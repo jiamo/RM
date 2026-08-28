@@ -1,0 +1,10 @@
+{
+  "challenge_module": "Challenge",
+  "solution_module": "Solution",
+  "theorem_names": [
+    "RiemannHypothesisConjecture.zeta_strip_iff_eta",
+    "RiemannHypothesisConjecture.zeta_iff_zeta_strip",
+    "RiemannHypothesisConjecture.zeta_iff_eta"
+  ],
+  "permitted_axioms": ["propext", "Quot.sound", "Classical.choice"]
+}

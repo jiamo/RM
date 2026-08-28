@@ -1,0 +1,197 @@
+version: "0.3"
+
+project:
+  name: "The Riemann Hypothesis: precise statement and equivalence of its formulations"
+  authors:
+    - name: "Riemann Hypothesis formalization project"
+  license: "Apache-2.0"
+
+repository:
+  role: statement-and-equivalence
+
+classification:
+  arxiv: [math.NT]
+  msc2020: ["11M26", "11M06", "03B35"]
+
+status: complete-with-open-conjecture
+fidelity: faithful
+scope: >-
+  The Riemann hypothesis itself is open, so it is not proved here.  What is formalized is
+  its precise statement in three standard formulations, together with the *proof* that the
+  three are equivalent:
+
+  * the zeta form (Mathlib's `RiemannHypothesis`): every zero of the analytically continued
+    Riemann zeta function, other than the trivial zeroes at the negative even integers and
+    the pole at s = 1, has real part 1/2;
+
+  * the strip form: every zero of zeta inside the critical strip 0 < re s < 1 lies on the
+    critical line re s = 1/2;
+
+  * the eta form: every zero of the Dirichlet eta function inside the critical strip lies on
+    the critical line, where eta is defined by its paired series (and equals the classical
+    alternating series on the half-plane of absolute convergence).
+
+  The equivalences are: zeta_strip_iff_eta, zeta_iff_zeta_strip, zeta_iff_eta
+  (RiemannHypothesisConjecture namespace, mirrored in RiemannHypothesis/Main.lean).
+
+  RiemannHypothesis/Symmetry.lean adds five further equivalent formulations, together with
+  the symmetries they rest on: the conjugation symmetry zeta(conj s) = conj(zeta s) inside
+  the strip (proved from the paired eta series), the reflection s -> 1 - s of the zeroes
+  (functional equation), and the nonvanishing of zeta on the real interval (0, 1) (proved
+  from the positivity of every paired term of the eta series).  The formulations are
+  ZetaUpperStripForm (only the zeroes with positive imaginary part), ZetaRightStripForm
+  (no zero in 1/2 < re s < 1), ZetaNonvanishingRightForm (no zero in re s > 1/2),
+  ZetaSelfReflectiveForm (every zero satisfies s = 1 - conj s) and the family
+  VerifiedUpToHeight H over all heights H; the equivalences are zeta_strip_iff_upper_strip,
+  zeta_strip_iff_right_strip, zeta_strip_iff_nonvanishing_right,
+  zeta_strip_iff_self_reflective and zeta_strip_iff_forall_verifiedUpToHeight.
+
+  RiemannHypothesis/Alternating.lean proves that the partial sums of the classical
+  alternating series converge to eta(s) on the whole half-plane 0 < re s
+  (tendsto_alternating_partialSum_dirichletEta), the series being only conditionally
+  convergent inside the strip; this gives EtaLimitForm, a form of the hypothesis stated
+  purely with partial sums of an explicit elementary series, and the equivalences
+  eta_iff_eta_limit and zeta_iff_eta_limit.
+
+  RiemannHypothesis/Bounds.lean proves the first of the classical growth estimates:
+  norm_riemannZeta_le_of_one_lt_re, ||zeta s|| <= 1 + 1/(re s - 1) for re s > 1, by
+  comparing the Dirichlet series with the integral of x^(-sigma).
+
+  RiemannHypothesis/Growth.lean carries the estimates into the critical strip through the
+  paired eta series: norm_dirichletEta_le, ||eta(s)|| <= ||s|| (1 + 1/re s) for re s > 0,
+  and hence norm_riemannZeta_le_of_mem_strip,
+  ||zeta(s)|| <= ||s|| (1 + 1/re s)/(2^(1 - re s) - 1) for 0 < re s < 1, with the
+  vertical-line form norm_riemannZeta_le_linear_of_mem_strip: for fixed 0 < sigma < 1 there
+  is C > 0 with ||zeta(sigma + i t)|| <= C (1 + |t|).  The classical convexity bound
+  O(|t|^((1-sigma)/2 + eps)) is proved elsewhere in the repository, in
+  RiemannHypothesis/Convexity.lean (see below).  The same file specializes mathlib's
+  Dirichlet-character product bound to modulus 1, giving the Mertens 3-4-1 inequality for zeta
+  (norm_riemannZeta_product_ge_one).
+
+  RiemannHypothesis/EulerMaclaurin.lean proves the first-order Euler-Maclaurin
+  representation of zeta: with eulerTerm n s = (n+1)^(-s) - the integral of x^(-s) over
+  [n+1, n+2], riemannZeta_eq_zetaApprox gives, for every N and every s with re s > 1,
+  zeta(s) = sum_{n<N} (n+1)^(-s) + (N+1)^(1-s)/(s-1) + sum'_n eulerTerm(n+N) s, by an
+  elementary telescoping argument (no analytic continuation, no differentiation under the
+  integral sign).  Taking N = ceil(|t|) it derives norm_riemannZeta_le_log:
+  ||zeta(s)|| <= 6 + log(1 + |im s|) for 1 <= re s <= 2 and |im s| >= 2, the classical
+  O(log t) bound with explicit constants, uniform in sigma; the line re s = 1 is reached by
+  continuity of sigma |-> zeta(sigma + i t).  This is the bound the eta route of Growth.lean
+  cannot give, because 1 - 2^(1-s) vanishes on re s = 1 at arbitrarily large heights.
+
+  RiemannHypothesis/ZeroFree.lean turns the Mertens 3-4-1 inequality into a quantitative
+  lower bound: norm_riemannZeta_pow_four_ge, x^3/(8 (6 + log(1 + 2|y|))) <=
+  ||zeta(1 + x + i y)||^4 for 0 < x <= 1 and 1 <= |y|, together with the derived
+  nonvanishing riemannZeta_ne_zero_of_one_lt_re_of_one_le_abs_im.  This is the quantitative
+  form of the nonvanishing on re s = 1 that the de la Vallee Poussin argument starts from;
+  the zero-free region itself is NOT proved, because transferring the bound to the left of
+  the line needs an estimate for zeta' that is neither in mathlib nor here.
+
+  RiemannHypothesis/Spectral.lean makes the heat-kernel origin of the functional equation
+  explicit: jacobiTheta_imaginary_axis (theta(i/t) = sqrt(t) theta(i t) for t > 0, from
+  mathlib's jacobiTheta_S_smul, whose own proof is Poisson summation for the Gaussian),
+  evenKernel_zero_eq_jacobiTheta (mathlib's even Hurwitz kernel at a = 0 is the heat trace
+  theta(i t)), and completedRiemannZeta_eq_mellin_jacobiTheta (for re s > 1 the completed
+  zeta function is the Mellin transform of (theta(i t) - 1)/2 at s/2).  The remaining two
+  steps of the chain - that the modularity is the hypothesis of mathlib's functional-equation
+  pair, and the resulting identity Lambda(1 - s) = Lambda(s) - are recorded as checked
+  mathlib citations, not reproved.  This is the geometric reading of the functional equation
+  only; the spectral reading of the zeroes (Hilbert-Polya) remains conjectural.
+
+  RiemannHypothesis/ImaginaryAxis.lean computes the modulus of the functional equation's
+  Gamma-factor on the line re s = 1 exactly: norm_Gamma_one_sub_mul_I_sq,
+  ||Gamma(1 - i t)||^2 = pi t / sinh(pi t), from Euler's reflection formula, and
+  norm_cos_pi_one_sub_mul_I_div_two, ||cos(pi (1 - i t)/2)|| = |sinh(pi t / 2)|.  Combined
+  with the O(log t) bound on re s = 1 this gives norm_riemannZeta_mul_I_le:
+  ||zeta(i t)|| <= sqrt(|t| / 2 pi) (6 + log(1 + |t|)) for |t| >= 2, i.e. the convexity
+  exponent 1/2 at sigma = 0.
+
+  RiemannHypothesis/Convexity.lean interpolates the two edges of the strip by
+  Phragmen-Lindelof (mathlib's PhragmenLindelof.vertical_strip), applied to
+  ((s-1)/(s+3))^2 zeta(s) exp(-((1-s)/4 + eps/2) log(s(1-s)+4)).  The result is
+  norm_riemannZeta_le_convexity: for every eps in (0,1] there is C > 0 with
+  ||zeta(s)|| <= C |im s|^((1 - re s)/2 + eps) for 0 <= re s <= 1 and |im s| >= 3, with the
+  critical-line corollary norm_riemannZeta_le_critical_line, ||zeta(1/2 + i t)|| <=
+  C |t|^(1/4 + eps).  RiemannHypothesis/ConvexityLog.lean removes the epsilon at the cost of
+  a logarithm, by running the same argument at eps = 0 and dividing in addition by the
+  analytic function log(s(1-s)+4): norm_riemannZeta_le_convexity_log gives an absolute
+  constant C with ||zeta(s)|| <= C (1 + log|im s|) |im s|^((1 - re s)/2) on the same region.
+  The logarithm-free form, and a fortiori the Lindelof hypothesis, are NOT proved.  The growth hypothesis of Phragmen-Lindelof is supplied by the crude bound
+  norm_riemannZeta_le_exp_strip, ||zeta(s)|| <= 100 e^(pi |t| / 2) |t|^2 on the closed
+  strip, itself deduced from the functional equation and ||Gamma(s)|| <= Gamma(re s).
+
+sources:
+  - title: "Riemann hypothesis"
+    authors: ["Bernhard Riemann"]
+    type: "paper"
+    identifier: "https://de.wikipedia.org/wiki/Riemannsche_Vermutung"
+    relationship: background
+    note: >-
+      The conjecture itself; no proof is attempted here.
+
+  - title: "Hilbert's problems"
+    authors: ["David Hilbert"]
+    type: "other"
+    identifier: "https://en.wikipedia.org/wiki/Hilbert%27s_problems"
+    relationship: background
+    note: >-
+      The Riemann hypothesis is problem 8 of Hilbert's list; again, background only.
+
+  - title: "The Theory of the Riemann Zeta-Function"
+    authors: ["E. C. Titchmarsh", "D. R. Heath-Brown"]
+    type: "book"
+    identifier: "Oxford University Press, 2nd ed., 1986"
+    relationship: background
+    note: >-
+      Standard reference for the facts used: the identity eta(s) = (1 - 2^(1-s)) zeta(s)
+      (Section 2.2), the location of the trivial zeroes via the functional equation
+      (Section 2.4), and the nonvanishing of zeta on re s >= 1 (Section 3.7).
+
+automation:
+  methods:
+    - method: "ai-agent"
+      model: "Claude (Anthropic), via pi"
+      role: >-
+        Wrote essentially all of the Lean source in this repository, working interactively
+        under the direction and review of the author: choosing the Lean formulations,
+        finding and repairing proofs, and structuring the development.
+
+review:
+  status: self-assessed
+  notes: >-
+    Every step is checked by Lean.  The compared theorems depend on propext, Quot.sound and
+    Classical.choice only; scripts/audit.sh checks this.
+
+known_gaps: []
+
+limitations:
+  - >-
+    The Riemann hypothesis is not proved.  The three propositions ZetaForm, ZetaStripForm
+    and EtaForm are definitions of a Prop; the theorems of this repository prove their
+    equivalence, not the propositions themselves.  This is stated plainly in Challenge.lean,
+    Solution.lean and the README.
+  - >-
+    The eta function is defined by its paired series (the terms of the classical alternating
+    series grouped in pairs), which converges absolutely for re s > 0.  The classical
+    alternating-series representation is proved for 1 < re s
+    (dirichletEta_eq_tsum_alternating_of_one_lt_re).  The paired-series definition is forced
+    by a convention of Mathlib: its tsum is the unconditional sum, and the alternating series
+    is only conditionally convergent in the strip, so it cannot serve as the definition there.
+  - >-
+    Inside the critical strip the convexity bound ||zeta(sigma + i t)|| <=
+    C_eps |t|^((1-sigma)/2 + eps) is proved for every eps > 0, and also the sharper
+    C (1 + log|t|) |t|^((1-sigma)/2) with an absolute constant, but not the logarithm-free
+    form O(|t|^((1-sigma)/2)), which would need the approximate functional equation or van
+    der Corput's method; and of course not the Lindelof hypothesis.  The bound holds only for |t| >= 3.  On the adjacent strip
+    1 <= re s <= 2 the sharp O(log |t|) bound is proved, by Euler-Maclaurin summation.
+  - >-
+    The Mertens 3-4-1 inequality for zeta is provided by mathlib
+    (DirichletCharacter.norm_LFunction_product_ge_one at modulus 1) and only specialized
+    here; it is not proved from scratch in this repository.
+  - >-
+    The proof of the identity eta(s) = (1 - 2^(1-s)) zeta(s) uses the identity theorem for
+    analytic functions (AnalyticOnNhd.eqOn_of_preconnected_of_eventuallyEq), the analyticity
+    of the paired series being established by the Weierstrass theorem
+    (TendstoLocallyUniformlyOn.differentiableOn / differentiableOn_tsum_of_summable_norm).
+    The preconnectedness of the punctured right half-plane is proved directly
+    (RiemannHypothesis/Connected.lean).

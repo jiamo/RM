@@ -1,0 +1,2352 @@
+arXiv:1002.4127v2  [math.NT]  11 Mar 2011
+MORE THAN 41% OF THE ZEROS OF THE ZETA FUNCTION ARE ON
+THE CRITICAL LINE
+H. M. BUI, BRIAN CONREY, AND MATTHEW P. YOUNG
+Abstract. We prove that at least 41 . 05% of the zeros of the Riemann zeta function are
+on the critical line.
+1. Introduction
+The location of the zeros of the Riemann zeta function is one of the m ost fascinating
+subjects in number theory. In this paper we study the percent of zeros lying on the critical
+line. With the use of a new two-piece molliﬁer, we make a modest improve ment on this
+important problem.
+To set some terminology, let N(T ) denote the number of zeros ρ =β +iγ with 0 <γ <T ,
+let N0(T ) denote the number of such critical zeros with β = 1/2, and let N ∗
+0 (T ) denote the
+number of such critical zeros which are simple. Deﬁne κ and κ∗ by
+κ = lim inf
+T →∞
+N0(T )
+N(T ), κ ∗ = lim inf
+T →∞
+N ∗
+0 (T )
+N(T ).
+Selberg [S] was the ﬁrst to prove that a positive percentage of zer os lie on the critical
+line. There has since been a series of improvements, of which we brieﬂ y mention the work
+of Levinson [Le] obtaining κ ≥ .3474, and the current record of κ ≥ .4088, κ∗ ≥ .4013 due
+to Conrey [C1].
+In this paper we show
+Theorem 1.1. We have
+(1.1) κ ≥.4105, κ ∗ ≥.4058.
+Our method is to revisit an old approach of Lou [Lo] by taking a two-p iece molliﬁer
+(meaning the sum of two molliﬁers, each of a diﬀerent shape). The de tails of Lou’s work
+never appeared in print and there is some doubt as to its correctne ss. We have added
+innovations to Lou’s approach by taking a longer molliﬁer (requiring de licate analysis of
+oﬀ-diagonal terms) and by combining it with ideas of Conrey [C1] [C2].
+S. Feng [F] has also introduced a new two-piece molliﬁer with the purpo se of proving a
+lower bound for the proportion κ of zeros of ζ(s) on the critical line. We have checked that
+Feng’s formulas are correct, except that we cannot verify that h is new molliﬁer is permitted
+to have a length θ = 4/7 −ǫ as is originally claimed in his preprint. His new molliﬁer taken
+1991 Mathematics Subject Classiﬁcation. Primary 11M26.
+Key words and phrases. Riemann zeta function, critical line, zeros, molliﬁer, moment, mean v alue.
+H.M.B. supported by an EPSRC Postdoctoral Fellowship.
+B.C. partially supported by the American Institute of Mathematics.
+This material is based upon work supported by the National Science Foundation under agreement Nos.
+DMS-0801264 (B.C.) DMS-0758235 (M.Y.), and DMS-0635607 (M.Y.). A ny opinions, ﬁndings and conclu-
+sions or recommendations expressed in this material are those of t he authors and do not necessarily reﬂect
+the views of the National Science Foundation.
+1
+2 H. M. BUI, BRIAN CONREY, AND MATTHEW P. YOUNG
+with length θ = 1/2 −ǫ, which is admissible, would surely lead to an improvement over
+Conrey’sκ ≥ 0.4088, but it is not clear to us what his ﬁnal bound for κ will be.
+One of the diﬃculties in studying this and other problems involving molliﬁe rs is that it
+takes a signiﬁcant amount of computation to judge how much progr ess one makes with a
+new idea. However, there are some heuristics that can save a lot of time. In particular,
+the ratios conjecture [CFZ] can rather quickly allow one to express molliﬁed moments of
+L-functions as certain multiple contour integrals; see [CS] for a varie ty of examples of such
+calculations. Even then, it takes some signiﬁcant work to simplify the se contour integrals
+into a form usable for calculation. With some practice these calculatio ns become routine,
+and we have made an eﬀort to describe the reasoning behind our app roach.
+2. Reduction to mean-value theorems
+2.1. The setup. The basic technology to prove that many zeros lie on the critical line is
+an asymptotic for a molliﬁed second moment of the zeta function. In this section, we recall
+how to reduce the problem to such mean value estimates. This is most ly a summary of [C1].
+Let ζ(s) = ∑ ∞
+n=1n−s for s =σ +it, σ >1. The functional equation states
+ξ(s) = ξ(1 −s), where ξ(s) = H(s)ζ(s), and H(s) = 1
+2s(s − 1)π− s
+2 Γ( s
+2).
+In its asymmetrical form the functional equation reads
+ζ(s) = χ(s)ζ(1 −s), where χ(1 −s) = 2(2π)−sΓ(s) cos( πs
+2 ).
+To get a lower bound on N0(T ) it suﬃces to consider a certain molliﬁed second moment
+of ζ and its derivatives. This is well-known; see Section 3 of [C1], for examp le, so we shall
+simply state the conclusion.
+LetQ(x) be a real polynomial satisfying Q(0) = 1, Q(x) +Q(1 −x) = constant, and deﬁne
+V (s) = Q
+(
+− 1
+L
+d
+ds
+)
+ζ(s),
+where for large T ,
+L = logT.
+Supposeψ(s) is a “molliﬁer”. Littlewood’s lemma and the arithmetic-mean, geometr ic-mean
+inequality give
+(2.1) κ ≥ 1 − 1
+R log
+( 1
+T
+∫ T
+1
+|Vψ (σ0 +it)|2dt
+)
++o(1),
+whereσ0 = 1
+2 − R
+L , and R is a bounded positive real number to be chosen later. Actually, by
+choosingQ(x) to be a linear polynomial, one obtains a lower bound on the percent of simple
+zeros, κ∗.
+We choose a molliﬁer of the form
+ψ(s) = ψ1(s) +ψ2(s),
+whereψ1 andψ2 are molliﬁers of quite diﬀerent shape. Here ψ1 is molliﬁer of a familiar type
+from [C1]. Let P1(x) = ∑
+jajxj be a certain polynomial satisfying P1(0) = 0, P1(1) = 1, let
+y1 =T θ1 where 0 <θ 1 < 4
+7, and use the notation
+(2.2) P1[n] = P1
+( logy1/n
+logy1
+)
+,
+MORE THAN 41% OF THE ZEROS OF THE ZETA FUNCTION ARE ON THE CRITI CAL LINE 3
+for 1 ≤n ≤y1. By convention, we set P1[x] = 0 for x ≥y1. With this notation,
+ψ1(s) =
+∑
+n≤y1
+µ(n)P1[n]nσ0− 1
+2
+ns .
+For the second molliﬁer, we take
+(2.3) ψ2(s) = χ(s + 1
+2 −σ0)
+∑
+hk≤y2
+µ2(h)hσ0− 1
+2k
+1
+2 −σ0
+hsk1−s P2[hk]
+where µ2(h) are the coeﬃcients of 1 /ζ 2(s) and P2(x) = ∑
+jbjxj is a polynomial satisfying
+P2(0) = P ′
+2(0) = P ′′
+2 (0) = 0. Here y2 =T θ2 whereθ2 <θ 1 (we shall see later what conditions
+are required on θ2). Note that (formally)
+χ(s)
+∞∑
+h,k=1
+µ2(h)
+hsk1−s = χ(s)ζ(1 −s)
+ζ 2(s) = 1
+ζ(s),
+which explains why ψ2(s) may be a useful choice of a molliﬁer. Here ψ2(s) is of a somewhat
+similar shape to a molliﬁer chosen by Shi-tuo Lou in [Lo]. Lou considered a molliﬁer of the
+form L−2χ(s) times a Dirichlet series that is roughly of the shape above, with the c hoice of
+smoothing polynomial P2(x) = x. Unfortunately, the details of the calculations are omitted,
+and there is some doubt on whether the result is correct since our a nalysis suggests that P2
+must vanish to third order; the presence of L−2 is also suspect.
+The method sketched in Section 3 of [C1] carries through with our c hoice of ψ =ψ1 +ψ2,
+but there is one extra ingredient worthy of mention. To apply Littlew ood’s lemma, one needs
+to estimate the integral on the right side of a rectangle, say at σ = 2. This can be done
+using the trivial bound for σ ≥ 1
+2, say
+(2.4) |ψ2(s)| ≪
+√
+t
+( y2
+t
+) σ
+L2.
+As long as θ2 < 1 this is small for σ suﬃciently large. The point is that χ(s) is small for
+large σ; a molliﬁer of the form χ(1 −s) times a Dirichlet polynomial runs into problems for
+σ large.
+Theorem 2.1. Supposeθ1 = 4/7 −ε and θ2 = 1/2 −ε for ε> 0 small. Then
+(2.5) 1
+T
+∫ T
+1
+|Vψ (σ0 +it)|2dt =c(P,Q,R,θ 1,θ 2) +o(1),
+wherec(P,Q,R,θ 1,θ 2) = c1 + 2c12 +c2 and the ci are given below by (3.2), (3.4), and (3.6).
+2.2. Numerical evaluations. We use Mathematica to numerically evaluate
+c(P,Q,R, 4/7, 1/2) with the following particular choices of parameters. With R = 1.28,
+Q(x) = 0.492 + 0.604(1 − 2x) − 0.08(1 − 2x)3 − 0.06(1 − 2x)5 + 0.046(1 − 2x)7,
+P1(x) = .842706x +.00845721x2 +.093117x3 +.118788x4 −.0630687x5,
+P2(x) = .0245412x3 −.00635566x4 +.00603128x5,
+we have κ ≥.4105. To get κ∗ ≥.4058, we take R = 1.12, Q(x) = 1 − 1.03x,
+P1(x) = .829473x +.0104358x2 +.082009x3 +.177482x4 −.0993997x5,
+P2(x) = .0323061x3 −.00553783x4 +.0769594x5.
+4 H. M. BUI, BRIAN CONREY, AND MATTHEW P. YOUNG
+2.3. A smoothing argument. It simpliﬁes some calculations to smooth out the integral
+in (2.1). Suppose w(t) is a smooth function satisfying the following properties:
+0 ≤w(t) ≤ 1 for all t ∈ R,(2.6)
+w has compact support in [ T/ 4, 2T ],(2.7)
+w(j)(t) ≪j ∆ −j, for each j = 0, 1, 2,..., where ∆ = T/L.(2.8)
+Theorem 2.2. For any w satisfying (2.6)-(2.8), and σ = 1/2 −R/L,
+(2.9)
+∫ ∞
+−∞
+w(t)|Vψ (σ +it)|2dt =c(P,Q,R,θ 1,θ 2) ˆw(0) +O(TL −1+ε),
+uniformly for R ≪ 1, where c(P,Q,R,θ 1,θ 2) = c1 + 2c12 +c2, and where these constants are
+given below by (3.2), (3.4), and (3.6).
+We brieﬂy explain how to deduce Theorem 2.1 from Theorem 2.2. By cho osing w to
+satisfy (2.6)-(2.8) and in addition to be an upper bound for the char acteristic function of
+the interval [T/ 2,T ], and with support in [ T/ 2 − ∆,T + ∆], we get
+(2.10)
+∫ T
+T /2
+|Vψ (σ0 +it)|2dt ≤c(P,Q,R,θ 1,θ 2) ˆw(0) +O(TL −1+ε).
+Note ˆw(0) = T/ 2+O(T/L ). We similarly get a lower bound. Summing over dyadic segments
+gives the full integral.
+3. The mean-value results
+Writingψ =ψ1 +ψ2 and opening the square, we get
+∫
+|Vψ |2 =
+∫
+|Vψ 1|2 +
+∫
+|V |2ψ1
+ψ2 +
+∫
+|V |2ψ1ψ2 +
+∫
+|Vψ 2|2 =:I1 +I12 +I12 +I2.
+We shall compute the integrals in turn. It turns out that I12 is asymptotically real.
+3.1. The main terms. Recall the conditions on Q,P 1, and P2 stated in Section 2.1.
+First we quote Theorem 2 of [C1].
+Theorem 3.1 (Conrey). Supposeθ1 < 4/7. Then
+(3.1)
+∫ T
+1
+|Vψ 1(σ0 +it)|2dt ∼c1(P1,Q,R,θ 1)T,
+as T → ∞, where
+(3.2) c1(P1,Q,R,θ 1) = 1+ 1
+θ1
+∫ 1
+0
+∫ 1
+0
+e2Rv(Q(v)P ′
+1(u)+θ1Q′(v)P1(u)+θ1RQ(v)P1(u))2dudv.
+This is the unsmoothed version, but the smoothed version follows ea sily from this.
+We handle the other terms as follows
+Theorem 3.2. Supposeθ2 <θ 1 < 4/7. Then
+(3.3) I12 =
+∫ ∞
+−∞
+w(t)|V |2ψ1ψ2(σ0 +it)dt =c12 ˆw(0) +O(T/L ),
+MORE THAN 41% OF THE ZEROS OF THE ZETA FUNCTION ARE ON THE CRITI CAL LINE 5
+where
+(3.4) c12 = 4θ2
+2
+θ2
+1
+eR d2
+dxdy
+[ ∫ ∫
+0≤a+b≤1
+0≤a,b
+∫ 1
+0
+u2(1 −u)eR[θ1(y−x)+uθ2(a−b)]Q(−xθ1 +auθ2)
+Q(1 +yθ1 −buθ2)P1
+(
+x +y + 1 − (1 −u)θ2
+θ1
+)
+P ′′
+2 ((1 −a −b)u)dudadb
+]
+x=y=0
+.
+Theorem 3.3. Supposeθ2 < 1
+2. Then
+(3.5) I2 =
+∫ ∞
+−∞
+w(t)|V |2|ψ2|2(σ0 +it)dt =c2 ˆw(0) +O(TL −1+ε),
+where
+(3.6) c2 = 2
+3
+d4
+dx2dy2
+[ ∫ 1
+0
+∫ 1
+0
+∫ 1
+0
+∫ 1
+0
+(1 −r)4( 1
+θ2
++ (x +y −v(y +r) −u(x +r)))
+e−θ2R(x+y−v(y+r)−u(x+r))Q(θ2(−y +u(x +r)) +t(1 +θ2(x +y −v(y +r) −u(x +r))))
+e2Rt(1+θ2(x+y−v(y+r)−u(x+r)))Q(θ2(−x +v(y +r)) +t(1 +θ2(x +y −v(y +r) −u(x +r))))
+(x +r)(y +r)P ′′
+2 ((1 −u)(x +r))P ′′
+2 ((1 −v)(y +r))dtdrdudv ]x=y=0.
+Remark. Note that c12 is real so that I12 ∼I12.
+3.2. The shift parameters. Rather than working directly with V (s), we shall instead
+consider the following two general integrals:
+(3.7) I12(α,β ) =
+∫ ∞
+−∞
+w(t)ζ( 1
+2 +α +it)ζ( 1
+2 +β −it)ψ1ψ2(σ0 +it)dt,
+and
+(3.8) I2(α,β ) =
+∫ ∞
+−∞
+w(t)ζ( 1
+2 +α +it)ζ( 1
+2 +β −it)|ψ2(σ0 +it)|2dt.
+Our main goal in the rest of the paper is in proving the following two lemm as.
+Lemma 3.4. We have
+(3.9) I12(α,β ) = c12(α,β ) ˆw(0) +O(T/L ),
+uniformly for α,β ≪L−1, where
+(3.10) c12(α,β ) = 4θ2
+2
+θ2
+1
+d2
+dxdy
+
+
+∫ ∫
+0≤a+b≤1
+∫ 1
+0
+u2(1 −u)(y−x
+1 yau
+2 )−α(yy
+1y−ub
+2 T )−β
+P1
+(
+x +y + 1 − (1 −u)θ2
+θ1
+)
+P ′′
+2 ((1 −a −b)u)dudadb
+]
+x=y=0
+.
+Lemma 3.5. We have
+(3.11) I2(α,β ) = c2(α,β ) ˆw(0) +O(TL −1+ε),
+6 H. M. BUI, BRIAN CONREY, AND MATTHEW P. YOUNG
+uniformly for α,β ≪L−1, where
+(3.12) c2(α,β ) = 2
+3
+d4
+dx2dy2
+[ ∫ 1
+0
+∫ 1
+0
+∫ 1
+0
+∫ 1
+0
+(1 −r)4yβ(x−v(y+r))+α(y−u(x+r))
+2
+( 1
+θ2
++ (x +y −v(y +r) −u(x +r)))(Ty x+y−v(y+r)−u(x+r)
+2 )−t(α+β)(x +r)(y +r)
+P ′′
+2 ((1 −u)(x +r))P ′′
+2 ((1 −v)(y +r))dtdrdudv ]x=y=0.
+We now prove that Theorems 3.2 and 3.3 follow from Lemmas 3.4 and 3.5, respectively.
+Let I⋆ denote either I12 or I2. Note
+(3.13) I⋆ =Q
+( −1
+logT
+d
+dα
+)
+Q
+( −1
+logT
+d
+dβ
+)
+I⋆(α,β )
+⏐
+⏐
+⏐
+α=β=−R/L
+.
+We ﬁrst argue that we can obtain either c⋆ by applying the above diﬀerential operator to
+the corresponding c⋆(α,β ). Since I⋆(α,β ) and c⋆(α,β ) are holomorphic with respect to α,β
+small, the derivatives appearing in (3.13) can be obtained as integrals of radii ≍L−1 around
+the points −R/L, using Cauchy’s integral formula. Since the error terms hold unifor mly on
+these contours, the same error terms that hold for I⋆(α,β ) also hold for I⋆.
+Next we check that applying the above diﬀerential operator to c⋆(α,β ) does indeed give
+c⋆. Notice the formula
+(3.14) Q
+( −1
+logT
+d
+dα
+)
+X −α =Q
+( logX
+logT
+)
+X −α.
+Using (3.14), we have
+(3.15) Q
+( −1
+logT
+d
+dα
+)
+Q
+( −1
+logT
+d
+dβ
+)
+c12(α,β ) = 4θ2
+2
+θ2
+1
+d2
+dxdy
+[ ∫ ∫
+0≤a+b≤1
+∫ 1
+0
+u2(1 −u)(y−x
+1 yau
+2 )−α(yy
+1y−ub
+2 T )−βQ(−xθ1 +auθ2)Q(1 +yθ1 −buθ2)
+P1
+(
+x +y + 1 − (1 −u)θ2
+θ1
+)
+P ′′
+2 ((1 −a −b)u)dudadb
+]
+x=y=0
+.
+Settingα =β = −R/L and simplifying gives (3.4). A similar argument produces (3.6) from
+(3.12).
+We prove Lemma 3.4 in Section 5, and Lemma 3.5 in Section 6.
+4. V arious lemmas
+In this section we gather some miscellaneous results that are more o r less standard. These
+will be used to calculate the constants c⋆(α,β ), and we place them here to avoid interrupting
+the forthcoming arguments.
+4.1. Approximate functional equations. In the calculation of I12 we shall need the fol-
+lowing approximate functional equation with one long sum.
+Lemma 4.1. Letσα,−β(l) = ∑
+ab=la−αbβ. For L2 ≤ |t| ≤ 2T and uniformly for α,β ≪L−1,
+(4.1) ζ( 1
+2 +α +it)ζ( 1
+2 −β +it) =
+∞∑
+l=1
+σα,−β(l)
+l
+1
+2 +it e−l/T 3
++O(T −1+ε).
+MORE THAN 41% OF THE ZEROS OF THE ZETA FUNCTION ARE ON THE CRITI CAL LINE 7
+Remark. The exponential decay eﬀectively means that l is truncated at T 3. An essentially
+identical proof could truncate the sum at T 2+ε but it would not help the later arguments.
+Proof of Lemma 4.1. Consider the following sum
+A =
+∞∑
+l=1
+σα,−β(l)
+l
+1
+2 +it e−l/V,
+where V is a parameter to be chosen momentarily. Using the formula e−x =
+1
+2πi
+∫
+(1) Γ(s)x−sds, we get
+A = 1
+2πi
+∫
+(1)
+V sΓ(s)ζ( 1
+2 +α +it +s)ζ( 1
+2 −β +it +s)ds.
+Next we move the line to σ = −1 +ε, crossing poles at s = 0, 1
+2 −α −it, 1
+2 +β −it. Using
+the bound ζ(σ +it) ≪ |t|
+1
+2 −σ for σ <0 and the exponential decay of the gamma function,
+we get
+A =ζ( 1
+2 +α +it)ζ( 1
+2 −β +it) +O(
+√
+Ve −|t| +V −1+ε|t|2).
+Thus taking V =T 3 ﬁnishes the proof. □
+A key step in asymptotically evaluating I2 is ﬁnding an asymptotic for the “twisted”
+second moment of zeta. This is essentially implicit in [BCH-B] but we cann ot quite quote
+the result we need. Nevertheless, we state the following without pr oof
+Proposition 4.2. Suppose w satisﬁes (2.6)-(2.8), and a and b are positive integers with
+ab ≤T 1−ε. Then uniformly for α,β ≪L−1, we have
+(4.2)
+∫ ∞
+−∞
+( a
+b
+) −it
+w(t)ζ( 1
+2 +α +it)ζ( 1
+2 +β −it)dt =
+∑
+am=bn
+1
+m
+1
+2 +αn
+1
+2 +β
+∫ ∞
+−∞
+Vt(mn)w(t)dt
++
+∑
+am=bn
+1
+m
+1
+2 −βn
+1
+2 −α
+∫ ∞
+−∞
+Vt(mn)
+( t
+2π
+) −α−β
+w(t)dt +O(T −1/2).
+HereVt(x) is given by
+Vt(x) = 1
+2πi
+∫
+(1)
+( t
+2πx
+) z G(z)
+z dz,
+whereG(z) = ez2
+p(z) and p(z) = (α+β)2−(2z)2
+(α+β)2 .
+Remarks. G(z) can be chosen from a wide class of functions; we made this choice sin ce it
+has rapid decay and vanishes at 2 z = ±(α +β). This result is “easy” in the sense that with
+ab ≤T 1−ε only the diagonal terms contribute to the main term (one easily boun ds the oﬀ-
+diagonal terms by repeated integration by parts). Also note
+( t
+2π
+) −α−β
+=T −α−β(1 +O(L−1))
+for t ≍T , which is implied by the support of w.
+4.2. Exercises with Euler-Maclaurin. We need to evaluate various sums to which we
+apply the Euler-Maclaurin formula. We collect these formulas here.
+Lemma 4.3. Suppose l is a nonnegative integer, x ≥ 1 is real, and s is a complex number
+with |s| ≤ (logx)−1. Then
+(4.3)
+∑
+n≤x
+1
+n1+s (log(x/n))l = (logx)l+1x−s
+∫ 1
+0
+xsaalda +O((log 3x)l).
+8 H. M. BUI, BRIAN CONREY, AND MATTHEW P. YOUNG
+Proof of Lemma 4.3. A simple application of the Euler-Maclaurin formula gives
+∑
+n≤x
+1
+n1+s (log(x/n))l =
+∫ x
+1
+t−1−s(log(x/t))ldt +O((log 3x)l).
+We make the change of variables t =x1−a to obtain the desired expression. □
+Lemma 4.4. Supposez ≤x, |s| ≤ (logx)−1, k is a positive integer, and that F and H are
+(ﬁxed) smooth functions. Then
+(4.4)
+∑
+n≤z
+dk(n)
+n1+s F
+( log(x/n)
+logx
+)
+H
+( log(z/n)
+logz
+)
+= (logz)k
+(k − 1)!z−s
+∫ 1
+0
+(1 −u)k−1F
+(
+1 − (1 −u) logz
+logx
+)
+H(u)zusdu +O((log 3z)k−1).
+Remark. By repeatedly using Euler-Maclaurin we can express this as a k-fold integral. It
+turns out that this multiple integral can be computed explicitly enoug h to reduce to a single
+integral as above.
+Proof. We proceed by induction. For k = 1, a minor variation of the proof of Lemma 4.3
+gives that (4.4) is
+(logz)z−s
+∫ 1
+0
+F
+( logx − (1 −u) logz
+logx
+)
+H(u)zusdu +O(1),
+as desired. Now suppose k ≥ 2. Write the left hand side of (4.4) as
+(4.5)
+∑
+n≤z
+1
+n1+s
+∑
+m≤n− 1z
+dk−1(m)
+m1+s F
+( log(x/n)
+logx
+log(n−1x/m)
+log(n−1x)
+)
+H
+( log(z/n)
+logz
+log(n−1z/m)
+logn−1z
+)
+.
+By applying the induction hypothesis to the inner sum over m we get that (4.5) is
+(4.6)∫ 1
+0
+zus−s (1 −u)k−2
+(k − 2)!
+∑
+n≤z
+(log z
+n )k−1
+n1+us F
+( log(x/n)
+logx
+(
+1 − (1 −v) log(z/n)
+log(x/n)
+))
+H
+( log(z/n)
+logz v
+)
+dv
++O((log 3z)k−1).
+We again apply a minor variation on Lemma 4.3, this time to the sum over n which gives
+that (4.6) is
+(4.7)
+z−s(logz)k
+∫ 1
+0
+(1 −v)k−2
+(k − 2)!
+∫ 1
+0
+z−usvuk−1F
+(
+1 − (1 −u) logz
+logx − (1 −v)u logz
+logx
+)
+H(uv)dudv
++O((log 3z)k−1).
+Now we perform some elaborate changes of variables: ﬁrst v → 1 −v, followed by v →v/u,
+and ﬁnally u →u +v to give
+z−s (logz)k
+(k − 2)!
+∫ ∫
+u+v≤1
+0≤u,v
+vk−2zusF
+(
+1 − logz
+logx + u logz
+logx
+)
+H(u)dudv +O((log 3z)k−1).
+The integral over v can now be calculated to ﬁnish the proof. □
+MORE THAN 41% OF THE ZEROS OF THE ZETA FUNCTION ARE ON THE CRITI CAL LINE 9
+In the special case z =x we obtain
+Corollary 4.5. Let assumptions be as in Lemma 4.4. Then
+(4.8)
+∑
+n≤x
+dk(n)
+n1+s F
+( log(x/n)
+logx
+)
+H
+( log(x/n)
+logx
+)
+= (logx)k
+(k − 1)!x−s
+∫ 1
+0
+(1 −u)k−1F (u)H(u)xusdu +O((log 3x)k−1).
+We ﬁnally need one other result in this circle of sums. This result is impor tant for us
+because it saves one log when |σ| is taken to be a ﬁxed positive constant.
+Lemma 4.6. Suppose −1 ≤σ ≤ 0. Then
+(4.9)
+∑
+n≤x
+dk(n)
+n
+( x
+n
+) σ
+≪k (log 3x)k−1 min(|σ|−1, log 3x).
+Proof. We use an elementary approach with induction. The case σ = 0 is implied by Corol-
+lary 4.5, so suppose σ <0. Note that
+(4.10)
+∑
+m≤y
+1
+m1+σ ≤ 1 +
+∫ y
+1
+t−1−σdt ≤ 1 + |σ|−1y−σ.
+This proves (4.9) for k = 1. Suppose k ≥ 2. Then using (4.10),
+∑
+n≤x
+dk(n)
+n
+( x
+n
+) σ
+≤xσ ∑
+n≤x
+dk−1(n)
+n1+σ
+(
+1 + |σ|−1
+( x
+n
+) −σ)
+.
+Now apply the induction hypothesis to ﬁnish the proof. □
+4.3. A Mellin pair. Recall P1[n] is given by (2.2). Then for n ≤y1, we have
+(4.11) P1[n] =
+∑
+i
+ai
+(logy1)i (logy1/n)i =
+∑
+i
+aii!
+(logy1)i
+1
+2πi
+∫
+(1)
+( y1
+n
+) s ds
+si+1.
+Forn>y 1, the right hand side vanishes and therefore agrees with P1[n] in this case also.
+5. The cross term
+In this section we prove Lemma 3.4.
+5.1. Averaging over t. As a ﬁrst step, we show
+Lemma 5.1. Supposeθ1,θ 2 satisfy
+(5.1) 5
+2θ1 +θ2 < 2, 5
+3θ1 + 2
+3θ2 < 4/3, θ 2 <θ 1.
+For any B ≥ 0 we have, uniformly for α,β ≪L−1,
+(5.2)
+I12(α,β ) =
+∑
+n≤y1; hk≤y2
+hl=nk
+µ(n)µ2(h)σα,−β(l)
+(hkln)
+1
+2
+P1[n]P2[hk]e−l/T 3
+∫ ∞
+−∞
+( t
+2π
+) −β
+w(t)dt +OB(T/L B).
+Remark. When θ1 = 4/7 then (5.1) translates to θ2 < 4/7.
+10 H. M. BUI, BRIAN CONREY, AND MATTHEW P. YOUNG
+Proof of Lemma 5.1. Inserting the deﬁnition of ψ1 and ψ2, we have
+(5.3) I12(α,β ) =
+∑
+n≤y1
+∑
+hk≤y2
+µ(n)µ2(h)P1[n]P2[hk]
+(hkn)
+1
+2
+J12,
+where
+(5.4) J12 =
+∫ ∞
+−∞
+w(t)
+( h
+nk
+) −it
+χ( 1
+2 +it)ζ( 1
+2 +α +it)ζ( 1
+2 +β −it)dt.
+From the functional equation of ζ( 1
+2 +β −it) and the approximation
+(5.5) χ( 1
+2 +β −it)χ( 1
+2 +it) =
+( t
+2π
+) −β
+(1 +O(t−1)),
+we get
+(5.6) J12 =
+∫ ∞
+−∞
+w(t)
+( t
+2π
+) −β( h
+nk
+) −it
+ζ( 1
+2 +α +it)ζ( 1
+2 −β +it)dt +O(T ε).
+Applying Lemma 4.1 to (5.6), we have
+(5.7) J12 =
+∑
+l
+σα,−β(l)
+l
+1
+2
+e−l/T 3
+∫ ∞
+−∞
+w(t)
+( t
+2π
+) −β( hl
+nk
+) −it
+dt +O(T ε).
+The t-integral takes the form ˆw0( 1
+2π log hl
+nk ) where w0(t) = w(t)
+( t
+2π
+) −β
+. This explains why
+we took one long sum in the approximate functional equation above – the sum over l is
+automatically truncated by the decay of ˆw0. The diagonal terms hl =nk give the main term
+visible in (5.2). To complete the proof, we need to bound the oﬀ-diago nal terms (those with
+hl ⁄=nk). We accomplish this with Lemma 5.2 below. □
+5.2. Bounding the oﬀ-diagonal terms. Let C denote the contribution to I12(α,β ) from
+the oﬀ-diagonal terms, so that
+(5.8) C =
+∑
+n≤y1; hk≤y2
+hl⁄=nk
+µ(n)µ2(h)σα,−β(l)
+(hkln)
+1
+2
+P1[n]P2[hk]e−l/T 3
+ˆw0
+( 1
+2π log hl
+nk
+)
+.
+Lemma 5.2. Supposeθ1,θ 2 satisfy (5.1). Then for any B ≥ 0 we have
+(5.9) C ≪B T/L B.
+The proof is fairly lengthy and we shall state and prove various inter mediate lemmas within
+the body of the proof.
+Proof. First note that an easy integration by parts argument shows
+(5.10) ˆw0(x) ≪B T (1 + ∆ x)−B,
+for any B ≥ 0. Similarly, for each j = 1, 2,... , we have
+(5.11) dj
+dxj ˆw0(x) ≪B T j+1(1 + ∆ x)−B.
+Deﬁne f bynk =hl −f . Write C =C ′ +C ′′ where C ′ corresponds to the terms with
+(5.12) |f | ≤ ∆ −1+εhl.
+MORE THAN 41% OF THE ZEROS OF THE ZETA FUNCTION ARE ON THE CRITI CAL LINE 11
+By (5.10), we have C ′′ ≪T −2009, by taking B large enough with respect to ε, and bounding
+everything trivially. Also note that a trivial bound on C ′ gives
+(5.13) C ′ ≪T 1+ε
+∑
+n≤y1; hk≤y2
+hl=f +nk
+0<|f |≪∆ − 1+ε y1y2
+1
+(hkln)
+1
+2
+≪T εy1y2,
+where the error term comes from letting n, k, and f vary freely and bounding the number
+of values of h and l by the number of divisors of f +nk.
+Suppose now that (5.12) holds. A simple approximation of the logarith m gives
+ˆw0
+( 1
+2π log hl
+nk
+)
+= ˆw0
+( f
+2πhl +O
+( f 2
+h2l2
+) )
+.
+By the mean value theorem and (5.11), we then get (recall ∆ = T/L )
+(5.14) ˆw0
+( 1
+2π log hl
+nk
+)
+= ˆw0
+( f
+2πhl
+)
++O(L2).
+Using (5.14) and the trivial bound used to prove (5.13), we then hav e
+(5.15) C ′ =
+∑
+n≤y1; hk≤y2
+hl=f +nk
+0<|f |≤∆ − 1+ε hl
+µ(n)µ2(h)σα,−β(l)
+(hkln)
+1
+2
+P1[n]P2[hk]e−l/T 3
+ˆw0
+( f
+2πhl
+)
++O(T −1+εy1y2).
+Since y1y2 =T θ1+θ2 ≪T 2−ε by (5.1), this error term is O(T 1−ε).
+The next step is to eliminate k and express the equation hl = f +nk as the congruence
+hl ≡f (mod n). Set k = (hl −f )/n so that k = hl
+n (1 +O(∆ −1+ε)). Note that
+(5.16) P2[hk] = P2
+[ h2l
+n
+(
+1 − f
+hl
+)]
+=P2[h2l/n] +O(∆ −1+ε),
+which uses the fact that d
+dxP2[x] ≪ 1 for x ≥ 1 (recall that P ′
+2(0) = 0 so that P2[x] is
+continuously diﬀerentiable at x = y2). There is a small problem for x < 1 since P2[x] is
+really only deﬁned for x ≥ 1. However, the terms with h2l/n ≪ 1 are not included in the
+sum since the sum over f is empty unless hl ≥ ∆ 1−ε, so that h2l/n ≥h∆ 1−ε/n ≥ ∆ 1−ε/y1.
+The requirements (5.1) imply that θ1 < 1 so that h2l/n ≥ T ε. Thus we obtain by a trivial
+estimation
+(5.17) C =
+∑
+n≤y1; h2l/n≤y2; f ⁄=0
+hl≡f (mod n)
+µ(n)µ2(h)σα,−β(l)
+hl P1[n]P2[h2l/n]e−l/T 3
+ˆw0
+( f
+2πhl
+)
++O(T 1−ε).
+We relaxed the condition |f | ≤ ∆ −1+εhl without introducing a new error term due to the
+decay of ˆw0.
+Now consider the inner sum over l above, namely
+D(h,n,f ) :=
+∑
+l≤ny2/h2; f ⁄=0
+hl≡f (mod n)
+σα,−β(l)
+l P2[h2l/n]e−l/T 3
+ˆw0
+( f
+2πhl
+)
+,
+so that
+C =
+∑
+n≤y1; h2/n≤y2; f ⁄=0
+µ(n)µ2(h)P1[n]
+h D(h,n,f ) +O(T 1−ε).
+12 H. M. BUI, BRIAN CONREY, AND MATTHEW P. YOUNG
+The plan is to apply the Voronoi summation formula to D(h,n,f ). In order to easily quote
+results from the literature, we shall treat the case α =β = 0; versions of the Voronoi formula
+exist for general σα,−β(l) (e.g. see [M], Lemma 3.7). Since α and β are small, the methods
+will carry over essentially unchanged to the more general case.
+Lemma 5.3. Let η(q) be the arithmetical function deﬁned by η(q) = ∑
+p|q
+log p
+p−1 , where the
+sum is over primes, and let
+(5.18) g(l) = l−1P2[h2l/n]e−l/T 3
+ˆw0
+( f
+2πhl
+)
+.
+Suppose that (h,n ) = b, n =bn1, h =bh1, and b|f . Then D(h,n,f ) = DM +DE, where
+(5.19) DM = φ(n1)
+n2
+1
+g(1)(2γ − 1 − 2η(n1)) + φ(n1)
+n2
+1
+∫ x
+1
+g(t)(logt + 2γ − 2η(n1))dt,
+and for any B ≥ 0, we have
+(5.20) DE ≪T ε(
+√
+n1h
+|f | + T 1/3h2/3
+|f |2/3 )
+(
+1 + |f |∆h
+ny2
+) −B
+.
+If b ∤f then the sum is void, i.e., D(h,n,f ) = 0 .
+Proof of Lemma 5.3. Note that (5.11) implies
+(5.21) g′(t) ≪t−2T 1+ε
+(
+1 + |f |∆
+ht
+) −B
+.
+Then with x =ny2/h2, f =bf1, we have
+D(h,n,f ) =
+∑
+l≤x; l≡h1f1 (mod n1)
+d(l)g(l).
+By partial summation, noting g(x) = 0,
+D(h,n,f ) = −
+∫ x
+1
+g′(t)[
+∑
+l≤t; l≡h1f1 (mod n1)
+d(l)]dt.
+The Voronoi formula (see Exercise 7 of [IK] p.79, for example) gives that
+(5.22)
+∑
+l≤t; l≡h1f1 (mod n1)
+d(l) = M +E,
+where
+M = φ(n1)
+n2
+1
+t(logt + 2γ − 1 − 2η(n1)), E ≪ (n1t)ε(√
+n1 +t1/3).
+WriteD(h,n,f ) = DM +DE corresponding to (5.22). That is,
+DM = −φ(n1)
+n2
+1
+∫ x
+1
+g′(t)t(logt + 2γ − 1 − 2η(n1))dt.
+Integration by parts gives (5.19).
+As for the error term, a straightforward computation with (5.21) gives
+∫ x
+1
+|g′(t)|dt ≪T ε h
+|f |
+(
+1 + |f |∆
+hx
+) −B
+,
+∫ x
+1
+t1/3|g′(t)|dt ≪ T 1/3+εh2/3
+|f |2/3
+(
+1 + |f |∆
+hx
+) −B
+.
+Consequently, (5.20) follows. □
+Now we return to the proof of Lemma 5.2. We show
+MORE THAN 41% OF THE ZEROS OF THE ZETA FUNCTION ARE ON THE CRITI CAL LINE 13
+Lemma 5.4. Assume (5.1) holds. Then
+(5.23) C =C0 +O(T 1−ε),
+where
+(5.24) C0 =
+∑
+n≤y1
+∑
+h≤ny2/∆ 1− ε
+∑
+b|f ; f ⁄=0
+µ(n)µ2(h)P1[n]
+h
+φ(n1)
+n2
+1
+∫ ny2/h2
+∆ 1− ε /h
+g(t)(logt + 2γ − 2η(n1))dt.
+Proof of Lemma 5.4. Write C = CM + CE + O(T 1−ε) according to the decomposition
+D(h,n,f ) = DM +DE, and similarly CM = C1 +C2 according to the two terms of (5.19).
+A direct application of (5.20) shows
+CE ≪T εy5/2
+1 y2
+∆ +T εy5/3
+1 y2/3
+2
+∆ 1/3 ,
+which is ≪T 1−ε since (5.1) holds.
+Now we bound C1. The point is that essentially f ≪h/∆, yet h ≤ √ny2 =O(∆ 1−ε), so
+that the sum over f practically has no length. Explicitly, we have
+C1 ≪T ε ∑
+n≤y1,h2/n≤y2,f ⁄=0
+1
+n1
+1
+h
+⏐
+⏐
+⏐ˆw0
+( f
+2πh
+) ⏐
+⏐
+⏐ ≪T 1+ε ∑
+n≤y1
+∑
+h≤√
+y1y2
+1
+n1
+1
+h
+( h
+∆
+) B
+,
+which after writing n =bn1, gives
+C1 ≪T 1+ε
+( √y1y2
+T
+) B ∑
+b≤y1
+∑
+n1≤y1/b
+1
+n1
+≪T 2+ε
+( √y1y2
+T
+) B
+.
+Since (5.1) holds, we have θ1 +θ2 < 2. Taking B = 2(1 − θ1+θ2
+2 )−1 givesC1 ≪T ε.
+By deﬁnition,
+C2 =
+∑
+n≤y1
+∑
+h≤√ny2
+∑
+f ⁄=0
+µ(n)µ2(h)P1[n]
+h
+φ(n1)
+n2
+1
+∫ ny2/h2
+1
+g(t)(logt + 2γ − 2η(n1))dt,
+so thatC0 is given by the same expression except the integral has lower bound at ∆ 1−ε/√
+y1y2.
+Again, the point is that essentially 1 ≤ |f | ≪ ht/∆ 1−ε. An argument similar to that used
+above in bounding C1 shows that C2 =C0 +O(T ε). □
+Now the proof of Lemma 5.2 is reduced to showing C0 ≪T/L B. We arrange C0 as follows
+(5.25) C0 =
+∑
+h≤y1y2/∆ 1− ε
+µ2(h)
+h
+∫ y1y2/h2
+∆ 1− ε /h
+t−1e−t/T 3
+S1S2dt,
+where
+S1 =
+∑
+h2t/y2≤n≤y1
+µ(n)P1[n]P2[h2t/n]φ(n1)
+n2
+1
+(logt + 2γ − 2η(n1)),
+and
+S2 =
+∑
+b|f ; f ⁄=0
+ˆw0(f/ 2πht).
+Lemma 5.5. We have
+(5.26) S2 ≪T,
+uniformly in h and t.
+14 H. M. BUI, BRIAN CONREY, AND MATTHEW P. YOUNG
+Lemma 5.6. For any B ≥ 0, we have
+(5.27) S1 ≪B L−B.
+An easy application of Lemmas 5.5 and 5.6 ﬁnally completes the proof of Lemma 5.2, since
+they show C0 ≪T/L B. □
+Proof of Lemma 5.5. Recall that b = (h,n ), so that S2 takes the form
+∑
+f1⁄=0
+ˆw0(f1/2πh1t).
+Let X ≥ 1 be a parameter. Then by Poisson summation,
+∑
+q⁄=0
+ˆw0(q/X ) = −ˆw0(0) +
+∑
+k∈Z
+∫ ∞
+−∞
+ˆw0(u/X)e(−uk)du
+= −ˆw0(0) +X
+∑
+k∈Z
+w0(kX ).
+Since w has support in [ T/ 4, 2T ], we have ˆw0(0) ≪ T (recall w0(x) = w(x)(x/2π)−β and
+that β ≪ 1/ logT ). The support of w0 also implies that k ≍ T/X so that the sum over k
+also gives O(T ). Note that if X >2T then the sum over k is identically zero. □
+Proof of Lemma 5.6. This is essentially a variation on the prime number theorem.
+To begin, write n =bn1 where (n1,h 1) = 1. Then
+S1 =
+∑
+bh2
+1t/y2≤n1≤y1/b
+(n1,h1)=1
+µ(bn1)P1[bn1]P2[bh2
+1t/n1]φ(n1)
+n2
+1
+(logt + 2γ − 2η(n1)).
+For simplicity, consider
+S′
+1 :=
+∑
+n
+µ(n)P1[n]P2[R/n] 1
+n,
+for a parameter R ≥y1T ε (in our application, R =bh2
+1t ≥ ∆ 1−ε ≥y1T ε). We will show
+(5.28) S′
+1 ≪L−B.
+A straightforward modiﬁcation of the method gives the same bound for S1.
+By convention, P1[n] is zero unless 1 ≤n ≤y1, and similarly P2[R/n] = 0 unless R/y2 ≤
+n ≤R. The condition n ≤R is implied by the condition n ≤y1. By taking Mellin transforms
+of P1 and P2 (that is, using (4.11)), we get
+S′
+1 =
+∑
+j
+∑
+k
+ajj!bkk!
+(logy1)j(logy2)k
+∑
+n
+( 1
+2πi
+) 2 ∫
+(ε)
+∫
+(3ε)
+ys
+1(y2/R)u µ(n)
+n1+s−u
+ds
+sj+1
+du
+uk+1.
+The sum over n converges absolutely now, so that
+S′
+1 =
+∑
+j
+∑
+k
+ajj!bkk!
+(logy1)j(logy2)k
+( 1
+2πi
+) 2 ∫
+(ε)
+∫
+(3ε)
+ys
+1(y2/R)u 1
+ζ(1 +s −u)
+ds
+sj+1
+du
+uk+1.
+Now change variables s →s +u, so that with
+(5.29) F (s) = 1
+2πi
+∫
+(2ε)
+xu du
+(u +s)j+1uk+1, x = y1y2
+R ,
+MORE THAN 41% OF THE ZEROS OF THE ZETA FUNCTION ARE ON THE CRITI CAL LINE 15
+we have
+(5.30) S′
+1 =
+∑
+j
+∑
+k
+ajj!bkk!
+(logy1)j(logy2)k
+1
+2πi
+∫
+(ε)
+ys
+1
+1
+ζ(1 +s)F (s)ds.
+In the integral representation (5.29) for F (s), we initially suppose Re( s)< 2ε.
+We need to develop the analytic properties of F . It turns out that F (s) is an entire
+function of s and has good growth properties. First, if x ≤ 1 then by moving the contour
+far to the right we get the uniform bound F (s) ≪ (1 + |s|)−j−1. Even when x >1 we can
+do this, which shows that F is entire. Next suppose that x> 1. In this case, we show that
+if |s|> (logx)−1 we have a formula for F of the form
+(5.31) F (s) =
+∑
+l≤k
+cj,k,l
+(logx)k−l
+sj+l+1 +x−s
+∑
+l≤j
+dj,k,l
+(logx)j−l
+sk+l+1 +O((1 + |s|)−j−1),
+for certain constants cj,k,l,dj,k,l (we will give them explicitly below). With the formula (5.31)
+it is straightforward to prove (5.28) as in Chapter 18 of [D] for exam ple. It is a key point
+that ys
+1
+( y1y2
+R
+) −s
+=
+(
+R
+y2
+) s
+becomes small for s with negative real part.
+We prove (5.31) now. Since x >1, we move the contour far to the left, crossing poles as
+u = 0,u = −s. The new contour is again bounded by (1 + |s|)−j−1, accounting for the error
+term in (5.31). The residues can be expressed as contour integrals of the form
+(5.32) 1
+2πi
+∮
+xu du
+(u +s)j+1uk+1,
+with one a small circle around u = 0, and the other around u = −s (if s = 0 then it is just
+one contour integral around u = 0). Consider (5.32) on the circle of very small radius (small
+compared to |s|) around u = 0. By the binomial theorem,
+1
+(u +s)j+1 = 1
+sj+1
+∞∑
+l=0
+(−1)l
+( j +l
+j
+) ( u
+s
+) l
+.
+Inserting this into (5.32) and reversing the order of summation and integration gives
+1
+sj+1
+∞∑
+l=0
+(−1)l
+( j +l
+j
+)
+s−l 1
+2πi
+∮
+xu du
+uk−l+1 =
+∑
+l≤k
+(−1)l
+( j +l
+j
+) (logx)k−l
+sj+l+1(k −l)!.
+This accounts for the ﬁrst term in (5.31) above. The second conto ur around u = −s can be
+reduced to an instance of this previous formula after changing var iables u → u −s. This
+switches the roles of j and k, and multiplies by x−s. □
+5.3. Reduction to a contour integral. Next we express the main term in (5.2) as a
+contour integral. By (4.11) (and similarly for P2), we have
+(5.33) I12(α,β ) = ˆw0(0)
+∑
+i,j
+aibji!j!
+(logy1)i(logy2)j
+( 1
+2πi
+) 3 ∫
+(1)
+∫
+(1)
+∫
+(1)
+T 3zΓ(z)ys
+1yu
+2
+∑
+hl=nk
+µ(n)µ2(h)σα,−β(l)
+(hk)
+1
+2 +un
+1
+2 +sl
+1
+2 +z
+dzdsdu
+si+1uj+1 +O(T 1−ε).
+16 H. M. BUI, BRIAN CONREY, AND MATTHEW P. YOUNG
+A calculation gives
+(5.34)
+∑
+hl=nk
+µ(n)µ2(h)σα,−β(l)
+(hk)
+1
+2 +un
+1
+2 +sl
+1
+2 +z = ζ 2(1 +u +s)ζ(1 +α +u +z)ζ(1 −β +u +z)
+ζ 2(1 + 2u)ζ(1 +α +s +z)ζ(1 −β +s +z) A(s,u,z ),
+where A(s,u,z ) is a certain arithmetical factor that is given by an Euler product th at is
+absolutely and uniformly convergent in some product of ﬁxed half-p lanes containing the
+origin. We ﬁrst move the s and u contours to Re = δ, and then move the z-contour to
+−2δ/3, where δ > 0 is some ﬁxed constant such that the arithmetical factor conver ges
+absolutely. By doing so we only cross a pole at z = 0. On the new line we simply bound the
+integral by absolute values, giving the following contribution to I12
+≪ | ˆw0(0)|
+( y1y2
+T 2
+) δ
+≪T 1−ε,
+since θ1 +θ2 < 2. Thus
+(5.35) I12(α,β ) = ˆw0(0)
+∑
+i,j
+aibji!j!
+(logy1)i(logy2)jK12 +O(T 1−ε),
+where
+(5.36)
+K12 =
+( 1
+2πi
+) 2 ∫
+(ε)
+∫
+(ε)
+ys
+1yu
+2
+ζ 2(1 +u +s)ζ(1 +α +u)ζ(1 −β +u)
+ζ 2(1 + 2u)ζ(1 +α +s)ζ(1 −β +s) A(s,u, 0) dsdu
+si+1uj+1.
+5.4. Evaluation of K12. We now evaluate K12 asymptotically; this is somewhat subtle.
+Considering the pole of ζ 2(1 +u +s) at u = −s, we are wary about moving contours into
+the critical strip. To get around this delicate issue, we shall separa te the variables s and u.
+First notice that by moving the contours of integration to ε ≍ 1/L, and bounding the
+integral with absolute values, we see that K12 ≪Li+j (which translates to showing I12(α,β )
+is asymptotically constant as T → ∞ , consistent with successful molliﬁcation). Let K ′
+12 be
+the same integral as K12 but with A(s,u, 0) replaced by A(0, 0, 0). We check in Section 5.6
+below thatA(0, 0, 0) = 1, a result we now use freely. Then we see that K12 =K ′
+12+O(Li+j−1).
+Next we replace ζ 2(1 +s +u) by its Dirichlet series and reverse the orders of summation
+and integration. This cleanly separates the variables s and u. Thus we get
+(5.37) K ′
+12 =
+∑
+n≤y2
+d(n)
+n K1K2,
+where
+K1 = 1
+2πi
+∫
+(ε)
+( y1
+n
+) s 1
+ζ(1 +α +s)ζ(1 −β +s)
+ds
+si+1(5.38)
+K2 = 1
+2πi
+∫
+(ε)
+( y2
+n
+) uζ(1 +α +u)ζ(1 −β +u)
+ζ 2(1 + 2u)
+du
+uj+1.(5.39)
+Here we were able to truncate n at y2 <y 1 by moving the u-integral far to the right.
+We compute the s and u integrals separately with the following
+Lemma 5.7. Supposei ≥ 1, j ≥ 3. Then we have
+(5.40) K1 = 1
+i!
+d2
+dxdy
+[
+eαx−βy (x +y + logy1/n)i]
+x=y=0 +O(Li−3),
+MORE THAN 41% OF THE ZEROS OF THE ZETA FUNCTION ARE ON THE CRITI CAL LINE 17
+and
+(5.41) K2 = 4(log(y2/n))j
+(j − 2)!
+∫ ∫
+a+b≤1
+0≤a,b
+(1 −a −b)j−2
+( y2
+n
+) −aα+bβ
+dadb +O(Lj−1).
+Proof of Lemma 5.7. We ﬁrst work on K1. An argument on the level of the prime number
+theorem shows that K1 is captured by the residue at s = 0, with an error of size (log y1/n)−A
+for arbitrarily large A. Since n ≤y2, we have log y1/n ≥ logy1/y2 = (θ1 −θ2)L so that this
+error is satisfactory (if we had y1 = y2 the error term would be more delicate; see Lemma
+6.1). A similar approximation argument shows that
+K1 = 1
+2πi
+∮ ( y1
+n
+) s
+(α +s)(−β +s) ds
+si+1 +O(Li−3),
+where the contour is a small circle enclosing 0.We calculate this integra l exactly as
+K1 = (−αβ) (log(y1/n))i
+i! + (α −β) (log(y1/n))i−1
+(i − 1)! + (log(y1/n))i−2
+(i − 2)! +O(Li−3).
+When i = 1 we interpret 1 /(i − 2)! = 0. This can be expressed in a compact form as (5.40).
+Now we compute K2. As in the computation of K1, the prime number theorem shows
+that we can replace the contour by a small circle around the origin wit h radius ≍L−1, with
+error O(1). Then on this contour
+(5.42) K2 = 4 1
+2πi
+∮
+qu 1
+(α +u)(−β +u)
+du
+uj−1 +O(Lj−1),
+where q =y2/n. Observe the following identity
+(5.43) 1
+α +u =
+∫ 1
+1/q
+rα+u−1dr + q−α−u
+α +u,
+valid for all complex numbers α +u and positive q. We apply this identity to K2, expressing
+the main term as the sum of these two terms. The latter term can be seen to give no
+contribution to K2: it is
+4q−α 1
+2πi
+∮ 1
+(α +u)(−β +u)
+du
+uj−1,
+which vanishes as can be seen by taking the contour to be arbitrarily large. By reversing the
+orders of integration we have
+K2 = 4
+∫ 1
+1/q
+rα−1 1
+2πi
+∮
+(qr)u 1
+−β +u
+du
+uj−1dr +O(Lj−1).
+We use (5.43) again but with the lower boundary of integration at 1 /qr. Again we get K2
+as the sum of two terms, with the latter term vanishing (using j ≥ 2). The former term is
+4
+∫ 1
+1/q
+∫ 1
+1/qr
+rα−1t−β−1 1
+2πi
+∮
+(qrt)u du
+uj−1dtdr,
+which can be calculated as
+4
+(j − 2)!
+∫ 1
+1/q
+∫ 1
+1/qr
+rα−1t−β−1(logrty2
+n )j−2dtdr.
+Changing variables by r =q−a,t =q−b and simplifying gives (5.41). □
+18 H. M. BUI, BRIAN CONREY, AND MATTHEW P. YOUNG
+5.5. Final simpliﬁcations. We are ﬁnally ready to ﬁnish the proof of Lemma 3.4.
+Proof. We pick up our calculation with (5.35) and (5.37), getting
+I12(α,β ) = ˆw0(0)
+∑
+n≤y2
+d(n)
+n
+( ∑
+i
+aii!
+(logy1)iK1
+)( ∑
+j
+bjj!
+(logy2)jK2
+)
++O(T/L ).
+Using Lemma 5.7 we now compute these sums over i and j. We have
+∑
+i
+= d2
+dxdy
+[
+eαx−βyP1
+( x +y
+logy1
++ logy1/n
+logy1
+)]
+x=y=0
++O(L−3),
+which we write in the slightly more convenient form as
+∑
+i
+= 1
+(logy1)2
+d2
+dxdy
+[
+yαx−βy
+1 P1
+(
+x +y + logy1/n
+logy1
+)]
+x=y=0
++O(L−3).
+The sum over j is
+∑
+j
+= 4 (logy2/n)2
+(logy2)2
+∫ ∫
+0≤a+b≤1
+( y2
+n
+) −aα+bβ
+P ′′
+2
+(
+(1 −a −b) log(y2/n)
+logy2
+)
+dadb +O(L−1).
+With this, and recalling ˆw0(0) = T −β ˆw(0)(1 +O(L−1)), we have
+(5.44) I12(α,β ) = 4T −β ˆw(0)
+(logy1)2
+d2
+dxdy
+[
+yαx−βy
+1
+∫ ∫
+0≤a+b≤1
+∑
+n≤y2
+d(n)
+n
+(log(y2/n))2
+(logy2)2
+( y2
+n
+) −aα+bβ
+P1
+(
+x +y + log(y1/n)
+logy1
+)
+P ′′
+2
+(
+(1 −a −b) log(y2/n)
+logy2
+)]
+x=y=0
+dadb +O(T/L ).
+Finally we apply Lemma 4.4 to the sum over n (with k = 2, x =y1, z =y2, s = −aα +bβ,
+F (u) = P1(x +y +u), H(u) = u2P ′′
+2 ((1 −a −b)u)) to ﬁnish the proof of Lemma 3.4. □
+5.6. The arithmetical factor. Here we verify that A(0, 0, 0) = 1. To do so, we compute
+A(s,s,s ) and verify it is 1 at s = 0. In view of (5.34), we have
+A(s,s,s ) =
+∑
+hl=nk
+µ(n)µ2(h)σα,−β(l)
+(hknl)
+1
+2 +s =
+∑
+hl=nk
+µ(n)µ2(h)σα,−β(l)
+(hl)1+2s .
+Forhl ﬁxed, the sum over nk is ∑
+n|hlµ(n) which picks out h = l = 1. Thus A(s,s,s ) = 1
+for all s!
+6. The second diagonal term
+Our goal in this section is to prove Theorem 3.3. The overall strateg y is roughly the same
+as that in Section 5.
+6.1. Reduction to a contour integral. Recall I2(α,β ) is deﬁned by (3.8). Writing out
+the deﬁnition of ψ2, we have
+(6.1)
+I2(α,β ) =
+∑
+h1,h2
+k1,k2
+µ2(h1)µ2(h2)P2[h1k1]P2[h2k2]
+√h1h2k1k2
+∫ ∞
+−∞
+(
+h1k2
+h2k1
+) −it
+w(t)ζ( 1
+2 +α +it)ζ( 1
+2 +β −it)dt.
+MORE THAN 41% OF THE ZEROS OF THE ZETA FUNCTION ARE ON THE CRITI CAL LINE 19
+We apply Proposition 4.2, writing I2(α,β ) = I ′
+2(α,β ) +I ′′
+2 (α,β ), where I ′′
+2 can be obtained
+from I ′
+2 by switching α and −β and multiplying by
+( t
+2π
+) −α−β
+=T −α−β +O(L−1). Thus
+(6.2) I ′
+2(α,β ) =
+∫ ∞
+−∞
+w(t)
+∑
+i,j
+bibji!j!
+(logy2)i+j
+∑
+h1k2m=h2k1n
+µ2(h1)µ2(h2)
+(h1h2k1k2)
+1
+2m
+1
+2 +αn
+1
+2 +β
+( 1
+2πi
+) 3 ∫
+(1)
+∫
+(1)
+∫
+(1)
+( y2
+h1k1
+) s ( y2
+h2k2
+) u ( t
+2πmn
+) z G(z)
+z dz ds
+si+1
+du
+uj+1dt.
+Next we compute the arithmetical sum as
+(6.3)
+∑
+h1k2m=h2k1n
+µ2(h1)µ2(h2)
+(h1k1)
+1
+2 +s(h2k2)
+1
+2 +um
+1
+2 +α+zn
+1
+2 +β+z
+= ζ(1 +s +u)5ζ(1 +α +s +z)ζ(1 +β +u +z)ζ(1 +α +β + 2z)
+ζ 2(1 + 2s)ζ 2(1 + 2u)ζ 2(1 +β +s +z)ζ 2(1 +α +u +z) B(s,u,z ),
+where B(s,u,z ) is an arithmetical factor converging absolutely in a product of half -planes
+containing the origin. Hence
+I ′
+2(α,β ) =
+∫ ∞
+−∞
+w(t)
+∑
+i,j
+bibji!j!
+(logy2)i+j
+( 1
+2πi
+) 3 ∫
+(1)
+∫
+(1)
+∫
+(1)
+B(s,u,z )ys+u
+2
+( t
+2π
+) z G(z)
+z
+ζ(1 +s +u)5ζ(1 +α +s +z)ζ(1 +β +u +z)ζ(1 +α +β + 2z)
+ζ 2(1 + 2s)ζ 2(1 + 2u)ζ 2(1 +β +s +z)ζ 2(1 +α +u +z) dz ds
+si+1
+du
+uj+1dt.
+Now we take the contours of integration to δ >0 small, and then move z to −δ +ε, crossing
+a simple pole at z = 0 only (since G(z) vanishes at the pole of ζ(1 +α +β + 2z)). The new
+line of integration contributes
+(6.4) ≪T 1+ε
+( y2
+2
+T
+) δ
+=O(T 1−ε),
+since θ2 < 1/2. Write I ′
+2(α,β ) = I ′
+20(α +β) +O(T 1−ε), where I ′
+20(α,β ) corresponds to the
+residue at z = 0. Then
+(6.5) I ′
+20(α,β ) = ˆw(0)ζ(1 +α +β)
+∑
+i,j
+bibji!j!
+(logy2)i+jJ2,
+where
+J2 =
+( 1
+2πi
+) 2 ∫
+(δ)
+∫
+(δ)
+ys+u
+2
+B(s,u, 0)ζ(1 +s +u)5ζ(1 +α +s)ζ(1 +β +u)
+ζ 2(1 + 2s)ζ 2(1 + 2u)ζ 2(1 +β +s)ζ 2(1 +α +u)
+ds
+si+1
+du
+uj+1.
+Using the Dirichlet series for ζ 5(1 +s +u) and reversing the order of the sum and integral,
+we get
+J2 =
+∑
+m≤y2
+d5(m)
+m
+( 1
+2πi
+) 2 ∫
+(δ)
+∫
+(δ)
+B(s,u, 0)
+( y2
+m
+) s+u
+ζ(1 +α +s)ζ(1 +β +u)
+ζ 2(1 + 2s)ζ 2(1 + 2u)ζ 2(1 +β +s)ζ 2(1 +α +u)
+ds
+si+1
+du
+uj+1.
+20 H. M. BUI, BRIAN CONREY, AND MATTHEW P. YOUNG
+Takingδ ≍L−1 and bounding the integrals trivially shows J2 ≪Li+j−1. In particular, we can
+use a Taylor series so that B(s,u, 0) = B(0, 0, 0) +O(|s| + |u|) to write J2 =J ′
+2 +O(Li+j−2),
+say. Now the variables are separated so that
+(6.6) J ′
+2 =
+∑
+m≤y2
+d5(m)
+m L1L2,
+where
+(6.7) L1 = 1
+2πi
+∫
+(δ)
+( y2
+m
+) s ζ(1 +α +s)
+ζ 2(1 + 2s)ζ 2(1 +β +s)
+ds
+si+1,
+and L2 is the same as L1 but with i replaced by j and α and β switched. Next we need to
+use the zero-free region for ζ to move the contour to the left of 0. Unfortunately, an error of
+size O(1) is not suﬃcient for our application so we need a more subtle argum ent. We have
+Lemma 6.1. With L1 deﬁned by (6.7) and for some ν ≍ (log logy2)−1 we have
+(6.8) L1 = 4 1
+2πi
+∮ ( y2
+m
+) s (β +s)2
+α +s
+ds
+si−1 +O(Li−4) +O
+( ( y2
+m
+) −ν
+Lε
+)
+,
+where the contour is a circle of radius one enclosing the orig in.
+Proof. Let Y = o(T ) be a large parameter to be chosen later. By Cauchy’s theorem, L1 is
+equal to the sum of residues at s = 0 and s = −α, plus integrals over the line segments
+γ1 = {s = it,t ∈ R, |t| ≥ Y }, γ2 = {s = σ ±iY, − c
+log Y ≤ σ ≤ 0}, and γ3 = {s = − c
+log Y +
+it, |t| ≤ Y }, where c is some ﬁxed positive constant such that ζ(1 + 2s)ζ(1 +β +s) has no
+zeros in the region on the right hand side of the contour determined by the γi. Furthermore,
+we require that for such c that 1/ζ(σ +it) ≪ log(2 + |t|) in this region (see [T] Theorem
+3.11). Then the integral over γ1 is ≪ (logY )3/Y i ≪ Y −2 since i ≥ 3. The integral over
+γ2 is ≪ (logY )2/Y i+1 ≪ Y −2. Finally, the contribution from γ3 is ≪ (logY )i ( y2
+m
+) −c/ log Y
+.
+Choosing Y ≍ logy2 gives an error so far of size O((y2/m)−νLε) +O(L−2).
+Next we work with the sum of residues which can be expressed as
+1
+2πi
+∮ ( y2
+m
+) s ζ(1 +α +s)
+ζ 2(1 + 2s)ζ 2(1 +β +s)
+ds
+si+1,
+where the contour is a circle of radius ≍ 1/L. This integral is trivially bounded by O(Li−3)
+so that taking the ﬁrst term in the Taylor series of the ζ’s ﬁnishes the proof. □
+Next we calculate the integral in (6.8) with the following
+Lemma 6.2. Fori ≥ 3 we have
+1
+2πi
+∮ ( y2
+m
+) s (β +s)2
+α +s
+ds
+si−1 = d2
+dx2
+(x + log y2
+m )i−1
+(i − 2)!
+∫ 1
+0
+(1 −u)i−2ex(β−αu)
+( y2
+m
+) −αu
+du
+⏐
+⏐
+⏐
+x=0
+.
+Proof. Let N be the integral to be computed. We begin with the identity
+(β +s)2 = d2
+dx2e(β+s)x
+⏐
+⏐
+⏐
+x=0
+,
+whence
+N = d2
+dx2 eβxN1(x)
+⏐
+⏐
+x=0, where N1(x) = 1
+2πi
+∮ (
+exy2
+m
+) s 1
+α +s
+ds
+si−1.
+MORE THAN 41% OF THE ZEROS OF THE ZETA FUNCTION ARE ON THE CRITI CAL LINE 21
+Taking a power series, we have
+N1(x) =
+∑
+l≥0
+(x + log y2
+m )l
+l!
+1
+2πi
+∮ sl−i+1
+α +sds.
+As there are two poles inside the contour, it is easier to compute the residue at inﬁnity. In
+other words, change variables s → 1/s to get
+N1(x) =
+∑
+l≥0
+(x + log y2
+m )l
+l!
+1
+2πi
+∮ si−l−2
+1 +αsds.
+Taking a power series of (1 + αs)−1, we get
+N1(x) =
+∑
+l≥0
+(x + log y2
+m )l
+l!
+∑
+k≥0
+(−α)k 1
+2πi
+∮
+sk+i−l−2ds.
+The integral picks out l =k +i − 1, giving
+N1(x) = (x + logy2
+m )i−1
+∑
+k≥0
+(−α)k(x + log y2
+m )k
+(k +i − 1)! .
+Now separate the variables i andk by the following trick (with B(x,y ) denoting the standard
+beta function)
+1
+(k +i − 1)! =B(i − 1,k + 1) 1
+k!(i − 2)!
+followed by the usual integral representation deﬁnition of the bet a function, getting
+N1(x) = (x + log y2
+m )i−1
+(i − 2)!
+∫ 1
+0
+(1 −u)i−2
+∑
+k≥0
+(−α)kuk(x + log y2
+m )k
+k! du.
+Of course the sum over k is easily computable which completes the proof. □
+Applying Lemmas 6.1 and 6.2 to (6.6) gives
+(6.9) J ′
+2 = 16
+(i − 2)!(j − 2)!
+∑
+m≤y2
+d5(m)
+m
+d4
+dx2dy2
+[
+eβx+αy(x + log(y2/m))i−1(y + log(y2/m))j−1
+∫ 1
+0
+∫ 1
+0
+(1 −u)i−2(1 −v)j−2e−αxu−βyv
+( y2
+m
+) −αu−βv
+dudv
+]
+x=y=0
++O(Li+j−7 ∑
+m≤y2
+d5(m)
+m ) +O((Li−3 +Lj−3)Lε ∑
+m≤y2
+d5(m)
+m
+( y2
+m
+) −ν
+).
+Applying Lemma 4.6 and noting max( i + 1,j + 1) ≤i +j − 2 since i,j ≥ 3, shows that the
+error terms above are
+≪Li+j−2 +Lε(Li+1 +Lj+1) ≪Li+j−2+ε.
+Thus inserting (6.9) into (6.5) and recalling I ′
+2(α,β ) = I ′
+20(α,β ) +O(T 1−ε) gives
+I ′
+2(α,β ) = 16 ˆw(0)
+α +β
+d4
+dx2dy2
+[ ∫ 1
+0
+∫ 1
+0
+ex(β−αu)+y(α−βv) ∑
+m≤y2
+d5(m)
+m
+(x + log y2
+m )(y + log y2
+m )
+(logy2)4
+P ′′
+2
+(
+(1 −u)x + log y2
+m
+logy2
+)
+P ′′
+2
+(
+(1 −v)y + log y2
+m
+logy2
+) ( y2
+m
+) −αu−βv
+dudv
+]
+x=y=0
++O(TL −1+ε).
+22 H. M. BUI, BRIAN CONREY, AND MATTHEW P. YOUNG
+We write this main term in a more convenient way as
+16 ˆw(0)
+(α +β)(logy2)6
+d4
+dx2dy2
+[ ∫ 1
+0
+∫ 1
+0
+yx(β−αu)+y(α−βv)
+2
+∑
+m≤y2
+d5(m)
+m
+( y2
+m
+) −αu−βv
+(
+x + log y2
+m
+logy2
+)(
+y + log y2
+m
+logy2
+)
+P ′′
+2
+(
+(1 −u)(x + log y2
+m
+logy2
+)
+)
+P ′′
+2
+(
+(1 −v)(y + log y2
+m
+logy2
+)
+)
+dudv
+]
+x=y=0
+.
+Now apply Corollary 4.5 to this sum over m to get
+I ′
+2(α,β ) = 2 ˆw(0)
+3(α +β)(logy2)
+d4
+dx2dy2
+[ ∫ 1
+0
+∫ 1
+0
+∫ 1
+0
+(1 −r)4yβ(x−v(y+r))+α(y−u(x+r))
+2
+(x +r)(y +r)P ′′
+2 ((1 −u)(x +r))P ′′
+2 ((1 −v)(y +r))drdudv
+]
+x=y=0
++O(TL −1+ε).
+To form I2(α,β ), recall that we need to add I ′
+2 and I ′′
+2 , where I ′′
+2 is formed by taking I ′
+2,
+switchingα and −β, and multiplying by T −α−β. Letting
+(6.10) U(α,β ) = yβ(x−v(y+r))+α(y−u(x+r))
+2 −T −α−βy−α(x−v(y+r))−β(y−u(x+r))
+2
+α +β ,
+we then have
+(6.11) I2(α,β ) = 2 ˆw(0)
+3(logy2)
+d4
+dx2dy2
+[ ∫ 1
+0
+∫ 1
+0
+∫ 1
+0
+(1 −r)4U(α,β )
+(x +r)(y +r)P ′′
+2 ((1 −u)(x +r))P ′′
+2 ((1 −v)(y +r))drdudv]x=y=0 +O(TL −1+ε).
+Now write
+U(α,β ) = yβ(x−v(y+r))+α(y−u(x+r))
+2
+1 − (Ty x+y−v(y+r)−u(x+r)
+2 )−α−β
+α +β .
+Using the integral formula
+1 −z−α−β
+α +β = logz
+∫ 1
+0
+z−t(α+β)dt,
+and simplifying, we ﬁnish the proof of Lemma 3.5.
+6.2. The arithmetical factor. Here we compute B(0, 0, 0). The ﬁrst thing to notice is
+that since B is holomorphic with respect to α,β near the origin, we have B(0, 0, 0) =
+B0(0, 0, 0)(1 +O(L−1)), where B0 is B specialized with α = β = 0. For this choice of α,β
+and with u =z =s, the expression (6.3) simpliﬁes greatly. Thus
+B0(s,s,s ) =
+∑
+h1k2m=h2k1n
+µ2(h1)µ2(h2)
+(h1k1h2k2mn)
+1
+2 +s.
+Making h1k2 =l1 and h2k1 =l2 be new variables and using ∑
+h|lµ2(h) = µ(l), we get
+B0(s,s,s ) =
+∑
+l1m=l2n
+µ(l1)µ(l2)
+(l1l2mn)
+1
+2 +s = 1.
+MORE THAN 41% OF THE ZEROS OF THE ZETA FUNCTION ARE ON THE CRITI CAL LINE 23
+References
+[BCH-B] R. Balasubramanian, J.B. Conrey, and D.R. Heath-Brown, Asymptotic mean square of the product
+of the Riemann zeta-function and a Dirichlet polynomial. J. Reine Angew. Math. 357 (1985), 161–181.
+[C1] J. B. Conrey, More than two ﬁfths of the zeros of the Riemann zeta function a re on the critical line. J.
+Reine Angew. Math. 399 (1989), 1–26.
+[C2] J. B. Conrey, Zeros of derivatives of Riemann’s ξ-function on the critical line. J. Number Theory 16
+(1983), no. 1, 49–74.
+[CFZ] J.B. Conrey, D. Farmer, and M. Zirnbauer, Autocorrelation of ratios of L-functions. Commun. Number
+Theory Phys. 2 (2008), no. 3, 593–636.
+[CS] J.B. Conrey and N. Snaith, Applications of the L-functions ratios conjectures. Proc. Lond. Math. Soc.
+(3) 94 (2007), no. 3, 594–646.
+[D] H. Davenport, Multiplicative number theory. Third edition. Revised and with a preface by Hugh L.
+Montgomery. Graduate Texts in Mathematics, 74. Springer-Verla g, New York, 2000.
+[F] S. Feng, Zeros of the Riemann zeta function on the critical line. http://arxiv.org/abs/1003.0059.
+[HY] C. Hughes and M. Young, The twisted fourth moment of the Riemann zeta function. To appear in J.
+Reine Angew. Math.
+[IK] H. Iwaniec and E. Kowalski, Analytic Number Theory . American Mathematical Society Colloquium
+Publications, 53. American Mathematical Society, Providence, RI, 2004.
+[Le] N. Levinson, More than one third of the zeros of Riemann’s zeta function ar e on σ = 1/ 2. Adv. Math.
+13 (1974), 383–436.
+[Lo] Shi-Tuo Lou, A lower bound for the number of zeros of Riemann’s zeta functi on on σ = 1
+2 . Recent
+progress in analytic number theory, Vol. 1 (Durham, 1979), pp. 31 9–324, Academic Press, London-New
+York, 1981.
+[M] Y. Motohashi, Spectral theory of the Riemann zeta-function . Cambridge Tracts in Mathematics, 127.
+Cambridge University Press, Cambridge, 1997.
+[S] A. Selberg, On the zeros of Riemann’s zeta-function. Skr. Norske Vid. Akad. Oslo I. (1942). no. 10,
+1–59.
+[T] E. C. Titchmarsh, The Theory of the Riemann Zeta-function . Second edition. Edited and with a preface
+by D. R. Heath-Brown. The Clarendon Press, Oxford University Pr ess, New York, 1986.
+Mathematical Institute, University of Oxford, Oxford OX1 3 LB, UK
+E-mail address : hung.bui@maths.ox.ac.uk
+American Institute of Mathematics, 360 Portage A ve., Palo A lto, CA 94306
+E-mail address : conrey@aimath.org
+Department of Mathematics, Texas A&M University, College S tation, TX 77843-3368
+Current address : School of Mathematics, Institute for Advanced Study, Einstein Drive, Princeton, NJ
+08540 USA
+E-mail address : myoung@math.tamu.edu

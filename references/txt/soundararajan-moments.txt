@@ -1,0 +1,969 @@
+arXiv:math/0612106v2  [math.NT]  8 Feb 2008
+MOMENTS OF THE RIEMANN ZET A-FUNCTION
+K. Soundararajan
+In memoriam Atle Selberg
+1. Introduction
+An important problem in analytic number theory is to gain an u nderstanding of the mo-
+ments
+Mk(T ) =
+∫ T
+0
+|ζ( 1
+2 + it)|2kdt.
+For positive real numbers k, it is believed that Mk(T ) ∼ CkT (log T )k2
+for a positive
+constant Ck. A precise value for Ck was conjectured by Keating and Snaith [10] based on
+considerations from random matrix theory. Subsequently, a n alternative approach, based
+on multiple Dirichlet series and producing the same conject ure, was given by Diaconu,
+Goldfeld and Hoﬀstein [4]. Recent work by Conrey et al [2] gives a more precise conjecture,
+identifying lower order terms in an asymptotic expansion fo r Mk(T ).
+Despite many attempts, asymptotic formulae for Mk(T ) have been established only for
+k = 1 (due to Hardy and Littlewood, see [22]) and k = 2 (due to Ingham, see [22]). However
+we do have the lower bound Mk(T ) ≫k T (log T )k2
+. This was established by Ramachandra
+[13] for positive integers 2 k, by Heath-Brown [6] for all positive rational numbers k, and
+assuming the truth of the Riemann Hypothesis by Ramachandra [12] for all positive real
+numbers k. See also the elegant note [1] giving such a bound assuming RH , and [20] for
+the best known constants implicit in these lower bounds. Ana logous conjectures exist (see
+[2], [4], [11]) for moments of central values of L-functions in families, and in many cases
+lower bounds of the conjectured order are known (see [16] and [17]).
+Here we study the problem of obtaining upper bounds for Mk(T ). When 0 ≤ k ≤ 2,
+Ramachandra ([13], [14]) and Heath-Brown ([6], [7]) showed , assuming RH, that Mk(T ) ≪
+T (log T )k2
+. The Lindel¨ of Hypothesis is equivalent to the estimate Mk(T ) ≪k,ǫ T 1+ǫ for
+all natural numbers k. Thus, for k larger than 2, it seems diﬃcult to make unconditional
+progress on bounding Mk(T ). If we assume RH, then a classical bound of Littlewood (see
+[22]) gives that (for t ≥ 10 and some positive constant C)
+(1) |ζ( 1
+2 + it)| ≪ exp
+(
+C log t
+log log t
+)
+,
+The author is partially supported by the National Science Foun dation and the American Institute of
+Mathematics (AIM).
+Typeset by AMS-TEX
+1
+2 K. SOUNDARARAJAN
+and therefore Mk(T ) ≪ T exp(2kC log T /log log T ). We improve upon this, nearly obtain-
+ing an upper bound of the conjectured order of magnitude.
+Corollary A. Assume RH. For every positive real number k, and every ǫ > 0 we have
+T (log T )k2
+≪k Mk(T ) ≪k,ǫ T (log T )k2+ǫ.
+Our proof suggests that the dominant contribution to the 2 k-th moment comes from t
+such that |ζ( 1
+2 + it)| has size (log T )k, and this set has measure about T /(log T )k2
+.
+Corollary B. Assume RH. Let k ≥ 0 be a ﬁxed real number. For large T we have
+meas{t ∈ [0, T ] : |ζ( 1
+2 + it)| ≥ (log T )k} = T (log T )−k2+o(1).
+We will deduce these corollaries by ﬁnding an upper bound on t he frequency with which
+large values of |ζ( 1
+2 + it)| can occur. Throughout we deﬁne
+S(T, V ) = {t ∈ [T, 2T ] : log |ζ( 1
+2 + it)| ≥ V },
+and observe that
+(2)
+∫ 2T
+T
+|ζ( 1
+2 + it)|2kdt = −
+∫ ∞
+−∞
+e2kV dmeas(S(T, V )) = 2 k
+∫ ∞
+−∞
+e2kV meas(S(T, V ))dV.
+To prove Corollaries A and B, we desire estimates for the meas ure of S(T, V ) for large T
+and all V ≥ 3. To place our main theorem in context, let us recall the beau tiful result
+of Selberg that as t varies in [ T, 2T ] the distribution of log |ζ( 1
+2 + it)| is approximately
+Gaussian with mean 0 and variance 1
+2 log log T . Precisely, Selberg’s theorem (see [18], [19])
+shows that for any ﬁxed λ ∈ R, and as T → ∞
+meas(S(T, λ
+√
+1
+2 log log T )) = T
+( 1√
+2π
+∫ ∞
+λ
+e−x2/2dx + o(1)
+)
+.
+Although Selberg’s result holds only for V of size √log log T , we may speculate that in a
+much larger range for V a similar estimate holds:
+(3) meas( S(T, V )) ≪ T
+√log log T
+V exp
+(
+− V 2
+log log T
+)
+.
+Such an estimate would lead, via (2), to the bound Mk(T ) ≪k T (log T )k2
+. In our main The-
+orem we establish that a weaker form of (3) holds in the range 3 ≤ V = o((log log T ) log3 T ),
+where throughout we shall write log 3 for log log log. In the application to moments, the
+crucial range is when V is of size about k log log T , and our Theorem shows that a ver-
+sion of (3) holds for such V . For larger values of V we obtain an upper bound of the
+form meas( S(T, V )) ≪ T exp(− 1
+33 V log V ) (at least when 1
+2 (log log T ) log3 T < V ), and
+the shape of this estimate is in keeping with Littlewood’s bo und (1).
+MOMENTS OF THE RIEMANN ZETA-FUNCTION 3
+Theorem. Assume RH. Let T be large, and V ≥ 3 be a real number, and let S(T, V ) be
+as deﬁned above. If 10√log log T ≤ V ≤ log log T then we have
+meas(S(T, V )) ≪ T V√log log T exp
+(
+− V 2
+log log T
+(
+1 − 4
+log3 T
+))
+;
+if log log T < V ≤ 1
+2 (log log T ) log3 T we have
+meas(S(T, V )) ≪ T V√log log T exp
+(
+− V 2
+log log T
+(
+1 − 7V
+4(log log T ) log3 T
+) 2)
+;
+and, ﬁnally, if 1
+2 (log log T ) log3 T < V we have
+meas(S(T, V )) ≪ T exp
+(
+− 1
+33 V log V
+)
+.
+In the limited range 0 ≤ V ≤ log log T , Jutila [8] had previously shown that
+meas(S(T, V )) ≪ T exp
+(
+− V 2
+log log T
+(
+1 + O
+( V
+log log T
+))
+.
+I have shown recently in [21] that in the range 3 ≤ V ≤ 1
+5
+√
+log T /log log T one has
+meas(S(T, V )) ≫ T
+(log T )4 exp
+(
+− 10 V 2
+log log T
+8V 2 log V
+)
+.
+In contrast to our Theorem above, these results are uncondit ional.
+As noted above, we build on Selberg’s work on the distributio n of log ζ( 1
+2 + it). Selberg
+computed the moments of the real and imaginary parts of log ζ( 1
+2 + it). To achieve this he
+found an ingenious expression for log ζ( 1
+2 + it) in terms of primes. His ideas work very well
+for the imaginary part of the logarithm, but are more complic ated for the real part of the
+logarithm owing to zeros of the zeta-function lying very clo se to 1
+2 + it. One novelty in our
+work is the realization that if we seek an upper bound for log |ζ( 1
+2 + it)| (which is what is
+needed for our Theorem) then the eﬀect of the zeros very near 1
+2 + it is actually benign.
+This is our main Proposition given below, from which we will d educe our Theorem. We
+should comment that Selberg’s work is unconditional, and us es zero-density results which
+put most of the zeros near the critical line. It would be inter esting to see how much of our
+work can be recovered unconditionally.
+Proposition. Assume RH. Let T be large, let t ∈ [T, 2T ], and let 2 ≤ x ≤ T 2. Let
+λ0 = 0 .4912 . . . denote the unique positive real number satisfying e−λ0 = λ0 + λ2
+0/2. For
+all λ ≥ λ0 we have the estimate
+log |ζ( 1
+2 + it)| ≤ Re
+∑
+n≤x
+Λ( n)
+n
+1
+2 + λ
+log x +it log n
+log(x/n)
+log x + (1 + λ)
+2
+log T
+log x + O
+( 1
+log x
+)
+.
+Taking x = (log T )2−ǫ in our Proposition, and estimating the sum over n trivially,
+we obtain the following explicit form of Littlewood’s bound (1), which improves upon
+the previous estimate obtained by Ramachandra and Sankaran arayanan [15]. There is
+certainly some scope to improve our Corollary C below, and it may be instructive to
+understand what the limit of the method would be (analogousl y to the elegant treatment
+of Im log ζ( 1
+2 + it) given by Goldston and Gonek [5]).
+4 K. SOUNDARARAJAN
+Corollary C. Assume RH. For all large t we have
+|ζ( 1
+2 + it)| ≤ exp
+(( 1 + λ0
+4 + o(1)
+) log t
+log log t
+)
+≤ exp
+( 3
+8
+log t
+log log t
+)
+.
+The method developed here is robust and applies equally well to moments in families of
+L-functions; we discuss this brieﬂy in section 4 below. We end the introduction by deriving
+Corollaries A and B.
+Proof of Corollaries A and B. As mentioned earlier, the lower bound for Mk(T ) in Corol-
+lary A is due to Ramachandra [12]. The upper bound follows upo n inserting the bounds
+of the Theorem into (2). In performing this computation, it i s convenient to use our The-
+orem in the crude form meas( S(T, V )) ≪ T (log T )o(1) exp(−V 2/ log log T ) for 3 ≤ V ≤
+4k log log T , and meas( S(T, V )) ≪ T (log T )o(1) exp(−4kV ) for V > 4k log log T .
+From the Theorem, we may see that the contribution to Mk(T ) from t ∈ [0, T ] with
+|ζ( 1
+2 + it)| > (log T )k+ǫ or |ζ( 1
+2 + it)| < (log T )k−ǫ is o(T (log T )k2
+). Combining this with
+the lower bound Mk(T ) ≫k T (log T )k2
+we obtain the lower bound for the measure implicit
+in Corollary B. The upper bound implicit there follows from t he Theorem.
+Acknowledgments. I am grateful to Mike Rubinstein for some helpful remarks, an d
+to Brian Conrey for his encouragement.
+2. Proof of the main Proposition
+In proving the Proposition we may suppose that t does not coincide with the ordinate of
+a zero of ζ(s). Letting ρ = 1
+2 + iγ run over the non-trivial zeros of ζ(s), we deﬁne
+F (s) = Re
+∑
+ρ
+1
+s − ρ =
+∑
+ρ
+σ − 1/2
+(σ − 1/2)2 + (t − γ)2 .
+Visibly F (s) is non-negative in the half-plane σ ≥ 1/2. Recall Hadamard’s factorization
+formula which gives (see (8) and (11) of §12 of Davenport [3])
+Re ζ ′
+ζ (s) = −Re 1
+s − 1 + 1
+2 log π − 1
+2 Re Γ ′
+Γ ( 1
+2 s + 1) + F (s),
+so that for t ∈ [T, 2T ] an application of Stirling’s formula yields
+(4) −Re ζ ′
+ζ (s) = 1
+2 log T + O(1) − F (s).
+Integrating (4) as σ = Re(s) varies from 1
+2 to σ0(> 1
+2 ) we obtain, setting s0 = σ0 + it,
+log |ζ( 1
+2 + it)| − log |ζ(s0)| =
+( log T
+2 + O(1)
+)
+(σ0 − 1
+2 ) −
+∫ σ0
+1/2
+F (σ + it)dσ
+= (σ0 − 1
+2 )
+( log T
+2 + O(1)
+)
+− 1
+2
+∑
+ρ
+log (σ0 − 1
+2 )2 + (t − γ)2
+(t − γ)2 .
+Since log(1 + x2) ≥ x2/(1 + x2) we deduce that
+(5) log |ζ( 1
+2 + it)| − log |ζ(s0)| ≤ (σ0 − 1
+2 )
+( log T
+2 + O(1) − F (s0)
+2
+)
+.
+MOMENTS OF THE RIEMANN ZETA-FUNCTION 5
+Lemma 1. Unconditionally, for any s not coinciding with 1 or a zero of ζ(s) and any
+x ≥ 2, we have
+− ζ ′
+ζ (s) =
+∑
+n≤x
+Λ( n)
+ns
+log(x/n)
+log x + 1
+log x
+( ζ ′
+ζ (s)
+) ′
++ 1
+log x
+∑
+ρ
+xρ−s
+(ρ − s)2
+− x1−s
+(1 − s)2 log x + 1
+log x
+∞∑
+k=1
+x−2k−s
+(2k + s)2 .
+Proof. This is similar to an identity of Selberg, see Theorem 14.20 o f Titchmarsh [22].
+With c = max(1, 2 − σ) we consider
+1
+2πi
+∫ c+i∞
+c−i∞
+− ζ ′
+ζ (s + w) xw
+w2 dw =
+∑
+n≤x
+Λ( n)
+ns log(x/n),
+upon integrating term by term using the Dirichlet series exp ansion of − ζ′
+ζ (s + w). On the
+other hand, moving the line of integration to the left and cal culating residues this equals
+− ζ ′
+ζ (s) log x −
+( ζ ′
+ζ (s)
+) ′
+−
+∑
+ρ
+xρ−s
+(ρ − s)2 + x1−s
+(1 − s)2 −
+∞∑
+k=1
+x−2k−s
+(2k + s)2 .
+Equating these two expressions we obtain the lemma.
+Take s = σ + it in Lemma 1, extract the real parts of both sides, and integrat e over σ
+from σ0 to ∞. Thus, for 2 ≤ x ≤ T 2,
+log |ζ(s0)| = Re
+( ∑
+n≤x
+Λ( n)
+ns0 log n
+log(x/n)
+log x − 1
+log x
+ζ ′
+ζ (s0)
++ 1
+log x
+∑
+ρ
+∫ ∞
+σ0
+xρ−s
+(ρ − s)2 dσ + O
+( 1
+log x
+))
+.
+Using (4), and observing that
+∑
+ρ
+⏐
+⏐
+⏐
+∫ ∞
+σ0
+xρ−s
+(ρ − s)2 dσ
+⏐
+⏐
+⏐ ≤
+∑
+ρ
+∫ ∞
+σ0
+x
+1
+2 −σ
+|s0 − ρ|2 dσ =
+∑
+ρ
+x
+1
+2 −σ0
+|s0 − ρ|2 log x = x
+1
+2 −σ0 F (s0)
+(σ0 − 1
+2 ) log x ,
+we deduce that
+log |ζ(s0)| ≤ Re
+∑
+n≤x
+Λ( n)
+ns0 log n
+log(x/n)
+log x + log T
+2 log x − F (s0)
+log x + x
+1
+2 −σ0 F (s0)
+(σ0 − 1/2) log2 x + O
+( 1
+log x
+)
+.
+(6)
+6 K. SOUNDARARAJAN
+Adding the inequalities (5) and (6), we obtain that
+log |ζ( 1
+2 + it)| ≤ Re
+∑
+n≤x
+Λ( n)
+ns0 log n
+log x/n
+log x + log T
+2
+(
+σ0 − 1
+2 + 1
+log x
+)
++ F (s0)
+( x
+1
+2 −σ0
+(σ0 − 1
+2 ) log2 x − 1
+log x − (σ0 − 1
+2 )
+2
+)
++ O
+( 1
+log x
+)
+.(7)
+We choose σ0 = 1
+2 + λ
+log x , where λ ≥ λ0. This restriction on λ ensures that the term
+involving F (s0) in (7) makes a negative contribution, and may therefore be o mitted. The
+Proposition follows.
+3. Proof of the Theorem
+Our proof of the Theorem rests upon our main Proposition. We b egin by showing that
+the sum over prime powers appearing there may be restricted j ust to primes.
+Lemma 2. Assume RH. Let T ≤ t ≤ 2T , let 2 ≤ x ≤ T 2, and let σ ≥ 1
+2 . Then
+⏐
+⏐
+⏐
+∑
+n≤x
+n⁄=p
+Λ( n)
+nσ+it log n
+log x/n
+log x
+⏐
+⏐
+⏐ ≪ log log log T + O(1).
+Proof. The terms when n = pk for k ≥ 3 clearly contribute an amount ≪ 1, and it
+remains to handle the terms n = p2. By following closely the explicit formula proof of
+the prime number theorem (see §17 and 18 of Davenport [3]) we obtain that, on RH,∑
+p≤z(log p)p−2it ≪ z/T + √
+z(log zT )2. By partial summation, using this estimate when
+z ≥ (log T )4 and the trivial ≪ z for smaller z, we deduce that for σ ≥ 1
+2
+∑
+p≤√x
+1
+p2σ+2it
+log(√x/p)
+log √x ≪ log log log T,
+completing our proof.
+We also need a standard mean value estimate whose proof we inc lude for completeness.
+Lemma 3. Let T be large, and let 2 ≤ x ≤ T . Let k be a natural number such that
+xk ≤ T /log T . For any complex numbers a(p) we have
+∫ 2T
+T
+⏐
+⏐
+⏐
+∑
+p≤x
+a(p)
+p
+1
+2 +it
+⏐
+⏐
+⏐
+2k
+dt ≪ T k!
+( ∑
+p≤x
+|a(p)|2
+p
+) k
+.
+Proof. Write ( ∑
+p≤x
+a(p)
+p
+1
+2 +it
+) k
+=
+∑
+n≤xk
+ak,x(n)
+n
+1
+2 +it ,
+MOMENTS OF THE RIEMANN ZETA-FUNCTION 7
+where ak,x(n) = 0 unless n is the product of k (not necessarily distinct) primes, all below
+x. In that case, if we write the prime factorization of n as n = ∏ r
+i=1 pαi
+i then ak,x(n) =( k
+α1,... ,αr
+) ∏ r
+i=1 a(pi)αi. Now
+∫ 2T
+T
+⏐
+⏐
+⏐
+∑
+p≤x
+a(p)
+p
+1
+2 +it
+⏐
+⏐
+⏐
+2k
+dt =
+∑
+m,n≤xk
+ak,x(m)
+ak,x(n)√mn
+∫ 2T
+T
+( n
+m
+) it
+dt
+= T
+∑
+n≤xk
+|ak,x(n)|2
+n + O
+( ∑
+m,n≤xk
+m⁄=n
+|ak,x(m)ak,x(n)|√mn| log(m/n)|
+)
+,
+upon separating the diagonal terms m = n, and the oﬀ-diagonal terms m ⁄= n. Since
+2|ak,x(m)ak,x(n)/√mn| ≤ | ak,x(m)|2/m + |ak,x(n)|2/n we see that the oﬀ-diagonal terms
+above contribute
+≪
+∑
+n≤xk
+|ak,x(n)|2
+n
+∑
+m≤xk
+m⁄=n
+1
+| log(m/n)| ≪ xk log(xk)
+∑
+n≤xk
+|ak,x(n)|2
+n ≪ T
+∑
+n≤xk
+|ak,x(n)|2
+n ,
+recalling that xk ≤ T /log T . The Lemma follows upon noting that
+∑
+n≤xk
+|ak,x(n)|2
+n =
+∑
+p1<...<pr ≤x
+∑
+α1,... ,αr≥1P αi=k
+( k
+α1, . . . , αr
+) 2 |a(p1)|2α1 · · · |a(pr)|2αr
+pα1
+1 · · · pαr
+r
+≤ k!
+∑
+p1<...<pr ≤x
+∑
+α1,... ,αr≥1P αi=k
+( k
+α1, . . . , αr
+) |a(p1)|2α1 · · · |a(pr)|2αr
+pα1
+1 · · · pαr
+r
+= k!
+( ∑
+p≤x
+|a(p)|2
+p
+) k
+.
+In proving our Theorem we may assume that 10 √log log T ≤ V ≤ 3
+8 log T /log log T .
+We also keep in mind that T is large. We deﬁne a parameter A by setting A = 1
+2 log3 T
+when V ≤ log log T , setting A = log log T
+2V log3 T when log log T < V ≤ 1
+2 (log log T ) log3 T ,
+and ﬁnally setting A = 1 when V > 1
+2 (log log T ) log3 T . We further set x = T A/V and
+z = x1/ log log T . Using Lemma 2 and our Proposition, we ﬁnd that
+log |ζ( 1
+2 + it)| ≤ S1(t) + S2(t) + 1 + λ0
+2A V + O(log log log T ),
+where
+S1(t) =
+⏐
+⏐
+⏐
+∑
+p≤z
+1
+p
+1
+2 + λ0
+log x +it
+log(x/p)
+log x
+⏐
+⏐
+⏐,
+8 K. SOUNDARARAJAN
+and
+S2(t) =
+⏐
+⏐
+⏐
+∑
+z<p≤x
+1
+p
+1
+2 + λ0
+log x +it
+log(x/p)
+log x
+⏐
+⏐
+⏐.
+If t ∈ S (T, V ) then we must either have
+S2(t) ≥ V
+8A , or S1(t) ≥ V
+(
+1 − 7
+8A
+)
+=: V1,
+say.
+By Lemma 3 we see that for any natural number k ≤ V /A− 1 we have
+∫ 2T
+T
+|S2(t)|2kdt ≪ T k!
+( ∑
+z<p≤x
+1
+p
+) k
+≪ T
+(
+k(log log log T + O(1))
+) k
+.
+Choosing k to be the largest integer below V /A−1, we obtain that the measure of t ∈ [T, 2T ]
+with S2(t) ≥ V /(8A) is
+(8) ≪ T
+( 8A
+V
+) 2k
+(2k log log log T )k ≪ T exp
+(
+− V
+2A log V
+)
+.
+Next we consider the measure of the set of t ∈ [T, 2T ] with S1(t) ≥ V1. By Lemma 3,
+we see that for any natural number k ≤ log(T /log T )/ log z,
+∫ 2T
+T
+|S1(t)|2kdt ≪ T k!
+( ∑
+p≤z
+1
+p
+) k
+≪ T
+√
+k
+( k log log T
+e
+) k
+,
+so that the measure of t ∈ [T, 2T ] with S1(t) ≥ V1 is
+≪ T
+√
+k
+( k log log T
+eV 2
+1
+) k
+.
+When V ≤ (log log T )2 we choose k to be the greatest integer below V 2
+1 / log log T , and
+when V > (log log T )2 we choose k = [10V ]. It then follows that the measure of t ∈ [T, 2T ]
+with S1(t) ≥ V1 is
+(9) ≪ T V√log log T exp
+(
+− V 2
+1
+log log T
+)
++ T exp(−4V log V ).
+Our Theorem follows upon combining the estimates (8) and (9) .
+4. Moments of L-functions in families
+We brieﬂy sketch here the modiﬁcations needed to obtain boun ds for moments of L-
+functions in families. Throughout we assume the Generalize d Riemann Hypothesis for
+MOMENTS OF THE RIEMANN ZETA-FUNCTION 9
+the appropriate L-functions under consideration. If q is a large prime, then Rudnick and
+Soundararajan [16] showed that, for positive rational numb ers k,
+∑ ∗
+χ (mod q)
+|L( 1
+2 , χ)|2k ≫k q(log q)k2
+,
+where the sum is over primitive characters χ. The argument given here carries over to
+obtain the upper bound ≪k,ǫ q(log q)k2+ǫ for all positive real k. The only diﬀerence is
+that one uses the orthogonality relations of the characters (mod q) to treat non-diagonal
+terms in the analog of Lemma 3.
+More interesting is the case of quadratic Dirichlet L-functions. In [17] Rudnick and
+Soundararajan showed that for rational numbers k ≥ 1
+∑ ♭
+|d|≤X
+L( 1
+2 , χd)k ≫k X(log X)k(k+1)/2,
+where the sum is over fundamental discriminants d, and χd denotes the associated primitive
+quadratic character. To obtain an upper bound, we seek to bou nd the frequency of large
+values of L( 1
+2 , χd). Analogously to our Proposition we ﬁnd that 1, for any x ≥ 2 and with
+λ0 as in our Proposition,
+log L( 1
+2 , χd) ≤
+∑
+2≤n≤x
+Λ( n)χd(n)
+n
+1
+2 + λ0
+log x log n
+log(x/n)
+log x + (1 + λ0)
+2
+log |d|
+log x + O
+( 1
+log x
+)
+.
+Notice that, in contrast to Lemma 2, the contribution of the p rime squares in our sum is
+∼ 1
+2 log log x, since χd(p2) = 1 for all p ∤ d. Taking this key diﬀerence into account, we
+may argue as in §4, using now quadratic reciprocity and the P´ olya-Vinograd ov inequality
+to develop the analog of Lemma 3. Thus we obtain that the numbe r of d with |d| ≤ X
+and log L( 1
+2 , χd) ≥ V + 1
+2 log log X is
+≪ X exp
+(
+− V 2
+2 log log X (1 + o(1))
+)
+when √log log X ≤ V = o((log log X) log3 X), and when V ≥ (log log X) log3 X this num-
+ber is ≪ X exp(−cV log V ) for some positive constant c. From these estimates we deduce
+that ∑ ♭
+|d|≤X
+L( 1
+2 , χd)k ≪k,ǫ X(log X)k(k+1)/2+ǫ.
+As a last example consider the family of quadratic twists of a given elliptic curve E.
+We write the L-function for E as L(E, s) = ∑ ∞
+n=1 a(n)n−s where the a(n) are normalized
+1Since we are assuming GRH we know that L( 1
+2 , χ d) ≥ 0. If L( 1
+2 , χ d) = 0 we interpret log L( 1
+2 , χ d) as
+−∞ so that the claimed inequality is still valid.
+10 K. SOUNDARARAJAN
+to satisfy |a(n)| ≤ d(n) (the number of divisors of n). The methods of [16] and [17] can be
+used to show that for rational numbers k ≥ 1
+∑ ♭
+|d|≤X
+L(E ⊗ χd, 1
+2 )k ≫k X(log X)k(k−1)/2.
+Writing a(p) = αp + βp with αpβp = 1 we obtain analogously to our Proposition that, for
+x ≥ 2 and λ0 as before,
+log L(E ⊗ χd, 1
+2 ) ≤
+∑
+n=pℓ≤x
+ℓ≥1
+χd(pℓ)(αℓ
+p + βℓ
+p)
+ℓn
+1
+2 + λ0
+log x
+log(x/pℓ)
+log x + (1 + λ0) log |d|
+log x + O
+( 1
+log x
+)
+.
+The contribution of the terms ℓ ≥ 3 above is O(1), and the contribution of ℓ = 2 (the
+prime squares) is
+∑
+p≤√x
+p∤d
+a(p2) − 1
+2p1+2 λ0
+log x
+log(x/p2)
+log x ∼ − 1
+2 log log x.
+After taking this feature into account, we may develop the an alogous argument of §4.
+Thus, the number of d with |d| ≤ X and log L(E ⊗ χd, 1
+2 ) ≥ V − 1
+2 log log X is
+≪ X exp
+(
+− V 2
+2 log log X (1 + o(1))
+)
+when √log log X ≤ V = o((log log X) log3 X) and when V ≥ (log log X) log3 X this number
+is ≪ X exp(−cV log V ) for some positive constant c. This leads to the upper bound
+∑ ♭
+|d|≤X
+L(E ⊗ χd, 1
+2 )k ≪ X(log X)k(k−1)/2+ǫ.
+Our work above is in keeping with conjectures of Keating and S naith [11] (see (51)
+and (79) there) that an analog of Selberg’s result holds in fa milies of L-functions. Thus
+in the unitary family of χ (mod q), we expect that the distribution of log |L( 1
+2 , χ)| is
+Gaussian with mean 0, and variance ∼ 1
+2 log log q. In the symplectic family of quadratic
+Dirichlet characters, we expect that the distribution of lo g L( 1
+2 , χd) is Gaussian with mean
+∼ 1
+2 log log |d| and variance ∼ log log |d|. Thus most values of L( 1
+2 , χd) are quite large.
+In the orthogonal family of quadratic twists of an elliptic c urve, ﬁrst we must restrict
+to those twists with positive sign of the functional equatio n, else the L-value is 0. In
+this restricted class, we expect that the distribution of lo g L(E ⊗ χd, 1
+2 ) is Gaussian with
+mean ∼ − 1
+2 log log |d| and variance ∼ log log |d|. Thus the values in an orthogonal family
+tend to be small. With a little more work, the ideas in this pap er would show (assuming
+GRH) that the frequency with which log |L| exceeds Mean + λ · Var is bounded above by
+1√
+2π
+∫ ∞
+λ e−x2/2dx for any ﬁxed real number λ. If in addition to GRH we assume that most
+of the L-functions under consideration do not have a zero very near 2 1
+2 , then Selberg’s
+techniques would yield these Keating-Snaith analogs.
+2This is implied by the one level density conjectures of Katz an d Sarnak [9].
+MOMENTS OF THE RIEMANN ZETA-FUNCTION 11
+References
+[1] J.B. Conrey and A. Ghosh, On mean values of the Zeta-function , Mathematika 31 (1984), 159–161.
+[2] J.B. Conrey, D. Farmer, J. Keating, M. Rubinstein, and N. Sna ith, Integral moments of L-functions,
+Proc. London Math. Soc. 91 (2005), 33–104.
+[3] H. Davenport, Multiplicative Number Theory , vol. 74, Springer-Verlag (GTM), 2000.
+[4] A. Diaconu, D. Goldfeld, and J. Hoﬀstein, Multiple Dirichlet series and moments of zeta and L-
+functions, Compositio Math. 139 (2003), 297–360.
+[5] D.A. Goldston and S.M. Gonek, A note on S(t) and the zeros of the Riemann zeta-function , Bull.
+London Math. Soc. 39 (2007), 482-486.
+[6] D.R. Heath-Brown, Fractional moments of the Riemann zeta-function , J. London Math. Soc. 24
+(1981), 65-78.
+[7] D.R. Heath-Brown, Fractional moments of the Riemann zeta-function, II , Quart. J. of Math. 44
+(1993), 185–197.
+[8] M. Jutila, On the value distribution of the zeta-function on the critic al line , Bull. London Math. Soc.
+15 (1983), 513–518.
+[9] N.M. Katz and P. Sarnak, Random Matrices, Frobenius Eigenvalues, and Monodromy , vol. 45, Amer.
+Math. Soc. Colloq. Publ., 1998.
+[10] J.P. Keating and N.C. Snaith, Random matrix theory and ζ ( 1
+2 + it), Comm. in Math. Phys. 214
+(2000), 57–89.
+[11] J.P. Keating and N.C. Snaith, Random matrix theory and L-functions at s = 1 / 2, Comm. in Math.
+Phys. 214 (2000), 91–110.
+[12] K. Ramachandra, Some remarks on the mean value of the Riemann zeta-function a nd other Dirichlet
+series, I , Hardy-Ramanujan J. 1 (1978), 1–15.
+[13] K. Ramachandra, Some remarks on the mean value of the Riemann zeta-function a nd other Dirichlet
+series, II , Hardy-Ramanujan J. 3 (1980), 1–25.
+[14] K. Ramachandra, Some remarks on the mean value of the Riemann zeta-function a nd other Dirichlet
+series, III , Ann. Acad. Sci. Fenn. 5 (1980), 145–180.
+[15] K. Ramachandra and A. Sankaranarayanan, On some theorems of Littlewood and Selberg. I. , J.
+Number Theory 44 (1993), 281–291.
+[16] Z. Rudnick and K. Soundararajan, Lower bounds for moments of L-functions, Proc. Natl. Sci. Acad.
+USA 102 (2005), 6837-6838.
+[17] Z. Rudnick and K. Soundararajan, Lower bounds for moments of L-functions: symplectic and orthog-
+onal examples , Multiple Dirichlet Series, Automorphic Forms, and Analytic Nu mber Theory (Editors:
+Friedberg, Bump, Goldfeld, and Hoﬀstein), Proc. Symp. Pure Math ., vol. 75, Amer. Math. Soc., 2006.
+[18] A. Selberg, Contributions to the theory of the Riemann zeta-function , Archiv Math. Naturvid. 48
+(1946), 89–155.
+[19] A. Selberg, Old and new conjectures and results about a class of Dirichle t series , Proceedings of the
+Amalﬁ Conference on Number Theory, Collected Papers (Vol. II), pp. 47–63.
+[20] K. Soundararajan, Mean values of the Riemann zeta-function , Mathematika 42 (1995), 158–174.
+[21] K. Soundararajan, Extreme values of zeta and L-functions, 16 pp., to appear, e-print available at
+http://arxiv.org/abs/0708.3990.
+[22] E.C. Titchmarsh, The theory of the Riemann zeta-function , Oxford University Press, New York, 1986.
+Department of Mathematics, 450 Serra Mall, Bldg. 380, Stanf ord University, Stanford,
+CA 94305, USA
+E-mail address : ksound@math.stanford.edu

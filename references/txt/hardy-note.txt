@@ -1,0 +1,657 @@
+arXiv:1606.00680v1  [math.NT]  2 Jun 2016
+A NOTE ON HARDY’S THEOREM
+USHA K. SANGALE
+Abstract. Hardy’s theorem for the Riemann zeta-function ζ(s) says that it admits in-
+ﬁnitely many complex zeros on the line ℜ(s) = 1
+2 . In this note, we give a simple proof of
+this statement which, to the best of our knowledge, is new.
+1. Introduction
+The Riemann Hypothesis (RH) is perhaps one of the most challenging p roblems in mathe-
+matics to this date. In 1859, Riemann asserted that all the complex zeros of the Riemann
+zeta function ζ(s), s = σ + it lie on the critical line σ = 1 / 2. In other words, RH asserts
+that
+ζ(s) ⁄= 0 in σ > 1/ 2. (1.1)
+So far a proof or disproof of this statement has eluded the best min ds. The sharpest known
+result in this direction is by I. M. Vinogradov [5] who proved that ther e exists a positive
+constant c such that
+ζ(s) ⁄= 0 in σ > 1 − c(log t)−2/ 3(log log t)−1/ 3. (1.2)
+Riemann zeta-function was invented by Euler to study the distribut ion of primes. There
+is a deep connection between the zero-free region of ζ(s) and the error term in the prime
+number theorem (PNT) (see Chap. 12, [2]). Let π(x) counts the number of primes upto x,
+then the prime number theorem says that there is an absolute cons tant C > 0 such that
+π(x) =
+∫ x
+2
+1
+log u du + O
+{
+x exp
+(
+−C(log x)3/ 5(log log x)−1/ 5)}
+.
+The above error term is a consequence of (1.2), which is the best kn own unconditional
+result whereas the error on RH is O(x1/ 2+ε).
+It was G. H. Hardy who in 1914 [1] showed that ζ(s) has inﬁnitely many zeros on the
+critical line σ = 1 / 2. This is generally known as a ﬁrst step towards RH! The method
+of Hardy paved way to establish analogous results for more genera l Dirichlet Series (see
+[4]). Titchmarsh’s famous book on Riemann zeta-function (Chap. X, [6]) discusses several
+methods of proving Hardy’s theorem.
+2010 Mathematics Subject Classiﬁcation. 11E45 (primary); 11M41 (secondary).
+Key words and phrases. Riemann zeta-function, Hardy’s theorem, Hardy’s Z-function.
+1
+2 USHA K. SANGALE
+The basic idea behind the proof of Hardy’s theorem is very simple. Sup pose f (x) ∈
+C 1[a, b ], and f (x) ⁄= 0 in a ⩽ x ⩽ b, then
+|
+∫ b
+a
+f (x)dx |=
+∫ b
+a
+| f (x) | dx. (1.3)
+Therefore, if (1.3) is violated for some x, then it shows that f (x) has a zero of odd order
+in [ a, b ].
+The proof of Hardy’s theorem involves estimating a certain integral both from above
+and below and arrive at a contradiction by comparing these estimate s. The estimation
+from below is straight forward for the Riemann zeta function and no t too diﬃcult in the
+case of a general Dirichlet series - thanks to a beautiful theorem o f Ramachandra (see [4]).
+However, obtaining good upper bounds, which will lead to a contradic tion, is a diﬃcult
+problem!
+In this article, we shall ﬁrst discuss the classical approach of Hard y’s theorem as given
+in §10.5 of [6]. Then in the next section we shall give an alternative proof o f this theorem,
+which is simpler and seems to be new!
+2. Hardy’s theorem for the Riemann zeta-function
+The Riemann zeta function, denoted by ζ(s), s = σ + it, is deﬁned by the series
+ζ(s) =
+∞∑
+n=1
+1
+ns , σ > 1.
+It satisﬁes the following analytic properties:
+i) Analytic Continuation: ( s − 1)ζ(s) is an entire function of order 1.
+ii) Functional Equation:
+π −s/ 2Γ( s/ 2)ζ(s) = π −(1−s)/ 2Γ((1 − s)/ 2)ζ(1 − s). (2.1)
+iii) Euler Product:
+ζ(s) =
+∏
+p
+(1 − p−s)−1, σ > 1,
+where the product is over all primes.
+It is well known that the gamma function Γ( s) is analytic in σ > 0 and has no zeros.
+It has simple poles at s = 0 , −1, −2, −3, · · ·.This fact, along with the functional equation
+(2.1) implies that ζ(s) has zeros at s = −2, −4, −6, ... .These zeros on the real line are
+called trivial zeros of ζ(s). From the theory of entire functions of ﬁnite order, it can be
+derived that all the complex zeros of ζ(s) have real part 0 ≤ σ ≤ 1. It is also well known
+that ζ(1 + it) ⁄= 0 for t ⁄= 0 and therefore ζ(it) ⁄= 0 by (2.1). Further, it is an elementary
+exercise to show that ζ(s) ⁄= 0 for 0 < s < 1. Thus, all the complex zeros of ζ(s) lie in
+the vertical strip 0 < σ < 1. These zeros are called non-trivial zeros and the Riemann
+Hypothesis asserts that all the non-trivial zeros are, in fact, on the line σ = 1/ 2.
+Now, the theorem of Hardy for the Riemann zeta-function is the fo llowing:
+A NOTE ON HARDY’S THEOREM 3
+Hardy’s Theorem. ζ(s) has inﬁnitely many zeros on the line σ = 1/ 2.
+Proof. The functional equation (2.1) can be rewritten as
+ζ(s) = χ (s)ζ(1 − s), (2.2)
+where χ (s) = π s−1/ 2Γ( 1
+2(1 − s))/ Γ( 1
+2s).
+Observe that χ (s)χ (1 − s) = 1 or χ ( 1
+2 + it)χ ( 1
+2 − it) = 1 , i.e., |χ ( 1
+2 + it)| = 1. From (2.2),
+we get χ ( 1
+2 + it)−1/ 2ζ( 1
+2 + it) = χ ( 1
+2 − it)1/ 2ζ( 1
+2 − it).
+Thus the function
+Z(t) := χ ( 1
+2 + it)−1/ 2ζ( 1
+2 + it)
+is real for real values of t ⁄= 0. Moreover, |Z(t)| = |ζ( 1
+2 + it)|. The function Z is popularly
+called Hardy’s Z-function. From the above discussion, it is clear that the zeros of Z(t)
+correspond to the zeros of ζ(s) on the critical line. We shall apply the basic idea elucidated
+in the beginning by taking f = Z in (1.3).
+To begin with, we shall assume that Z(t) has ﬁnitely many zeros or no zeros, then we
+can ﬁnd a real number T0 > 0 suﬃciently large such that for all T ≥ T0, we have
+|I| := |
+∫ 2T
+T
+Z(t)dt| =
+∫ 2T
+T
+|Z(t)|dt. (2.3)
+Now, we need to estimate the integrals in (2.3) both from below and ab ove and arrive
+at a contradiction to our assumption.
+Estimation from below: This is the easy step. We have
+∫ 2T
+T
+|Z(t)|dt =
+∫ 2T
+T
+|ζ( 1
+2 + it)|dt ≥ |
+∫ 2T
+T
+ζ( 1
+2 + it)dt|. (2.4)
+Now, by a change of variable we get
+i
+∫ 2T
+T
+ζ( 1
+2 + it)dt =
+∫ 1/ 2+2iT
+1/ 2+iT
+ζ(s)ds.
+Moving the line of integration to σ = 2 and using Cauchy’s theorem, we obtain
+∫ 1/ 2+2iT
+1/ 2+iT
+ζ(s)ds = (
+∫ 2+iT
+1/ 2+iT
++
+∫ 2+2iT
+2+iT
++
+∫ 1/ 2+2iT
+2+2iT
+)ζ(s)ds. (2.5)
+Now, from the convexity bound (2.13), it follows that
+∫ 2+iT
+1/ 2+iT
+ζ(s)ds =
+∫ 2
+1/ 2
+ζ(σ + iT )dσ = O
+(
+T 1/ 4+ε)
+. (2.6)
+4 USHA K. SANGALE
+On the other hand,
+∫ 2+2iT
+2+iT
+ζ(s)ds =
+∫ 2+2iT
+2+iT
+(
+1 +
+∞∑
+n=2
+n−s
+)
+ds
+= iT + i
+∞∑
+n=2
+n−2
+∫ 2T
+T
+e−it log ndt
+= iT + O
+( ∞∑
+n=2
+1
+n2 log n
+)
+= iT + O(1). (2.7)
+Therefore, from (2.4), (2.5), (2.6) and (2.7), we obtain
+∫ 2T
+T
+|Z(t)|dt > AT. (2.8)
+where A > 0 is an absolute constant.
+The main problem, as remarked before, is to ﬁnd an upper bound of t he type
+|I| ≪ T α . (2.9)
+If 0 < α < 1, this will contradict (2.8) and thus establishes the theorem.
+Remark. As |χ ( 1
+2 + it)| = 1, taking trivial estimate we see that
+|
+∫ 2T
+T
+Z(t)dt| = |
+∫ 2T
+T
+χ ( 1
+2 + it)−1/ 2ζ( 1
+2 + it)dt|
+≤
+∫ 2T
+T
+|ζ( 1
+2 + it)|dt.
+Even on Lindel¨ of hypothesis (which is a consequence of RH and whichsays that ζ(σ +it) ≪
+tε for σ ≥ 1
+2 ) the above is only O(T 1+ε), not enough to contradict (2.8).
+Thus we need to estimate |I| nontrivially, which we do below.
+Estimation from above :
+Our aim is to estimate the integral
+|I| = |
+∫ 1/ 2+2iT
+1/ 2+iT
+χ (s)−1/ 2ζ(s)ds|.
+We move the line of integration to the right of the line σ = 1 so that ζ(s) can be replaced
+by its series representation and then evaluate the integral using C auchy’s theorem. Ac-
+cordingly, let us consider the rectangle R with the vertices at 1 / 2 + iT, 1 + δ + iT, 1 + δ +
+2iT, 1/ 2 + 2iT for some δ > 0 to be chosen later.
+As χ (s) ⁄= 0 in σ > 0, χ (s)−1/ 2 is single-valued analytic function in σ ≥ 1/ 2, therefore,
+by Cauchy’s Theorem
+1
+2πi
+∫
+R
+χ (s)−1/ 2ζ(s)ds = 0.
+A NOTE ON HARDY’S THEOREM 5
+Thus,
+1
+2πi
+∫ 1/ 2+2iT
+1/ 2+iT
+χ (s)−1/ 2ζ(s)ds = 1
+2πi
+(∫ 1+δ+iT
+1/ 2+iT
++
+∫ 1+δ+2iT
+1+δ+iT
++
+∫ 1/ 2+2iT
+1+δ+2iT
+)
+χ (s)−1/ 2ζ(s)ds
+= I1 + I2 + I3(say). (2.10)
+As I1 and I3 are of the same order of magnitude, it is enough to estimate I1 only.
+We require growth estimates for the integrand in the region σ ≥ 1/ 2. The well-known
+Stirling’s formula for Γ( s) says that in any ﬁxed strip α ≤ σ ≤ β , we have,
+Γ( σ + it) = tσ +it− 1
+2 e
+1
+2 πt −it+ 1
+2 iπ (σ − 1
+2 )(2π)
+1
+2
+(
+1 + O(t−1)
+)
+,
+as t → ∞. This gives
+χ (s) = ( t/ 2π)1/ 2−(σ +it) ei(t+π/ 4)(
+1 + O(t−1)
+)
+, (2.11)
+as t → ∞.
+Therefore,
+χ (s)−1/ 2 = O
+(
+tσ/ 2−1/ 4)
+, 0 ≤ σ ≤ 1 + δ. (2.12)
+We also require an upper bound for ζ(s) in the critical strip which is uniform in σ. This
+is obtained by using convexity principle. First, one shows that ζ(s) = O(log t) for σ ≥ 1.
+Then (2.2) combined with (2.11) gives ζ(0 + it) = O(t1/ 2 log t). Finally the Phragmen-
+Lindel¨ of convexity principle implies
+ζ(s) = O
+(
+t(1−σ )/ 2(log t)5)
+, uniformly in 0 ≤ σ ≤ 1. (2.13)
+Now, combining (2.12) and (2.13), we obtain
+χ (s)−1/ 2ζ(s) =
+{
+O
+(
+t1/ 4(log t)5)
+, 0 ≤ σ ≤ 1
+O(t1/ 4+δ/ 2), 1 ≤ σ ≤ 1 + δ.
+Thus,
+|I1| = |
+∫ 1+δ
+1/ 2
+χ (σ + iT )−1/ 2ζ(σ + iT ) dσ| = O
+(
+T 1/ 4+δ/ 2)
+. (2.14)
+Now comes the diﬃcult part, the estimation of I2, which we carry out below.
+We have
+I2 = 1
+2πi
+∫ 1+δ+2iT
+1+δ+iT
+χ (s)−1/ 2ζ(s)ds
+= 1
+2π
+∫ 2T
+T
+χ (1 + δ + it)−1/ 2ζ(1 + δ + it))dt.
+By Stirling’s formula (2.11), we have
+χ (1 + δ + it)−1/ 2 =
+(t
+2π
+) 1/ 4+δ/ 2+it/ 2
+e−i(t/ 2+π/ 8) {1 + O(1/t )} .
+6 USHA K. SANGALE
+Therefore, the above integral is
+=
+∞∑
+n=1
+1
+n1+δ
+∫ 2T
+T
+(t
+2π
+) 1/ 4+δ/ 2+it/ 2
+e−i(t/ 2+π/ 8)n−it {1 + O(1/t )} dt.
+The O-term is O(
+∫ 2T
+T t−3/ 4+δ/ 2dt) = O(T 1/ 4+δ/ 2) = o(T ) provided δ < 3/ 2.
+The main term is a constant multiple of
+∞∑
+n=1
+1
+n1+δ
+∫ 2T
+T
+(t
+2π
+) 1/ 4+δ/ 2+it/ 2
+e−it/ 2−it log ndt
+=
+∞∑
+n=1
+1
+n1+δ
+∫ 2T
+T
+(t
+2π
+) 1/ 4+δ/ 2
+e
+it
+2 log(t/ 2πen 2)dt. (2.15)
+Observe that a trivial estimation of the integral in (2.15) will not yield the desired upper
+bound, thus we need to exploit the possible cancellations arising from the exponential term
+in the integrand and hope that the resulting estimate will be small !
+The following results are standard tools in theory of exponential int egral techniques (see
+page 71–72, [6]) .
+Lemma 1. Let F (x) be a real-valued diﬀerentiable function such that F ′(x) is monotonic,
+and F ′(x) ≥ m > 0, or F ′(x) ≤ −m < 0, throughout the interval [a, b ]. Then
+|
+∫ b
+a
+eiF (x)dx| ≤ 4
+m .
+Lemma 2. Let F (x)be twice diﬀerentiable function and F ′′(x) ≥ r > 0 or F ′′(x) ≤ −r < 0,
+throughout the interval [a, b ] and let G(x)/F ′(x) be monotonic with |G(x)| ≤ M, then
+|
+∫ b
+a
+G(x)eiF (x)dx| ≤ 8M√r .
+Now, taking Fn(t) = t
+2 log( t
+2πen 2 ), we see that F ′′n(t) = 1 / 2t ≥ 1/ 4T, T ≤ t ≤ 2T .
+Thus from the Lemma 2 we obtain
+∫ 2T
+T
+(t
+2π
+) 1/ 4+δ/ 2
+e
+it
+2 log(t/ 2πen 2)dt = O
+(
+T 1/ 4+δ/ 2T 1/ 2)
+= O
+(
+T 3/ 4+δ/ 2)
+. (2.16)
+Now combining (2.10), (2.14), (2.15) and (2.16), we obtain
+|
+∫ 2T
+T
+Z(t)dt| = O(T 3/ 4+δ/ 2) = o(T ) provided δ < 1/ 2. (2.17)
+Therefore, the desired contradiction is arrived from comparing (2 .8) and (2.17), by choos-
+ing δ < 1/ 2.
+A NOTE ON HARDY’S THEOREM 7
+Remark. Another method of estimating the upper bound for |I| uses the following weak
+version of the well-known Riemann-Siegel formula
+Z(t) = 2
+∑
+n≤
+√
+t/ (2π )
+n−1/ 2 cos
+(
+t log
+√
+t/ (2π)
+n − t
+2 − π
+8
+)
++ O
+(
+t−1/ 4)
+. (2.18)
+The integral I is then evaluated using Lemma 2 to obtain I = O(T 3/ 4) (see Chap. 2 of [3]
+for details).
+3. A new approach using first approximation formula for ζ(s)
+In this method, the integral
+I =
+∫ 2T
+T
+χ ( 1
+2 + it)−1/ 2ζ( 1
+2 + it)dt (3.1)
+is evaluated by replacing the zeta function with a Dirichlet polynomial h aving a good error
+term. As mentioned in the remark above, a weak version of Riemann- Siegel formula can be
+used for the upper bound estimation. We will use the well-known ﬁrst order approximation
+of ζ(s) (see page 77 of [6]) to estimate I both from below and above. The estimation from
+above seems to be new.
+Lemma 3. We have
+ζ(s) =
+∑
+n≤x
+n−s + x1−s
+s − 1 + O(x−σ ), (3.2)
+uniformly for σ ≥ σ0 > 0, |t| < 2πx/C when C is a given constant > 1.
+Taking x = CT /π in the above Lemma and noting that T ≤ t ≤ 2T , we get
+ζ( 1
+2 + it) =
+∑
+n≤CT /π
+n− 1
+2 −it + O
+(T 1/ 2
+|t|
+)
++ O(T −1/ 2). (3.3)
+For the lower bound, recall that we have
+∫ 2T
+T
+|Z(t)|dt =
+∫ 2T
+T
+|ζ( 1
+2 + it)|dt ≥ |
+∫ 2T
+T
+ζ( 1
+2 + it)dt|. (3.4)
+Therefore, from (3.3) we have
+∫ 2T
+T
+ζ( 1
+2 + it)dt =
+∫ 2T
+T
+{1 +
+∑
+2≤n≤CT /π
+n− 1
+2 −it}dt + O(T 1/ 2) (3.5)
+= T + O(T 1/ 2) > AT, (3.6)
+where A > 0 is an absolute constant.
+Therefore, we have ∫ 2T
+T
+|Z(t)|dt ≥ AT. (3.7)
+8 USHA K. SANGALE
+On the other hand, for estimation of upper bound, we have from (3 .3),
+Z(t) = χ ( 1
+2 + it)−1/ 2 ∑
+n≤CT /π
+n− 1
+2 −it + O
+(T 1/ 2
+|t|
+)
++ O(T −1/ 2). (3.8)
+The O-terms contributes O(T 1/ 2) to the integral I. Thus, by Stirling’s formula for χ (s),
+we have
+I =
+∫ 2T
+T
+∑
+n≤CT /π
+n− 1
+2 −it(t
+2π
+) it/ 2
+e−i(t/ 2+π/ 8){
+1 + O
+(1
+t
+)}
+dt + O(T 1/ 2). (3.9)
+Note that the error term in the above expression is O(T 1/ 2). Thus the main term is a
+constant multiple of
+∑
+n≤CT /π
+1
+n1/ 2
+∫ 2T
+T
+eiF (n,t )dt, (3.10)
+where F (n, t ) = t
+2 log
+( t
+2πen 2
+)
+. Observe that
+F ′(n, t ) = 1
+2 log
+( t
+2πn 2
+)
+, F ′′(n, t ) = 1
+2t > 1
+4T . (3.11)
+As F ′(n, t ) = 0 when t = 2 πn 2 or when n =
+√
+t/ 2π, we break the sum over n into two
+parts viz., 1 ≤ n ≤ 3
+√
+T /π and 3
+√
+T /π < n ≤ CT /π . The integral in the ﬁrst sum is
+evaluated using Lemma 2 and the integral in the second sum is evaluat ed using Lemma 1.
+Thus from Lemma 2 and (3.11) we obtain
+|
+∑
+n≤3
+√
+T /π
+1
+n1/ 2
+∫ 2T
+T
+eiF (n,t )dt| = O
+
+
+
+∑
+n≤3
+√
+T /π
+1
+n1/ 2 T 1/ 2
+
+
+ = O
+(
+T 3/ 4)
+. (3.12)
+To evaluate the second sum, we use the elementary inequality log n
+m ≥ n−m
+n for n > m .
+This gives
+log
+(
+2πn 2
+t
+)
+≥
+(
+2πn 2−t
+2πn 2
+)
+≥ 8
+9,
+as T ≤ t ≤ 2T and 3
+√
+T /π < n ≤ CT /π . Thus F ′(n, t ) = 1
+2 log
+( t
+2πn 2
+)
+≤ − 4/ 9. Now
+applying Lemma 1, we get
+|
+∑
+3
+√
+T /π<n ≤CT /π
+1
+n1/ 2
+∫ 2T
+T
+eiF (n,t )dt| = O
+
+
+
+∑
+3
+√
+T /π<n ≤CT /π
+1
+n1/ 2
+
+
+ = O
+(
+T 1/ 2)
+. (3.13)
+Thus, it follows that
+|
+∫ 2T
+T
+Z(t)dt| = O(T 3/ 4). (3.14)
+Equation (3.7) and (3.14) leads to a contradiction to our assumption and thus establishes
+Hardy’s theorem.
+A NOTE ON HARDY’S THEOREM 9
+Acknowledgements. I wish to thank Prof. K. Srinivas for many useful discussions. I
+also thank Prof. A. Ivi´ c for his advise and encouragement. I exp ress my gratitude to the
+Institute of Mathematical Sciences for providing congenial enviro nment which enabled me
+to carry out this project. I sincerely thank Prof. C. S. Aravinda f or the prompt handling
+of the manuscript and for suggesting some changes in the layout of article.
+References
+[1] G. H. Hardy, Sur les zeros de la fonction ζ(s), Comp. Rend. Acad. Sci. 158 (1914) 1012–1014.
+[2] A. Ivi´ c, The Riemann zeta-function,The theory of the Riemann zeta-function with applications. A
+Wiley-Interscience Publication. John Wiley & Sons, Inc. , New York, (1985). xvi+517.
+[3] A. Ivi´ c, The theory of Hardy’s Z-function, Cambridge University Press , UK, (2013).
+[4] A. Mukhopadhayay, K. Rajkumar and K. Srinivas, On the zeros of functions in the Selberg class ,
+Functiones et Arithematico XXXVIII.2 (2008), 121-130.
+[5] I. M. Vinogradov, A new method of estimation of trigonometrical sums, Mat. Sbornik (1) 43 (1936),
+175–188.
+[6] E. C. Titchmarsh, The theory of the Riemann zeta-function, Se cond edition. Edited and with a
+preface by D. R. Heath-Brown, The Clarendon Press, Oxford University Press, New York, 1986.
+SRTM University, Nanded, Maharashtra 431606, India
+E-mail address : ushas073@gmail.com

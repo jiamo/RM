@@ -1,0 +1,34 @@
+name = "RiemannHypothesis"
+version = "0.1.0"
+keywords = ["math"]
+defaultTargets = ["RiemannHypothesis", "Challenge", "Solution"]
+
+[leanOptions]
+pp.unicode.fun = true # pretty-prints `fun a ↦ b`
+relaxedAutoImplicit = false
+weak.linter.mathlibStandardSet = true
+maxSynthPendingDepth = 3
+
+
+# The Zeta23 library (vendored under vendor/zeta23, Apache 2.0; see vendor/zeta23/NOTICE):
+# the formalization of "More than two thirds of the zeros of the Riemann zeta function are
+# simple and on the critical line".  Its results are restated in this repository's own
+# vocabulary in RiemannHypothesis/Zeta23Bridge.lean.
+[[require]]
+name = "Zeta23"
+path = "vendor/zeta23"
+
+[[lean_lib]]
+name = "RiemannHypothesis"
+
+[[lean_lib]]
+name = "Challenge"
+
+[[lean_lib]]
+name = "Solution"
+
+# Mathlib is required last so that its own dependency versions take precedence.
+[[require]]
+name = "mathlib"
+git = "https://github.com/leanprover-community/mathlib4"
+rev = "db584cd6d46c92f209a44c0f1c829460d327499d"

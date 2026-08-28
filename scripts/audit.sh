@@ -1,0 +1,728 @@
+#!/usr/bin/env bash
+# Check the trust conditions of the formalization:
+#  1. everything builds;
+#  2. no `sorry` anywhere outside Challenge.lean (which is allowed to have them);
+#  3. the compared theorems depend only on propext, Quot.sound, Classical.choice;
+#  4. no Float in any statement or proof;
+#  5. every claim of a closed task-board row is pinned in scripts/revalidation.lean;
+#  6. every conditional theorem (one whose hypotheses mention an unproved Prop of this
+#     repository) is listed in docs/goal/conditional-theorems.txt;
+#  7. the task board validates.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+fail=0
+
+# 1. build everything
+echo "==> lake build"
+lake build
+
+# 2. no sorry outside Challenge.lean
+echo "==> checking for sorry outside Challenge.lean"
+# `vendor/` holds the vendored Zeta23 / PrimeNumberTheoremAnd sources, whose prose
+# comments mention the word "sorry"; that code carries no real `sorry`, and the
+# results taken from it are covered by the `#print axioms` checks in step 3 below.
+if grep -rn "sorry" --include="*.lean" . --exclude-dir=.lake --exclude-dir=vendor --exclude=Challenge.lean; then
+  echo "FOUND sorry outside Challenge.lean"; fail=1
+fi
+
+# 3. axioms of the compared theorems
+echo "==> checking axioms of the compared theorems"
+cat > .lake/build/axioms.lean <<'EOF'
+import Solution
+import RiemannHypothesis.Symmetry
+import RiemannHypothesis.Alternating
+import RiemannHypothesis.Bounds
+import RiemannHypothesis.Growth
+import RiemannHypothesis.Spectral
+import RiemannHypothesis.EulerMaclaurin
+import RiemannHypothesis.ZeroFree
+import RiemannHypothesis.Continuation
+import RiemannHypothesis.NearLine
+import RiemannHypothesis.ZeroFreeRegion
+import RiemannHypothesis.StripGrowth
+import RiemannHypothesis.ZeroLocation
+import RiemannHypothesis.PrimeCounting
+import RiemannHypothesis.ChebyshevLower
+import RiemannHypothesis.Mertens
+import RiemannHypothesis.MertensSecond
+import RiemannHypothesis.MertensThird
+import RiemannHypothesis.ImaginaryAxis
+import RiemannHypothesis.Convexity
+import RiemannHypothesis.ConvexityLog
+import RiemannHypothesis.DeBruijnNewman
+import RiemannHypothesis.Xi
+import RiemannHypothesis.ZeroCountingLemma
+import RiemannHypothesis.XiGrowth
+import RiemannHypothesis.ZeroCount
+import RiemannHypothesis.GammaVertical
+import RiemannHypothesis.ZeroCountLocal
+import RiemannHypothesis.ZeroSum
+import RiemannHypothesis.ZeroExists
+import RiemannHypothesis.ZeroInfinite
+import RiemannHypothesis.ZeroCountLower
+import RiemannHypothesis.ZeroSymmetryCount
+import RiemannHypothesis.OffLineQuadruple
+import RiemannHypothesis.ZeroMultiplicitySymmetry
+import RiemannHypothesis.MultiplicityCountingLemma
+import RiemannHypothesis.ZeroMultiplicityBound
+import RiemannHypothesis.ThetaW
+import RiemannHypothesis.FourierXi
+import RiemannHypothesis.Zeta23Bridge
+import RiemannHypothesis.CriticalLine
+import RiemannHypothesis.CriticalLineOrdinates
+import RiemannHypothesis.OffLine
+import RiemannHypothesis.EightyPercent
+import RiemannHypothesis.EightyPercentSimple
+import RiemannHypothesis.PrimeNumberTheorem
+import RiemannHypothesis.ExplicitFormula
+import RiemannHypothesis.PartialProved
+import RiemannHypothesis.DirichletSeriesBounds
+import RiemannHypothesis.ZeroFreeClassical
+import RiemannHypothesis.ZeroLocationClassical
+import RiemannHypothesis.WeilPositivity
+import RiemannHypothesis.MertensSums
+import RiemannHypothesis.Redheffer
+import RiemannHypothesis.WeilTestFunctions
+import RiemannHypothesis.LiouvilleSums
+import RiemannHypothesis.MeanSquare
+import RiemannHypothesis.FourthMoment
+import RiemannHypothesis.HigherMoments
+import RiemannHypothesis.MeanFluctuation
+import RiemannHypothesis.SpeiserMultiple
+import RiemannHypothesis.EightyPercentMultiplicity
+import RiemannHypothesis.CriticalLineXi
+import RiemannHypothesis.SpeiserRolle
+import RiemannHypothesis.SpeiserEquivalence
+import RiemannHypothesis.SpeiserRH
+import RiemannHypothesis.RectangleZeroCount
+import RiemannHypothesis.RectangleArgumentPrinciple
+import RiemannHypothesis.ZetaRectangleCount
+import RiemannHypothesis.LogModulusSegment
+import RiemannHypothesis.RectangleLogModulus
+import RiemannHypothesis.ArgumentSegment
+import RiemannHypothesis.Littlewood
+import RiemannHypothesis.ZetaLittlewood
+import RiemannHypothesis.DirichletPolyMeanSquare
+import RiemannHypothesis.StripMeanSquare
+import RiemannHypothesis.StripMeanSquareTrapezoid
+import RiemannHypothesis.StripMeanSquareBernoulli
+import RiemannHypothesis.StripMeanSquareBohrLandau
+import RiemannHypothesis.StripMeanSquareAsymptotic
+import RiemannHypothesis.StripMeanSquareAsymptoticHalf
+import RiemannHypothesis.DirichletPolyMeanValue
+import RiemannHypothesis.ZeroExponent
+import RiemannHypothesis.ZeroExponentOne
+import RiemannHypothesis.ZeroSumLogSq
+import RiemannHypothesis.RvMCumulative
+import RiemannHypothesis.ZeroOrdinate
+import RiemannHypothesis.ZeroGaps
+import RiemannHypothesis.StripMeanSquareUniform
+import RiemannHypothesis.ZetaCircleAverage
+import RiemannHypothesis.RectangleLogModulusZeros
+import RiemannHypothesis.BohrLandau
+import RiemannHypothesis.LindelofDensity
+import RiemannHypothesis.ThreeCircles
+import RiemannHypothesis.LittlewoodZetaBound
+import RiemannHypothesis.ArgumentBacklund
+import RiemannHypothesis.ZeroCountRadii
+import RiemannHypothesis.BacklundZeta
+import RiemannHypothesis.ZetaDensityLittlewood
+import RiemannHypothesis.CriticalLineMeanSquare
+import RiemannHypothesis.MethodCeiling
+import RiemannHypothesis.VanDerCorput
+import RiemannHypothesis.KusminLandau
+import RiemannHypothesis.VanDerCorputSums
+import RiemannHypothesis.WeylDifferencing
+import RiemannHypothesis.WeylQuadratic
+import RiemannHypothesis.WeylEquidistribution
+import RiemannHypothesis.WeylCriterion
+import RiemannHypothesis.WeylCount
+import RiemannHypothesis.WeylCountGeneral
+import RiemannHypothesis.WeylLinear
+import RiemannHypothesis.WeylCountArc
+import RiemannHypothesis.SqrtHarmonic
+import RiemannHypothesis.ZetaChi
+import RiemannHypothesis.ApproximateFunctionalEquation
+import RiemannHypothesis.VanDerCorputThird
+import RiemannHypothesis.AFESubconvexity
+import RiemannHypothesis.LindelofFromRH
+
+#print axioms RiemannHypothesisConjecture.zeta_strip_iff_eta
+#print axioms RiemannHypothesisConjecture.zeta_iff_zeta_strip
+#print axioms RiemannHypothesisConjecture.zeta_iff_eta
+#print axioms RiemannHypothesis.zeta_strip_iff_upper_strip
+#print axioms RiemannHypothesis.zeta_strip_iff_right_strip
+#print axioms RiemannHypothesis.zeta_strip_iff_nonvanishing_right
+#print axioms RiemannHypothesis.zeta_strip_iff_self_reflective
+#print axioms RiemannHypothesis.zeta_strip_iff_forall_verifiedUpToHeight
+#print axioms RiemannHypothesis.riemannZeta_conj_of_mem_strip
+#print axioms RiemannHypothesis.riemannZeta_one_sub_eq_zero_of_mem_strip
+#print axioms RiemannHypothesis.riemannZeta_ofReal_ne_zero_of_lt_one
+#print axioms RiemannHypothesis.tendsto_alternating_partialSum_dirichletEta
+#print axioms RiemannHypothesis.eta_iff_eta_limit
+#print axioms RiemannHypothesis.zeta_iff_eta_limit
+#print axioms RiemannHypothesis.norm_riemannZeta_le_of_one_lt_re
+#print axioms RiemannHypothesis.norm_dirichletEta_le
+#print axioms RiemannHypothesis.norm_riemannZeta_le_of_mem_strip
+#print axioms RiemannHypothesis.norm_riemannZeta_le_linear_of_mem_strip
+#print axioms RiemannHypothesis.norm_riemannZeta_product_ge_one
+#print axioms RiemannHypothesis.jacobiTheta_imaginary_axis
+#print axioms RiemannHypothesis.evenKernel_zero_eq_jacobiTheta
+#print axioms RiemannHypothesis.completedRiemannZeta_eq_mellin_jacobiTheta
+#print axioms RiemannHypothesis.riemannZeta_eq_zetaApprox
+#print axioms RiemannHypothesis.norm_riemannZeta_le_log_of_one_lt_re
+#print axioms RiemannHypothesis.norm_riemannZeta_le_log
+#print axioms RiemannHypothesis.norm_riemannZeta_pow_four_ge
+#print axioms RiemannHypothesis.riemannZeta_ne_zero_of_one_lt_re_of_one_le_abs_im
+#print axioms RiemannHypothesis.riemannZeta_eq_zetaApprox_of_pos_re
+#print axioms RiemannHypothesis.norm_riemannZeta_le_log_near_line
+#print axioms RiemannHypothesis.norm_deriv_riemannZeta_le_near_line
+#print axioms RiemannHypothesis.riemannZeta_ne_zero_of_near_one
+#print axioms RiemannHypothesis.zeroFreeRegionNinth
+#print axioms RiemannHypothesis.norm_riemannZeta_le_strip
+#print axioms RiemannHypothesis.zero_mem_shrinking_strip
+#print axioms RiemannHypothesis.zero_abs_re_sub_half_le
+#print axioms RiemannHypothesis.exists_divided
+#print axioms RiemannHypothesis.pow_three_sum_mul_norm_le
+#print axioms RiemannHypothesis.pow_three_pow_mul_norm_le
+#print axioms RiemannHypothesis.analyticOrder_le_log_div_log_three
+#print axioms RiemannHypothesis.sum_analyticOrder_le_log_div_log_three
+#print axioms RiemannHypothesis.exists_disc_data_near_height
+#print axioms RiemannHypothesis.exists_global_disc_bound
+#print axioms RiemannHypothesis.analyticOrderAt_xiFn_eq
+#print axioms RiemannHypothesis.zeroMultiplicity_le_of_mem_zerosNearHeight
+#print axioms RiemannHypothesis.zeroMultiplicity_le_log_abs_im
+#print axioms RiemannHypothesis.exists_zeroMultiplicity_bound_low
+#print axioms RiemannHypothesis.exists_zeroMultiplicity_bound
+#print axioms RiemannHypothesis.finite_zerosNearHeight
+#print axioms RiemannHypothesis.sum_zeroMultiplicity_zerosNearHeight_le
+#print axioms RiemannHypothesis.multCount_le
+#print axioms RiemannHypothesis.xiDerivMultiplicity_add_one
+#print axioms RiemannHypothesis.xiDerivFn_eq_zero_of_multiple
+#print axioms RiemannHypothesis.xiDerivFn_ne_zero_of_simple
+#print axioms RiemannHypothesis.windowZerosOffLineMultiple_subset
+#print axioms RiemannHypothesis.ncard_windowZerosOffLineMultiple_le_bad
+#print axioms RiemannHypothesis.xiDerivWindowCountBad_le
+#print axioms RiemannHypothesis.ncard_windowZerosOffLineMultiple_le_windowCount
+#print axioms RiemannHypothesis.windowMultipleOffLineExcess_le_bad
+#print axioms RiemannHypothesis.windowMultipleOffLineExcess_le_windowCount
+#print axioms RiemannHypothesis.hasDerivAt_XiReal
+#print axioms RiemannHypothesis.exists_xiDerivFn_onLine_eq_zero
+#print axioms RiemannHypothesis.windowCountOffLineMult_add_windowCountOnLineMult
+#print axioms RiemannHypothesis.windowCountOnLineMult_le_xiDerivWindowCountOnLineMult
+#print axioms RiemannHypothesis.speiserOffLineTransfer_iff_xiDerivOnLineDominates
+#print axioms RiemannHypothesis.xiDerivWindowCountOffLineMult_le_windowCountOffLineMult
+#print axioms RiemannHypothesis.eighty_six_percent_on_critical_line_mult_of_speiserOffLineTransfer
+#print axioms RiemannHypothesis.speiserOffLineTransfer_of_zetaStripForm
+#print axioms RiemannHypothesis.xiDerivWindowCountOffLineMult_le_log_of_zetaStripForm
+#print axioms RiemannHypothesis.not_zetaStripForm_of_xiDeriv_offLine_gt
+#print axioms RiemannHypothesis.chebyshev_theta_tendsto_of_psi
+#print axioms RiemannHypothesis.primeCounting_tendsto_of_chebyshev_theta
+#print axioms RiemannHypothesis.primeCounting_tendsto_of_chebyshev_psi
+#print axioms RiemannHypothesis.log_le_psi_of_pow_factorization_le
+#print axioms RiemannHypothesis.log_centralBinom_le_psi
+#print axioms RiemannHypothesis.psi_lower_bound
+#print axioms RiemannHypothesis.psi_ge_half_log_two_mul
+#print axioms RiemannHypothesis.theta_ge_eventually
+#print axioms RiemannHypothesis.primeCounting_ge_eventually
+#print axioms RiemannHypothesis.primeCounting_asymptotic_bounds
+#print axioms RiemannHypothesis.psi_asymptotic_bounds
+#print axioms RiemannHypothesis.theta_asymptotic_bounds
+#print axioms RiemannHypothesis.sum_log_eq_sum_vonMangoldt_mul_floor_div
+#print axioms RiemannHypothesis.mertens_first_nat
+#print axioms RiemannHypothesis.mertens_first
+#print axioms RiemannHypothesis.mertens_first_isBigO
+#print axioms RiemannHypothesis.properPrimePower_sum_le
+#print axioms RiemannHypothesis.mertens_first_prime
+#print axioms RiemannHypothesis.mertens_first_prime_isBigO
+#print axioms RiemannHypothesis.sum_by_parts_Ioc
+#print axioms RiemannHypothesis.sum_inv_sq_le
+#print axioms RiemannHypothesis.mertens_second_nat
+#print axioms RiemannHypothesis.mertens_second
+#print axioms RiemannHypothesis.neg_log_one_sub_bounds
+#print axioms RiemannHypothesis.log_primeProd_sub_primeRecipSum_bounds
+#print axioms RiemannHypothesis.mertens_third
+#print axioms RiemannHypothesis.mertens_third_bounds
+#print axioms RiemannHypothesis.norm_Gamma_one_sub_mul_I_sq
+#print axioms RiemannHypothesis.norm_riemannZeta_mul_I_le
+#print axioms RiemannHypothesis.norm_riemannZeta_isBigO_imaginary_axis
+#print axioms RiemannHypothesis.norm_Gamma_le_Gamma_re
+#print axioms RiemannHypothesis.norm_riemannZeta_le_exp_strip
+#print axioms RiemannHypothesis.norm_riemannZeta_le_convexity
+#print axioms RiemannHypothesis.norm_riemannZeta_le_critical_line
+#print axioms RiemannHypothesis.norm_riemannZeta_le_convexity_log
+#print axioms RiemannHypothesis.norm_riemannZeta_le_critical_line_log
+#print axioms RiemannHypothesis.abs_dbnPhi_le
+#print axioms RiemannHypothesis.integrableOn_dbnKernel
+#print axioms RiemannHypothesis.differentiable_dbnH
+#print axioms RiemannHypothesis.dbnH_neg
+#print axioms RiemannHypothesis.dbnH_conj
+#print axioms RiemannHypothesis.differentiable_riemannXi
+#print axioms RiemannHypothesis.riemannXi_neg
+#print axioms RiemannHypothesis.completedRiemannZeta_conj_of_mem_strip
+#print axioms RiemannHypothesis.riemannXi_ofReal_im
+#print axioms RiemannHypothesis.riemannXi_eq_completed
+#print axioms RiemannHypothesis.completedRiemannZeta_ne_zero_of_one_le_re
+#print axioms RiemannHypothesis.completedRiemannZeta_ne_zero_of_re_nonpos
+#print axioms RiemannHypothesis.riemannXi_eq_zero_iff
+#print axioms RiemannHypothesis.zeta_strip_iff_xi
+#print axioms RiemannHypothesis.zeta_iff_xi
+#print axioms RiemannHypothesis.zeta_iff_dbnH_zero_of_eq
+#print axioms RiemannHypothesis.pow_three_card_mul_norm_le
+#print axioms RiemannHypothesis.card_le_log_div_log_three
+#print axioms RiemannHypothesis.finite_setOf_zeros
+#print axioms RiemannHypothesis.ncard_setOf_zeros_le
+#print axioms RiemannHypothesis.differentiable_xiFn
+#print axioms RiemannHypothesis.xiFn_one_sub
+#print axioms RiemannHypothesis.xiFn_eq_zero_of_zeta
+#print axioms RiemannHypothesis.xiFn_two_ne_zero
+#print axioms RiemannHypothesis.norm_Gammaℝ_le
+#print axioms RiemannHypothesis.norm_riemannZeta_le_sq
+#print axioms RiemannHypothesis.norm_xiFn_le
+#print axioms RiemannHypothesis.finite_nontrivialZeros
+#print axioms RiemannHypothesis.ncard_nontrivialZeros_le
+#print axioms RiemannHypothesis.norm_Gamma_half_add_mul_I_sq
+#print axioms RiemannHypothesis.norm_Gamma_one_add_mul_I_sq
+#print axioms RiemannHypothesis.norm_Gamma_mul_cos_le_of_mem_strip
+#print axioms RiemannHypothesis.norm_Gamma_le_exp_decay
+#print axioms RiemannHypothesis.norm_Gamma_le_exp_decay_of_le
+#print axioms RiemannHypothesis.half_le_norm_riemannZeta_of_three_le_re
+#print axioms RiemannHypothesis.norm_xiFn_le_exp_neg_pi_im
+#print axioms RiemannHypothesis.norm_xiFn_le_exp_neg_pi_im'
+#print axioms RiemannHypothesis.exp_le_norm_xiFn_centre
+#print axioms RiemannHypothesis.ncard_zerosNearHeight_le
+#print axioms RiemannHypothesis.countable_nontrivialZeroSet
+#print axioms RiemannHypothesis.sum_inv_one_add_im_sq_le
+#print axioms RiemannHypothesis.summable_inv_one_add_im_sq
+#print axioms RiemannHypothesis.summable_inv_one_add_norm_sq
+#print axioms RiemannHypothesis.summable_inv_norm_sq
+#print axioms RiemannHypothesis.exists_exp_of_ne_zero
+#print axioms RiemannHypothesis.linear_of_re_le
+#print axioms RiemannHypothesis.factorial_le_norm_xiFn
+#print axioms RiemannHypothesis.exists_xiFn_eq_zero
+#print axioms RiemannHypothesis.nontrivialZeroSet_nonempty
+#print axioms RiemannHypothesis.exists_riemannZeta_eq_zero_of_mem_strip
+#print axioms RiemannHypothesis.exists_rootMultiset_factorization
+#print axioms RiemannHypothesis.xiFn_eq_zero_iff_mem_nontrivialZeroSet
+#print axioms RiemannHypothesis.infinite_nontrivialZeroSet
+#print axioms RiemannHypothesis.infinite_setOf_xiFn_eq_zero
+#print axioms RiemannHypothesis.monotone_ncard_nontrivialZeros
+#print axioms RiemannHypothesis.exists_mem_nontrivialZeroSet_lt_abs_im
+#print axioms RiemannHypothesis.exists_le_ncard_nontrivialZeros
+#print axioms RiemannHypothesis.tendsto_ncard_nontrivialZeros_atTop
+#print axioms RiemannHypothesis.im_ne_zero_of_mem_nontrivialZeroSet
+#print axioms RiemannHypothesis.conj_mem_nontrivialZeroSet
+#print axioms RiemannHypothesis.one_sub_mem_nontrivialZeroSet
+#print axioms RiemannHypothesis.conj_image_upperNontrivialZeroSet
+#print axioms RiemannHypothesis.infinite_upperNontrivialZeroSet
+#print axioms RiemannHypothesis.infinite_lowerNontrivialZeroSet
+#print axioms RiemannHypothesis.ncard_nontrivialZeros_eq_two_mul
+#print axioms RiemannHypothesis.even_ncard_nontrivialZeros
+#print axioms RiemannHypothesis.criticalReflect_mem_nontrivialZeros
+#print axioms RiemannHypothesis.offLineQuadruple_distinct
+#print axioms RiemannHypothesis.ncard_offLineNontrivialZeros_eq_four_mul
+#print axioms RiemannHypothesis.four_dvd_ncard_offLineNontrivialZeros
+#print axioms RiemannHypothesis.four_le_ncard_offLineNontrivialZeros
+#print axioms RiemannHypothesis.analyticOrderAt_conj_conj
+#print axioms RiemannHypothesis.analyticOrderAt_completedRiemannZeta_eq
+#print axioms RiemannHypothesis.zeroMultiplicity_conj
+#print axioms RiemannHypothesis.zeroMultiplicity_one_sub
+#print axioms RiemannHypothesis.zeroMultiplicity_criticalReflect
+#print axioms RiemannHypothesis.even_multCount
+#print axioms RiemannHypothesis.offLineMultCount_eq_four_mul
+#print axioms RiemannHypothesis.four_dvd_offLineMultCount
+#print axioms RiemannHypothesis.wFun_neg
+#print axioms RiemannHypothesis.wFun'_zero
+#print axioms RiemannHypothesis.hasDerivAt_wFun
+#print axioms RiemannHypothesis.hasDerivAt_wFun'
+#print axioms RiemannHypothesis.dbnPhi_eq
+#print axioms RiemannHypothesis.completedRiemannZeta₀_eq_integral
+#print axioms RiemannHypothesis.riemannXi_eq_integral
+#print axioms RiemannHypothesis.integral_wFun''_add_sq_mul_wFun
+#print axioms RiemannHypothesis.dbnH_zero_eq_integral
+#print axioms RiemannHypothesis.dbnH_zero_eq_riemannXi
+#print axioms RiemannHypothesis.dbnH_zero_eq_zero_iff
+#print axioms RiemannHypothesis.zeta_iff_dbnH_zero
+#print axioms RiemannHypothesis.two_thirds_on_critical_line
+#print axioms RiemannHypothesis.five_sixths_distinct
+#print axioms RiemannHypothesis.eighty_percent_distinct
+#print axioms RiemannHypothesis.two_mul_windowCountDistinct_le_add
+#print axioms RiemannHypothesis.mtConstant_gt_three_quarters
+#print axioms RiemannHypothesis.four_fifths_simple_among_distinct
+#print axioms RiemannHypothesis.eighty_percent_simple_among_distinct
+#print axioms RiemannHypothesis.eighty_percent_simple_among_distinct_cumulative
+#print axioms RiemannHypothesis.four_fifths_le_liminf_windowCountSimple_div_windowCountDistinct
+#print axioms RiemannHypothesis.ninety_two_percent_simple_among_distinct_xiDeriv
+#print axioms RiemannHypothesis.ninety_two_percent_simple_among_distinct_xiDeriv_cumulative
+#print axioms RiemannHypothesis.eighty_percent_simple_among_distinctL
+#print axioms RiemannHypothesis.one_fifth_off_critical_line_of_eightyPercent
+#print axioms RiemannHypothesis.infinite_criticalLineZeroSet
+#print axioms RiemannHypothesis.infinite_simpleCriticalLineZeroSet
+#print axioms RiemannHypothesis.selberg_positive_proportion
+#print axioms RiemannHypothesis.levinson_one_third
+#print axioms RiemannHypothesis.conrey_two_fifths
+#print axioms RiemannHypothesis.tendsto_windowCount_atTop
+#print axioms RiemannHypothesis.tendsto_windowCountOnLine_atTop
+#print axioms RiemannHypothesis.tendsto_windowCountSimpleOnLine_atTop
+#print axioms RiemannHypothesis.hardyTheorem
+#print axioms RiemannHypothesis.positiveProportionOnCriticalLine
+#print axioms RiemannHypothesis.twoFifthsOnCriticalLine
+#print axioms RiemannHypothesis.twoThirds_le_liminf_criticalZeroCount_div
+#print axioms RiemannHypothesis.oneThirdOnCriticalLine
+#print axioms RiemannHypothesis.prime_number_theorem
+#print axioms RiemannHypothesis.chebyshev_psi_div_tendsto_one
+#print axioms RiemannHypothesis.weil_explicit_formula
+#print axioms RiemannHypothesis.finite_windowZeros
+#print axioms RiemannHypothesis.exists_mem_criticalLineZeroSet_lt_im
+#print axioms RiemannHypothesis.exists_mem_simpleCriticalLineZeroSet_lt_im
+#print axioms RiemannHypothesis.conj_mem_criticalLineZeroSet
+#print axioms RiemannHypothesis.exists_mem_criticalLineZeroSet_im_lt
+#print axioms RiemannHypothesis.riemannXi_ofReal_eq_zero_iff
+#print axioms RiemannHypothesis.infinite_setOf_riemannXi_ofReal_eq_zero
+#print axioms RiemannHypothesis.exists_riemannXi_ofReal_eq_zero_lt
+#print axioms RiemannHypothesis.exists_riemannXi_ofReal_eq_zero_gt
+#print axioms RiemannHypothesis.not_bddAbove_setOf_riemannXi_ofReal_eq_zero
+#print axioms RiemannHypothesis.not_bddBelow_setOf_riemannXi_ofReal_eq_zero
+#print axioms RiemannHypothesis.windowCountOffLine_add_windowCountOnLine
+#print axioms RiemannHypothesis.one_third_off_critical_line
+#print axioms RiemannHypothesis.one_third_off_critical_line_cumulative
+#print axioms RiemannHypothesis.offCriticalZeroCount_add_criticalZeroCount
+#print axioms RiemannHypothesis.eventually_offCriticalZeroCount_le
+#print axioms RiemannHypothesis.limsup_offCriticalZeroCount_div_le_one_third
+#print axioms RiemannHypothesis.three_four_one
+#print axioms RiemannHypothesis.negReLogDerivZeta_real_le
+#print axioms RiemannHypothesis.negReLogDerivZeta_le
+#print axioms RiemannHypothesis.negReLogDerivZeta_le_of_zero
+#print axioms RiemannHypothesis.exists_re_le_one_sub_of_nontrivialZero
+#print axioms RiemannHypothesis.zeroFreeRegion
+#print axioms RiemannHypothesis.exists_zero_re_le_one_sub_classical
+#print axioms RiemannHypothesis.exists_zero_mem_shrinking_strip_classical
+#print axioms RiemannHypothesis.exists_zero_abs_re_sub_half_le_classical
+#print axioms RiemannHypothesis.weilFunctional_eq_zeroSum
+#print axioms RiemannHypothesis.zeroOrdinate_eq_ofReal
+#print axioms RiemannHypothesis.weilFunctional_nonneg_of_zetaForm
+#print axioms RiemannHypothesis.sum_mertens_div
+#print axioms RiemannHypothesis.sum_moebius_mul_div
+#print axioms RiemannHypothesis.abs_littleMertens_le_one
+#print axioms RiemannHypothesis.redheffer_eq_divisorMatrix_mul_mertensColumn
+#print axioms RiemannHypothesis.det_redheffer
+#print axioms RiemannHypothesis.mertensBound_of_redhefferBound
+#print axioms RiemannHypothesis.zeta_of_redhefferBound
+#print axioms RiemannHypothesis.testTransform_ofReal
+#print axioms RiemannHypothesis.fourier_starReflect
+#print axioms RiemannHypothesis.testTransform_weilSquare
+#print axioms RiemannHypothesis.weilSquare_zero
+#print axioms RiemannHypothesis.isPositiveTestFunction_weilSquare
+#print axioms RiemannHypothesis.exists_isPositiveTestFunction_ne_zero
+#print axioms RiemannHypothesis.sum_divisors_liouville
+#print axioms RiemannHypothesis.sum_liouville_mul_div
+#print axioms RiemannHypothesis.abs_littleLiouville_sub_le_one
+#print axioms RiemannHypothesis.oscAvg_tendsto_zero
+#print axioms RiemannHypothesis.normSq_riemannZeta_line_eq_tsum
+#print axioms RiemannHypothesis.integral_normSq_riemannZeta_line
+#print axioms RiemannHypothesis.meanSquareAvg_tendsto_tsum_of_summable
+#print axioms RiemannHypothesis.meanSquareAvg_tendsto_tsum
+#print axioms RiemannHypothesis.meanSquareAvg_tendsto_riemannZeta
+#print axioms RiemannHypothesis.dirichletLineSum_moebius
+#print axioms RiemannHypothesis.meanSquareAvg_tendsto_tsum_moebius
+#print axioms RiemannHypothesis.lseriesSummable_divisorCount
+#print axioms RiemannHypothesis.lseries_divisorCount
+#print axioms RiemannHypothesis.dirichletLineSum_divisorCount
+#print axioms RiemannHypothesis.fourthMomentAvg_tendsto_tsum_divisorCount
+#print axioms RiemannHypothesis.divisorCountK_two
+#print axioms RiemannHypothesis.lseriesSummable_divisorCountK
+#print axioms RiemannHypothesis.lseries_divisorCountK
+#print axioms RiemannHypothesis.dirichletLineSum_divisorCountK
+#print axioms RiemannHypothesis.momentAvg_tendsto_tsum_divisorCountK
+#print axioms RiemannHypothesis.frequently_gt_sub_of_avg_tendsto
+#print axioms RiemannHypothesis.frequently_lt_add_of_avg_tendsto
+#print axioms RiemannHypothesis.continuous_normSq_riemannZeta_line
+#print axioms RiemannHypothesis.frequently_normSq_riemannZeta_gt
+#print axioms RiemannHypothesis.frequently_normSq_riemannZeta_lt
+#print axioms RiemannHypothesis.rectZeros_finite
+#print axioms RiemannHypothesis.rectZeroCount_mono
+#print axioms RiemannHypothesis.rectZeroCount_leftCorner_antitone
+#print axioms RiemannHypothesis.integral_rectZeroCount_eq_finsum
+#print axioms RiemannHypothesis.rectangle_argument_principle
+#print axioms RiemannHypothesis.rectangle_argument_principle_weighted
+#print axioms RiemannHypothesis.integral_rectangleIntegral'_logDeriv_eq_finsum
+#print axioms RiemannHypothesis.rectangleBorder_leftCorner_subset
+#print axioms RiemannHypothesis.rectZeros_eq_empty_of_forall_leftCorner_border
+#print axioms RiemannHypothesis.integral_rectangleIntegral'_logDeriv_eq_finsum_of_border
+#print axioms RiemannHypothesis.rectZeros_xiFn_finite
+#print axioms RiemannHypothesis.rectZeroCount_riemannZeta_eq_xiFn
+#print axioms RiemannHypothesis.zeta_rectangle_argument_principle
+#print axioms RiemannHypothesis.integral_rectZeroCount_riemannZeta_eq_finsum
+#print axioms RiemannHypothesis.integral_rectangleIntegral'_logDeriv_riemannZeta_eq_finsum
+#print axioms RiemannHypothesis.integral_rectangleIntegral'_logDeriv_riemannZeta_eq_finsum_of_border
+#print axioms RiemannHypothesis.hasDerivAt_log_norm_comp
+#print axioms RiemannHypothesis.integral_re_logDeriv_horizontal
+#print axioms RiemannHypothesis.integral_im_logDeriv_vertical
+#print axioms RiemannHypothesis.re_HIntegral_logDeriv
+#print axioms RiemannHypothesis.re_VIntegral_logDeriv
+#print axioms RiemannHypothesis.re_rectangleIntegral_logDeriv_eq_zero
+#print axioms RiemannHypothesis.im_rectangleIntegral'_logDeriv_eq_zero
+#print axioms RiemannHypothesis.integral_integral_re_logDeriv_swap
+#print axioms RiemannHypothesis.integral_integral_re_logDeriv_eq_integral_log_norm
+#print axioms RiemannHypothesis.exp_integral_logDeriv_comp
+#print axioms RiemannHypothesis.exists_continuousOn_arg
+#print axioms RiemannHypothesis.exists_continuousOn_arg_horizontal
+#print axioms RiemannHypothesis.exp_rectangleIntegral_logDeriv_eq_one
+#print axioms RiemannHypothesis.exists_int_rectangleIntegral'_logDeriv
+#print axioms RiemannHypothesis.integrableOn_logDeriv_prod_rectangle
+#print axioms RiemannHypothesis.integral_integral_re_logDeriv_eq_integral_log_norm_of_border
+#print axioms RiemannHypothesis.littlewood_lemma
+#print axioms RiemannHypothesis.littlewood_lemma_arg
+#print axioms RiemannHypothesis.zeta_littlewood_lemma
+#print axioms RiemannHypothesis.zeta_littlewood_lemma_arg
+#print axioms RiemannHypothesis.zeta_littlewood_lemma_nontrivialZeros
+#print axioms RiemannHypothesis.exists_continuousOn_arg_vertical
+#print axioms RiemannHypothesis.abs_sub_lt_pi_of_forall_cos_ne_zero
+#print axioms RiemannHypothesis.norm_riemannZeta_sub_one_le_half_of_three_le_re
+#print axioms RiemannHypothesis.abs_im_VIntegral_logDeriv_riemannZeta_lt_pi
+#print axioms RiemannHypothesis.abs_integral_log_norm_riemannZeta_three_le
+#print axioms RiemannHypothesis.integral_posLog_norm_riemannZeta_le
+#print axioms RiemannHypothesis.analyticOnNhd_riemannZeta_rectangle_of_im_pos
+#print axioms RiemannHypothesis.zeta_littlewood_lemma_above
+#print axioms RiemannHypothesis.zeta_littlewood_bound
+#print axioms RiemannHypothesis.exists_zeta_littlewood_bound
+#print axioms RiemannHypothesis.abs_sub_le_pi_of_forall_cos_ne_zero_Ioo
+#print axioms RiemannHypothesis.abs_sub_le_of_ncard_cos_eq_zero
+#print axioms RiemannHypothesis.card_mul_log_le_log_of_sphere_le
+#print axioms RiemannHypothesis.finite_setOf_zeros_radii
+#print axioms RiemannHypothesis.ncard_setOf_zeros_le_radii
+#print axioms RiemannHypothesis.norm_riemannZeta_le_sq_of_tenth_le_re
+#print axioms RiemannHypothesis.zetaRefl_horizontal
+#print axioms RiemannHypothesis.analyticOnNhd_zetaRefl
+#print axioms RiemannHypothesis.norm_zetaRefl_le
+#print axioms RiemannHypothesis.exists_ncard_re_riemannZeta_eq_zero_le
+#print axioms RiemannHypothesis.exists_abs_im_HIntegral_logDeriv_riemannZeta_le
+#print axioms RiemannHypothesis.exists_zeta_littlewood_bound_total
+#print axioms RiemannHypothesis.exists_rectZeroCount_riemannZeta_le
+#print axioms RiemannHypothesis.offDiagSum_one_le
+#print axioms RiemannHypothesis.norm_riemannZeta_sub_dirichletPoly_le
+#print axioms RiemannHypothesis.integral_normSq_dirichletPoly_one_le
+#print axioms RiemannHypothesis.exists_integral_normSq_riemannZeta_le
+#print axioms RiemannHypothesis.exists_integral_norm_riemannZeta_le
+#print axioms RiemannHypothesis.exists_volume_norm_riemannZeta_ge_le
+#print axioms RiemannHypothesis.norm_trapTerm_le
+#print axioms RiemannHypothesis.norm_riemannZeta_sub_dirichletPoly_le_trap
+#print axioms RiemannHypothesis.exists_integral_normSq_riemannZeta_le_three_fifths
+#print axioms RiemannHypothesis.exists_integral_norm_riemannZeta_le_three_fifths
+#print axioms RiemannHypothesis.exists_volume_norm_riemannZeta_ge_le_three_fifths
+#print axioms RiemannHypothesis.norm_bernTerm_le
+#print axioms RiemannHypothesis.norm_riemannZeta_sub_dirichletPoly_le_bern
+#print axioms RiemannHypothesis.riemannZeta_eq_bernApprox
+#print axioms RiemannHypothesis.exists_integral_normSq_riemannZeta_le_four_sevenths
+#print axioms RiemannHypothesis.exists_integral_norm_riemannZeta_le_four_sevenths
+#print axioms RiemannHypothesis.exists_volume_norm_riemannZeta_ge_le_four_sevenths
+#print axioms RiemannHypothesis.emTail_succ
+#print axioms RiemannHypothesis.exists_norm_riemannZeta_sub_dirichletPoly_le_em
+#print axioms RiemannHypothesis.exists_integral_normSq_riemannZeta_le_half
+#print axioms RiemannHypothesis.exists_integral_norm_riemannZeta_le_half
+#print axioms RiemannHypothesis.exists_volume_norm_riemannZeta_ge_le_half
+#print axioms RiemannHypothesis.abs_integral_normSq_dirichletPoly_sub_diag_le
+#print axioms RiemannHypothesis.exists_integral_normSq_riemannZeta_asymptotic
+#print axioms RiemannHypothesis.tendsto_integral_normSq_riemannZeta_div
+#print axioms RiemannHypothesis.integral_normSq_error_em_le
+#print axioms RiemannHypothesis.exists_emOrder_meanSquareExponent
+#print axioms RiemannHypothesis.exists_integral_normSq_riemannZeta_asymptotic_half
+#print axioms RiemannHypothesis.tendsto_integral_normSq_riemannZeta_div_half
+#print axioms RiemannHypothesis.offDiagSum_le
+#print axioms RiemannHypothesis.abs_integral_normSq_dirichletPoly_sub_diag_le_mvt
+#print axioms RiemannHypothesis.integral_normSq_dirichletPoly_mvt_zero
+#print axioms RiemannHypothesis.sum_inv_norm_rpow_le
+#print axioms RiemannHypothesis.summable_inv_norm_rpow
+#print axioms RiemannHypothesis.exists_mul_le_windowCountDistinct_zero
+#print axioms RiemannHypothesis.tendsto_sum_rpow_neg_windowZeros_atTop
+#print axioms RiemannHypothesis.not_summable_rpow_neg
+#print axioms RiemannHypothesis.not_summable_rpow_neg_of_nonpos
+#print axioms RiemannHypothesis.not_summable_inv_norm
+#print axioms RiemannHypothesis.sInf_exponent_summable_eq_one
+#print axioms RiemannHypothesis.exists_mul_le_windowCountDistinct_dyadic
+#print axioms RiemannHypothesis.pairwiseDisjoint_dyadic_windowZeros
+#print axioms RiemannHypothesis.exists_mul_le_sum_inv_norm_block
+#print axioms RiemannHypothesis.exists_sum_inv_norm_block_le
+#print axioms RiemannHypothesis.exists_mul_log_sq_le_sum_inv_norm
+#print axioms RiemannHypothesis.exists_sum_inv_norm_le_mul_log_sq
+#print axioms RiemannHypothesis.exists_sum_inv_norm_asymptotic
+#print axioms RiemannHypothesis.exists_abs_windowCount_sub_main_le
+#print axioms RiemannHypothesis.windowCount_eq_add_sum_dyadic
+#print axioms RiemannHypothesis.sum_dyadic_main_term
+#print axioms RiemannHypothesis.exists_abs_windowCount_zero_sub_rvmMain_le
+#print axioms RiemannHypothesis.tendsto_windowCount_zero_sub_rvmMain_div_atTop
+#print axioms RiemannHypothesis.exists_abs_windowCount_zero_sub_main_le
+#print axioms RiemannHypothesis.tendsto_windowCount_zero_div
+#print axioms RiemannHypothesis.le_windowCount_nthZeroOrdinate
+#print axioms RiemannHypothesis.exists_mem_nontrivialZeroSet_im_eq_nthZeroOrdinate
+#print axioms RiemannHypothesis.tendsto_nthZeroOrdinate_mul_log_div_nat
+#print axioms RiemannHypothesis.tendsto_nthZeroOrdinate_mul_log_nat_div
+#print axioms RiemannHypothesis.monotone_nthZeroOrdinate
+#print axioms RiemannHypothesis.sum_zeroGap
+#print axioms RiemannHypothesis.tendsto_nthZeroOrdinate_div_nat
+#print axioms RiemannHypothesis.tendsto_avg_zeroGap
+#print axioms RiemannHypothesis.infinite_setOf_zeroGap_lt
+#print axioms RiemannHypothesis.infinite_setOf_zeroGap_mul_log_lt
+#print axioms RiemannHypothesis.tendsto_log_nthZeroOrdinate_succ_div
+#print axioms RiemannHypothesis.infinite_setOf_zeroGap_mul_log_gt
+#print axioms RiemannHypothesis.exists_integral_normSq_riemannZeta_le_uniform
+#print axioms RiemannHypothesis.integral_normSq_riemannZeta_le_uniform_Icc
+#print axioms RiemannHypothesis.intervalIntegrable_circleAverage_normSq_riemannZeta
+#print axioms RiemannHypothesis.exists_integral_circleAverage_normSq_riemannZeta_le
+#print axioms RiemannHypothesis.integrableOn_re_logDeriv_prod_of_zeros
+#print axioms RiemannHypothesis.integral_integral_re_logDeriv_swap_of_zeros
+#print axioms RiemannHypothesis.integral_integral_re_logDeriv_eq_integral_log_norm_of_zeros
+#print axioms RiemannHypothesis.card_filter_le_circleAverage
+#print axioms RiemannHypothesis.exists_ncard_zerosRightOf_le
+#print axioms RiemannHypothesis.card_filter_le_log_max
+#print axioms RiemannHypothesis.card_filter_le_of_lindelof
+#print axioms RiemannHypothesis.card_le_sum_card_filter
+#print axioms RiemannHypothesis.exists_ncard_zerosRightOfWindow_le
+#print axioms RiemannHypothesis.tendsto_ncard_zerosRightOfWindow_div_log
+#print axioms RiemannHypothesis.ncard_zerosOffCriticalLineWindow_le
+#print axioms RiemannHypothesis.tendsto_ncard_zerosOffCriticalLineWindow_div_log
+#print axioms RiemannHypothesis.exists_ncard_zerosRightOfWindow_le_log
+#print axioms RiemannHypothesis.norm_le_rpow_mul_rpow_of_annulus
+#print axioms RiemannHypothesis.three_circles
+#print axioms RiemannHypothesis.exists_ncard_zerosOffCriticalLine_le
+#print axioms RiemannHypothesis.exists_mul_le_windowCount_zero
+#print axioms RiemannHypothesis.tendsto_zerosOffCriticalLine_div_windowCount
+#print axioms RiemannHypothesis.exists_integral_normSq_riemannZeta_le_critical_line
+#print axioms RiemannHypothesis.exists_integral_norm_riemannZeta_le_critical_line
+#print axioms RiemannHypothesis.exists_volume_norm_riemannZeta_ge_le_critical_line
+#print axioms RiemannHypothesis.WindowCounts.budget_ceiling
+#print axioms RiemannHypothesis.WindowCounts.budgetMult_ceiling
+#print axioms RiemannHypothesis.WindowCounts.eighty_percent_not_derivable_from_budget
+#print axioms RiemannHypothesis.WindowCounts.eighty_percent_derivable_from_budgetMult
+#print axioms RiemannHypothesis.VanDerCorput.norm_integral_expI_le_of_abs_deriv_ge
+#print axioms RiemannHypothesis.VanDerCorput.norm_integral_expI_le_of_deriv_two_ge
+#print axioms RiemannHypothesis.VanDerCorput.norm_integral_expI_logPhase_le
+#print axioms RiemannHypothesis.VanDerCorput.norm_integral_expI_logPhase_le_sqrt
+#print axioms RiemannHypothesis.KusminLandau.norm_sum_e2pi_le
+#print axioms RiemannHypothesis.KusminLandau.norm_sum_e2pi_le_of_deriv
+#print axioms RiemannHypothesis.KusminLandau.norm_sum_e2pi_le_of_deriv_sub_int
+#print axioms RiemannHypothesis.VanDerCorputSums.norm_fiber_sum_le
+#print axioms RiemannHypothesis.VanDerCorputSums.norm_sum_e2pi_le_of_grow
+#print axioms RiemannHypothesis.VanDerCorputSums.norm_sum_e2pi_le_of_grow_sqrt
+#print axioms RiemannHypothesis.VanDerCorputSums.norm_sum_e2pi_le_of_deriv_two
+#print axioms RiemannHypothesis.VanDerCorputSums.norm_sum_e2pi_le_of_deriv_two_neg
+#print axioms RiemannHypothesis.VanDerCorputSums.norm_sum_e2pi_logPhase_le
+#print axioms RiemannHypothesis.WeylDifferencing.mul_normSq_sum_le
+#print axioms RiemannHypothesis.WeylDifferencing.mul_normSq_sum_le_weighted
+#print axioms RiemannHypothesis.WeylDifferencing.norm_sq_sum_e2pi_le
+#print axioms RiemannHypothesis.WeylQuadratic.norm_geomSum_e2pi_le
+#print axioms RiemannHypothesis.WeylQuadratic.norm_sq_sum_e2pi_quadratic_le
+#print axioms RiemannHypothesis.WeylQuadratic.normSq_sum_e2pi_quadratic_le_of_le
+#print axioms RiemannHypothesis.WeylEquidistribution.exists_pos_le_intDist_of_irrational
+#print axioms RiemannHypothesis.WeylEquidistribution.exists_normSq_quadSum_le
+#print axioms RiemannHypothesis.WeylEquidistribution.tendsto_norm_quadSum_div_atTop
+#print axioms RiemannHypothesis.WeylCriterion.integral_fourier_eq_zero
+#print axioms RiemannHypothesis.WeylCriterion.equidistributedMod1_iff_weylSumsVanish
+#print axioms RiemannHypothesis.WeylCriterion.equidistributedMod1_quadratic
+#print axioms RiemannHypothesis.WeylCriterion.not_equidistributedMod1_const_zero
+#print axioms RiemannHypothesis.WeylCount.tendsto_avg_real
+#print axioms RiemannHypothesis.WeylCount.tendsto_countIn_div
+#print axioms RiemannHypothesis.WeylCount.tendsto_countIn_div_quadratic
+#print axioms RiemannHypothesis.WeylCount.equidistributedMod1_add_const
+#print axioms RiemannHypothesis.WeylCount.tendsto_countIn_div_of_le
+#print axioms RiemannHypothesis.WeylCount.tendsto_countIn_div_quadratic_of_le
+#print axioms RiemannHypothesis.WeylCount.weylSumsVanish_linear
+#print axioms RiemannHypothesis.WeylCount.equidistributedMod1_linear
+#print axioms RiemannHypothesis.WeylCount.tendsto_countIn_div_linear
+#print axioms RiemannHypothesis.WeylCount.tendsto_countIn_div_of_le'
+#print axioms RiemannHypothesis.WeylCount.tendsto_countArc_div
+#print axioms RiemannHypothesis.WeylCount.tendsto_countArc_div_quadratic
+#print axioms RiemannHypothesis.WeylCount.tendsto_countArc_div_linear
+#print axioms RiemannHypothesis.sum_one_div_sqrt_le
+#print axioms RiemannHypothesis.sum_sqrt_le
+#print axioms RiemannHypothesis.riemannZeta_eq_zetaChi_mul
+#print axioms RiemannHypothesis.zetaChi_mul_zetaChi_one_sub
+#print axioms RiemannHypothesis.norm_zetaChi_criticalLine
+#print axioms RiemannHypothesis.zetaSumDual_criticalLine
+#print axioms RiemannHypothesis.norm_zetaSum_criticalLine_le
+#print axioms RiemannHypothesis.norm_riemannZeta_criticalLine_le_of_afe
+#print axioms RiemannHypothesis.VanDerCorputThird.norm_sq_sum_e2pi_le_of_deriv_three
+#print axioms RiemannHypothesis.AFESubconvexity.norm_sum_weighted_le
+#print axioms RiemannHypothesis.AFESubconvexity.block_bound_numeric
+#print axioms RiemannHypothesis.AFESubconvexity.norm_sum_e2pi_logPhase_block_le
+#print axioms RiemannHypothesis.AFESubconvexity.cpow_criticalLine_eq
+#print axioms RiemannHypothesis.AFESubconvexity.norm_sum_block_criticalLine_le
+#print axioms RiemannHypothesis.AFESubconvexity.norm_zetaSum_le_of_le_cube
+#print axioms RiemannHypothesis.AFESubconvexity.norm_riemannZeta_criticalLine_le_of_afe
+#print axioms RiemannHypothesis.norm_riemannZeta_le_exp_of_zetaStripForm
+#print axioms RiemannHypothesis.exists_bound_riemannZeta_of_zetaStripForm
+EOF
+lake env lean .lake/build/axioms.lean > .lake/build/axioms.out
+cat .lake/build/axioms.out
+if grep -q "sorryAx" .lake/build/axioms.out; then
+  echo "FOUND sorryAx among the axioms"; fail=1
+fi
+# the only allowed axioms
+for ax in propext Classical.choice Quot.sound; do
+  if ! grep -q "$ax" .lake/build/axioms.out; then
+    echo "missing expected axiom $ax"; fail=1
+  fi
+done
+# (the output of `#print axioms` may be wrapped over several lines, so unwrap it first)
+if tr '\n' ' ' < .lake/build/axioms.out | tr -s ' ' \
+    | grep -o "depends on axioms: \[[^]]*\]" \
+    | grep -v "\[propext, Classical.choice, Quot.sound\]" ; then
+  echo "unexpected axioms"; fail=1
+fi
+
+# 4. no Float
+echo "==> checking for Float"
+if grep -rn "Float" --include="*.lean" RiemannHypothesis Challenge.lean Solution.lean; then
+  echo "FOUND Float"; fail=1
+fi
+
+# 5. adversarial revalidation: every claim of a closed task-board row is pinned in
+#    scripts/revalidation.lean, where the statement is written out in full and the
+#    repository's declaration is the proof term.  A weakened or renamed declaration
+#    stops this file from elaborating.
+echo "==> pinning the claims of the closed rows (scripts/revalidation.lean)"
+if ! lake env lean scripts/revalidation.lean > .lake/build/revalidation.out 2>&1; then
+  cat .lake/build/revalidation.out
+  echo "revalidation.lean failed to elaborate"; fail=1
+fi
+if grep -q "sorry" .lake/build/revalidation.out; then
+  cat .lake/build/revalidation.out
+  echo "FOUND sorry while pinning the claims"; fail=1
+fi
+
+# 6. the conditional/unconditional boundary: `scripts/conditional_theorems.lean` lists every
+#    theorem of the library one of whose hypotheses mentions a `Prop` that this repository
+#    states but does not prove (ZetaForm, the entries of Partial.lean, SpeiserTransfer, ...).
+#    The list is diffed against docs/goal/conditional-theorems.txt, so a new conditional
+#    theorem cannot be added without recording it, and "unconditional" is machine-checked
+#    rather than a docstring claim.
+echo "==> checking the conditional/unconditional boundary"
+if ! lake env lean scripts/conditional_theorems.lean > .lake/build/conditional.raw 2>&1; then
+  cat .lake/build/conditional.raw
+  echo "conditional_theorems.lean failed to elaborate"; fail=1
+else
+  # lake itself may print build-system warnings (an out-of-date manifest note, for instance) on
+  # the same stream; they are not part of the list of conditional theorems, so drop them.
+  grep -v '^warning: ' .lake/build/conditional.raw > .lake/build/conditional.out || true
+  if [ ! -f docs/goal/conditional-theorems.txt ]; then
+    echo "docs/goal/conditional-theorems.txt is missing; the current list is:"
+    cat .lake/build/conditional.out
+    echo "  record it with 'lake env lean scripts/conditional_theorems.lean > docs/goal/conditional-theorems.txt'"
+    fail=1
+  elif ! diff -u docs/goal/conditional-theorems.txt .lake/build/conditional.out; then
+    echo "the set of conditional theorems changed:"
+    echo "  regenerate with 'lake env lean scripts/conditional_theorems.lean > docs/goal/conditional-theorems.txt'"
+    fail=1
+  fi
+fi
+
+# 7. the task board validates, including the revalidation-note and
+#    open-conjecture-reduction rules
+echo "==> validating the task board"
+if ! python3 scripts/goal_state.py validate; then
+  fail=1
+fi
+
+if [ $fail -eq 0 ]; then echo "OK"; fi
+exit $fail

@@ -1,0 +1,1619 @@
+arXiv:2004.03581v1  [math.NT]  7 Apr 2020
+ZEROS OF GL2 L-FUNCTIONS ON THE CRITICAL LINE
+NICKOLAS ANDERSEN AND JESSE THORNER
+Abstract. We use Levinson’s method and the work of Blomer and Harcos on the G L2
+shifted convolution problem to prove that at least 6.96% of the zero s of the L-function of
+any holomorphic or Maaß cusp form lie on the critical line.
+1. Introduction
+Beginning with the celebrated work of Selberg [20], the last 80 years h ave seen numerous
+results measuring the proportion κ of nontrivial zeros of the Riemann zeta function that lie
+on the critical line Re(s) = 1
+2. To give an incomplete history, after Selberg proved that κ> 0,
+Levinson [18] proved that κ > 1
+3 . Conrey [10] reﬁned Levinson’s ideas to prove that κ> 2
+5.
+Most recently, Pratt, Robles, Zaharescu, and Zeindler [19] prov ed that κ> 0.41729, and this
+seems to be close to the limit of Levinson’s method. The Riemann hypot hesis asserts that
+all of the nontrivial zeros lie on the line Re( s) = 1
+2 , which would imply that κ = 1.
+We consider the corresponding problem for L-functions of degree two. Let f be a Hecke
+newform (holomorphic or Maaß ) on Γ 0(Nf ) with trivial nebentypus. The generalized Rie-
+mann hypothesis predicts that the nontrivial zeros of the associa ted L-function L(s,f ) all
+lie on the critical line. Hafner [12, 13] modiﬁed Selberg’s techniques to prove that for f of
+level Nf = 1, the proportion κf of such zeros is positive. Bernard [1, 2] proved that for
+f holomorphic of squarefree level and trivial nebentypus, we have κf > 0.0297; under the
+generalized Ramanujan conjecture for Hecke–Maaß forms, this im proves to κf > 0.0693.
+This was recently improved to κf > 0.02976, and to κf > 0.06938 under the generalized
+Ramanujan conjecture [17], using the ideas in [19]. We improve these r esults as follows.
+Theorem 1.1. Letf be a holomorphic or Hecke–Maaß newform on Γ 0(Nf ) for any Nf ≥ 1.
+Then κf > 0.0696. Under the generalized Ramanujan conjecture, we have κf > 0.0896.
+We follow Bernard [2] in applying Levinson’s attack on the problem of ob taining a lower
+bound for κf . There are two broad areas of improvement. The ﬁrst is a theoret ical improve-
+ment involving the spectral decomposition of GL 2 shifted convolution sums due to Blomer
+and Harcos [7], which increases the length of the allowed molliﬁer (see T heorem 2.1 below).
+The second is a computational reﬁnement in the process which tran slates our improved mol-
+liﬁer length into a numerical lower bound for κf . While our method applies equally well to
+both holomorphic and Maaß cusp forms, we have chosen to give most of the details of the
+proof in the Maaß case only, as it is more illuminating and only slightly more involved.
+Our theoretical improvement lies far into the proof, and several p reliminary reductions are
+nearly identical to the treatments of Levinson’s method in [1, 2, 21]. In order to highlight
+the new contributions here, we will refer the reader to [1, 2, 21] f or certain lengthy standard
+calculations which do not pertain to our improvements.
+Date: April 8, 2020.
+1
+2 NICKOLAS ANDERSEN AND JESSE THORNER
+Acknowledgements. This work began while the ﬁrst author was funded by NSF grant
+DMS-1701638 and the second author was a postdoctoral resear cher at Stanford University
+(funded by a NSF Mathematical Sciences Postdoctoral Fellowship) .
+2. A smooth mollified second moment
+Let f be a Hecke–Maaß newform of level Nf and trivial nebentypus. Then f is an eigen-
+function of the hyperbolic Laplacian −y2(∂xx +∂yy) with Laplace eigenvalue λ = 1
+4 +r2,
+where r ∈ R or ir ∈ [0, 1
+2). We write the Fourier expansion of f at inﬁnity as
+f (z) = √y
+∑
+n⁄=0
+λf (n)Kir(2π|n|y)e2πinx,
+arithmetically normalized with λf (1) = 1, where z = x +iy and Kir(y) is the K-Bessel
+function. Then f gives rise to the L-function
+L(s,f ) =
+∞∑
+n=1
+λf (n)
+ns =
+∏
+p
+(1 −λ(p)p−s +χ(p)p−2s)−1,
+whereχ(p) is the trivial character modulo N. By the work of Kim and Sarnak [16, Appendix]
+and Blomer and Brumley [4, 5], we know that there exists a constant θ ∈ [0, 7
+64 ] such that
+we have the uniform bounds
+|λf (n)| ≤ d(n)nθ, |Im(r)| ≤ θ,
+where d(n) is the number of divisors of n. The Ramanujan conjecture asserts that θ = 0.
+By Rankin-Selberg theory, we have the bound
+∑
+X≤n≤2X
+|λf (n)| ≪ f,ε X 1+ε (2.1)
+for all ǫ> 0, which provides us with an average form of the Ramanujan conjec ture.
+The main object of study in the GL 2 modiﬁcation of Levinson’s argument (following
+Young’s treatment in [21]) is an asymptotic formula for a smooth molliﬁe d second moment
+of L(s,f ). Deﬁne µf (n) by the convolution identity
+∑
+d|n
+µf (d)λf (n/d) =
+{
+1 if n = 1,
+0 if n> 1.
+Let T >0 be a large parameter, and deﬁne
+ψ(s) =
+∑
+n≤T ν
+µf (n)
+ns+ 1
+2 −σ0
+P
+(log(T ν/n)
+logT ν
+)
+, σ 0 = 1
+2 − R
+log T,
+where R > 0 and ν > 0 are parameters to be determined later and P ∈ R[x] satisﬁes
+P (0) = 0 and P (1) = 1. Let Q ∈ C[x] satisfy Q(0) = 1, and deﬁne
+V (s) = Q
+(
+− 1
+2 logT
+d
+ds
+)
+L(f,s ).
+As a corollary of his main theorem, Bernard [2, Theorem 5] proved t hat for any ν satisfying
+0<ν < 1 − 2θ
+4 + 2θ, (2.2)
+ZEROS OF GL 2 L-FUNCTIONS ON THE CRITICAL LINE 3
+we have
+lim
+T →∞
+1
+T
+∫ T
+1
+|V (σ0 +it)ψ(σ0 +it)|2dt =c(P,Q, 2R,ν/ 2), (2.3)
+where
+c(P,Q,r,ξ ) = 1 + 1
+ξ
+∫ 1
+0
+∫ 1
+0
+e2rv|P ′(u)Q(v) +ξP (u)Q′(v) +ξrP (u)Q(v)|2dudv.
+We then have
+κf ≥ lim sup
+T →∞
+(
+1− 1
+2R log
+[1
+T
+∫ T
+1
+|V (σ0 +it)ψ(σ0 +it)|2dt
+])
+≥ 1 − inf
+P,Q,R
+logc(P,Q, 2R,ν/ 2)
+2R = 1 − inf
+P,Q,R
+logc(P,Q,R,ν/ 2)
+R ,
+(2.4)
+which we bound from below using a computer search (see Section 6 be low).
+It seems that any signiﬁcant theoretical improvement that uses L evinson’s method comes
+from extending the permissible range (2.2) for ν. We will brieﬂy recall the main steps in
+Bernard’s argument leading to (2.3) until we come to the most diﬃcult part of the argument:
+estimating a certain shifted convolution sum. We will then estimate th is sum using the ideas
+of Blomer and Harcos [7]. This results in the following improvement over (2.2).
+Theorem 2.1. Equation 2.3 holds for any ν in the range
+0<ν < 1
+4 − θ
+2. (2.5)
+3. From the second moment to shifted convolution sums
+As in Young’s short proof of Levinson’s theorem, (2.3) follows from a n asymptotic formula
+for a smoothed, perturbed second moment integral. Let w : R → R be a smooth function
+with compact support in [ T/ 4, 2T ] satisfying
+w(j)(t) ≪
+(log T
+T
+) j
+for each j ≥ 0.
+Let α,β be complex numbers satisfying α,β ≪ 1/ logT and |α +β| ≫ 1/ logT . We set
+I(α,β ) =
+∫
+R
+w(t)L( 1
+2 +α +it)L( 1
+2 +β −it)|ψ(σ0 +it)|2dt.
+Then the main result of this section is the following.
+Theorem 3.1. Forν satisfying (2.5) we have
+I(α,β ) = c(α,β )
+∫
+R
+w(t)dt +O
+(T (log logT )4
+logT
+)
+,
+where
+c(α,β ) = 1 + 1
+ν · 1 −T −2(α+β)
+(α +β) logT · d2
+dxdy
+[
+T −ν(βx+αy)
+∫ 1
+0
+P (x +u)P (y +u)du
+] ⏐
+⏐
+⏐
+⏐
+⏐
+x=y=0
+.
+Theorem 3.1 implies Theorem 2.1. Once the range of ν is established as claimed, the pas-
+sage from Theorem 3.1 to (2.3) is nearly identical to the correspond ing argument given in
+Sections 2 and 3 of [21] for the Riemann zeta function. □
+To prove Theorem 3.1, we begin with a standard approximate functio nal equation.
+4 NICKOLAS ANDERSEN AND JESSE THORNER
+Lemma 3.2. Let G(u) be a holomorphic function which is even and decays rapidly in the
+vertical strip |Re(s)|< 4, satisfying G(0) = 1 . If X >0 and Re(α), Re(β) ∈ [− 1
+2, 1
+2], then
+L( 1
+2 +α +it,ϕ )L( 1
+2 +β +it,ϕ )
+=
+∑
+m,n≥1
+λ(m)λf (n)
+m
+1
+2 +αn
+1
+2 +β
+(m
+n
+) −it
+Vα,β(mn,t ) +Xα,β(t)
+∑
+m,n≥1
+λ(m) λf (n)
+m
+1
+2 −βn
+1
+2 −α
+(m
+n
+) −it
+V−β,−α(mn,t ),
+where
+Vα,β(x,t ) = 1
+2πi
+∫
+(1)
+G(s)
+s gα,β(s,t )x−sds,
+gα,β(s,t ) = L∞(f, 1
+2 +α +s +it)L∞(f, 1
+2 +β +s −it)
+L∞(f, 1
+2 +α +it)L∞(f, 1
+2 +β −it) ,
+Xα,β(t) = L∞( 1
+2 −α −it)L∞(f, 1
+2 −β +it)
+L∞( 1
+2 +α +it)L∞( 1
+2 +β −it) .
+Proof. This follows from minor changes to the proof of [15, Theorem 5.3]. □
+Applying the approximate functional equation to I(α,β ), we ﬁnd that
+I(α,β ) =
+∑
+a,b≤T ν
+µf (a)µf (b)√
+ab
+P
+(log(T ν/a)
+logT ν
+)
+P
+(log(T ν/b)
+logT ν
+) ∑
+±
+(
+D±
+a,b(α,β ) +N ±
+a,b(α,β )
+)
+,
+where we have split the sum into diagonal terms
+D+
+a,b(α,β ) =
+∑
+am=bn
+λf (m)λf (n)
+m
+1
+2 +αn
+1
+2 +β
+∫ ∞
+−∞
+w(t)Vα,β(mn,t )dt
+D−
+a,b(α,β ) =
+∑
+am=bn
+λf (m)λf (n)
+m
+1
+2 −αn
+1
+2 −β
+∫ ∞
+−∞
+w(t)Xα,β(t)V−β,−α(mn,t )dt
+and oﬀ-diagonal terms
+N +
+a,b(α,β ) =
+∑
+am⁄=bn
+λf (m)λf (n)
+m
+1
+2 +αn
+1
+2 +β
+∫ ∞
+−∞
+w(t)
+(bn
+am
+) it
+Vα,β(mn,t )dt
+N −
+a,b(α,β ) =
+∑
+am⁄=bn
+λf (m)λf (n)
+m
+1
+2 −αn
+1
+2 −β
+∫ ∞
+−∞
+w(t)
+(bn
+am
+) it
+Xα,β(t)V−β,−α(mn,t )dt.
+Proposition 3.3. For any ν ∈ (0, 1) and α,β as above, we have
+∑
+a,b≤T ν
+µf (a)µf (b)√
+ab
+P
+(log(T ν/a)
+logT ν
+)
+P
+(log(T ν/b)
+logT ν
+) ∑
+±
+D±
+a,b(α,β )
+=c(α,β )
+∫
+R
+w(t)dt +O
+(T (log logT )4
+logT
+)
+.
+Proof. Bernard [2, Proposition 4] proves this in the holomorphic case, but t he proof is iden-
+tical in the non-holomorphic setting apart from a minor detail in the p roof of [2, Lemma 8].
+In particular, the error term O(x3/5) in the ﬁrst displayed equation in the proof of Lemma 8
+is not known in the non-holomorphic case. One can achieve a power-s aving error term for
+ZEROS OF GL 2 L-FUNCTIONS ON THE CRITICAL LINE 5
+ﬁxedf using a standard contour integral calculation and the convexity bo und for L(s,f ×f ),
+so the proof of Lemma 8 holds in the non-holomorphic case after mino r adjustments. □
+It remains to show that the contribution from the oﬀ-diagonal ter ms is bounded above
+by the error term in Proposition 3.3. In the next three sections we w ill prove the following
+upper bound for the oﬀ-diagonal sums.
+Proposition 3.4. Let α,β be complex numbers satisfying α,β ≪ 1/ logT and |α +β| ≫
+1/ logT . Then for any a,b ∈ N we have
+N ±
+a,b(α,β ) ≪ (ab)
+1
+2T
+1
+2 +θ(abT )ε.
+This immediately settles the contribution from the oﬀ-diagonal term s.
+Corollary 3.5. Forν satisfying (2.5) we have
+∑
+a,b≤T ν
+µf (a)µf (b)√
+ab
+P
+(log(T ν/a)
+logT ν
+)
+P
+(log(T ν/b)
+logT ν
+) ∑
+±
+N ±
+a,b(α,β ) ≪T 1−ε.
+Proposition 3.4 implies Corollary 3.5. First we note that |µf (a)| ≪ max(1, |λf (a)|). We
+then apply Proposition 3.4 and bound everything else trivially to obtain
+∑
+a,b≤T ν
+µf (a)µf (b)√
+ab
+P
+(log(T ν/a)
+logT ν
+)
+P
+(log(T ν/b)
+logT ν
+) ∑
+±
+N ±
+a,b(α,β )
+≪T
+1
+2 +θ+ε
+( ∑
+a≤T ν
+1 +
+∑
+a≤T ν
+|λf (a)|
+) 2
+≪T
+1
+2 +θ+2ν+ε,
+where we used the Rankin-Selberg bound (2.1) in the last step. If ν ≤ 1
+4 − θ
+2 −ε, then the
+latter expression is bounded by T 1−ε. □
+Proof of Theorem 3.1. This follows immediately from Proposition 3.3 and Corollary 3.5. □
+Our main goal for the rest of the paper is to prove Proposition 3.4.
+4. Preliminaries for the proof of Proposition 3.4
+Before we begin the proof of Proposition 3.4, there are a few simpliﬁc ations we can make to
+the oﬀ-diagonal sums N ±
+a,b(α,β ). We will work only with N +
+a,b(α,β ) since the corresponding
+estimates for N −
+a,b(α,β ) are essentially identical in light of the asymptotics for Vα,β(x,t ) and
+Xα,β(t) that follow from Stirling’s formula. See [2, Corollary 5], for instance .
+First, we show that the terms with mn large or am far from bn contribute negligibly to
+the oﬀ-diagonal terms.
+Lemma 4.1. Leta,b,α,β be as in the statement of Proposition 3.4 and ﬁx δ >0. Deﬁne
+M(a,b ) =
+{
+(m,n ) ∈ Z :am ⁄=bn,mn ≤T 2+δ, and am
+bn = 1 + O(T −1+δ)
+}
+.
+If ε> 0, then we have
+N +
+a,b(α,β ) =
+∑
+(m,n)∈M(a,b)
+λf (m)λf (n)
+m
+1
+2 +αn
+1
+2 +β
+∫ ∞
+−∞
+w(t)
+(bn
+am
+) it
+Vα,β(mn,t )dt +Oδ(T −1+ε), (4.1)
+Proof. We proceed just as in [2, Lemma 3], though we use (2.1) in place of the R amanujan
+bound for holomorphic newforms. □
+6 NICKOLAS ANDERSEN AND JESSE THORNER
+Next, we introduce a dyadic partition of unity as follows. Let ρ : (0, ∞) → R be a smooth
+function, compactly supported in [1 , 2] such that
+∑
+ℓ∈Z
+ρ(2−ℓ/2x) = 1.
+We use this partition to write
+∑
+(m,n)∈M(a,b)
+F (m,n ) =
+∑
+(k,ℓ)∈S
+∑
+am⁄=bn
+F (m,n )ρ
+(am
+Ak
+)
+ρ
+(bn
+Aℓ
+)
+,
+for a suitable set S, where Ak = 2 k/2T 1−δ and F (m,n ) denotes the summand in (4.1). Here
+δ is a ﬁxed small positive number. As explained in the proof of Lemma 4 of [2], we have
+S =
+{
+(k,ℓ ) ∈ Z2 : 1
+2T 1−δ ≤Ak ≍Aℓ ≤ 2T 1+δ/2√
+ab
+}
+(4.2)
+and
+1 ≤ |am −bn| ≤ Hk,ℓ :=T −1+δ√
+AkAℓ. (4.3)
+So we can write the oﬀ-diagonal terms as
+N +
+a,b(α,β ) = 1
+2πi
+∫ σ+i∞
+σ−i∞
+G(s)
+s
+∑
+(k,ℓ)∈S
+as+αbs+β
+A2s+α+β
+k
+×
+∑
+1≤|h|≤Hk,ℓ
+∑
+am−bn=h
+λf (m)λf (n)√mn W1
+(am
+Ak
+)
+W2
+(bn
+Ak
+)
+dsdt +O(T −1+ε) (4.4)
+for any σ >0, where
+W1(x) = ρ(x)
+xs+α, W 2(y) = ρ(yAk/Aℓ)
+ys+β
+∫ ∞
+−∞
+w(t)
+(
+1 + h/Ak
+y
+) −it
+gα,β(s,t )dt. (4.5)
+Thus we are led to the averaged shifted convolution problem of boun ding the sums
+∑
+1≤|h|≤H
+∑
+am−bn=h
+λf (m)λf (n)√mn W1
+(am
+Ak
+)
+W2
+(bn
+Ak
+)
+(4.6)
+uniformly in the parameters a,b,H . This is the subject of the next section.
+5. Proof of Theorem 3.4
+At this point, our treatment diverges from that of [2], where the s hifted convolution sum
+(4.6) is bounded using work of Blomer [3]. In order to obtain a stronge r estimate for (4.6),
+we spectrally decompose (4.6) using the elegant ideas of Blomer and H arcos [6, 7].
+5.1. Preliminaries. Before we state the result of Blomer and Harcos, we recall some ba ck-
+ground on the spectrum of the hyperbolic Laplacian and ﬁx some not ation. Let Γ ⊆ SL2(Z)
+be a congruence subgroup. The weight k Petersson inner product is deﬁned as
+⟨g,h ⟩ =
+∫ ∫
+Γ \H
+g(z)h(z)ykdxdy
+y2 .
+Herez =x +iy andg,h are holomorphic cusp forms of weight k ≥ 2 or Maaß cusp forms (of
+weightk = 0). In what follows, we will always assume that each cusp form g (holomorphic
+ZEROS OF GL 2 L-FUNCTIONS ON THE CRITICAL LINE 7
+or Maaß) in a given basis is spectrally normalized so that ⟨g,g ⟩ = 1. In particular, our
+newforms will not generally have their ﬁrst Fourier coeﬃcient equal to 1.
+Let V(M) denote the set of spectrally normalized Hecke–Maaß newforms of level M,
+i.e. the normalized Maaß cusp forms on Γ 0(M) which are eigenforms for all of the Hecke
+operators Tn (not just those with ( n,M ) = 1). We also assume that each g ∈ V (M) satisﬁes
+g(−x +iy) = εgg(x +iy) with εg = ±1. The vector space of Maaß cusp forms of level N
+decomposes as ⨁
+M |N
+⨁
+g∈V(M )
+⨁
+d| N
+M
+g
+⏐
+⏐
+d · C,
+where g
+⏐
+⏐
+d(z) := g(dz). The ﬁrst two direct sums are orthogonal, but the innermost dire ct
+sum is not orthogonal in general. Thus we follow [8] in choosing an orth onormal basis given
+by a Gram–Schmidt orthogonalization process:
+⨁
+d| N
+M
+g
+⏐
+⏐
+d · C = span
+{
+g(t) :=
+∑
+s|t
+αt,sg
+⏐
+⏐
+s : t | N
+M
+}
+.
+The coeﬃcients αt,s are deﬁned in [7, Eqn. 40] (see also [8, Section 5] for an explicit descr ip-
+tion). To ease notation, we deﬁne the disjoint union
+U(N) =
+⨆
+M |N
+V(M).
+LetNg denote the unique level N for which the newform g lies in V(N). Each g ∈ V (N) has
+a Fourier expansion of the form
+g(z) = √y
+∑
+n⁄=0
+ρg(n)Krg (2π|n|y)e2πinx,
+where Kν(y) is the usual K-Bessel function and
+λg := 1
+4 −r2
+g, r g ∈iR≥0 ∪ (0, 1
+2),
+is the Laplace eigenvalue of g, normalized by
+(∆ 0 +λg)g :=
+(
+y2
+( ∂2
+∂x2 + ∂2
+∂y 2
+)
++λg
+)
+g = 0.
+Furthermore, the coeﬃcients satisfy
+ρg(n) = ρg(1)λg(n) for all n ≥ 1,
+where λg(n) is the eigenvalue of the Hecke operator Tn. The Hecke eigenvalues of the
+functions g(t) are given by
+λ(t)
+g (n) :=
+∑
+s|(t,n)
+αt,s
+√sλ g(n/s).
+From [7, Remark 6], when Ng is squarefree, we have the bound
+αt,s ≪tε(t/s)θ−1/2.
+This also holds when Ng is not squarefree by [8, Eqn. 5.6]. It follows that we have the
+pointwise bound
+λ(t)
+g (n) ≪nθ+ε(t,n )1/2−θ. (5.1)
+8 NICKOLAS ANDERSEN AND JESSE THORNER
+The setup is similar for the holomorphic cusp forms. For ℓ ≥ 2, let Hℓ(N) denote the set
+of weight ℓ newforms of level dividing N. Each g ∈ H ℓ(N) has a Fourier expansion of the
+form
+g(z) =
+∑
+n≥1
+ρg(n)n
+ℓ−1
+2 e(nz),
+where
+ρg(n) = λg(n)ρg(1),
+and λg(n) is the n-th Hecke eigenvalue of g. As before, let Ng denote the level of g. We
+apply a similar Gram–Schmidt orthonormalization as above to constru ctg(t) for each divisor
+t ofN/Ng, with coeﬃcients λ(t)
+g (n). These satisfy the pointwise bound (5.1) with θ replaced
+by 0. Lastly, the function yℓ/2g(z) is an eigenform of the weight ℓ hyperbolic Laplacian
+∆ ℓ :=y2
+( ∂2
+∂x2 + ∂2
+∂y 2
+)
+−iℓy ∂
+∂x
+with eigenvalue
+λg = ℓ
+2
+(
+1 − ℓ
+2
+)
+= 1
+4 −
+(
+ℓ−1
+2
+) 2
+=: 1
+4 −r2
+g, r g > 0.
+For detailed background on the Eisenstein series, we refer the rea der to [14]. All we need
+here is that for each singular cusp a of Γ 0(N), there is an Eisenstein series Ea(z,s ) with
+Fourier expansion
+Ea
+(
+z, 1
+2 +ir
+)
+=δa=∞y
+1
+2 +ir +τa(0,r )y
+1
+2 −ir + 2√y
+∑
+n⁄=0
+τa(n,r )Kir(2π|n|y)e2πinx.
+Blomer and Harcos [7, Sections 2.6–2.7] describe an explicit linear comb ination of Eisenstein
+series whose coeﬃcients exhibit properties similar to those of the Gr am–Schmidt bases of
+cusp forms described above. Brieﬂy, let E(N) denote the set of pairs τ = {χ,χ −1}, where χ
+is a Hecke character (over Q) of conductor Nχ such that N 2
+χ |N. We write
+Nτ :=N 2
+χ and λτ := 1
+4 −r2
+τ,
+where rτ ∈iR is such that χ = | · | irτ on R. For each τ ∈ E (N) and each t |N/Nτ , there is
+an Eisenstein series with coeﬃcients λ(t)
+τ (m) = λ(t)
+χ,χ−1(m) (see [7, Eqn. 68]). Here we only
+need that these coeﬃcients satisfy the pointwise bound [7, Eqn. 48 ]
+λ(t)
+τ (m) ≪ (t,m )mε. (5.2)
+5.2. The Petersson and Kuznetsov formulas. We require versions of the Petersson
+and Kuznetsov formulas for the Gram–Schmidt bases chosen abov e. In our notation, the
+Petersson formula (see [14, Theorem 9.6]) takes the form
+Γ( ℓ − 1)
+(4π)ℓ−1
+∑
+g∈Hℓ(N )
+|ρg(1)|2 ∑
+t|N/Ng
+λ
+(t)
+g (m)λ(t)
+g (n) = δmn + 2πiℓ ∑
+c>0
+c≡0(N )
+S(m, n, c)
+c Jℓ−1
+(4π√mn
+c
+)
+, (5.3)
+where Jν(x) is the J-Bessel function and S(m,n,c ) is the Kloosterman sum
+S(m,n,c ) =
+∑
+d mod c
+(c,d)=1
+e
+(md +nd
+c
+)
+.
+ZEROS OF GL 2 L-FUNCTIONS ON THE CRITICAL LINE 9
+To state the Kuznetsov formula, we ﬁrst require a test function φ(z) holomorphic in the strip
+| Re(z)|< 2
+3 which satisﬁes φ(z) ≪ (1 + |z|)−2−ε for some ε> 0. Then for integers m,n ≥ 1
+we have (see [14, Theorem 9.3])
+∑
+g∈U (N )
+|ρg(1)|2
+cosπrg
+φ(rg)
+∑
+t|N/Ng
+λ
+(t)
+g (m)λ(t)
+g (n) +
+∑
+cusps a
+∫ ∞
+−∞
+τ a(m,r )τa(n,r ) φ(ir)
+coshπr dr
+=δmn ˇφ +
+∑
+0<c≡0(N )
+S(m,n,c )
+c
+ˇφ
+(4π√mn
+c
+)
+, (5.4)
+where ˇφ and ˇφ(x) are the integral transforms
+ˇφ := i
+π
+∫
+(0)
+r tan(πr)φ(r)dr, ˇφ(x) := −2i
+∫
+(0)
+J2r(x)rφ(r)
+cosπr dr.
+5.3. Spectral decomposition of shifted convolution sums. Following [7, Eqn. 92], we
+combine the formulas above into a hybrid Petersson-Kuznetsov fo rmula as follows. Let ϕ be
+a function deﬁned on {z ∈ C : | Re(z)| < 2
+3 } ∪ (Z + 1
+2) and holomorphic in the interior of
+that set. Suppose that ϕ satisﬁes the decay condition
+ϕ(z) ≪ϕ,ǫ (1 + |z|)−2−ε
+for some ε> 0, and deﬁne
+ˇϕ := i
+π
+∫
+(0)
+r tan(πr)φ(r)dr +
+∑
+ℓ≥2 even
+(ℓ − 1)ϕ
+(ℓ − 1
+2
+)
+,
+ˇϕ(x) := −2i
+∫
+(0)
+J2r(x)rφ(r)
+cosπr dr + 2π
+∑
+ℓ≥2 even
+(−1)ℓ/2(ℓ − 1)ϕ
+(ℓ − 1
+2
+)
+Jℓ−1
+(4π√mn
+c
+)
+.
+To simplify notation, let
+C(N) = U(N)
+⋃ ( ⋃
+2≤ℓ≡0(2)
+Hℓ(N)
+)
+.
+For each g ∈ C (N) deﬁne
+Cg =
+
+
+
+
+
+
+
+(4π)ℓ−1
+Γ(ℓ)|ρg(1)|2 if g ∈ H ℓ(N),
+cosπrg
+|ρg(1)|2 if g ∈ U (N).
+We also follow [7] in abbreviating the contribution from the Eisenstein s eries as CSC, since
+its exact shape is not important for us; all we need is that CSC ≥ 0 when m = n. The
+following formula is obtained by multiplying (5.3) by ( ℓ − 1)ϕ( ℓ−1
+2 ), summing over positive
+evenℓ, and adding (5.4). See [7, Eqn. 92] and [7, Errata, Item 5] for a gen eralization and a
+discussion of convergence issues.
+Proposition 5.1. Letm,n ≥ 1. With the above notation and assumptions, we have
+∑
+g∈C(N )
+C −1
+g ϕ(rf )
+∑
+t|N/Ng
+λ
+(t)
+g (m)λ(t)
+g (n) + CSC = δmn ˇϕ +
+∑
+0<c≡0(N )
+S(m,n,c )
+c ˇϕ
+(4π√mn
+c
+)
+.
+10 NICKOLAS ANDERSEN AND JESSE THORNER
+Using the Kuznetsov formula, one can obtain the following large sieve inequality (see the
+proof of Lemma 6 of [7] and Section 5 of [11]).
+Proposition 5.2. Let {am} be a sequence of complex numbers and let M,X ≥ 1. Then
+∑
+g∈C(N )
+|rg|≤X
+∑
+t|N/Ng
+⏐
+⏐
+⏐
+∑
+|m|≤M
+amλ(t)
+g (m)
+⏐
+⏐
+⏐
+2
+≪ (NX 2 +M)(MNX )ε ∑
+|m|≤M
+|am|2. (5.5)
+We turn now to the shifted convolution sum (4.6), to which we apply th e spectral decom-
+position of Blomer and Harcos [6, 8]. The spectral decomposition is s tated in those papers
+using the language of automorphic forms, and we reproduce it here in the classical language
+to match the rest of this paper. To state the theorem, we ﬁrst de ﬁne (see also [7, Eqn. 88])
+‖W ‖Aℓ :=
+∑
+j≤k≤ℓ
+(∫
+R×
+|W (j)(y)|2(|y| + |y|−1)k dy
+y
+) 1/2
+. (5.6)
+Theorem 5.3 ([8], Theorem 2) . Letf be a holomorphic or Maaß newform of level Nf . Let
+a and b be nonzero integers and write N = lcm(aNf,bN f ). For any nonnegative integers
+p,q,r , let W1,W 2 : R× → C be arbitrary functions such that ‖W1‖Aℓ and ‖W2‖Aℓ exist for
+ℓ := 2(8 + p +q + 2r). Then for each cusp form or Eisenstein series g of level Ng |N and
+for any t | N/Ng there exists a function Wg,t : R× → C depending only on f , W1, W2, g,
+and t such that the following two properties hold.
+(1) For Y > 0 and h ∈ Z \ {0} there is a spectral decomposition
+∑
+am−bn=h
+λf (m)λf (n)√mn W1
+(am
+Y
+)
+W 2
+(bn
+Y
+)
+=
+∑
+g∈C(N )
+∑
+t|N/Ng
+λ(t)
+g (h)√
+h
+Wg,t
+(h
+Y
+)
++
+∫
+τ ∈E(N )
+∑
+t|N/Nτ
+λ(t)
+τ (h)√
+h
+Wτ,t
+(h
+Y
+)
+dτ.
+(2) Let P ∈ C[x] be a polynomial of degree at most p, and let D denote the diﬀerential
+operator D :=P (y∂y). For y ∈ R× we have
+∑
+g∈C(N )
+∑
+t|N/Ng
+(1 + |λg|)2r
+⏐
+⏐
+⏐DWg,t(y)
+⏐
+⏐
+⏐
+2
++
+∫
+τ ∈E(N )
+∑
+t|N/Nτ
+(1 + |λτ |)2r
+⏐
+⏐
+⏐DWτ,t(y)
+⏐
+⏐
+⏐
+2
+dτ
+≪
+⏐
+⏐ab
+⏐
+⏐ε
+‖W1‖2
+Aℓ‖W2‖2
+Aℓ|y|1−2θ−ε min(1, |y|−2q),
+with an implied constant depending only on f,p,q,r,P .
+Remark 12 of [7] also gives the L1 bounds
+∑
+g∈C(N )
+∑
+t|N/Ng
+(1 + |λg|)r|DWg,t(y)| ≪ |ab|
+1
+2 +ε‖W1‖Aℓ′ ‖W2‖Aℓ′ |y|
+1
+2 −θ−ε min(1, |y|−q) (5.7)
+and∫
+τ ∈E(N )
+∑
+t|N/Nτ
+(1 + |λτ |)r|DWτ,t(y)|dτ ≪d
+1
+4 |ab|ε‖W1‖Aℓ′ ‖W2‖Aℓ′ |y|
+1
+2 −θ−ε min(1, |y|−q) (5.8)
+for any y ∈ R×, where d is the largest square divisor of lcm( a,b ) and ℓ′ := 2(10 +p +q + 2r).
+We estimate ‖W1‖Aj and ‖W2‖Aj for the functions W1 andW2 deﬁned in (4.5) as follows.
+ZEROS OF GL 2 L-FUNCTIONS ON THE CRITICAL LINE 11
+Lemma 5.4. Fix B ∈ N. For W1 and W2 deﬁned in (4.5), let σ = Re(s)> 0. Then there
+exists a constant C =C(B)> 0 such that for any (k,ℓ ) ∈ S deﬁned in (4.2) we have
+‖W1‖AB ≪B (1 + |s|)C and ‖W2‖AB ≪B (1 + |s|)CT 1+2σ(logT )B.
+Proof. The upper bound for ‖W1‖AB is a straightforward computation involving the deﬁni-
+tions (4.5) and (5.6). For ‖W2‖AB we use [2, Eqn. 21] (together with the nearby comment
+that the implied constant is polynomial in |s|), which states that
+∂j
+∂y j
+(∫
+R
+w(t)
+(
+1 + h
+y
+) −it
+gα,β(s,t )dt
+)
+≪j (1 + |s|)C1y−jT 1+2σ(logT )j,
+for some C1 > 0. We observe that for ( k,ℓ ) ∈ S we have Ak ≍Aℓ, so because the support of
+ρ is contained in [1, 2], we have y ≍ 1 whenever W (j)
+2 (y) ⁄= 0. This, together with the Leibniz
+rule for derivatives, yields the lemma. □
+We are now ready to estimate (4.6).
+Proposition 5.5. Lets ∈ C withσ = Re(s)> 0 and deﬁne the set S, the number H =Hk,ℓ,
+and the functions W1 and W2 by (4.2), (4.3), and (4.5). Then there exists a constant B >0
+such that for any (k,ℓ ) ∈ S we have
+∑
+1≤|h|≤H
+∑
+am−bn=h
+λf (m)λf (n)√mn W1
+(am
+Ak
+)
+W2
+(bn
+Ak
+)
+≪ (ab)
+1
+4T 2σ+θ
+(
+(ab)
+1
+4T
+1
+2 +A
+1
+2
+k
+)
+(1 + |s|)B(abAkT )ε.
+(5.9)
+Proof. By Theorem 5.3, the left-hand side of (5.9) equals
+∑
+|h|≤H
+∑
+g∈C(N )
+∑
+t|N/Ng
+λ(t)
+g (h)√
+h
+Wg,t
+(h
+Ak
+)
++
+∑
+|h|≤H
+∫
+τ ∈E(N )
+∑
+t|N/Nτ
+λ(t)
+τ (h)√
+h
+Wτ,t
+(h
+Ak
+)
+dτ,
+where N = lcm(aNf,bN f ) ≪f ab. For the Eisenstein series contribution, we apply the
+pointwise bound (5.2) and the L1 bound (5.8) with p =q =r = 0 to obtain
+∑
+|h|≤H
+∫
+τ ∈E(N )
+∑
+t|N/Nτ
+λ(t)
+τ (h)√
+h
+Wτ,t
+(h
+Ak
+)
+dτ ≪
+∑
+|h|≤H
+(h,N )|h|− 1
+2 +ε
+∫
+τ ∈E(N )
+∑
+t|N/Nτ
+⏐
+⏐
+⏐Wτ,t
+(h
+Ak
+) ⏐
+⏐
+⏐dτ
+≪ (ab)
+1
+4 +εA
+− 1
+2 +θ+ε
+k ‖W1‖A20‖W2‖A20
+∑
+|h|≤H
+(h,N )|h|−θ
+≪ (ab)
+1
+4A
+1
+2
+kT −1+θ‖W1‖A20‖W2‖A20(abAkT )ε,
+where we used H ≍AkT −1+ε in the last line. It follows from Lemma 5.4 that the Eisenstein
+series contribution is at most
+(ab)
+1
+4A
+1
+2
+kT 2σ+θ(1 + |s|)B1(abAkT )ε,
+for some B1 > 0.
+We turn our attention to the discrete spectrum. Let us ﬁrst cons ider the contribution
+from the large eigenvalues, say |rg| ≥ R ≥ 1. Using the pointwise bound (5.1) for λ(t)
+g (h) we
+12 NICKOLAS ANDERSEN AND JESSE THORNER
+ﬁnd that
+∑
+|h|≤H
+∑
+g∈C(N )
+|rg|≥R
+∑
+t|N/Ng
+λ(t)
+g (h)
+√
+h
+Wg,t
+(h
+Ak
+)
+≪
+∑
+|h|≤H
+|h|− 1
+2 +θ+ε(h,N )
+1
+2 −θ
+∑
+g∈C(N )
+|rg|≥R
+∑
+t|N/Ng
+⏐
+⏐
+⏐Wg,t
+(h
+Ak
+) ⏐
+⏐
+⏐.
+Let r ≥ 1. We apply (5.7) with ( p,q,r ) = (0, 0,r ) to the inner sums to obtain
+∑
+g∈C(N )
+|rg|≥R
+∑
+t|N/Ng
+⏐
+⏐
+⏐Wg,t
+(h
+Ak
+) ⏐
+⏐
+⏐ ≪R−2r
+∑
+g∈C(N )
+∑
+t|N/Ng
+(1 + |λg|)r
+⏐
+⏐
+⏐Wg,t
+(h
+Ak
+) ⏐
+⏐
+⏐
+≪R−2r(ab)
+1
+2 +ε‖W1‖A20+4r ‖W2‖A20+4r |h|
+1
+2 −θ−εA
+− 1
+2 +θ+ε
+k
+≪R−2r(ab)
+1
+2 +ε|h|
+1
+2 −θ−εA
+− 1
+2 +θ+ε
+k (1 + |s|)B2T 1+2σ(logT )20+4r,
+for some B2 > 0, where we used Lemma 5.4 in the last step. Since H ≍AkT −1+ε, it follows
+that the total contribution from large eigenvalues |rg| ≥ R is at most
+R−2r(ab)
+1
+2A
+1
+2 +θ
+k T 2σ(logT )4r(1 + |s|)B2(abAkT )ε.
+For the remaining eigenvalues we apply Mellin inversion to obtain
+∑
+g∈C(N )
+|rg|≤R
+∑
+t|N/Ng
+∑
+|h|≤H
+λ(t)
+g (h)√
+h
+Wg,t
+(h
+Ak
+)
+= 1
+2πi
+∫
+(−ω)
+∑
+g∈C(N )
+|rg|≤R
+∑
+t|N/Ng
+ˆWg,t(u)
+∑
+|h|≤H
+λ(t)
+g (h)√
+h
+(h
+Ak
+) −u
+du
+for any real ω satisfying |ω| < 1
+2 −θ, where ˆWg,t(u) =
+∫ ∞
+0 Wg,t(y)yu−1dy. This converges
+since (5.7) with ( p,q,r ) = (p, 1, 0) implies that
+|(1 +y∂y)pWg,t(y)| ≪ p,g,t min(y− 1
+2 −θ−ε,y
+1
+2 −θ−ε). (5.10)
+By an application of Cauchy-Schwarz, it suﬃces to estimate
+∑
+g∈C(N )
+|rg|≤R
+∑
+t|N/Ng
+|ˆWg,t(u)|2 (5.11)
+and
+∑
+g∈C(N )
+|rg|≤R
+∑
+t|N/Ng
+⏐
+⏐
+⏐
+∑
+|h|≤H
+λ(t)
+g (h)
+√
+h
+(h
+Ak
+) −u⏐
+⏐
+⏐
+2
+. (5.12)
+By (5.10) and integration by parts we have
+ˆWg,t(u) = 1
+(u − 1)3
+∫ ∞
+0
+[
+(1 +y∂y)3Wg,t(y)
+]
+yu−1dy.
+Let D = (1 + y∂y)3. Then
+∑
+g∈C(N )
+|rg|≤R
+∑
+t|N/Ng
+|ˆWg,t(u)|2 ≪ 1
+(1 + |u|)3
+∫ ∞
+0
+∫ ∞
+0
+(yz)Re(u)−1
+∑
+g,t
+|DWg,t(y)||Wg,t(z)|dydz
+≪ 1
+(1 + |u|)3
+∫ ∞
+0
+yRe(u)−1
+(∑
+g,t
+|DWg,t(y)|2
+) 1
+2
+dy
+∫ ∞
+0
+zRe(u)−1
+(∑
+g,t
+|Wg,t(z)|2
+) 1
+2
+dz.
+ZEROS OF GL 2 L-FUNCTIONS ON THE CRITICAL LINE 13
+Applying Theorem 5.3 with ( p,q,r ) = (3 , 1, 0) and with ( p,q,r ) = (0 , 1, 0), we ﬁnd that
+(5.11) is at most (1 + |u|)−3‖W1‖2
+A24‖W2‖2
+A24. To estimate (5.12), we apply (5.5) to obtain
+∑
+g∈C(N )
+|rg|≤R
+∑
+t|N/Ng
+⏐
+⏐
+⏐
+∑
+|h|≤H
+λ(t)
+g (h)
+√
+h
+(h
+Ak
+) −u⏐
+⏐
+⏐
+2
+≪A−2ω
+k (NR 2 +H)(NRH )ε ∑
+h≤H
+h−1+2ω.
+Choosing ω >0 and using that H ≍AkT −1+δ, we ﬁnd that (5.12) is at most
+A−2ω
+k H 2ω(abR2 +H)(abRH)ε ≪T −2ω(abR2 +AkT −1)(abRAkT )ε.
+Taking the estimates for (5.11) and (5.12) together, we see (using Lemma 5.4) that for some
+B3 > 0, the contribution from the small eigenvalues is bounded above by
+‖W1‖A24‖W2‖A24T −ω((ab)
+1
+2R +A
+1
+2
+kT − 1
+2 )(abRAkT )ε
+∫
+(−ω)
+(1 + |u|)− 3
+2du
+≪T 1+2σ−ω((ab)
+1
+2R +A
+1
+2
+kT − 1
+2 )(1 + |s|)B3(abRAkT )ε.
+We choose ω = 1
+2 −θ −ε (the maximal choice), R ≍ (A1/2+θ
+k )1/2r, and r > 1+2θ
+4ε so that
+R−2rA1/2+θ
+k ≍ 1 and R ≪Aε
+k. Then the total contribution from the continuous and discrete
+spectra is ≪ (ab)1/4T 2σ+θ((ab)1/4T 1/2 +A1/2
+k )(1 + |s|)B(abAkT )ε for some B >0. □
+5.4. Proof of Proposition 3.4. By the assumptions on α,β we may assume that |α|, |β|<
+ε. Then, starting with (4.4), we apply Proposition 5.5, so that it suﬃce s to estimate
+(ab)
+1
+4 +σT 2σ+θ(abT )ε ∑
+(k,ℓ)∈S
+A−2σ+ε
+k ((ab)
+1
+4T
+1
+2 +A
+1
+2
+k )
+∫
+(σ)
+|G(s)|
+|s| (1 + |s|)Bds, (5.13)
+for σ >0. (Recall G(s) from Lemma 3.2.) Since G(s) decays rapidly as Im( s) → ±∞ , the
+s-integral converges. Recall that Ak = 2 k/2T 1−ε and that for ( k,ℓ ) ∈ S we have T 1−ε ≪
+Ak ≍Aℓ ≪T 1+ε√
+ab. Then for the ( k,ℓ )-sum above, we have
+∑
+(k,ℓ)∈S
+A−2σ+ε
+k ((ab)
+1
+4T
+1
+2 +A
+1
+2
+k ) ≪ ((ab)
+1
+4T
+1
+2 + (ab)
+1
+4 −σ)(abT )ε,
+as long as 0 < σ < 1
+4. It follows that (5.13) is bounded above by ( ab)
+1
+2 +σT
+1
+2 +2σ+θ(abT )ε.
+Takingσ =ε, we obtain the bound stated in the proposition.
+6. Proof of Theorem 1.1
+Our starting point is the lower bound for κf given by (2.4). Recall the assumption that
+Q ∈ C[x] and Q(0) = 1. It follows from Conrey’s analysis in [10, Section 4] that
+inf
+P
+c(P,Q,R,ν/ 2) = 1 +e2R|Q(1)|2
+2 +
+√
+AC − Im(B)2
+tanh( ν
+2A
+√
+AC − Im(B)2)
+,
+where
+A =
+∫ 1
+0
+e2Ry|Q(y)|2dy, B =
+∫ 1
+0
+e2RyQ(y)(R
+Q(y) + Q′(y))dy, C =
+∫ 1
+0
+e2Ry|RQ(y) + Q′(y)|2dy.
+14 NICKOLAS ANDERSEN AND JESSE THORNER
+For convenience (and with little loss), we introduce the restriction Q ∈ R[x], in which case
+it follows from the above discussion that
+κf ≥ 1 − inf
+Q real, R
+1
+R log
+(1 +e2R|Q(1)|2
+2 +
+√
+AC
+tanh( ν
+2A
+√
+AC)
+)
+. (6.1)
+This reduces the problem to ﬁnding a polynomial Q (with Q(0) = 1) and an R > 0 that
+maximizes the right-hand side of (6.1). Following [9, Section 7], we con sider
+Q(x) = 1 +
+M∑
+n=1
+hn
+[
+(1 − 2x)2n−1 − 1
+]
+,
+with M ≥ 1 and hn ∈ R. To obtain the lower bounds in Theorem 3.1, we take M = 14 and
+use the values of hn and R given in the tables below (depending on how small θ is).
+R 9. 582304437529595324225525968614158462696585619536462654863
+h1 3. 2650607637931750587244792559874799768045041255799130557
+h2 − 35. 69693130713001721891231865087654064687229555965328678
+h3 307. 14883295928891589009756204165288064665563409009168052
+h4 − 1739. 103927081019501913939892903078766924017002429996574
+h5 6512. 9325542974150723150270068720999657089209281615395908
+h6 − 16198. 8443601293961103032391540414314371460860896192784
+h7 25957. 21515703246078149929293503676356429786232735906639
+h8 − 23196. 1136942987736061546457127666178068318784665665983
+h9 1766. 822480793037850524223302703619208156578957397032833
+h10 23510. 5438732118788135370157003618549490819858577637324
+h11 − 31147. 450313477985980949805234797917653137151413430706
+h12 20163. 1035156568404078601394891882725477808931702413852
+h13 − 6904. 5360619620713355820026759440194356027492039210252
+h14 1001. 213829782225368635171849616243036610842971507148658
+κ f > 0. 0696
+Figure 1. Values of R and hn when θ = 7
+64 .
+R 7. 65208835094302319781281223375733559244215115656457449206824
+h1 2. 76591562468250508070995158206560886257952253926602201302
+h2 − 24. 953344958701578608094342599145795564509677472168223757
+h3 200. 979584757620870082162895767337819051600939086950347820
+h4 − 1135. 7009379004886683791498121437935780154665640397909333
+h5 4400. 79389257036604453210634685290016467996411799112455297
+h6 − 11685. 944299525457982968825745037097501864284460873563400
+h7 21012. 4431008707944609811293884869360821464728093593306850
+h8 − 24307. 727935478566887581509351616632376257812726305311352
+h9 14812. 4249653214080776097144795696331108125704065596268115
+h10 1611. 9036496014506124399090833449500819481038030909555252
+h11 − 11123. 93686807508540451538386504193951998533566471937387
+h12 9234. 6455282293357101009990009864484443907079856350398614
+h13 − 3551. 076363873755489914586897948635652602188820369924054
+h14 553. 88321676561034086729538059117184038452850086361067769
+κ f > 0. 0896
+Figure 2. Values of R and hn when θ = 0.
+ZEROS OF GL 2 L-FUNCTIONS ON THE CRITICAL LINE 15
+References
+[1] D. Bernard. Statistics on non-trivial zeros of modular L-functions . PhD thesis, University Blaise Pascal
+- Clermont-Ferrand II.
+[2] D. Bernard. Modular case of Levinson’s theorem. Acta Arith., 167(3):201–237, 2015.
+[3] V. Blomer. Rankin-Selberg L-functions on the critical line. Manuscripta Math. , 117(2):111–133, 2005.
+[4] V. Blomer and F. Brumley. On the Ramanujan conjecture over nu mber ﬁelds. Ann. of Math. (2) ,
+174(1):581–605, 2011.
+[5] V. Blomer and F. Brumley. Non-vanishing of L-functions, the Ramanujan conjecture, and families of
+Hecke characters. Canad. J. Math. , 65(1):22–51, 2013.
+[6] V. Blomer and G. Harcos. The spectral decomposition of shifted convolution sums. Duke Math. J. ,
+144(2):321–339, 2008.
+[7] V. Blomer and G. Harcos. Twisted L-functions over number ﬁelds and
+Hilbert’s eleventh problem. Geom. Funct. Anal. , 20(1):1–52, 2010. Erratum:
+https://users.renyi.hu/~gharcos/hilbert_erratum.pdf.
+[8] V. Blomer and D. Mili´ cevi´ c. The second moment of twisted modu lar L-functions. Geom. Funct. Anal. ,
+25(2):453–516, 2015.
+[9] B. Conrey. Zeros of derivatives of Riemann’s ξ-function on the critical line. J. Number Theory, 16(1):49–
+74, 1983.
+[10] J. B. Conrey. More than two ﬁfths of the zeros of the Riemann zeta function are on the critical line. J.
+Reine Angew. Math. , 399:1–26, 1989.
+[11] J.-M. Deshouillers and H. Iwaniec. Kloosterman sums and Fourier coeﬃcients of cusp forms. Invent.
+Math., 70(2):219–288, 1982/83.
+[12] J. L. Hafner. Zeros on the critical line for Dirichlet series attac hed to certain cusp forms. Math. Ann. ,
+264(1):21–37, 1983.
+[13] J. L. Hafner. Zeros on the critical line for Maass wave form L-functions. J. Reine Angew. Math. , 377:127–
+158, 1987.
+[14] H. Iwaniec. Spectral methods of automorphic forms , volume 53 of Graduate Studies in Mathematics .
+American Mathematical Society, Providence, RI; Revista Matem´ atica Iberoamericana, Madrid, second
+edition, 2002.
+[15] H. Iwaniec and E. Kowalski. Analytic number theory , volume 53 of American Mathematical Society
+Colloquium Publications . American Mathematical Society, Providence, RI, 2004.
+[16] H. H. Kim. Functoriality for the exterior square of GL 4 and the symmetric fourth of GL 2. J. Amer.
+Math. Soc. , 16(1):139–183, 2003. With appendix 1 by Dinakar Ramakrishnan an d appendix 2 by Kim
+and Peter Sarnak.
+[17] P. K¨ uhn, N. Robles, and D. Zeindler. On mean values of molliﬁers and L-functions associated to primitive
+cusp forms. Math. Z. , 291(1-2):661–709, 2019.
+[18] N. Levinson. More than one third of zeros of Riemann’s zeta-fu nction are on σ = 1 /2. Advances in
+Math., 13:383–436, 1974.
+[19] K. Pratt, N. Robles, A. Zaharescu, and D. Zeindler. More than ﬁve-twelfths of the zeros of ζ are on the
+critical line. Res. Math. Sci. , 7(1):74 pages, 2019.
+[20] A. Selberg. On the zeros of Riemann’s zeta-function. Skr. Norske Vid. Akad. Oslo I. , 1942(10):59, 1942.
+[21] M. P. Young. A short proof of Levinson’s theorem. Arch. Math. (Basel) , 95(6):539–548, 2010.
+Department of Mathematics, Brigham Young University
+E-mail address : nick@math.byu.edu
+Department of Mathematics, University of Florida
+E-mail address : jesse.thorner@gmail.com
