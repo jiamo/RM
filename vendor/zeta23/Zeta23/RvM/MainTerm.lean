@@ -197,7 +197,7 @@ theorem exists_goodHeight (a : ℝ) : ∃ T ∈ Set.Icc a (a + 1), GoodHeight T 
   have hfin : ((fun ρ : ℂ => ρ.im) '' zerosIn a (a + 1)).Finite :=
     (zerosIn_finite a (a + 1)).image _
   have hinf : (Set.Ioo a (a + 1)).Infinite := Set.Ioo_infinite (by linarith)
-  obtain ⟨T, hT⟩ := (hinf.sdiff hfin).nonempty
+  obtain ⟨T, hT⟩ := (hinf.diff hfin).nonempty
   obtain ⟨hT, hTnot⟩ := hT
   refine ⟨T, ⟨hT.1.le, hT.2.le⟩, ?_⟩
   intro ρ hρ him

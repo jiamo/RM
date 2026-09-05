@@ -48,7 +48,7 @@ theorem card_mul_log_le_log_of_sphere_le
   have hmero : MeromorphicOn f (sphere c |R|) := by
     rw [habs]; exact (hf.mono hsphere_sub).meromorphicOn
   have hint : CircleIntegrable (fun z => Real.log ‖f z‖) c R :=
-    circleIntegrable_log_norm_meromorphicOn hmero
+    MeromorphicOn.circleIntegrable_log_norm hmero
   have havg : circleAverage (fun z => Real.log ‖f z‖) c R ≤ Real.log M := by
     refine circleAverage_mono_on_of_le_circle hint ?_
     intro z hz

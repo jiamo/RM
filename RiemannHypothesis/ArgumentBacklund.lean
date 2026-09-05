@@ -142,14 +142,14 @@ theorem abs_sub_le_of_ncard_cos_eq_zero {theta : ℝ → ℝ} :
         simp only [Set.mem_singleton_iff]
         exact ne_of_gt hy.1.1
       have hfin2 : {y ∈ Ioc x b | Real.cos (theta y) = 0}.Finite :=
-        (hfin.diff).subset hsubS
+        (hfin.sdiff).subset hsubS
       have hcard2 : {y ∈ Ioc x b | Real.cos (theta y) = 0}.ncard ≤ n := by
         have hdiff : (S \ {x}).ncard + 1 = S.ncard := by
-          have := Set.ncard_diff_singleton_add_one (a := x) (s := S)
+          have := Set.ncard_sdiff_singleton_add_one (a := x) (s := S)
             ⟨⟨hax, hxb⟩, hcosx⟩ hfin
           simpa using this
         have hle : {y ∈ Ioc x b | Real.cos (theta y) = 0}.ncard ≤ (S \ {x}).ncard :=
-          Set.ncard_le_ncard hsubS hfin.diff
+          Set.ncard_le_ncard hsubS hfin.sdiff
         omega
       have h2 : |theta b - theta x| ≤ ((n : ℝ) + 1) * π :=
         ih x b hxb (hc.mono (Icc_subset_Icc hax' le_rfl)) hfin2 hcard2

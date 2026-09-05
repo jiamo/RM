@@ -61,7 +61,7 @@ theorem one_le_divisor_of_zero {f : ℂ → ℂ} {c : ℂ} {R : ℝ} (hR : 0 < R
     exact ⟨n, rfl⟩
   rw [hn] at hne ⊢
   have hn0 : n ≠ 0 := by simpa using hne
-  simp only [ENat.map_coe]
+  simp only [ENat.map_natCast]
   have hcast : ((n : ℤ) : WithTop ℤ).untop₀ = (n : ℤ) := by simp
   rw [hcast]
   omega

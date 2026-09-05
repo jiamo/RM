@@ -292,7 +292,6 @@ lemma support_MellinConvolution (f g : ℝ → 𝕂) :
     (MellinConvolution f g).support ⊆ f.support * g.support :=
   support_MellinConvolution_subsets subset_rfl subset_rfl
 
-set_option backward.isDefEq.respectTransparency false in
 lemma MellinConvolutionTransform (f g : ℝ → ℂ) (s : ℂ)
     (hf : IntegrableOn (fun x y ↦ f y * g (x / y) / (y : ℂ) * (x : ℂ) ^ (s - 1)).uncurry
       (Ioi 0 ×ˢ Ioi 0)) :
@@ -340,7 +339,6 @@ lemma mem_within_strip (σ₁ σ₂ : ℝ) :
       𝓟 {s | σ₁ ≤ s.re ∧ s.re ≤ σ₂} :=
   mem_principal_self _
 
-set_option backward.isDefEq.respectTransparency false in
 lemma MellinOfPsi_aux {ν : ℝ → ℝ} (diffν : ContDiff ℝ 1 ν)
     (suppν : ν.support ⊆ Set.Icc (1 / 2) 2)
     {s : ℂ} (hs : s ≠ 0) :
@@ -426,7 +424,8 @@ lemma MellinOfPsi {ν : ℝ → ℝ} (diffν : ContDiff ℝ 1 ν)
           have xpos : 0 ≤ x := by linarith [(mem_Icc.mp hx).1]
           have h := rpow_le_rpow xpos (mem_Icc.mp hx).2 (by linarith : 0 ≤ s.re)
           exact le_trans h <| rpow_le_rpow_of_exponent_le (by norm_num) hs₂
-        convert! mul_le_mul f_bound pow_bound (norm_nonneg _) ?_ using 1 <;> simp [f]
+        convert mul_le_mul f_bound pow_bound (norm_nonneg _) ?_ using 1 <;>
+          first | rfl | simp [f]
   have Cnonneg : 0 ≤ C := by
     have hh := mainBnd 1 (by norm_num) ((3 : ℂ) / 2) (by norm_num) (by norm_num)
     have hhh : 0 ≤ ‖𝓜 (fun x ↦ (ν x : ℂ)) ((3 : ℂ) / 2)‖ := by positivity
@@ -501,7 +500,6 @@ lemma DeltaSpikeOfRealContinuous {ν : ℝ → ℝ} {ε : ℝ} (εpos : 0 < ε)
     (diffν : ContDiff ℝ 1 ν) : Continuous (fun x ↦ (DeltaSpike ν ε x : ℂ)) :=
   continuous_ofReal.comp <| DeltaSpikeContinuous εpos diffν
 
-set_option backward.isDefEq.respectTransparency false in
 theorem MellinOfDeltaSpike (ν : ℝ → ℝ) {ε : ℝ} (εpos : ε > 0) (s : ℂ) :
     𝓜 (fun x ↦ (DeltaSpike ν ε x : ℂ)) s = 𝓜 (fun x ↦ (ν x : ℂ)) (ε * s) := by
   unfold DeltaSpike
@@ -533,18 +531,16 @@ lemma MellinOfDeltaSpikeAt1_asymp {ν : ℝ → ℝ} (diffν : ContDiff ℝ 1 ν
     · apply Asymptotics.IsBigO.trans_le (g' := fun _ ↦ (0 : ℝ)) ?_ (by simp)
       apply BigO_zero_atZero_of_support_in_Icc (a := 1 / 2) (b := 2) (ha := (by norm_num))
       rwa [ν.support_ofReal]
+  have hzero : 𝓜 (fun x ↦ (ν x : ℂ)) 0 = 1 := by
+    simp only [mellin, zero_sub, cpow_neg_one, smul_eq_mul]
+    calc (∫ (t : ℝ) in Ioi 0, (↑t)⁻¹ * ↑(ν t) : ℂ)
+        = ∫ (t : ℝ) in Ioi 0, ((ν t / t : ℝ) : ℂ) :=
+          integral_congr_ae (Filter.Eventually.of_forall fun t => by push_cast; ring)
+      _ = ((∫ t in Ioi 0, ν t / t : ℝ) : ℂ) := integral_ofReal
+      _ = 1 := by rw [mass_one, ofReal_one]
   have := ofReal_zero ▸ diff.isBigO_sub
-  simp only [sub_sub_sub_cancel_right, sub_zero] at this
-  convert! this using 1
-  simp only [mellin, zero_sub, cpow_neg_one, smul_eq_mul]
-  funext ε
-  congr 1
-  symm
-  calc (∫ (t : ℝ) in Ioi 0, (↑t)⁻¹ * ↑(ν t) : ℂ)
-      = ∫ (t : ℝ) in Ioi 0, ((ν t / t : ℝ) : ℂ) :=
-        integral_congr_ae (Filter.Eventually.of_forall fun t => by push_cast; ring)
-    _ = ((∫ t in Ioi 0, ν t / t : ℝ) : ℂ) := integral_ofReal
-    _ = 1 := by rw [mass_one, ofReal_one]
+  simp only [sub_sub_sub_cancel_right, sub_zero, hzero] at this
+  exact this
 
 lemma MellinOf1 (s : ℂ) (h : s.re > 0) :
     𝓜 ((fun x ↦ if 0 < x ∧ x ≤ 1 then 1 else 0)) s = 1 / s := by
@@ -766,9 +762,8 @@ lemma Smooth1LeOne_aux {x ε : ℝ} {ν : ℝ → ℝ} (xpos : 0 < x) (εpos : 0
       _ = ∫ (y : ℝ) in Ioi 0, (ν (y ^ (1 / ε)) / ε) / y := ?_
       _ = ∫ (y : ℝ) in Ioi 0, ν y / y := ?_
       _ = 1 := mass_one
-    · have := integral_comp_div_I0i_haar (fun y ↦ ν ((x / y) ^ (1 / ε)) / ε) xpos
-      convert! this.symm using 1
-      congr; funext y; congr; field_simp [mul_comm]
+    · have h := integral_comp_div_I0i_haar (𝕂 := ℝ) (fun y ↦ ν (y ^ (1 / ε)) / ε) xpos
+      simpa [RCLike.ofReal_real_eq_id] using h
     · have := integral_comp_rpow_I0i_haar_real (fun y ↦ ν y) (one_div_ne_zero εpos.ne')
       rw [← this, abs_of_pos <| one_div_pos.mpr εpos]
       field_simp
@@ -870,10 +865,16 @@ lemma MellinOfSmooth1a {ν : ℝ → ℝ} (diffν : ContDiff ℝ 1 ν)
     dsimp [mellin]; rw [setIntegral_congr_fun (by simp)]
     intro x hx; simp_rw [MellinConvolutionSymmetric _ _ <| mem_Ioi.mp hx]
 
-  convert! this using 1
-  · congr; funext x; convert! integral_ofReal.symm
-    simp only [MellinConvolution, RCLike.ofReal_div, ite_mul, one_mul, zero_mul, @apply_ite ℝ ℂ,
-      algebraMap.coe_zero, g]; rfl
+  convert this using 1
+  · have hfun : (fun x : ℝ ↦ ((Smooth1 ν ε x : ℝ) : ℂ)) = MellinConvolution g f' := by
+      funext x
+      rw [Smooth1]
+      simp only [MellinConvolution]
+      rw [← integral_complex_ofReal]
+      refine setIntegral_congr_fun measurableSet_Ioi (fun y _ ↦ ?_)
+      simp only [g, f']
+      split_ifs <;> push_cast [RCLike.ofReal_real_eq_id, id_eq] <;> rfl
+    rw [hfun]
   · rw [MellinOf1 s hs, MellinOfDeltaSpike ν εpos s]
     simp
 
@@ -897,8 +898,8 @@ lemma MellinOfSmooth1b {ν : ℝ → ℝ} (diffν : ContDiff ℝ 1 ν)
         ‖s⁻¹‖ * ‖𝓜 (fun x ↦ (ν x : ℂ)) (ε * s)‖ := by simp
     _                        ≤ ‖s⁻¹‖ * (C * (ε * ‖s‖)⁻¹) := by
       gcongr
-      convert! hC (ε * σ₁) (by positivity) (ε * s) hh1 hh2
-      simp [abs_eq_self.mpr εpos.le]
+      have h := hC (ε * σ₁) (by positivity) (ε * s) hh1 hh2
+      rwa [norm_mul, Complex.norm_real, Real.norm_of_nonneg εpos.le] at h
     _                        = C * (ε * ‖s‖ ^ 2)⁻¹ := by
       simp only [norm_inv, mul_inv_rev]
       ring

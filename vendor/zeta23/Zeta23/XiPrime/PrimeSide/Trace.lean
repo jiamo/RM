@@ -35,7 +35,7 @@ variable {cϱ : ℝ} {p : Setting} {F : LocalFun}
 /-- Integrability of `φ̂(r)² P_c(t+r)` (bounded × integrable). -/
 lemma Pc_part_integrable (hF : LocalHypsCore cϱ p F) (c : ℕ → ℂ) (t : ℝ) :
     Integrable (fun r => F.phiHat r ^ 2 * Pc p.X c (t + r)) :=
-  hF.phiHat_sq_mul_integrable_of_bdd ((Pc_continuous p.X c).comp (continuous_const_add t))
+  hF.phiHat_sq_mul_integrable_of_bdd ((Pc_continuous p.X c).comp (continuous_add_left t))
     (fun x => Pc_abs_le p.X c (t + x))
 
 /-- **P_c-part of [prop:trace] at one grid point** (mirror of ThmE.P_part_chi_eq):

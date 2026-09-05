@@ -124,6 +124,10 @@ theorem paperFT_deriv_deriv {f : ℝ → ℂ} (hf : ContDiff ℝ 2 f) (hsupp : H
   rw [I_sq]
   ring
 
+/-- The closed support of `deriv f` is contained in that of `f`. -/
+theorem tsupport_deriv_subset {f : ℝ → ℂ} : tsupport (deriv f) ⊆ tsupport f :=
+  closure_minimal support_deriv_subset isClosed_closure
+
 theorem hasCompactSupport_of_support_subset_abs {E : Type*} [Zero E] {f : ℝ → E} {Λ : ℝ}
     (hsupp : ∀ u, f u ≠ 0 → |u| ≤ Λ) : HasCompactSupport f := by
   refine HasCompactSupport.of_support_subset_isCompact (isCompact_Icc (a := -Λ) (b := Λ)) ?_

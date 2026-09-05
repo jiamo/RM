@@ -187,7 +187,7 @@ theorem exists_ncard_zerosRightOf_high_le {σ : ℝ} (h0 : 1 / 2 < σ) (h1 : σ 
   · -- no zeroes of ordinate at least `5` below height `T`
     have hempty : {ρ : ℂ | riemannZeta ρ = 0 ∧ σ ≤ ρ.re ∧ 5 ≤ ρ.im ∧ ρ.im ≤ T} = ∅ := by
       ext ρ
-      simp only [Set.mem_setOf_eq, Set.mem_empty_iff_false, iff_false, not_and]
+      simp only [Set.mem_ofPred_eq, Set.mem_empty_iff_false, iff_false, not_and]
       intro _ _ h5 hle
       linarith
     rw [hempty]
@@ -229,7 +229,7 @@ theorem exists_ncard_zerosRightOf_high_le {σ : ℝ} (h0 : 1 / 2 < σ) (h1 : σ 
         = ∑ ρ ∈ S, ∫ y in (4 : ℝ)..T, (if |ρ.im - y| ≤ κ then (1 : ℝ) else 0) := by
       rw [intervalIntegral.integral_congr (g := fun y =>
         ∑ ρ ∈ S, (if |ρ.im - y| ≤ κ then (1 : ℝ) else 0)) (fun y _ => hfsum y)]
-      exact intervalIntegral.integral_finset_sum
+      exact intervalIntegral.integral_finsetSum
         (fun ρ _ => intervalIntegrable_window_indicator ρ.im κ 4 T)
     rw [hsum]
     have hterm : ∀ ρ ∈ S,

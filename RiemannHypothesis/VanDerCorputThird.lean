@@ -57,20 +57,20 @@ theorem sum_Ioo_int_eq_sum_Ico (H : ℕ) (g : ℤ → ℝ) :
     ∑ k ∈ Finset.Ioo (0 : ℤ) (H : ℤ), g k = ∑ k ∈ Finset.Ico 1 H, g (k : ℤ) := by
   refine Finset.sum_nbij' (fun k => k.toNat) (fun k => (k : ℤ)) ?_ ?_ ?_ ?_ ?_
   · intro k hk
-    rw [Finset.mem_Ioo] at hk
-    rw [Finset.mem_Ico]
+    simp only [Finset.mem_Ioo] at hk
+    simp only [Finset.mem_Ico]
     omega
   · intro k hk
-    rw [Finset.mem_Ico] at hk
-    rw [Finset.mem_Ioo]
-    exact ⟨by exact_mod_cast hk.1.trans_lt' zero_lt_one, by exact_mod_cast hk.2⟩
+    simp only [Finset.mem_Ico] at hk
+    simp only [Finset.mem_Ioo]
+    omega
   · intro k hk
-    rw [Finset.mem_Ioo] at hk
+    simp only [Finset.mem_Ioo] at hk
     omega
   · intro k _
     simp
   · intro k hk
-    rw [Finset.mem_Ioo] at hk
+    simp only [Finset.mem_Ioo] at hk
     congr 1
     omega
 

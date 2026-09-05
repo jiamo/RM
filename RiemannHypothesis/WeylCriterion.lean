@@ -43,8 +43,11 @@ hypothesis sends to `0`, while `∫ fourier m = 0` by direct computation
 ## Scope
 
 Equidistribution is formulated against continuous test functions, which is the Riesz/portmanteau
-form of the statement; the count of `n < N` with fractional part in a subinterval is not derived
-here.  Nothing in this module concerns `ζ`.
+form of the statement.  The count of `n < N` with fractional part in a subinterval is not derived
+here: it is deduced from equidistribution in `RiemannHypothesis.WeylCount` and
+`RiemannHypothesis.WeylCountGeneral`, and `RiemannHypothesis.WeylPortmanteau` proves the converse,
+so that the counting statement is itself equivalent to the two notions of this module.  Nothing in
+this module concerns `ζ`.
 -/
 
 noncomputable section
@@ -160,7 +163,7 @@ def weylTest (x : ℕ → ℝ) : Submodule ℂ C(Circ, ℂ) where
   carrier := {f | Tendsto (fun N => avg x f N) atTop (𝓝 (∫ t, f t ∂haarAddCircle))}
   add_mem' := by
     intro f g hf hg
-    simp only [Set.mem_setOf_eq] at hf hg ⊢
+    simp only [Set.mem_ofPred_eq] at hf hg ⊢
     have hint : (∫ t, (f + g) t ∂haarAddCircle)
         = (∫ t, f t ∂haarAddCircle) + ∫ t, g t ∂haarAddCircle := by
       simpa using integral_add (integrable_contMap f) (integrable_contMap g)
@@ -178,7 +181,7 @@ def weylTest (x : ℕ → ℝ) : Submodule ℂ C(Circ, ℂ) where
     exact Tendsto.congr (fun N => (havg N).symm) tendsto_const_nhds
   smul_mem' := by
     intro c f hf
-    simp only [Set.mem_setOf_eq] at hf ⊢
+    simp only [Set.mem_ofPred_eq] at hf ⊢
     have hint : (∫ t, (c • f) t ∂haarAddCircle) = c • ∫ t, f t ∂haarAddCircle := by
       simpa using integral_smul c (fun t : Circ => f t)
     have havg : ∀ N, avg x (⇑(c • f)) N = c * avg x f N := by

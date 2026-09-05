@@ -11,7 +11,6 @@ import Zeta23.ThmE.FullLineChiAssembly
 
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
 
 open Complex MeasureTheory Real Set DirichletCharacter
 open scoped BigOperators ArithmeticFunction
@@ -197,7 +196,7 @@ theorem EF_lit_chi_L (hq : 1 < q) (hprim : χ.IsPrimitive) :
       ∀ (cf : ℕ → ℂ), (∀ n, ‖cf n‖ ≤ 1) →
       Summable (fun n : ℕ => cf n * ((Λ n / Real.sqrt n : ℝ) : ℂ) * g (Real.log n)) := by
     intro g hg cf hcf
-    refine summable_of_hasFiniteSupport ?_
+    refine summable_of_finite_support ?_
     have hsub : Function.support (fun n : ℕ => cf n * ((Λ n / Real.sqrt n : ℝ) : ℂ)
         * g (Real.log n)) ⊆ Set.Iic ⌈Real.exp (max B₁ 0)⌉₊ := by
       intro n hn

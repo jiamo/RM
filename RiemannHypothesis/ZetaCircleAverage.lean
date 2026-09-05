@@ -83,7 +83,7 @@ theorem circleAverage_log_norm_riemannZeta_le_circleAverage_normSq {y R : ℝ} (
   have hone : (1 : ℂ) ∉ sphere ((3 : ℂ) + (y : ℂ) * I) R := fun h =>
     one_notMem_closedBall_of_le hy hR (sphere_subset_closedBall h)
   have h1 : CircleIntegrable (fun z => Real.log ‖riemannZeta z‖) ((3 : ℂ) + (y : ℂ) * I) R :=
-    circleIntegrable_log_norm_meromorphicOn
+    MeromorphicOn.circleIntegrable_log_norm
       (meromorphicOn_riemannZeta (s := sphere ((3 : ℂ) + (y : ℂ) * I) |R|) (by rwa [habs]))
   have h2 : CircleIntegrable (fun z => ‖riemannZeta z‖ ^ 2 / 2) ((3 : ℂ) + (y : ℂ) * I) R := by
     refine ContinuousOn.circleIntegrable hR0.le ?_

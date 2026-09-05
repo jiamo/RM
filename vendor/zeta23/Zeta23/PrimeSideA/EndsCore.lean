@@ -274,7 +274,7 @@ theorem trG2integrand_integrable (hνc : Continuous ν) (hF : LocalHypsCoreW cϱ
   have hT1 : 1 ≤ p.T := by linarith [Real.pi_gt_three]
   have h : Integrable (fun q : ℝ × ℝ => ∑ k : Fin p.d, ∑ l : Fin p.d,
       gkl p F ν k l q.1 * gkl p F ν k l q.2) := by
-    refine integrable_finsetSum _ fun k _ => integrable_finsetSum _ fun l _ => ?_
+    refine integrable_finset_sum _ fun k _ => integrable_finset_sum _ fun l _ => ?_
     exact (gkl_integrable hνc hF hν hT1 hB k l).mul_prod (gkl_integrable hνc hF hν hT1 hB k l)
   exact h.congr (Filter.Eventually.of_forall fun q => sum_gkl_mul_gkl q)
 
@@ -294,10 +294,10 @@ theorem eq_trG2int (hνc : Continuous ν) (hF : LocalHypsCoreW cϱ p F) (hν : N
   have hinner : ∀ k : Fin p.d, ∑ l : Fin p.d, GentryNu ν p F k l ^ 2
       = ∫ q : ℝ × ℝ, ∑ l : Fin p.d, gkl p F ν k l q.1 * gkl p F ν k l q.2 := by
     intro k
-    rw [integral_finsetSum _ (fun l _ => hI k l)]
+    rw [integral_finset_sum _ (fun l _ => hI k l)]
     exact Finset.sum_congr rfl fun l _ => hsq k l
   rw [Finset.sum_congr rfl fun k _ => hinner k,
-    ← integral_finsetSum _ (fun k _ => integrable_finsetSum _ fun l _ => hI k l)]
+    ← integral_finset_sum _ (fun k _ => integrable_finset_sum _ fun l _ => hI k l)]
   exact integral_congr_ae (Filter.Eventually.of_forall fun q => sum_gkl_mul_gkl q)
 
 /-- `∬_{I×I} K_∞² νν' = L² 𝓜` (§5.3 "note …"). -/
@@ -461,7 +461,7 @@ theorem sum_grid_le_of_antitoneOn {f : ℝ → ℝ} (hf : AntitoneOn f (Set.Ici 
           rw [intervalIntegral.integral_of_le h0m]
           exact setIntegral_mono_set hint
             (ae_restrict_of_forall_mem measurableSet_Ioi fun x hx => h0 x (hΔ.trans (le_of_lt hx)))
-            (LE.le.eventuallyLE fun x hx => lt_of_le_of_lt (hΔa 0) hx.1)
+            (HasSubset.Subset.eventuallyLE fun x hx => lt_of_le_of_lt (hΔa 0) hx.1)
 
 /-- grid sum vs integral (ψ antitone): Σ_{j<n} ψ(Δ + j h) ≤ ψ(Δ) + h⁻¹ ∫_{(Δ,∞)} ψ. -/
 theorem sum_psiA_grid_le (hF : LocalHypsCoreW cϱ p F) {Δ h : ℝ} (hΔ : 0 ≤ Δ) (hh : 0 < h) (n : ℕ) :

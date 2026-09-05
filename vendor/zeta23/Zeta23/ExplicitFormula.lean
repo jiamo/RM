@@ -37,7 +37,6 @@ open scoped Real FourierTransform Convolution ComplexConjugate ArithmeticFunctio
 
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
 
 namespace Zeta23
 namespace EF
@@ -360,7 +359,7 @@ theorem prime_term {k : ℝ → ℂ} {L : ℝ} (hk : Continuous k)
     rw [Finset.mul_sum, Finset.mul_sum]
     refine Finset.sum_congr rfl fun n _ => ?_
     ring
-  rw [step2, integral_finsetSum _ (fun n _ => (integrable_paperFT_mul_cos hFk _).const_mul _)]
+  rw [step2, integral_finset_sum _ (fun n _ => (integrable_paperFT_mul_cos hFk _).const_mul _)]
   rw [← Finset.sum_neg_distrib]
   refine Finset.sum_congr rfl fun n _ => ?_
   rw [cintegral_const_mul]
@@ -661,7 +660,7 @@ theorem paperFT_mul_PX_eq (k : ℝ → ℂ) (L : ℝ) :
 theorem integrable_paperFT_mul_PX {k : ℝ → ℂ} (L : ℝ) (hFk : Integrable (𝓕 k)) :
     Integrable (fun τ : ℝ => paperFT k τ * (PX (Real.exp L) τ : ℂ)) := by
   rw [paperFT_mul_PX_eq]
-  exact integrable_finsetSum _ (fun n _ => (integrable_paperFT_mul_cos hFk _).const_mul _)
+  exact integrable_finset_sum _ (fun n _ => (integrable_paperFT_mul_cos hFk _).const_mul _)
 
 /-- `h·ν_X` is integrable, given that `h·μ` is (μ grows like log|τ|, so this last fact needs the
 decay [eq:hfbound] of h and the Stirling bound [eq:mufacts]; it is supplied by the caller). -/

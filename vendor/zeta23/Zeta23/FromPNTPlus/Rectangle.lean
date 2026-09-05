@@ -81,7 +81,7 @@ lemma mem_Rect {z w : ℂ} (zRe_lt_wRe : z.re ≤ w.re) (zIm_lt_wIm : z.im ≤ w
   exact and_assoc
 
 lemma square_neg (p : ℂ) (c : ℝ) : Square p (-c) = Square p c := by
-  simpa [Square] using! Rectangle.symm
+  simpa [Square, sub_eq_add_neg] using Rectangle.symm
 
 theorem Set.left_not_mem_uIoo {a b : ℝ} : a ∉ Set.uIoo a b :=
   fun ⟨h1, h2⟩ ↦ (left_lt_sup.mp h2) (le_of_not_ge (inf_lt_left.mp h1))
@@ -165,14 +165,14 @@ lemma rectangle_subset_punctured_rect {z₀ z₁ z₂ z₃ p : ℂ}
     (hp : (p.re < z₁.re ∧ p.re < z₂.re) ∨ (p.im < z₁.im ∧ p.im < z₂.im) ∨
       (z₁.re < p.re ∧ z₂.re < p.re) ∨ (z₁.im < p.im ∧ z₂.im < p.im)) :
     Rectangle z₁ z₂ ⊆ Rectangle z₀ z₃ \ {p} :=
-  Set.subset_sdiff.mpr ⟨by apply RectSubRect' <;> tauto, rectangle_disjoint_singleton hp⟩
+  Set.subset_diff.mpr ⟨by apply RectSubRect' <;> tauto, rectangle_disjoint_singleton hp⟩
 
 lemma rectangleBorder_subset_punctured_rect {z₀ z₁ z₂ z₃ p : ℂ}
     (hz : z₀.re ≤ z₁.re ∧ z₁.re ≤ z₂.re ∧ z₂.re ≤ z₃.re ∧
       z₀.im ≤ z₁.im ∧ z₁.im ≤ z₂.im ∧ z₂.im ≤ z₃.im)
     (hp : p.re ≠ z₁.re ∧ p.re ≠ z₂.re ∧ p.im ≠ z₁.im ∧ p.im ≠ z₂.im) :
     RectangleBorder z₁ z₂ ⊆ Rectangle z₀ z₃ \ {p} :=
-  Set.subset_sdiff.mpr ⟨
+  Set.subset_diff.mpr ⟨
     (rectangleBorder_subset_rectangle _ _).trans (by apply RectSubRect' <;> tauto),
     rectangleBorder_disjoint_singleton hp⟩
 
@@ -220,25 +220,25 @@ lemma mapsTo_rectangleBorder_right_im (z w : ℂ) :
 lemma mapsTo_rectangle_left_re_NoP (z w : ℂ) {p : ℂ}
     (pNotOnBorder : p ∉ RectangleBorder z w) :
     MapsTo (fun (y : ℝ) => ↑z.re + ↑y * I) [[z.im, w.im]] (Rectangle z w \ {p}) := by
-  refine (mapsTo_rectangleBorder_left_re z w).mono_right (Set.subset_sdiff.mpr ?_)
+  refine (mapsTo_rectangleBorder_left_re z w).mono_right (Set.subset_diff.mpr ?_)
   exact ⟨rectangleBorder_subset_rectangle z w, disjoint_singleton_right.mpr pNotOnBorder⟩
 
 lemma mapsTo_rectangle_right_re_NoP (z w : ℂ) {p : ℂ}
     (pNotOnBorder : p ∉ RectangleBorder z w) :
     MapsTo (fun (y : ℝ) => ↑w.re + ↑y * I) [[z.im, w.im]] (Rectangle z w \ {p}) := by
-  refine (mapsTo_rectangleBorder_right_re z w).mono_right (Set.subset_sdiff.mpr ?_)
+  refine (mapsTo_rectangleBorder_right_re z w).mono_right (Set.subset_diff.mpr ?_)
   exact ⟨rectangleBorder_subset_rectangle z w, disjoint_singleton_right.mpr pNotOnBorder⟩
 
 lemma mapsTo_rectangle_left_im_NoP (z w : ℂ) {p : ℂ}
     (pNotOnBorder : p ∉ RectangleBorder z w) :
     MapsTo (fun (x : ℝ) => ↑x + z.im * I) [[z.re, w.re]] (Rectangle z w \ {p}) := by
-  refine (mapsTo_rectangleBorder_left_im z w).mono_right (Set.subset_sdiff.mpr ?_)
+  refine (mapsTo_rectangleBorder_left_im z w).mono_right (Set.subset_diff.mpr ?_)
   exact ⟨rectangleBorder_subset_rectangle z w, disjoint_singleton_right.mpr pNotOnBorder⟩
 
 lemma mapsTo_rectangle_right_im_NoP (z w : ℂ) {p : ℂ}
     (pNotOnBorder : p ∉ RectangleBorder z w) :
     MapsTo (fun (x : ℝ) => ↑x + w.im * I) [[z.re, w.re]] (Rectangle z w \ {p}) := by
-  refine (mapsTo_rectangleBorder_right_im z w).mono_right (Set.subset_sdiff.mpr ?_)
+  refine (mapsTo_rectangleBorder_right_im z w).mono_right (Set.subset_diff.mpr ?_)
   exact ⟨rectangleBorder_subset_rectangle z w, disjoint_singleton_right.mpr pNotOnBorder⟩
 
 theorem not_mem_rectangleBorder_of_rectangle_mem_nhds {z w p : ℂ}
@@ -253,8 +253,11 @@ theorem Complex.nhds_hasBasis_square (p : ℂ) : (𝓝 p).HasBasis (0 < ·) (Squ
   suffices
       (𝓝 p.re ×ˢ 𝓝 p.im).HasBasis (0 < ·)
         (equivRealProdCLM.symm.toHomeomorph ⁻¹' Square p ·)
-    by simpa only [← nhds_prod_eq, Homeomorph.map_nhds_eq, Homeomorph.image_preimage]
-      using! this.map equivRealProdCLM.symm.toHomeomorph
+    by
+      have hpe : equivRealProdCLM.symm.toHomeomorph (p.re, p.im) = p := by
+        simp [ContinuousLinearEquiv.coe_symm_toHomeomorph, equivRealProdCLM_symm_apply]
+      simpa only [← nhds_prod_eq, Homeomorph.map_nhds_eq, Homeomorph.image_preimage, hpe]
+        using this.map equivRealProdCLM.symm.toHomeomorph
   apply ((nhds_basis_Icc_pos p.re).prod_same_index_mono (nhds_basis_Icc_pos p.im) ?_ ?_).congr
   · intro; rfl
   · intros

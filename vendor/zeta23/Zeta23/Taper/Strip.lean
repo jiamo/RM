@@ -11,7 +11,7 @@ All three statements are proved here from the general-`f` bounds in Zeta23/Poiss
 and are consumed via `Zeta23.Params.norm_phiHat_*`.
 Reference: the paper, §2.1 [eq:hfbound], §4 [prop:tail].
 -/
-import Mathlib.Algebra.Order.Star.Real
+import Mathlib.Algebra.Order.Star.Basic
 import Mathlib.MeasureTheory.Integral.Bochner.Set
 import Zeta23.Taper.Basic
 

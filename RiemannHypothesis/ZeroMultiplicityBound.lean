@@ -73,7 +73,7 @@ lemma analyticOrderAt_xiFn_eq {s : ℂ} (h0 : 0 < s.re) (h1 : s.re < 1) :
 lemma zeroMultiplicity_le_analyticOrderAt_xiFn {s : ℂ} (h0 : 0 < s.re) (h1 : s.re < 1) :
     ((zeroMultiplicity s : ℕ) : ℕ∞) ≤ analyticOrderAt xiFn s := by
   rw [analyticOrderAt_xiFn_eq h0 h1]
-  exact ENat.coe_toNat_le_self _
+  exact ENat.natCast_toNat_le_self _
 
 /-! ## The bound in the disc at height `T` -/
 

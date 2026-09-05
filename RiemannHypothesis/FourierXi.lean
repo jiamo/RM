@@ -341,7 +341,7 @@ theorem integral_Ioi_one_eq_cos_integral (z : ℂ) :
     dsimp only
     rw [hkey u, show ((u : ℂ) * (2 * z)) = 2 * (u : ℂ) * z from by ring]
     ring
-  have hmain := MeasureTheory.integral_comp_smul_deriv_Ioi hfc hft hff' hg_cont hg1 hg2
+  have hmain := MeasureTheory.integral_deriv_smul_comp_Ioi hfc hft hff' hg_cont hg1 hg2
   have hF0 : F 0 = 1 := by simp [hF]
   rw [hF0] at hmain
   rw [← hmain]

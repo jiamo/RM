@@ -117,7 +117,7 @@ theorem k_log_eq_zero {k : ℝ → ℂ} {L : ℝ} (hks : tsupport k ⊆ Icc (-L)
 theorem summable_coeff_mul_k {k : ℝ → ℂ} {L : ℝ} (hks : tsupport k ⊆ Icc (-L) L) (c : ℕ → ℂ) (sgn : Bool) :
     Summable (fun N : ℕ => c N / ((Real.sqrt N : ℝ) : ℂ) *
       k (if sgn then Real.log N else -Real.log N)) := by
-  refine summable_of_hasFiniteSupport ((Set.finite_Iic ⌈Real.exp L⌉₊).subset ?_)
+  refine summable_of_finite_support ((Set.finite_Iic ⌈Real.exp L⌉₊).subset ?_)
   intro N hN
   rw [Function.mem_support] at hN
   rw [Set.mem_Iic]

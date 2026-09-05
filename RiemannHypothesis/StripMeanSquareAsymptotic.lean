@@ -134,12 +134,12 @@ theorem abs_integral_normSq_dirichletPoly_sub_diag_le (a : ℕ → ℂ) (N : ℕ
     rw [intervalIntegral.integral_congr (g := fun t => ∑ m ∈ Finset.Icc 1 N,
       ∑ n ∈ Finset.Icc 1 N, (meanSquareTerm a σ m n t).re)
       (fun t _ => normSq_dirichletPoly_eq a N σ t)]
-    rw [intervalIntegral.integral_finset_sum]
+    rw [intervalIntegral.integral_finsetSum]
     · refine Finset.sum_congr rfl fun m _ => ?_
-      rw [intervalIntegral.integral_finset_sum]
+      rw [intervalIntegral.integral_finsetSum]
       exact fun n _ => (hcont m n).intervalIntegrable 0 T
     · intro m _
-      exact (continuous_finset_sum _ fun n _ => hcont m n).intervalIntegrable 0 T
+      exact (continuous_finsetSum _ fun n _ => hcont m n).intervalIntegrable 0 T
   -- split each inner sum into its diagonal entry and the rest
   have hsplit : ∀ m ∈ Finset.Icc 1 N,
       (∑ n ∈ Finset.Icc 1 N, ∫ t in (0 : ℝ)..T, (meanSquareTerm a σ m n t).re)
@@ -212,7 +212,7 @@ theorem abs_sum_Icc_rpow_neg_sub_tsum_le {q : ℝ} (hq : 1 < q) {N : ℕ} (hN : 
 theorem continuous_dirichletPoly_line {σ : ℝ} (N : ℕ) :
     Continuous (fun t : ℝ => dirichletPoly (fun _ => 1) N ((σ : ℂ) + (t : ℂ) * I)) := by
   unfold dirichletPoly
-  refine continuous_finset_sum _ fun n hn => ?_
+  refine continuous_finsetSum _ fun n hn => ?_
   simp only [Finset.mem_Icc] at hn
   have hn0 : (0 : ℝ) < (n : ℝ) := by exact_mod_cast hn.1
   have hc : Continuous (fun t : ℝ => ((n : ℂ)) ^ (-((σ : ℂ) + (t : ℂ) * I))) := by

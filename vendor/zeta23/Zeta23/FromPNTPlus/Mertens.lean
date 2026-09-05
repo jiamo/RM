@@ -162,8 +162,10 @@ theorem E₁Λ.ge {x : ℝ} (hx : 1 ≤ x) :
     rw [Finset.mul_sum]
     ring_nf
   _ ≥ ∑ d ∈ Ioc 0 ⌊x⌋₊, Λ d * ⌊x / d⌋₊ := by
-    gcongr
-    exact Nat.floor_le <| div_nonneg (by linarith) (by positivity)
+    refine Finset.sum_le_sum fun d _ => ?_
+    exact mul_le_mul_of_nonneg_left
+      (Nat.floor_le (div_nonneg (by linarith) (by positivity)))
+      ArithmeticFunction.vonMangoldt_nonneg
   _ ≥ x * log x - 2 * x :=
     sum_log_eq_sum_mangoldt ▸ sum_log_ge hx
   _ = _ := by ring
@@ -180,8 +182,9 @@ theorem E₁Λ.le {x : ℝ} (hx : 1 ≤ x) :
     rw [Finset.mul_sum]
     ring_nf
   _ ≤ ∑ d ∈ Ioc 0 ⌊x⌋₊, Λ d * (⌊x / d⌋₊ + 1) := by
-    gcongr
-    exact Nat.lt_floor_add_one _|>.le
+    refine Finset.sum_le_sum fun d _ => ?_
+    exact mul_le_mul_of_nonneg_left (Nat.lt_floor_add_one _).le
+      ArithmeticFunction.vonMangoldt_nonneg
   _ = (∑ d ∈ Ioc 0 ⌊x⌋₊, log d) + ∑ d ∈ Ioc 0 ⌊x⌋₊, Λ d := by
     simp_rw [mul_add, mul_one]
     rw [Finset.sum_add_distrib, sum_log_eq_sum_mangoldt]

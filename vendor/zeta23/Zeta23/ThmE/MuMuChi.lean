@@ -17,7 +17,6 @@ import Zeta23.PrimeSideB.PPKernel
 
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
 
 open MeasureTheory Real Set
 open scoped BigOperators
@@ -116,11 +115,11 @@ theorem abs_inner_sub_le_chi (hΓq : GammaFactsChi κ q) (hT2 : 2 ≤ p.T)
         _ = A * (K * (|x| + x ^ 2)) := mul_one _
     have hcomp : |(∫ τ' in Ix p.T x, muq κ q τ' ^ 2)
         - ∫ τ' in Icc p.T (2 * p.T), muq κ q τ' ^ 2| ≤ A ^ 2 * |x| := by
-      rw [abs_sub_comm, ← setIntegral_sdiff hIxmeas hIInt2 hIxI]
+      rw [abs_sub_comm, ← MeasureTheory.integral_diff hIxmeas hIInt2 hIxI]
       have hdvol : (volume : Measure ℝ).real (Icc p.T (2 * p.T) \ Ix p.T x) = |x| := by
         have hsub : volume (Icc p.T (2 * p.T) \ Ix p.T x)
             = volume (Icc p.T (2 * p.T)) - volume (Ix p.T x) :=
-          measure_sdiff hIxI hIxmeas.nullMeasurableSet hIxfin
+          MeasureTheory.measure_diff hIxI hIxmeas.nullMeasurableSet hIxfin
         rw [measureReal_def, hsub]
         unfold Ix
         rw [Real.volume_Icc, Real.volume_Icc,
@@ -132,7 +131,7 @@ theorem abs_inner_sub_le_chi (hΓq : GammaFactsChi κ q) (hT2 : 2 ≤ p.T)
         fun τ' hτ' => hsq_bound τ' hτ'.1
       have h := norm_setIntegral_le_of_norm_le_const (μ := volume)
         (s := Icc p.T (2 * p.T) \ Ix p.T x) (f := fun τ' => muq κ q τ' ^ 2)
-        (lt_of_le_of_lt (measure_mono Set.sdiff_subset)
+        (lt_of_le_of_lt (measure_mono Set.diff_subset)
           (by rw [Real.volume_Icc]; exact ENNReal.ofReal_lt_top)) hb
       rw [Real.norm_eq_abs, hdvol] at h
       exact h

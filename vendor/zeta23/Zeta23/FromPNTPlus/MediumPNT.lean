@@ -56,7 +56,7 @@ theorem LogDerivativeDirichlet (s : ℂ) (hs : 1 < s.re) :
   · simp
   · have := ArithmeticFunction.LSeriesSummable_vonMangoldt hs
     dsimp [LSeriesSummable] at this
-    convert! this; rename ℕ => n
+    refine this.congr fun n ↦ ?_
     by_cases h : n = 0 <;> simp [LSeries.term, h]
 
 noncomputable abbrev SmoothedChebyshevIntegrand
@@ -69,7 +69,6 @@ noncomputable def SmoothedChebyshev (SmoothingF : ℝ → ℝ) (ε : ℝ) (X : �
 
 open ComplexConjugate
 
-set_option backward.isDefEq.respectTransparency false in
 lemma smoothedChebyshevIntegrand_conj
     {SmoothingF : ℝ → ℝ} {ε X : ℝ} (Xpos : 0 < X) (s : ℂ) :
     SmoothedChebyshevIntegrand SmoothingF ε X (conj s) =
@@ -129,7 +128,6 @@ lemma SmoothedChebyshevDirichlet_aux_integrable {SmoothingF : ℝ → ℝ}
 -- TODO: add to mathlib
 attribute [fun_prop] Continuous.const_cpow
 
-set_option backward.isDefEq.respectTransparency false in
 lemma SmoothedChebyshevDirichlet_aux_tsum_integral {SmoothingF : ℝ → ℝ}
     (diffSmoothingF : ContDiff ℝ 1 SmoothingF)
     (SmoothingFpos : ∀ x > 0, 0 ≤ SmoothingF x)
@@ -188,8 +186,8 @@ lemma SmoothedChebyshevDirichlet_aux_tsum_integral {SmoothingF : ℝ → ℝ}
       rw [MeasureTheory.lintegral_const_mul' (hr := by simp)]
 
     rw [ENNReal.tsum_mul_right]
-    apply WithTop.mul_lt_top
-    · rw [WithTop.lt_top_iff_ne_top, ENNReal.tsum_coe_ne_top_iff_summable_coe]
+    apply ENNReal.mul_lt_top
+    · rw [lt_top_iff_ne_top, ENNReal.tsum_coe_ne_top_iff_summable_coe]
       push_cast
       convert (ArithmeticFunction.LSeriesSummable_vonMangoldt (s := σ)
         (by simp only [ofReal_re]; linarith)).norm
@@ -200,7 +198,6 @@ lemma SmoothedChebyshevDirichlet_aux_tsum_integral {SmoothingF : ℝ → ℝ}
       exact SmoothedChebyshevDirichlet_aux_integrable diffSmoothingF SmoothingFpos suppSmoothingF
             mass_one εpos ε_lt_one σ_gt σ_le |>.hasFiniteIntegral
 
-set_option backward.isDefEq.respectTransparency false in
 theorem SmoothedChebyshevDirichlet {SmoothingF : ℝ → ℝ}
     (diffSmoothingF : ContDiff ℝ 1 SmoothingF)
     (SmoothingFpos : ∀ x > 0, 0 ≤ SmoothingF x)
@@ -283,10 +280,10 @@ theorem SmoothedChebyshevDirichlet {SmoothingF : ℝ → ℝ}
       ?_ ?_ ?_ ?_
     · beta_reduce at this
       dsimp [mellinInv, VerticalIntegral] at this
-      convert! this using 4
-      · norm_cast
-      · rw [mul_comm]
-        norm_cast
+      rw [← this]
+      push_cast
+      congr 1
+      exact MeasureTheory.integral_congr_ae (.of_forall fun y ↦ mul_comm _ _)
     · exact div_pos (by exact_mod_cast n_pos) (by linarith : 0 < X)
     · apply Smooth1MellinConvergent diffSmoothingF suppSmoothingF ⟨εpos, ε_lt_one⟩
         SmoothingFpos mass_one
@@ -787,8 +784,8 @@ theorem SmoothedChebyshevPull1_aux_integrable {SmoothingF : ℝ → ℝ} {ε : �
     intro t
     simp only [Complex.norm_mul, c]
     gcongr
-    · convert! hC t using 1
-      simp
+    · rw [neg_div, norm_neg]
+      exact hC t
     · rw [Complex.norm_cpow_eq_rpow_re_of_nonneg]
       · simp
       · linarith
@@ -949,7 +946,7 @@ theorem SmoothedChebyshevPull1 {SmoothingF : ℝ → ℝ} {ε : ℝ} (ε_pos : 0
           rw [this]
           apply DifferentiableOn.neg
           apply holoOn.mono
-          apply Set.sdiff_subset_sdiff_left
+          apply Set.diff_subset_diff_left
           apply reProdIm_subset_iff'.mpr
           left
           simp only [sub_re, ofReal_re, mul_re, I_re, mul_zero, ofReal_im, I_im, mul_one, sub_self,
@@ -1058,7 +1055,7 @@ theorem SmoothedChebyshevPull2_aux1 {T σ₁ : ℝ} (σ₁lt : σ₁ < 1)
   apply ContinuousOn.neg
   apply holoOn.continuousOn.comp (by fun_prop)
   intro t ht
-  simp only [Set.mem_sdiff, mem_singleton_iff]
+  simp only [Set.mem_diff, mem_singleton_iff]
   constructor
   · apply mem_reProdIm.mpr
     simp only [add_re, ofReal_re, mul_re, I_re, mul_zero, ofReal_im, I_im, mul_one, sub_self,
@@ -1352,7 +1349,7 @@ theorem integral_evaluation (x : ℝ) (T : ℝ) (T_large : 3 < T) :
           apply Set.ext
           intro x
           simp_all only [ne_eq, setOf_subset_setOf, not_false_eq_true, implies_true,
-            mem_setOf_eq, Set.mem_sdiff, mem_univ, mem_singleton_iff, true_and]
+            mem_setOf_eq, Set.mem_diff, mem_univ, mem_singleton_iff, true_and]
 
         rw [U1] at U
         exact ae_volume_of_contains_compl_singleton_zero _ U
@@ -1730,7 +1727,6 @@ theorem I1Bound
   ring_nf at Z4
   exact Z4
 
-set_option backward.isDefEq.respectTransparency false in
 lemma I9I1 {SmoothingF : ℝ → ℝ} {ε X T : ℝ} (Xpos : 0 < X) :
     I₉ SmoothingF ε X T = conj (I₁ SmoothingF ε X T) := by
   unfold I₉ I₁
@@ -2053,9 +2049,9 @@ lemma log_pow_over_xsq_integral_bounded :
         have fun2 : (↑d + 1) * Real.log x ^ d / x =  (↑d + 1) * Real.log x ^ d * x⁻¹:= by
           exact rfl
         rw [fun2]
-        convert! deriv2 using 1
-        rw [Nat.add_sub_cancel,
-          Nat.cast_add, Nat.cast_one]
+        have hfun : (Real.log ^ (d + 1) : ℝ → ℝ) = fun x ↦ Real.log x ^ (d + 1) := rfl
+        rw [hfun] at deriv2
+        simpa using deriv2
 
       have deriv_v : (∀ x ∈ Set.Ioo (3 ⊓ T) (3 ⊔ T), HasDerivAt v (v' x) x) := by
         intro x hx
@@ -2074,12 +2070,9 @@ lemma log_pow_over_xsq_integral_bounded :
         have fun2 : -(x ^ 2)⁻¹ = - 1 / x ^ 2 := by
           field_simp
         rw [fun2] at deriv1
-        convert! HasDerivAt.neg deriv1 using 1
-        · ext x
-          rw [neg_eq_neg_one_mul]
-          field_simp
-          simp
-        · field_simp
+        rw [show (fun x : ℝ ↦ -1 / x) = fun x : ℝ ↦ -(1 / x) from funext fun y ↦ neg_div _ _,
+          show (1 : ℝ) / x ^ 2 = -(-1 / x ^ 2) by ring]
+        exact deriv1.neg
 
       have cont_u' : ContinuousOn u' (Set.uIcc 3 T) := by
         rw[uIcc_is_Icc]
@@ -2535,7 +2528,7 @@ lemma I4Bound {SmoothingF : ℝ → ℝ}
       apply h_logDeriv_holo.continuousOn.comp' (by fun_prop)
       unfold MapsTo
       intro x xInIcc
-      simp only [neg_le_self_iff, Nat.ofNat_nonneg, uIcc_of_le, Set.mem_sdiff, mem_singleton_iff]
+      simp only [neg_le_self_iff, Nat.ofNat_nonneg, uIcc_of_le, Set.mem_diff, mem_singleton_iff]
       have : ¬↑σ₂ + ↑x * (1 - ↑σ₂) - 3 * I = 1 := by
         by_contra h
         rw[Complex.ext_iff, sub_re, add_re, sub_im, add_im] at h
@@ -2606,10 +2599,9 @@ lemma I4Bound {SmoothingF : ℝ → ℝ}
       repeat rw[ofReal_im] at temp
       rw[reThree, imOne] at temp
       ring_nf at temp ⊢
-      rw[(by ring : σ₂ - σ₂ * x + x - I * 3 = σ₂ - σ₂ * x + (x - I * 3))] at temp ⊢
       rw[abs_of_neg, neg_neg] at temp
-      · have : (3 : NNReal) ≤ ‖↑σ₂ - ↑σ₂ * ↑x + (↑x - I * 3)‖₊ := temp
-        positivity
+      · have h3 : (0 : ℝ) < ↑‖↑σ₂ - ↑σ₂ * ↑x + ↑x - I * 3‖₊ := lt_of_lt_of_le (by norm_num) temp
+        exact_mod_cast h3
       · rw[neg_lt_zero]
         norm_num
   have CNonneg : 0 ≤ C := by
@@ -2915,7 +2907,7 @@ lemma I5Bound {SmoothingF : ℝ → ℝ}
       Nat.ofNat_nonneg, uIcc_of_le]
     intro z hyp_z
     simp only [mem_reProdIm, mem_singleton_iff, mem_Icc] at hyp_z
-    simp only [Set.mem_sdiff, mem_reProdIm, mem_Icc, mem_singleton_iff]
+    simp only [Set.mem_diff, mem_reProdIm, mem_Icc, mem_singleton_iff]
     constructor
     · constructor
       · rw [hyp_z.1]
@@ -3065,7 +3057,7 @@ lemma LogDerivZetaBoundedAndHolo : ∃ A C : ℝ, 0 < C ∧ A ∈ Ioc 0 (1 / 2) 
   · intro T hT
     apply (holo _ hT).mono
     intro s hs
-    simp only [Set.mem_sdiff, mem_singleton_iff, mem_reProdIm] at hs ⊢
+    simp only [Set.mem_diff, mem_singleton_iff, mem_reProdIm] at hs ⊢
     refine ⟨?_, hs.2⟩
     refine ⟨?_, hs.1.2⟩
     refine ⟨?_, hs.1.1.2⟩
@@ -3177,7 +3169,7 @@ theorem MediumPNT : ∃ c > 0,
   have holo2 : HolomorphicOn (fun s ↦ ζ' s / ζ s) (uIcc σ₂ 2 ×ℂ uIcc (-3) 3 \ {1}) := by
     apply holo2'.mono
     intro s hs
-    simp only [neg_le_self_iff, Nat.ofNat_nonneg, uIcc_of_le, Set.mem_sdiff, mem_reProdIm, mem_Icc,
+    simp only [neg_le_self_iff, Nat.ofNat_nonneg, uIcc_of_le, Set.mem_diff, mem_reProdIm, mem_Icc,
       mem_singleton_iff] at hs ⊢
     refine ⟨?_, hs.2⟩
     refine ⟨?_, hs.1.2⟩
@@ -3495,29 +3487,16 @@ theorem MediumPNT : ∃ c > 0,
       Real.log x - const3 * Real.log x ^ pow1 - (const1 * Real.log x + const2 * Real.log x ^ pow1)
       = (1 - const1) * Real.log x - (const2 + const3) * Real.log x ^ pow1 := by ring
     rw [this]
-    convert hx using 1
-    ring_nf
-    congr! 1
-    · have : Real.log x * const2 * Real.log x ^ (-1 + pow1)
-          = const2 * Real.log x ^ pow1 := by
-        rw [mul_assoc, mul_comm, mul_assoc]
-        congr! 1
-        conv =>
-          enter [1, 2]
-          rw [← Real.rpow_one (Real.log x)]
-        rw [← Real.rpow_add (Real.log_pos (by linarith))]
-        ring_nf
-      rw [this]
-    have : Real.log x * const3 * Real.log x ^ (-1 + pow1)
-        = const3 * Real.log x ^ pow1 := by
-      rw [mul_assoc, mul_comm, mul_assoc]
-      congr! 1
-      conv =>
-        enter [1, 2]
-        rw [← Real.rpow_one (Real.log x)]
-      rw [← Real.rpow_add (Real.log_pos (by linarith))]
+    have hL : 0 < Real.log x := Real.log_pos (by linarith)
+    have key : Real.log x * Real.log x ^ (pow1 - 1) = Real.log x ^ pow1 := by
+      nth_rewrite 1 [← Real.rpow_one (Real.log x)]
+      rw [← Real.rpow_add hL]
       ring_nf
-    rw [this]
+    calc (0 : ℝ)
+        ≤ Real.log x * (1 - const1 - (const2 + const3) * Real.log x ^ (pow1 - 1)) := hx
+      _ = (1 - const1) * Real.log x
+            - (const2 + const3) * (Real.log x * Real.log x ^ (pow1 - 1)) := by ring
+      _ = (1 - const1) * Real.log x - (const2 + const3) * Real.log x ^ pow1 := by rw [key]
 
   have event_4_aux : ∀ᶠ (x : ℝ) in atTop,
       c₅ * rexp (σ₂ * Real.log x + (A ^ ((1 : ℝ) / 10) / 2) * Real.log x ^ ((1 : ℝ) / 10)) ≤
@@ -3605,14 +3584,11 @@ theorem MediumPNT : ∃ c > 0,
     rw [SmoothedChebyshevPull2 ε_pos ε_lt_one X X_gt_3 (T := T) (by linarith)
       σ₂_pos σ₁_lt_one σ₂_lt_σ₁ holo1 holo2a ν_supp ν_nonneg ν_massOne ContDiff1ν]
     ring_nf
-    iterate 5
-      apply le_trans (by apply norm_add_le)
-      gcongr
-    rw [(by ring : I₁ ν ε X T - I₂ ν ε T X σ₁ + I₃ ν ε T X σ₁ - I₄ ν ε X σ₁ σ₂ = (I₁ ν ε X T - I₂ ν ε T X σ₁) + (I₃ ν ε T X σ₁ - I₄ ν ε X σ₁ σ₂))]
-    apply le_trans (by apply norm_add_le)
-    rw [(by ring : ‖I₁ ν ε X T‖ + ‖I₂ ν ε T X σ₁‖ + ‖I₃ ν ε T X σ₁‖ + ‖I₄ ν ε X σ₁ σ₂‖ =
-      (‖I₁ ν ε X T‖ + ‖I₂ ν ε T X σ₁‖) + (‖I₃ ν ε T X σ₁‖ + ‖I₄ ν ε X σ₁ σ₂‖))]
-    gcongr <;> apply le_trans (by apply norm_sub_le) <;> rfl
+    repeat'
+      first
+        | exact le_rfl
+        | (refine (norm_add_le _ _).trans ?_; gcongr)
+        | (refine (norm_sub_le _ _).trans ?_; gcongr)
   specialize h_main ε ⟨ε_pos, ε_lt_ε_main⟩
   have main : ‖𝓜 (fun x ↦ (Smooth1 ν ε x : ℂ)) 1 * X - X‖ ≤ C_main * ε * X := by
     nth_rewrite 2 [← one_mul X]
@@ -3690,10 +3666,8 @@ theorem MediumPNT : ∃ c > 0,
                   + c₈ * X / (ε * T)
                   + c₉ * X * Real.log X / (ε * T)) := by
       gcongr
-      convert! h_close using 1
-      rw [← norm_neg]
-      congr
-      ring
+      rw [show ψ_ε_of_X = SmoothedChebyshev ν ε X from rfl, norm_sub_rev]
+      exact h_close
     _         =  (c_close * ε * X * Real.log X + C_main * ε * X)
                   + ((c₁ * X * Real.log X / (ε * T) + c₂ * X / (ε * T)
                   + c₈ * X / (ε * T)

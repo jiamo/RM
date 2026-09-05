@@ -53,14 +53,14 @@ lemma rtrace_tilde_GpCW (cPi : ℝ) (c : ℕ → ℂ) :
     rtrace (Q.tilde T (Q.GpCW T cPi c)) = trGtW cPi c (Q.toSetting T) (Q.localFun T) := by
   rw [tilde_eq, rtrace_smul_ofReal]
   simp [trGtW, rtrace, Matrix.trace, Params.GpCW, GentryCW_eq]
-  left; rfl
+  exact Or.inl rfl
 
 /-- `‖M̃ᵀ‖²_F` computed entrywise. -/
 lemma frobSq_tilde_GpCW (cPi : ℝ) (c : ℕ → ℂ) :
     frobSq (Q.tilde T (Q.GpCW T cPi c)) = trGt2W cPi c (Q.toSetting T) (Q.localFun T) := by
   rw [tilde_eq, frobSq_smul_ofReal, frobSq_eq_sum_norm_sq]
   simp [trGt2W, Params.GpCW, GentryCW_eq, sq_abs]
-  left; rfl
+  exact Or.inl rfl
 
 lemma rtrace_hat_GpCW (cPi : ℝ) (c : ℕ → ℂ) :
     rtrace (Q.hat T (Q.GpCW T cPi c))

@@ -359,7 +359,7 @@ private lemma infinite_setOf_zeroGap_mul_log_gt_aux {ε : ℝ} (hε : 0 < ε) (h
   have hinf := infinite_setOf_zeroGap_mul_log_succ_gt (ε := ε / 2) (by linarith)
   obtain ⟨N₁, hN₁⟩ := eventually_atTop.1 hcontra
   refine absurd hinf (Set.not_infinite.2 (Set.Finite.subset (Set.finite_Iio N₁) fun n hn => ?_))
-  simp only [Set.mem_setOf_eq] at hn
+  simp only [Set.mem_ofPred_eq] at hn
   by_contra hcon
   exact absurd (hN₁ n (not_lt.1 hcon)) (not_le.2 hn)
 
@@ -372,7 +372,7 @@ theorem infinite_setOf_zeroGap_mul_log_gt {ε : ℝ} (hε : 0 < ε) :
   · refine Set.Infinite.mono (s := {n : ℕ | 2 * Real.pi - Real.pi
       < zeroGap n * Real.log (nthZeroOrdinate n)}) (fun n hn => ?_)
       (infinite_setOf_zeroGap_mul_log_gt_aux Real.pi_pos le_rfl)
-    simp only [Set.mem_setOf_eq] at hn ⊢
+    simp only [Set.mem_ofPred_eq] at hn ⊢
     linarith
 
 end RiemannHypothesis

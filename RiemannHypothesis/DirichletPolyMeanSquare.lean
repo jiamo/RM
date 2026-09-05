@@ -175,12 +175,12 @@ theorem integral_normSq_dirichletPoly_le (a : ℕ → ℂ) (N : ℕ) (σ : ℝ) 
     rw [intervalIntegral.integral_congr (g := fun t => ∑ m ∈ Finset.Icc 1 N,
       ∑ n ∈ Finset.Icc 1 N, (meanSquareTerm a σ m n t).re)
       (fun t _ => normSq_dirichletPoly_eq a N σ t)]
-    rw [intervalIntegral.integral_finset_sum]
+    rw [intervalIntegral.integral_finsetSum]
     · refine Finset.sum_congr rfl fun m _ => ?_
-      rw [intervalIntegral.integral_finset_sum]
+      rw [intervalIntegral.integral_finsetSum]
       exact fun n _ => (hcont m n).intervalIntegrable 0 T
     · intro m _
-      exact (continuous_finset_sum _ fun n _ => hcont m n).intervalIntegrable 0 T
+      exact (continuous_finsetSum _ fun n _ => hcont m n).intervalIntegrable 0 T
   rw [hstep]
   refine Finset.sum_le_sum fun m hm => Finset.sum_le_sum fun n hn => ?_
   exact integral_meanSquareTerm_re_le a σ hT (Finset.mem_Icc.mp hm).1 (Finset.mem_Icc.mp hn).1

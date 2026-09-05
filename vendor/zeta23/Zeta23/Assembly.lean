@@ -1368,6 +1368,8 @@ theorem nplus_ge_explicit {nplus trG trG2 θd FN CE : ℝ}
   have : 2 * x * Q ≤ 2 * x * ((1 + CE) * FN) := mul_le_mul_of_nonneg_left hQhi (by positivity)
   linarith
 
+set_option maxHeartbeats 800000 in
+-- The final `nlinarith` call is heavy; it needs more than the default budget.
 /-- **Theorems B and C at fixed `λ ∈ (0,1)`, for an abstract zero configuration — common core.**
 There is `R = o(N)` with, eventually in `T`:  `(2F(λ) − 1)N − 2R ≤ N₀ˢ(T,2T)` and
 `F(λ)N − R ≤ N_d(T,2T)`  (paper §6, proofs of thm:B, thm:C: prop:tail `θ₀ ≪ lT^{λ/2−1}`, prop:trace

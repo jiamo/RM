@@ -697,7 +697,7 @@ private lemma sum_log_mul_vonMangoldt_div_bound {x : ℝ} (hx : 1 ≤ x) :
       simp only [Set.mem_compl_iff, Set.mem_singleton_iff]
       nlinarith [ht.1]
   have hint_diff : IntegrableOn (fun t : ℝ => t⁻¹ * (Msum t - Real.log t)) (Set.Ioc 1 x) :=
-    ((hint_M.sub hint_log).congr_fun
+    (IntegrableOn.congr_fun (hint_M.sub hint_log)
       (fun t _ => by simp only [Pi.sub_apply]; ring) measurableSet_Ioc)
   have hsplit : ∫ t in Set.Ioc 1 x, t⁻¹ * Msum t
       = (∫ t in Set.Ioc 1 x, t⁻¹ * Real.log t)
@@ -1113,7 +1113,7 @@ theorem sum_vonMangoldt_sq_div_mul_log_sub_eq_explicit : ∀ x : ℝ, 2 ≤ x �
     integrableOn_inv_mul_mono M2sum_mono M2sum_nonneg hx1
   have hint_diff : IntegrableOn
       (fun t : ℝ => t⁻¹ * (M2sum t - Real.log t ^ 2 / 2)) (Set.Ioc 1 x) :=
-    ((hint_M2.sub hcont_logsq).congr_fun
+    (IntegrableOn.congr_fun (hint_M2.sub hcont_logsq)
       (fun t _ => by simp only [Pi.sub_apply]; ring) measurableSet_Ioc)
   have hsplit : ∫ t in Set.Ioc 1 x, t⁻¹ * M2sum t
       = (∫ t in Set.Ioc 1 x, t⁻¹ * (Real.log t ^ 2 / 2))

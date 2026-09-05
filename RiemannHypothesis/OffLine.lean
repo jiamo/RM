@@ -54,7 +54,7 @@ lemma windowCountOffLine_add_windowCountOnLine (T₁ T₂ : ℝ) :
   have hunion : windowZerosOffLine T₁ T₂ ∪ (windowZeros T₁ T₂ ∩ {ρ : ℂ | ρ.re = 1 / 2}) =
       windowZeros T₁ T₂ := by
     ext s
-    simp only [windowZerosOffLine, Set.mem_union, Set.mem_inter_iff, Set.mem_setOf_eq]
+    simp only [windowZerosOffLine, Set.mem_union, Set.mem_inter_iff, Set.mem_ofPred_eq]
     constructor
     · rintro (⟨hs, -⟩ | ⟨hs, -⟩) <;> exact hs
     · intro hs
@@ -122,7 +122,7 @@ lemma offCriticalZeroCount_add_criticalZeroCount (T : ℝ) :
       {s : ℂ | riemannZeta s = 0 ∧ s.re = 1 / 2 ∧ 0 < s.im ∧ s.im < T} =
       {s : ℂ | riemannZeta s = 0 ∧ 0 < s.im ∧ s.im < T} := by
     ext s
-    simp only [Set.mem_union, Set.mem_setOf_eq]
+    simp only [Set.mem_union, Set.mem_ofPred_eq]
     constructor
     · rintro (⟨hz, -, him, hlt⟩ | ⟨hz, -, him, hlt⟩) <;> exact ⟨hz, him, hlt⟩
     · rintro ⟨hz, him, hlt⟩

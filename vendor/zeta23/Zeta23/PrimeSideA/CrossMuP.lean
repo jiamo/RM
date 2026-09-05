@@ -56,7 +56,7 @@ lemma Mform_mu_PX_eq {p : Setting} {F : LocalFun} (hΦ : Continuous F.Phi) (hμ 
     funext q
     rw [PX_eq, Finset.mul_sum, Finset.mul_sum]
     exact Finset.sum_congr rfl fun n _ => by ring
-  rw [h1, integral_finsetSum]
+  rw [h1, integral_finset_sum]
   · refine Finset.sum_congr rfl fun n _ => ?_
     rw [integral_const_mul]
   · intro n _

@@ -2484,6 +2484,27 @@ example {K : ℕ} {lam c : ℝ} {k : ℤ} {f f' : ℝ → ℝ} (hlam : 0 < lam)
       ≤ 1 + 2 / lam :=
   RiemannHypothesis.KusminLandau.norm_sum_e2pi_le_of_deriv_sub_int hlam hf hlb hub hmono
 
+/-- **The general range**: `f'` monotone or antitone and at distance at least `λ` from every
+integer, with no restriction on how many integers it sweeps across; the bound is proportional to
+the total variation `V = |f'(c+K) − f'(c)|` of the derivative. -/
+example {K : ℕ} {lam c : ℝ} {f f' : ℝ → ℝ} (hlam : 0 < lam)
+    (hf : ∀ x ∈ Set.Icc c (c + K), HasDerivAt f (f' x) x)
+    (hsep : ∀ x ∈ Set.Icc c (c + K), ∀ m : ℤ, lam ≤ |f' x - m|)
+    (hmono : MonotoneOn f' (Set.Icc c (c + K)) ∨ AntitoneOn f' (Set.Icc c (c + K))) :
+    ‖∑ j ∈ Finset.range (K + 1), RiemannHypothesis.KusminLandau.e2pi (f (c + j))‖
+      ≤ (|f' (c + K) - f' c| + 2) * (1 + 2 / lam) :=
+  RiemannHypothesis.KusminLandau.norm_sum_e2pi_le_of_deriv_general hlam hf hsep hmono
+
+/-- **The exact block count** of the general range: the number of maximal subranges on which
+`⌊f'⌋` is constant. -/
+example {lam : ℝ} (hlam : 0 < lam) (K : ℕ) (c : ℝ) (f f' : ℝ → ℝ)
+    (hf : ∀ x ∈ Set.Icc c (c + K), HasDerivAt f (f' x) x)
+    (hsep : ∀ x ∈ Set.Icc c (c + K), ∀ m : ℤ, lam ≤ |f' x - m|)
+    (hmono : MonotoneOn f' (Set.Icc c (c + K))) :
+    ‖∑ j ∈ Finset.range (K + 1), RiemannHypothesis.KusminLandau.e2pi (f (c + j))‖
+      ≤ ((⌊f' (c + K)⌋ - ⌊f' c⌋ + 1 : ℤ) : ℝ) * (1 + 2 / lam) :=
+  RiemannHypothesis.KusminLandau.norm_sum_e2pi_le_of_deriv_floor hlam K c f f' hf hsep hmono
+
 /-! ## M1-VDC-SECOND-DERIVATIVE — the second-derivative test for exponential sums -/
 
 /-- **The bound with the separation `λ` free**, under the sole hypothesis that `f'` increases at
@@ -2743,6 +2764,52 @@ example {a b al : ℝ} (hal : Irrational al) (hb : 0 ≤ b) (hba : b ≤ a) (ha 
       Filter.atTop (nhds ((1 - a) + b)) :=
   RiemannHypothesis.WeylCount.tendsto_countArc_div_linear hal hb hba ha
 
+/-! ## M1-WEYL-PORTMANTEAU — Weyl's criterion in its counting form -/
+
+/-- **The counting form implies the vanishing of every exponential sum.** -/
+example {x : ℕ → ℝ}
+    (h : ∀ a b : ℝ, 0 ≤ a → a < b → b ≤ 1 →
+      Filter.Tendsto
+        (fun N : ℕ =>
+          (((Finset.range N).filter fun n : ℕ =>
+              a ≤ Int.fract (x n) ∧ Int.fract (x n) < b).card : ℝ) / N)
+        Filter.atTop (nhds (b - a))) :
+    ∀ m : ℤ, m ≠ 0 →
+      Filter.Tendsto
+        (fun N : ℕ =>
+          ‖∑ n ∈ Finset.range N,
+              Complex.exp ((2 * Real.pi * ((m : ℝ) * x n) : ℝ) * Complex.I)‖ / N)
+        Filter.atTop (nhds 0) :=
+  RiemannHypothesis.WeylPortmanteau.weylSumsVanish_of_countsEquidistribute h
+
+/-- **Weyl's criterion, counting form**: equidistribution against continuous test functions is
+equivalent to the counting statement for every subinterval of `[0, 1]`. -/
+example (x : ℕ → ℝ) :
+    RiemannHypothesis.WeylCriterion.EquidistributedMod1 x ↔
+      ∀ a b : ℝ, 0 ≤ a → a < b → b ≤ 1 →
+        Filter.Tendsto
+          (fun N : ℕ =>
+            (((Finset.range N).filter fun n : ℕ =>
+                a ≤ Int.fract (x n) ∧ Int.fract (x n) < b).card : ℝ) / N)
+          Filter.atTop (nhds (b - a)) :=
+  RiemannHypothesis.WeylPortmanteau.equidistributedMod1_iff_countsEquidistribute x
+
+/-- **The same against the exponential sums.** -/
+example (x : ℕ → ℝ) :
+    (∀ m : ℤ, m ≠ 0 →
+        Filter.Tendsto
+          (fun N : ℕ =>
+            ‖∑ n ∈ Finset.range N,
+                Complex.exp ((2 * Real.pi * ((m : ℝ) * x n) : ℝ) * Complex.I)‖ / N)
+          Filter.atTop (nhds 0)) ↔
+      ∀ a b : ℝ, 0 ≤ a → a < b → b ≤ 1 →
+        Filter.Tendsto
+          (fun N : ℕ =>
+            (((Finset.range N).filter fun n : ℕ =>
+                a ≤ Int.fract (x n) ∧ Int.fract (x n) < b).card : ℝ) / N)
+          Filter.atTop (nhds (b - a)) :=
+  RiemannHypothesis.WeylPortmanteau.weylSumsVanish_iff_countsEquidistribute x
+
 /-! ## M1-ZETA-CHI-AFE — the `χ` factor, and the approximate functional equation as a statement -/
 
 /-- **The elementary sum** `∑_{1 ≤ n ≤ N} 1/√n ≤ 2√N`. -/
@@ -2841,6 +2908,124 @@ example {C : ℝ} (hafe : RiemannHypothesis.AFECriticalLine C) {t : ℝ} (ht : (
     ‖riemannZeta (1 / 2 + (t : ℂ) * I)‖ ≤ C + 120 * t ^ ((1 : ℝ) / 6) * (Real.log t + 1) :=
   RiemannHypothesis.AFESubconvexity.norm_riemannZeta_criticalLine_le_of_afe hafe ht
 
+/-! ## M1-SUBCONVEXITY-UNCONDITIONAL — the exponent `1/6`, with no hypothesis -/
+
+/-- **One block of the phase of `ζ`, in the whole range** `30u² ≤ M ≤ 2u¹²`. -/
+example {M L : ℕ} {u : ℝ} (hu : 10 ≤ u) (hM : 30 * u ^ 2 ≤ (M : ℝ))
+    (hMu : (M : ℝ) ≤ 2 * u ^ 12) (hLM : L ≤ M) :
+    ‖∑ j ∈ Finset.range L,
+        RiemannHypothesis.KusminLandau.e2pi
+          (-(u ^ 6 / (2 * Real.pi)) * Real.log ((M : ℝ) + (j : ℝ)))‖
+      ≤ 60 * Real.sqrt M * u :=
+  RiemannHypothesis.SubconvexityUnconditional.norm_sum_e2pi_logPhase_block_le_all hu hM hMu hLM
+
+/-- **The dyadic bound for the Dirichlet polynomial of length `N ≤ 2u¹² = 2t²`.** -/
+example {N : ℕ} {u : ℝ} (hu : 10 ≤ u) (hN : (N : ℝ) ≤ 2 * u ^ 12) :
+    ‖RiemannHypothesis.zetaSum N (1 / 2 + ((u ^ 6 : ℝ) : ℂ) * I)‖
+      ≤ 60 * u * (Nat.log 2 N + 1) :=
+  RiemannHypothesis.SubconvexityUnconditional.norm_zetaSum_le_of_le_pow_twelve hu hN
+
+/-- **The Euler–Maclaurin error at length `t² ≤ N ≤ 2t²` is at most `10`.** -/
+example {N : ℕ} {t : ℝ} (ht : 2 ≤ t) (hN : t ^ 2 ≤ (N : ℝ)) (hN2 : (N : ℝ) ≤ 2 * t ^ 2) :
+    ‖riemannZeta (1 / 2 + (t : ℂ) * I) - RiemannHypothesis.zetaSum N (1 / 2 + (t : ℂ) * I)‖
+      ≤ 10 :=
+  RiemannHypothesis.SubconvexityUnconditional.norm_riemannZeta_sub_zetaSum_le ht hN hN2
+
+/-- **Subconvexity on the critical line, unconditionally**: no hypothesis but `10⁹ ≤ t`. -/
+example {t : ℝ} (ht : (10 : ℝ) ^ 9 ≤ t) :
+    ‖riemannZeta (1 / 2 + (t : ℂ) * I)‖ ≤ 200 * t ^ ((1 : ℝ) / 6) * (Real.log t + 1) :=
+  RiemannHypothesis.SubconvexityUnconditional.norm_riemannZeta_criticalLine_le ht
+
+/-! ## M1-SUBCONVEXITY-STRIP — the exponent `(1-σ)/3` on every line of the right half strip -/
+
+/-- **One block of the Dirichlet polynomial on the line `re s = σ`.** -/
+example {M L : ℕ} {u sg : ℝ} (hu : 10 ≤ u) (hsg : 1 / 2 ≤ sg) (hM : 30 * u ^ 2 ≤ (M : ℝ))
+    (hMu : (M : ℝ) ≤ 2 * u ^ 12) (hLM : L ≤ M) :
+    ‖∑ j ∈ Finset.range L, ((M + j : ℕ) : ℂ) ^ (-((sg : ℂ) + ((u ^ 6 : ℝ) : ℂ) * I))‖
+      ≤ 60 * u ^ (2 - 2 * sg) :=
+  RiemannHypothesis.SubconvexityStrip.norm_sum_block_strip_le hu hsg hM hMu hLM
+
+/-- **The Dirichlet polynomial of length `N ≤ 2t²` on the line `re s = σ`.** -/
+example {N : ℕ} {u sg : ℝ} (hu : 10 ≤ u) (hsg : 1 / 2 ≤ sg) (hsg1 : sg ≤ 1)
+    (hN : (N : ℝ) ≤ 2 * u ^ 12) :
+    ‖RiemannHypothesis.zetaSum N ((sg : ℂ) + ((u ^ 6 : ℝ) : ℂ) * I)‖
+      ≤ 120 * u ^ (2 - 2 * sg) * (Nat.log 2 N + 1) :=
+  RiemannHypothesis.SubconvexityStrip.norm_zetaSum_strip_le hu hsg hsg1 hN
+
+/-- **Subconvexity inside the strip, unconditionally.** -/
+example {sg t : ℝ} (hsg : 1 / 2 ≤ sg) (hsg1 : sg ≤ 1) (ht : (10 : ℝ) ^ 9 ≤ t) :
+    ‖riemannZeta ((sg : ℂ) + (t : ℂ) * I)‖ ≤ 400 * t ^ ((1 - sg) / 3) * (Real.log t + 1) :=
+  RiemannHypothesis.SubconvexityStrip.norm_riemannZeta_strip_le hsg hsg1 ht
+
+/-! ## M1-SUBCONVEXITY-LEFT — the exponent `1/2 - 2σ/3` on the left of the critical line -/
+
+/-- **The Weyl exponent `1/6` on the critical line, at every height `|t| ≥ 3`.** -/
+example : ∃ A : ℝ, 0 < A ∧ ∀ t : ℝ, 3 ≤ |t| →
+    ‖riemannZeta (1 / 2 + (t : ℂ) * I)‖ ≤ A * |t| ^ ((1 : ℝ) / 6) * (1 + Real.log |t|) :=
+  RiemannHypothesis.exists_bound_criticalLine_sixth
+
+/-- **Subconvexity on `0 ≤ σ ≤ 1/2`, unconditionally.** -/
+example : ∃ C : ℝ, 0 < C ∧ ∀ s : ℂ, 0 ≤ s.re → s.re ≤ 1 / 2 → 3 ≤ |s.im| →
+    ‖riemannZeta s‖ ≤ C * (1 + Real.log |s.im|) * |s.im| ^ (1 / 2 - 2 * s.re / 3) :=
+  RiemannHypothesis.norm_riemannZeta_le_subconvexity_left
+
+/-! ## M1-SUBCONVEXITY-CLOSED-STRIP — one subconvex bound for the whole closed strip -/
+
+/-- **The exponent `(1-σ)/3` on `1/2 ≤ σ ≤ 1` at every height, with no threshold.** -/
+example : ∃ C : ℝ, 0 < C ∧ ∀ s : ℂ, 1 / 2 ≤ s.re → s.re ≤ 1 → 3 ≤ |s.im| →
+    ‖riemannZeta s‖ ≤ C * (1 + Real.log |s.im|) * |s.im| ^ ((1 - s.re) / 3) :=
+  RiemannHypothesis.norm_riemannZeta_le_subconvexity_right
+
+/-- **Subconvexity on the whole closed critical strip.** -/
+example : ∃ C : ℝ, 0 < C ∧ ∀ s : ℂ, 0 ≤ s.re → s.re ≤ 1 → 3 ≤ |s.im| →
+    ‖riemannZeta s‖ ≤ C * (1 + Real.log |s.im|)
+      * |s.im| ^ max ((1 - s.re) / 3) (1 / 2 - 2 * s.re / 3) :=
+  RiemannHypothesis.norm_riemannZeta_le_subconvexity_closed_strip
+
+/-! ## M1-SUBCONVEXITY-LOGFREE — the subconvex bound with no logarithm -/
+
+/-- **Log-free subconvexity on the closed strip, with an `ε` in the exponent.** -/
+example {ep : ℝ} (hep : 0 < ep) :
+    ∃ C : ℝ, 0 < C ∧ ∀ s : ℂ, 0 ≤ s.re → s.re ≤ 1 → 3 ≤ |s.im| →
+      ‖riemannZeta s‖
+        ≤ C * |s.im| ^ (max ((1 - s.re) / 3) (1 / 2 - 2 * s.re / 3) + ep) :=
+  RiemannHypothesis.norm_riemannZeta_le_subconvexity_logfree hep
+
+/-- **Log-free subconvexity at a fixed abscissa**, at an exponent strictly below the
+convexity exponent `(1-σ)/2`, with no logarithm and no `ε`. -/
+example {sg : ℝ} (h0 : 0 < sg) (h1 : sg < 1) :
+    ∃ C : ℝ, 0 < C ∧ ∀ t : ℝ, 3 ≤ |t| →
+      ‖riemannZeta ((sg : ℂ) + (t : ℂ) * I)‖
+        ≤ C * |t| ^ ((1 - sg) / 2 - min sg (1 - sg) / 12) :=
+  RiemannHypothesis.norm_riemannZeta_le_subconvexity_logfree_fixed h0 h1
+
+/-- **The same bound in asymptotic form.** -/
+example {sg : ℝ} (h0 : 0 < sg) (h1 : sg < 1) :
+    (fun t : ℝ => riemannZeta ((sg : ℂ) + (t : ℂ) * I))
+      =O[atTop] fun t : ℝ => t ^ ((1 - sg) / 2 - min sg (1 - sg) / 12) :=
+  RiemannHypothesis.isBigO_riemannZeta_subconvexity_logfree h0 h1
+
+/-! ## M1-GROWTH — the convexity bound with no logarithm and no epsilon -/
+
+/-- **The logarithm-free convexity bound** `‖ζ(σ + i t)‖ ≤ C |t|^((1-σ)/2)`, for every fixed
+`σ` strictly inside the critical strip. -/
+example {sg : ℝ} (h0 : 0 < sg) (h1 : sg < 1) :
+    ∃ C : ℝ, 0 < C ∧ ∀ t : ℝ, 3 ≤ |t| →
+      ‖riemannZeta ((sg : ℂ) + (t : ℂ) * I)‖ ≤ C * |t| ^ ((1 - sg) / 2) :=
+  RiemannHypothesis.norm_riemannZeta_le_convexity_logfree h0 h1
+
+/-- **The same bound in asymptotic form**: `ζ(σ + i t) = O(t^((1-σ)/2))` as `t → ∞`. -/
+example {sg : ℝ} (h0 : 0 < sg) (h1 : sg < 1) :
+    (fun t : ℝ => riemannZeta ((sg : ℂ) + (t : ℂ) * I))
+      =O[atTop] fun t : ℝ => t ^ ((1 - sg) / 2) :=
+  RiemannHypothesis.isBigO_riemannZeta_convexity_logfree h0 h1
+
+/-- **The bound used by the zero-free region**: `‖ζ(σ + i t)‖ ≤ 2 log|t| / (σ - 1)` for
+`1 < σ ≤ 2`. -/
+example {s : ℂ} (h1 : 1 < s.re) (h2 : s.re ≤ 2) (ht : 3 ≤ |s.im|) :
+    ‖riemannZeta s‖ ≤ 2 * Real.log |s.im| / (s.re - 1) :=
+  RiemannHypothesis.norm_riemannZeta_le_log_div_of_one_lt_re h1 h2 ht
+
 /-! ## M2-METHOD-CEILING — the ceilings of the counting routes -/
 
 /-- **The exact ceiling of the distinctness-budget route**: `p` is derivable iff `p ≤ c − b`. -/
@@ -2886,6 +3071,1419 @@ example (h : RiemannHypothesis.ZetaStripForm) {δ ε : ℝ} (hδ0 : 0 < δ) (hδ
     ∃ C T₀ : ℝ, 0 < C ∧ 0 < T₀ ∧ ∀ s : ℂ, 1 / 2 + δ ≤ s.re → T₀ ≤ |s.im| →
       ‖riemannZeta s‖ ≤ C * |s.im| ^ ε :=
   RiemannHypothesis.exists_bound_riemannZeta_abs_im_of_zetaStripForm h hδ0 hδ1 hε
+
+/-! ## M2-LARGE-VALUES — Halász–Montgomery and the large-values estimate for Dirichlet polynomials -/
+
+/-- **The Halász–Montgomery inequality**, coordinate form: a bound on the Gram row sums bounds the
+squared coefficients of the expansion. -/
+example {ι κ : Type*} (s : Finset ι) (m : Finset κ) (φ : ι → κ → ℂ) (ξ : κ → ℂ) {Δ : ℝ}
+    (hΔ0 : 0 ≤ Δ)
+    (hΔ : ∀ i ∈ s, ∑ j ∈ s, ‖∑ n ∈ m, (starRingEnd ℂ) (φ i n) * φ j n‖ ≤ Δ) :
+    ∑ i ∈ s, ‖∑ n ∈ m, (starRingEnd ℂ) (φ i n) * ξ n‖ ^ 2 ≤ Δ * ∑ n ∈ m, ‖ξ n‖ ^ 2 :=
+  RiemannHypothesis.HalaszMontgomery.sum_normSq_le_of_rowSum_le s m φ ξ hΔ0 hΔ
+
+/-- **The Halász–Montgomery inequality** in a complex inner product space. -/
+example {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E] {ι : Type*} (s : Finset ι)
+    (φ : ι → E) (ξ : E) {Δ : ℝ} (hΔ0 : 0 ≤ Δ)
+    (hΔ : ∀ i ∈ s, ∑ j ∈ s, ‖inner ℂ (φ i) (φ j)‖ ≤ Δ) :
+    ∑ i ∈ s, ‖inner ℂ (φ i) ξ‖ ^ 2 ≤ Δ * ‖ξ‖ ^ 2 :=
+  RiemannHypothesis.HalaszMontgomery.halasz_montgomery s φ ξ hΔ0 hΔ
+
+/-- **Large values of a Dirichlet polynomial**: the number of sampled points at which
+`|D(t i)| ≥ V` is at most `Δ ‖a‖² / V²`, where `Δ` bounds the Gram row sums. -/
+example {ι : Type*} (s : Finset ι) (t : ι → ℝ) (a : ℕ → ℂ) (N : ℕ) {Δ V : ℝ} (hΔ0 : 0 ≤ Δ)
+    (hV : 0 < V)
+    (hΔ : ∀ i ∈ s, ∑ j ∈ s,
+        ‖∑ n ∈ Finset.Icc 1 N, (n : ℂ) ^ (Complex.I * ((t j - t i : ℝ) : ℂ))‖ ≤ Δ)
+    (hbig : ∀ i ∈ s, V ≤ ‖RiemannHypothesis.dirichletPoly a N ((t i : ℂ) * Complex.I)‖) :
+    (s.card : ℝ) ≤ Δ * (∑ n ∈ Finset.Icc 1 N, ‖a n‖ ^ 2) / V ^ 2 :=
+  RiemannHypothesis.HalaszMontgomery.card_le_of_dirichletPoly_large s t a N hΔ0 hV hΔ hbig
+
+/-! ## M2-LARGE-SIEVE — the large sieve inequality -/
+
+/-- **The large sieve inequality** for `δ`-separated points, with the constant
+`N + δ⁻¹(1 + log (2δ)⁻¹)`. -/
+example {ι : Type*} {s : Finset ι} {t : ι → ℝ} {δ : ℝ} (hδ : 0 < δ) (hδ2 : δ ≤ 1 / 2)
+    (hsep : ∀ i ∈ s, ∀ j ∈ s, i ≠ j →
+      δ ≤ RiemannHypothesis.LargeSieve.intDist (t i - t j))
+    (a : ℕ → ℂ) (N : ℕ) :
+    ∑ i ∈ s, ‖∑ n ∈ Finset.range N,
+        a n * RiemannHypothesis.KusminLandau.e2pi ((n : ℝ) * t i)‖ ^ 2
+      ≤ ((N : ℝ) + δ⁻¹ * (1 + Real.log ((2 * δ)⁻¹))) * ∑ n ∈ Finset.range N, ‖a n‖ ^ 2 :=
+  RiemannHypothesis.LargeSieve.large_sieve hδ hδ2 hsep a N
+
+/-- **Large values of an exponential polynomial** over `δ`-separated points. -/
+example {ι : Type*} {s : Finset ι} {t : ι → ℝ} {δ V : ℝ} (hδ : 0 < δ) (hδ2 : δ ≤ 1 / 2)
+    (hV : 0 < V)
+    (hsep : ∀ i ∈ s, ∀ j ∈ s, i ≠ j →
+      δ ≤ RiemannHypothesis.LargeSieve.intDist (t i - t j))
+    (a : ℕ → ℂ) (N : ℕ)
+    (hbig : ∀ i ∈ s, V ≤ ‖∑ n ∈ Finset.range N,
+      a n * RiemannHypothesis.KusminLandau.e2pi ((n : ℝ) * t i)‖) :
+    (s.card : ℝ) ≤ ((N : ℝ) + δ⁻¹ * (1 + Real.log ((2 * δ)⁻¹)))
+      * (∑ n ∈ Finset.range N, ‖a n‖ ^ 2) / V ^ 2 :=
+  RiemannHypothesis.LargeSieve.card_le_of_large_values hδ hδ2 hV hsep a N hbig
+
+/-- **The ceiling of the large-values estimate**: the constant `1` in `R ≤ Δ ‖a‖²/V²` cannot be
+improved, because the orthonormal configuration attains the Halász–Montgomery inequality. -/
+example {c : ℝ}
+    (hc : ∀ (R : ℕ) (φ : Fin R → Fin R → ℂ) (ξ : Fin R → ℂ) (Δ V : ℝ), 0 ≤ Δ → 0 < V →
+      (∀ i, ∑ j, ‖∑ n, (starRingEnd ℂ) (φ i n) * φ j n‖ ≤ Δ) →
+      (∀ i, V ≤ ‖∑ n, (starRingEnd ℂ) (φ i n) * ξ n‖) →
+      (R : ℝ) ≤ c * Δ * (∑ n, ‖ξ n‖ ^ 2) / V ^ 2) :
+    1 ≤ c :=
+  RiemannHypothesis.HalaszMontgomery.largeValues_constant_ge_one hc
+
+/-- **The ceiling of the large sieve**: every admissible constant is at least `max N (2δ)⁻¹`, so
+only the logarithmic factor separates the constant proved in the repository from the optimum. -/
+example {C : ℝ → ℕ → ℝ} (hC : RiemannHypothesis.LargeSieve.AdmissibleConstant C) {δ : ℝ}
+    (hδ : 0 < δ) (hδ2 : δ ≤ 1 / 2) {N : ℕ} (hN : 0 < N) :
+    max (N : ℝ) ((2 * δ)⁻¹) ≤ C δ N :=
+  RiemannHypothesis.LargeSieve.le_of_admissibleConstant hC hδ hδ2 hN
+
+/-! ## M2-LARGE-SIEVE-GALLAGHER — the large sieve without a logarithm -/
+
+/-- **The large sieve inequality, Gallagher's form**, with the constant `δ⁻¹ + π N`. -/
+example {ι : Type*} {s : Finset ι} {t : ι → ℝ} {δ : ℝ} (hδ : 0 < δ) (hδ2 : δ ≤ 1 / 2)
+    (hsep : ∀ i ∈ s, ∀ j ∈ s, i ≠ j →
+      δ ≤ RiemannHypothesis.LargeSieve.intDist (t i - t j))
+    (a : ℕ → ℂ) (N : ℕ) :
+    ∑ i ∈ s, ‖∑ n ∈ Finset.range N,
+        a n * RiemannHypothesis.KusminLandau.e2pi ((n : ℝ) * t i)‖ ^ 2
+      ≤ (δ⁻¹ + Real.pi * N) * ∑ n ∈ Finset.range N, ‖a n‖ ^ 2 :=
+  RiemannHypothesis.LargeSieveGallagher.large_sieve_gallagher hδ hδ2 hsep a N
+
+/-- **Parseval over one period** for an exponential polynomial with frequencies `n − c`. -/
+example (a : ℕ → ℂ) (N : ℕ) (c : ℝ) :
+    (∫ θ in (0:ℝ)..1, ‖RiemannHypothesis.LargeSieveGallagher.expPoly a N c θ‖ ^ 2)
+      = ∑ n ∈ Finset.range N, ‖a n‖ ^ 2 :=
+  RiemannHypothesis.LargeSieveGallagher.integral_normSq_expPoly a N c
+
+/-- **Gallagher's lemma with the cross term.** -/
+example {f f' : ℝ → ℂ} (hf : ∀ x, HasDerivAt f (f' x) x) (hf' : Continuous f')
+    {ι : Type*} {s : Finset ι} {t : ι → ℝ} {δ A B : ℝ} (hδ : 0 < δ) (hAB : A ≤ B)
+    (hsep : ∀ i ∈ s, ∀ j ∈ s, i ≠ j → δ ≤ |t i - t j|)
+    (hmem : ∀ i ∈ s, t i ∈ Set.Icc (A + δ / 2) (B - δ / 2)) :
+    δ * ∑ i ∈ s, ‖f (t i)‖ ^ 2
+      ≤ (∫ x in A..B, ‖f x‖ ^ 2) + (δ / 2) * ∫ x in A..B, 2 * ‖f x‖ * ‖f' x‖ :=
+  RiemannHypothesis.LargeSieveGallagher.sum_normSq_le_of_separated_sharp hf hf' hδ hAB hsep hmem
+
+/-- **Large values of an exponential polynomial**, counted with the constant `δ⁻¹ + π N`. -/
+example {ι : Type*} {s : Finset ι} {t : ι → ℝ} {δ V : ℝ} (hδ : 0 < δ) (hδ2 : δ ≤ 1 / 2)
+    (hV : 0 < V)
+    (hsep : ∀ i ∈ s, ∀ j ∈ s, i ≠ j →
+      δ ≤ RiemannHypothesis.LargeSieve.intDist (t i - t j))
+    (a : ℕ → ℂ) (N : ℕ)
+    (hbig : ∀ i ∈ s, V ≤ ‖∑ n ∈ Finset.range N,
+      a n * RiemannHypothesis.KusminLandau.e2pi ((n : ℝ) * t i)‖) :
+    (s.card : ℝ)
+      ≤ (δ⁻¹ + Real.pi * N) * (∑ n ∈ Finset.range N, ‖a n‖ ^ 2) / V ^ 2 :=
+  RiemannHypothesis.LargeSieveGallagher.card_le_of_large_values_gallagher hδ hδ2 hV hsep a N hbig
+
+/-! ## M2-LARGE-SIEVE-FAREY — the arithmetic large sieve -/
+
+/-- **The arithmetic large sieve**, over the reduced fractions `b / q` with `q ≤ Q`. -/
+example {Q : ℕ} (hQ : 2 ≤ Q) (a : ℕ → ℂ) (N : ℕ) :
+    ∑ q ∈ Finset.Icc 1 Q, ∑ b ∈ (Finset.range q).filter (fun b => Nat.Coprime b q),
+        ‖∑ n ∈ Finset.range N,
+          a n * RiemannHypothesis.KusminLandau.e2pi ((n : ℝ) * ((b : ℝ) / (q : ℝ)))‖ ^ 2
+      ≤ ((Q : ℝ) ^ 2 + Real.pi * N) * ∑ n ∈ Finset.range N, ‖a n‖ ^ 2 :=
+  RiemannHypothesis.LargeSieveFarey.large_sieve_farey_pairs hQ a N
+
+/-- **Farey fractions of order `Q` are `Q⁻²`-separated modulo one.** -/
+example {x y : ℚ} {Q : ℕ} (hx : x ∈ Set.Ico (0 : ℚ) 1) (hy : y ∈ Set.Ico (0 : ℚ) 1)
+    (hxd : x.den ≤ Q) (hyd : y.den ≤ Q) (hxy : x ≠ y) :
+    1 / ((Q : ℝ) ^ 2) ≤ RiemannHypothesis.LargeSieve.intDist ((x : ℝ) - (y : ℝ)) :=
+  RiemannHypothesis.LargeSieveFarey.inv_sq_le_intDist_sub hx hy hxd hyd hxy
+
+/-- **The large sieve at rationals of bounded denominator.** -/
+example {s : Finset ℚ} {Q : ℕ} (hQ : 2 ≤ Q)
+    (hmem : ∀ x ∈ s, x ∈ Set.Ico (0 : ℚ) 1) (hden : ∀ x ∈ s, x.den ≤ Q)
+    (a : ℕ → ℂ) (N : ℕ) :
+    ∑ x ∈ s, ‖∑ n ∈ Finset.range N,
+        a n * RiemannHypothesis.KusminLandau.e2pi ((n : ℝ) * (x : ℝ))‖ ^ 2
+      ≤ ((Q : ℝ) ^ 2 + Real.pi * N) * ∑ n ∈ Finset.range N, ‖a n‖ ^ 2 :=
+  RiemannHypothesis.LargeSieveFarey.large_sieve_farey hQ hmem hden a N
+
+/-- **Large values at Farey fractions.** -/
+example {s : Finset ℚ} {Q : ℕ} {V : ℝ} (hQ : 2 ≤ Q) (hV : 0 < V)
+    (hmem : ∀ x ∈ s, x ∈ Set.Ico (0 : ℚ) 1) (hden : ∀ x ∈ s, x.den ≤ Q)
+    (a : ℕ → ℂ) (N : ℕ)
+    (hbig : ∀ x ∈ s, V ≤ ‖∑ n ∈ Finset.range N,
+      a n * RiemannHypothesis.KusminLandau.e2pi ((n : ℝ) * (x : ℝ))‖) :
+    (s.card : ℝ)
+      ≤ ((Q : ℝ) ^ 2 + Real.pi * N) * (∑ n ∈ Finset.range N, ‖a n‖ ^ 2) / V ^ 2 :=
+  RiemannHypothesis.LargeSieveFarey.card_le_of_large_values_farey hQ hV hmem hden a N hbig
+
+/-! ## M2-LARGE-SIEVE-DUAL — the dual large sieve -/
+
+/-- **The duality principle for a finite matrix.** -/
+example {ι κ : Type*} {s : Finset ι} {u : Finset κ} (phi : ι → κ → ℂ) {C : ℝ} (hC : 0 ≤ C)
+    (h : ∀ a : κ → ℂ, ∑ i ∈ s, ‖∑ n ∈ u, a n * phi i n‖ ^ 2 ≤ C * ∑ n ∈ u, ‖a n‖ ^ 2)
+    (x : ι → ℂ) :
+    ∑ n ∈ u, ‖∑ i ∈ s, x i * (starRingEnd ℂ) (phi i n)‖ ^ 2 ≤ C * ∑ i ∈ s, ‖x i‖ ^ 2 :=
+  RiemannHypothesis.LargeSieveDual.sum_normSq_adjoint_le phi hC h x
+
+/-- **The dual large sieve**, with the constant `δ⁻¹ + π N`. -/
+example {ι : Type*} {s : Finset ι} {t : ι → ℝ} {δ : ℝ} (hδ : 0 < δ) (hδ2 : δ ≤ 1 / 2)
+    (hsep : ∀ i ∈ s, ∀ j ∈ s, i ≠ j →
+      δ ≤ RiemannHypothesis.LargeSieve.intDist (t i - t j))
+    (x : ι → ℂ) (N : ℕ) :
+    ∑ n ∈ Finset.range N, ‖∑ i ∈ s,
+        x i * RiemannHypothesis.KusminLandau.e2pi ((n : ℝ) * t i)‖ ^ 2
+      ≤ (δ⁻¹ + Real.pi * N) * ∑ i ∈ s, ‖x i‖ ^ 2 :=
+  RiemannHypothesis.LargeSieveDual.large_sieve_dual hδ hδ2 hsep x N
+
+/-- **The dual large sieve at Farey fractions**, with the constant `Q² + π N`. -/
+example {s : Finset ℚ} {Q : ℕ} (hQ : 2 ≤ Q)
+    (hmem : ∀ y ∈ s, y ∈ Set.Ico (0 : ℚ) 1) (hden : ∀ y ∈ s, y.den ≤ Q)
+    (x : ℚ → ℂ) (N : ℕ) :
+    ∑ n ∈ Finset.range N, ‖∑ y ∈ s,
+        x y * RiemannHypothesis.KusminLandau.e2pi ((n : ℝ) * (y : ℝ))‖ ^ 2
+      ≤ ((Q : ℝ) ^ 2 + Real.pi * N) * ∑ y ∈ s, ‖x y‖ ^ 2 :=
+  RiemannHypothesis.LargeSieveDual.large_sieve_dual_farey hQ hmem hden x N
+
+/-! ## M2-ZERO-DETECTION — the mollifier identity -/
+
+open scoped ArithmeticFunction.Moebius in
+/-- The coefficients of `ζ M_y` vanish in the initial range `2 ≤ n ≤ y`. -/
+example {y n : ℕ} (hn : 2 ≤ n) (hny : n ≤ y) :
+    ∑ d ∈ n.divisors.filter (fun d => d ≤ y), ((ArithmeticFunction.moebius d : ℤ) : ℂ) = 0 :=
+  RiemannHypothesis.Mollifier.detectCoeff_eq_zero_of_le hn hny
+
+/-- **The mollifier identity** for `re s > 1`: `ζ(s) M_y(s) = 1 + ∑_{n > y} c_n n^{-s}`. -/
+example {y : ℕ} (hy : 1 ≤ y) {s : ℂ} (hs : 1 < s.re) :
+    riemannZeta s * RiemannHypothesis.Mollifier.mollifier y s
+      = 1 + LSeries (RiemannHypothesis.Mollifier.tailCoeff y) s :=
+  RiemannHypothesis.Mollifier.zeta_mul_mollifier_eq_one_add_tail hy hs
+
+open scoped ArithmeticFunction.Moebius in
+/-- **The finite mollifier identity**, valid for every `s`: the mollified partial sum equals `1`
+plus a Dirichlet polynomial supported on `m > y`. -/
+example {y K : ℕ} (hy : 1 ≤ y) (hyK : y ≤ K) (s : ℂ) :
+    (∑ d ∈ Finset.Icc 1 y, ((ArithmeticFunction.moebius d : ℤ) : ℂ) * (d : ℂ) ^ (-s)) *
+        (∑ k ∈ Finset.Icc 1 K, (k : ℂ) ^ (-s))
+      = 1 + ∑ m ∈ Finset.Ioc y (y * K),
+          RiemannHypothesis.Mollifier.finiteDetectCoeff y K m * (m : ℂ) ^ (-s) :=
+  RiemannHypothesis.Mollifier.mollified_partialSum_eq_one_add_tail hy hyK s
+
+/-! ## M2-MOLLIFIED-MEAN-SQUARE — the mean square of the mollified partial sum -/
+
+/-- **`∑_n d(n)² n^{-a}` converges for every `a > 1`.** -/
+example {a : ℝ} (ha : 1 < a) :
+    Summable fun n : ℕ =>
+      (RiemannHypothesis.divisorCount (n + 1) : ℝ) ^ 2 * ((n : ℝ) + 1) ^ (-a) :=
+  RiemannHypothesis.summable_divisorCount_sq_rpow ha
+
+/-- The mean-square weight of the mollifier tail coefficients is small for a long mollifier. -/
+example {σ ε : ℝ} (hσ : 1 / 2 < σ) (hε : 0 < ε) :
+    ∃ y : ℕ, 1 ≤ y ∧
+      ∑' n : ℕ, ‖RiemannHypothesis.Mollifier.tailCoeff y (n + 1)‖ ^ 2 *
+        ((n : ℝ) + 1) ^ (-(2 * σ)) < ε :=
+  RiemannHypothesis.exists_tsum_normSq_tailCoeff_lt hσ hε
+
+/-- `M_y · P_K - 1` is a Dirichlet polynomial supported on `m > y`. -/
+example {y K : ℕ} (hy : 1 ≤ y) (hyK : y ≤ K) (s : ℂ) :
+    RiemannHypothesis.Mollifier.mollifier y s * (∑ k ∈ Finset.Icc 1 K, (k : ℂ) ^ (-s)) - 1
+      = RiemannHypothesis.dirichletPoly (RiemannHypothesis.mollifiedTailCoeff y K) (y * K) s :=
+  RiemannHypothesis.mollifiedTail_eq hy hyK s
+
+/-- **The mean square of the mollified partial sum**: for every `σ > 1/2` and `ε > 0` there is a
+mollifier length `y ≥ 1` with `∫₀ᵀ ‖M_y P_K - 1‖² ≤ (T + 8 yK (1 + log (yK))) ε` for all
+`K ≥ y` and `T ≥ 0`. -/
+example {σ ε : ℝ} (hσ : 1 / 2 < σ) (hε : 0 < ε) :
+    ∃ y : ℕ, 1 ≤ y ∧ ∀ K : ℕ, y ≤ K → ∀ T : ℝ, 0 ≤ T →
+      (∫ t in (0 : ℝ)..T, ‖RiemannHypothesis.Mollifier.mollifier y ((σ : ℂ) + (t : ℂ) * I) *
+          (∑ k ∈ Finset.Icc 1 K, (k : ℂ) ^ (-((σ : ℂ) + (t : ℂ) * I))) - 1‖ ^ 2)
+        ≤ (T + 8 * ((y * K : ℕ) : ℝ) * (1 + Real.log (y * K))) * ε :=
+  RiemannHypothesis.exists_integral_normSq_mollified_partialSum_sub_one_le hσ hε
+
+/-- **The large values estimate** for the mollified partial sum (Chebyshev). -/
+example {σ ε : ℝ} (hσ : 1 / 2 < σ) (hε : 0 < ε) :
+    ∃ y : ℕ, 1 ≤ y ∧ ∀ K : ℕ, y ≤ K → ∀ T : ℝ, 0 ≤ T → ∀ V : ℝ, 0 < V →
+      (MeasureTheory.volume {t : ℝ | t ∈ Set.Ioc (0 : ℝ) T ∧
+          V ≤ ‖RiemannHypothesis.Mollifier.mollifier y ((σ : ℂ) + (t : ℂ) * I) *
+            (∑ k ∈ Finset.Icc 1 K, (k : ℂ) ^ (-((σ : ℂ) + (t : ℂ) * I))) - 1‖}).toReal
+        ≤ (T + 8 * ((y * K : ℕ) : ℝ) * (1 + Real.log (y * K))) * ε / V ^ 2 :=
+  RiemannHypothesis.exists_volume_norm_mollified_partialSum_sub_one_ge_le hσ hε
+
+/-! ## M2-DISCRETE-MEANVALUE — Gallagher's lemma and the discrete mean value theorem -/
+
+/-- **Gallagher's lemma**: a Sobolev bound for a sum over `δ`-separated points. -/
+example {f f' : ℝ → ℂ} (hf : ∀ x, HasDerivAt f (f' x) x) (hf' : Continuous f')
+    {ι : Type*} {s : Finset ι} {t : ι → ℝ} {δ A B : ℝ} (hδ : 0 < δ) (hAB : A ≤ B)
+    (hsep : ∀ i ∈ s, ∀ j ∈ s, i ≠ j → δ ≤ |t i - t j|)
+    (hmem : ∀ i ∈ s, t i ∈ Set.Icc (A + δ / 2) (B - δ / 2)) :
+    δ * ∑ i ∈ s, ‖f (t i)‖ ^ 2
+      ≤ 2 * (∫ x in A..B, ‖f x‖ ^ 2) + δ ^ 2 * ∫ x in A..B, ‖f' x‖ ^ 2 :=
+  RiemannHypothesis.Gallagher.sum_normSq_le_of_separated hf hf' hδ hAB hsep hmem
+
+/-- The derivative of a Dirichlet polynomial along a vertical line. -/
+example (a : ℕ → ℂ) (N : ℕ) (σ t : ℝ) :
+    HasDerivAt (fun x : ℝ => RiemannHypothesis.dirichletPoly a N ((σ : ℂ) + (x : ℂ) * I))
+      (-I * RiemannHypothesis.dirichletPoly (RiemannHypothesis.logCoeff a) N
+        ((σ : ℂ) + (t : ℂ) * I)) t :=
+  RiemannHypothesis.hasDerivAt_dirichletPoly_line a N σ t
+
+/-- **The discrete mean value theorem for Dirichlet polynomials** at `δ`-separated points. -/
+example (a : ℕ → ℂ) (N : ℕ) (σ : ℝ) {ι : Type*} {s : Finset ι} {t : ι → ℝ} {δ T : ℝ}
+    (hδ : 0 < δ) (hT : 0 ≤ T)
+    (hsep : ∀ i ∈ s, ∀ j ∈ s, i ≠ j → δ ≤ |t i - t j|)
+    (hmem : ∀ i ∈ s, t i ∈ Set.Icc (δ / 2) (T - δ / 2)) :
+    ∑ i ∈ s, ‖RiemannHypothesis.dirichletPoly a N ((σ : ℂ) + (t i : ℂ) * I)‖ ^ 2
+      ≤ (2 / δ + δ * Real.log N ^ 2) * (T + 8 * (N : ℝ) * (1 + Real.log N))
+          * ∑ n ∈ Finset.Icc 1 N, ‖a n‖ ^ 2 * (n : ℝ) ^ (-2 * σ) :=
+  RiemannHypothesis.sum_normSq_dirichletPoly_at_separated_le a N σ hδ hT hsep hmem
+
+/-- **The large values count** at `δ`-separated points. -/
+example (a : ℕ → ℂ) (N : ℕ) (σ : ℝ) {ι : Type*} {s : Finset ι} {t : ι → ℝ} {δ T V : ℝ}
+    (hδ : 0 < δ) (hT : 0 ≤ T) (hV : 0 < V)
+    (hsep : ∀ i ∈ s, ∀ j ∈ s, i ≠ j → δ ≤ |t i - t j|)
+    (hmem : ∀ i ∈ s, t i ∈ Set.Icc (δ / 2) (T - δ / 2))
+    (hbig : ∀ i ∈ s, V ≤ ‖RiemannHypothesis.dirichletPoly a N ((σ : ℂ) + (t i : ℂ) * I)‖) :
+    (s.card : ℝ)
+      ≤ (2 / δ + δ * Real.log N ^ 2) * (T + 8 * (N : ℝ) * (1 + Real.log N))
+          * (∑ n ∈ Finset.Icc 1 N, ‖a n‖ ^ 2 * (n : ℝ) ^ (-2 * σ)) / V ^ 2 :=
+  RiemannHypothesis.card_le_of_dirichletPoly_large_separated a N σ hδ hT hV hsep hmem hbig
+
+/-! ## M2-MEANVALUE-MV — the mean value theorem with the error term inside the sum -/
+
+/-- The Gaussian oscillatory integral `∫ exp (i θ t) exp (-b t²) dt = √(π/b) exp (-θ²/(4b))`. -/
+example (b θ : ℝ) (hb : 0 < b) :
+    ∫ t : ℝ, Complex.exp ((t : ℂ) * θ * I) * Complex.exp (-(b : ℂ) * (t : ℂ) ^ 2)
+      = ((Real.sqrt (Real.pi / b) * Real.exp (-θ ^ 2 / (4 * b)) : ℝ) : ℂ) :=
+  RiemannHypothesis.integral_exp_mul_I_gaussian b θ hb
+
+/-- The Gaussian-weighted mean square as a bilinear form in the coefficients. -/
+example (a : ℕ → ℂ) (N : ℕ) (σ : ℝ) {b : ℝ} (hb : 0 < b) :
+    (∫ t : ℝ, ‖RiemannHypothesis.dirichletPoly a N ((σ : ℂ) + (t : ℂ) * I)‖ ^ 2 *
+        Real.exp (-(b * t ^ 2)))
+      ≤ Real.sqrt (Real.pi / b) * ∑ m ∈ Finset.Icc 1 N, ∑ n ∈ Finset.Icc 1 N,
+          (‖a m‖ * (m : ℝ) ^ (-σ)) * (‖a n‖ * (n : ℝ) ^ (-σ)) *
+            Real.exp (-(Real.log n - Real.log m) ^ 2 / (4 * b)) :=
+  RiemannHypothesis.integral_normSq_dirichletPoly_gaussian_le a N σ hb
+
+/-- The row sums of the Gaussian kernel: `∑_{n ≤ N} exp (-L² (log n - log m)²) ≤ 1 + 6 m / L`. -/
+example {L : ℝ} (hL : 3 ≤ L) {m : ℕ} (hm : 1 ≤ m) (N : ℕ) :
+    ∑ n ∈ Finset.Icc 1 N, Real.exp (-(L ^ 2 * (Real.log n - Real.log m) ^ 2))
+      ≤ 1 + 6 * m / L :=
+  RiemannHypothesis.sum_exp_neg_sq_log_sub_le hL hm N
+
+/-- **The mean value theorem for Dirichlet polynomials, in Montgomery–Vaughan shape**: the
+error term is inside the sum. -/
+example (a : ℕ → ℂ) (N : ℕ) (σ : ℝ) {T : ℝ} (hT : 6 ≤ T) :
+    (∫ t in (-T)..T, ‖RiemannHypothesis.dirichletPoly a N ((σ : ℂ) + (t : ℂ) * I)‖ ^ 2)
+      ≤ 58 * ∑ n ∈ Finset.Icc 1 N, ‖a n‖ ^ 2 * (n : ℝ) ^ (-2 * σ) * (T + n) :=
+  RiemannHypothesis.integral_normSq_dirichletPoly_le_mv a N σ hT
+
+/-- The same over `[0, T]`. -/
+example (a : ℕ → ℂ) (N : ℕ) (σ : ℝ) {T : ℝ} (hT : 6 ≤ T) :
+    (∫ t in (0 : ℝ)..T, ‖RiemannHypothesis.dirichletPoly a N ((σ : ℂ) + (t : ℂ) * I)‖ ^ 2)
+      ≤ 58 * ∑ n ∈ Finset.Icc 1 N, ‖a n‖ ^ 2 * (n : ℝ) ^ (-2 * σ) * (T + n) :=
+  RiemannHypothesis.integral_Icc_normSq_dirichletPoly_le_mv a N σ hT
+
+/-! ## M2-DISCRETE-MEANVALUE-MV — the discrete bound with the error term inside the sum -/
+
+/-- The `(T + n)`-weighted coefficient comparison for `a n log n`. -/
+example (a : ℕ → ℂ) (N : ℕ) (σ : ℝ) {T : ℝ} (hT : 0 ≤ T) :
+    ∑ n ∈ Finset.Icc 1 N, ‖RiemannHypothesis.logCoeff a n‖ ^ 2 * (n : ℝ) ^ (-2 * σ) * (T + n)
+      ≤ Real.log N ^ 2 *
+          ∑ n ∈ Finset.Icc 1 N, ‖a n‖ ^ 2 * (n : ℝ) ^ (-2 * σ) * (T + n) :=
+  RiemannHypothesis.sum_normSq_logCoeff_weighted_le a N σ hT
+
+/-- **The discrete mean value theorem, in Montgomery–Vaughan shape.** -/
+example (a : ℕ → ℂ) (N : ℕ) (σ : ℝ) {ι : Type*} {s : Finset ι} {t : ι → ℝ} {δ T : ℝ}
+    (hδ : 0 < δ) (hT : 6 ≤ T)
+    (hsep : ∀ i ∈ s, ∀ j ∈ s, i ≠ j → δ ≤ |t i - t j|)
+    (hmem : ∀ i ∈ s, t i ∈ Set.Icc (δ / 2) (T - δ / 2)) :
+    ∑ i ∈ s, ‖RiemannHypothesis.dirichletPoly a N ((σ : ℂ) + (t i : ℂ) * I)‖ ^ 2
+      ≤ 58 * (2 / δ + δ * Real.log N ^ 2)
+          * ∑ n ∈ Finset.Icc 1 N, ‖a n‖ ^ 2 * (n : ℝ) ^ (-2 * σ) * (T + n) :=
+  RiemannHypothesis.sum_normSq_dirichletPoly_at_separated_le_mv a N σ hδ hT hsep hmem
+
+/-- **The large values count** at `δ`-separated points, in Montgomery–Vaughan shape. -/
+example (a : ℕ → ℂ) (N : ℕ) (σ : ℝ) {ι : Type*} {s : Finset ι} {t : ι → ℝ} {δ T V : ℝ}
+    (hδ : 0 < δ) (hT : 6 ≤ T) (hV : 0 < V)
+    (hsep : ∀ i ∈ s, ∀ j ∈ s, i ≠ j → δ ≤ |t i - t j|)
+    (hmem : ∀ i ∈ s, t i ∈ Set.Icc (δ / 2) (T - δ / 2))
+    (hbig : ∀ i ∈ s, V ≤ ‖RiemannHypothesis.dirichletPoly a N ((σ : ℂ) + (t i : ℂ) * I)‖) :
+    (s.card : ℝ)
+      ≤ 58 * (2 / δ + δ * Real.log N ^ 2)
+          * (∑ n ∈ Finset.Icc 1 N, ‖a n‖ ^ 2 * (n : ℝ) ^ (-2 * σ) * (T + n)) / V ^ 2 :=
+  RiemannHypothesis.card_le_of_dirichletPoly_large_separated_mv a N σ hδ hT hV hsep hmem hbig
+
+/-! ## M1-WEYL-DIFFERENCE — van der Corput's difference theorem -/
+
+/-- **The A process for a `ℕ`-indexed sequence**: `H ‖∑_{n<N} e(m xₙ)‖²` is bounded by the
+differenced sums. -/
+example (x : ℕ → ℝ) (m : ℝ) (N H : ℕ) (hH : 0 < H) :
+    (H : ℝ) * ‖∑ n ∈ Finset.range N, RiemannHypothesis.KusminLandau.e2pi (m * x n)‖ ^ 2
+      ≤ ((N : ℝ) + H - 1)
+        * ((N : ℝ) + 2 * ∑ k ∈ Finset.Ico 1 H,
+            ‖∑ n ∈ Finset.range (N - k),
+                RiemannHypothesis.KusminLandau.e2pi (m * (x (n + k) - x n))‖) :=
+  RiemannHypothesis.WeylDifference.mul_normSq_weylSum_le x m N H hH
+
+/-- **van der Corput's difference theorem**: if every difference sequence is equidistributed
+modulo one, so is the sequence itself. -/
+example {x : ℕ → ℝ}
+    (h : ∀ k : ℕ, 0 < k →
+      RiemannHypothesis.WeylCriterion.EquidistributedMod1 (fun n : ℕ => x (n + k) - x n)) :
+    RiemannHypothesis.WeylCriterion.EquidistributedMod1 x :=
+  RiemannHypothesis.WeylDifference.equidistributedMod1_of_diff h
+
+/-! ## M1-WEYL-POLYNOMIAL — Weyl's theorem for an arbitrary polynomial -/
+
+/-- The forward difference of a polynomial of degree `d ≥ 1` has degree `d − 1` and leading
+coefficient `d · a_d · k`. -/
+example (p : Polynomial ℝ) (k : ℕ) (hd : 1 ≤ p.natDegree) :
+    (Polynomial.taylor (k : ℝ) p - p).coeff (p.natDegree - 1)
+      = (p.natDegree : ℝ) * p.coeff p.natDegree * k :=
+  RiemannHypothesis.WeylPolynomial.coeff_diffPoly_pred p k hd
+
+/-- **Weyl's theorem**: the values of a real polynomial of degree at least one with irrational
+leading coefficient are equidistributed modulo one. -/
+example {p : Polynomial ℝ} (hd : 1 ≤ p.natDegree) (hirr : Irrational (p.coeff p.natDegree)) :
+    RiemannHypothesis.WeylCriterion.EquidistributedMod1 (fun n : ℕ => p.eval (n : ℝ)) :=
+  RiemannHypothesis.WeylPolynomial.equidistributedMod1_polyEval hd hirr
+
+/-- **Weyl's theorem in its counting form.** -/
+example {p : Polynomial ℝ} (hd : 1 ≤ p.natDegree) (hirr : Irrational (p.coeff p.natDegree))
+    {a b : ℝ} (ha : 0 ≤ a) (hab : a < b) (hb : b ≤ 1) :
+    Filter.Tendsto
+      (fun N : ℕ =>
+        (((Finset.range N).filter fun n : ℕ =>
+            a ≤ Int.fract (p.eval (n : ℝ)) ∧ Int.fract (p.eval (n : ℝ)) < b).card : ℝ) / N)
+      Filter.atTop (nhds (b - a)) :=
+  RiemannHypothesis.WeylPolynomial.tendsto_countIn_div_polyEval hd hirr ha hab hb
+
+/-- **The fractional parts of `α n^d` are equidistributed** for every irrational `α` and
+`d ≥ 1`. -/
+example {al : ℝ} (hal : Irrational al) {d : ℕ} (hd : 1 ≤ d) :
+    RiemannHypothesis.WeylCriterion.EquidistributedMod1 (fun n : ℕ => al * (n : ℝ) ^ d) :=
+  RiemannHypothesis.WeylPolynomial.equidistributedMod1_monomial hal hd
+
+/-- The counting form for `α n^d`. -/
+example {al a b : ℝ} (hal : Irrational al) {d : ℕ} (hd : 1 ≤ d)
+    (ha : 0 ≤ a) (hab : a < b) (hb : b ≤ 1) :
+    Filter.Tendsto
+      (fun N : ℕ =>
+        (((Finset.range N).filter fun n : ℕ =>
+            a ≤ Int.fract (al * (n : ℝ) ^ d) ∧ Int.fract (al * (n : ℝ) ^ d) < b).card : ℝ) / N)
+      Filter.atTop (nhds (b - a)) :=
+  RiemannHypothesis.WeylPolynomial.tendsto_countIn_div_monomial hal hd ha hab hb
+
+/-! ## M1-WEYL-POLYNOMIAL-GENERAL — Weyl's exact criterion for a polynomial sequence -/
+
+/-- Equidistribution modulo one only depends on the sequence modulo one. -/
+example {x y : ℕ → ℝ} (h : ∀ n, ∃ k : ℤ, x n = y n + k)
+    (hy : RiemannHypothesis.WeylCriterion.EquidistributedMod1 y) :
+    RiemannHypothesis.WeylCriterion.EquidistributedMod1 x :=
+  RiemannHypothesis.WeylPolynomial.equidistributedMod1_of_sub_int h hy
+
+/-- A sequence all of whose arithmetic subsequences are equidistributed is equidistributed. -/
+example {x : ℕ → ℝ} {v : ℕ} (hv : 0 < v)
+    (h : ∀ r < v, RiemannHypothesis.WeylCriterion.EquidistributedMod1 fun k => x (v * k + r)) :
+    RiemannHypothesis.WeylCriterion.EquidistributedMod1 x :=
+  RiemannHypothesis.WeylPolynomial.equidistributedMod1_of_residue_classes hv h
+
+/-- One irrational coefficient of positive index makes the values of a polynomial
+equidistributed modulo one — no hypothesis on the leading coefficient. -/
+example {p : Polynomial ℝ} {j : ℕ} (hj : 1 ≤ j) (hirr : Irrational (p.coeff j)) :
+    RiemannHypothesis.WeylCriterion.EquidistributedMod1 (fun n : ℕ => p.eval (n : ℝ)) :=
+  RiemannHypothesis.WeylPolynomial.equidistributedMod1_polyEval_of_exists_irrational hj hirr
+
+/-- If every coefficient of positive index is rational, the values are not equidistributed. -/
+example {p : Polynomial ℝ} (h : ∀ j, 1 ≤ j → ¬ Irrational (p.coeff j)) :
+    ¬ RiemannHypothesis.WeylCriterion.EquidistributedMod1 (fun n : ℕ => p.eval (n : ℝ)) :=
+  RiemannHypothesis.WeylPolynomial.not_equidistributedMod1_polyEval_of_forall_rat h
+
+/-- **Weyl's criterion for polynomial sequences.** -/
+example (p : Polynomial ℝ) :
+    RiemannHypothesis.WeylCriterion.EquidistributedMod1 (fun n : ℕ => p.eval (n : ℝ))
+      ↔ ∃ j, 1 ≤ j ∧ Irrational (p.coeff j) :=
+  RiemannHypothesis.WeylPolynomial.equidistributedMod1_polyEval_iff p
+
+/-! ## M1-WEYL-QUADRATIC-QUANTITATIVE — the diophantine input, and an effective `N^(3/4)` bound -/
+
+/-- A fraction with denominator `q` that is not an integer is at distance at least `1/q` from
+the integers. -/
+example {m : ℤ} {q : ℕ} (hq : 0 < q) (hdvd : ¬ ((q : ℤ) ∣ m)) :
+    1 / (q : ℝ) ≤ RiemannHypothesis.WeylQuadratic.intDist ((m : ℝ) / q) :=
+  RiemannHypothesis.WeylQuadratic.inv_le_intDist_intCast_div hq hdvd
+
+/-- The distance to the nearest integer is `1`-Lipschitz. -/
+example (x y : ℝ) :
+    RiemannHypothesis.WeylQuadratic.intDist y
+      ≤ RiemannHypothesis.WeylQuadratic.intDist x + |x - y| :=
+  RiemannHypothesis.WeylQuadratic.intDist_le_intDist_add_abs_sub x y
+
+/-- **The diophantine input to Weyl's inequality**: a rational approximation of denominator `q`
+keeps the multiples `βk`, `0 < 2k ≤ q`, at distance `1/(2q)` from the integers. -/
+example {be : ℝ} {a : ℤ} {q : ℕ} (hq : 0 < q) (hcop : IsCoprime (q : ℤ) a)
+    (happ : |be - (a : ℝ) / q| ≤ 1 / (q : ℝ) ^ 2) {k : ℤ} (hk0 : 0 < k) (hk : 2 * k ≤ (q : ℤ)) :
+    1 / (2 * (q : ℝ)) ≤ RiemannHypothesis.WeylQuadratic.intDist (be * k) :=
+  RiemannHypothesis.WeylQuadratic.inv_two_mul_le_intDist_of_approx hq hcop happ hk0 hk
+
+/-- **The quantitative Weyl inequality for a quadratic phase.** -/
+example {al : ℝ} {a : ℤ} {q : ℕ} (hq : 4 ≤ q) (hcop : IsCoprime (q : ℤ) a)
+    (happ : |2 * al - (a : ℝ) / q| ≤ 1 / (q : ℝ) ^ 2) (N : ℕ) :
+    ‖RiemannHypothesis.WeylEquidistribution.quadSum al N‖ ^ 2
+      ≤ 4 * ((N : ℝ) + q) * ((N : ℝ) + (q : ℝ) ^ 2) / q :=
+  RiemannHypothesis.WeylQuadratic.normSq_quadSum_le_of_approx hq hcop happ N
+
+/-- The fourth-power form with a denominator of the size of `√N`. -/
+example {al : ℝ} {a : ℤ} {q N : ℕ} (hN : 16 ≤ N) (hcop : IsCoprime (q : ℤ) a)
+    (hq1 : (N : ℝ) ≤ (q : ℝ) ^ 2) (hq2 : (q : ℝ) ^ 2 ≤ 4 * N)
+    (happ : |2 * al - (a : ℝ) / q| ≤ 1 / (q : ℝ) ^ 2) :
+    ‖RiemannHypothesis.WeylEquidistribution.quadSum al N‖ ^ 4 ≤ 1600 * (N : ℝ) ^ 3 :=
+  RiemannHypothesis.WeylQuadratic.norm_quadSum_pow_four_le_of_approx_sqrt hN hcop hq1 hq2 happ
+
+/-- **An effective bound**: `‖∑_{0 ≤ n < N} e(α n²)‖ ≤ 7 N^(3/4)`. -/
+example {al : ℝ} {a : ℤ} {q N : ℕ} (hN : 16 ≤ N) (hcop : IsCoprime (q : ℤ) a)
+    (hq1 : (N : ℝ) ≤ (q : ℝ) ^ 2) (hq2 : (q : ℝ) ^ 2 ≤ 4 * N)
+    (happ : |2 * al - (a : ℝ) / q| ≤ 1 / (q : ℝ) ^ 2) :
+    ‖RiemannHypothesis.WeylEquidistribution.quadSum al N‖ ≤ 7 * (N : ℝ) ^ ((3 : ℝ) / 4) :=
+  RiemannHypothesis.WeylQuadratic.norm_quadSum_le_of_approx_sqrt hN hcop hq1 hq2 happ
+
+/-! ## M1-WEYL-MIN-SUM — the counting lemma, and the Weyl exponent `1/2` -/
+
+/-- **The block bound.**  Over any `q` consecutive integers, a majorant `g` of
+`min(N, 1/(2‖βk‖))` has total mass at most `4N + q(1 + log q)`. -/
+example {be : ℝ} {a : ℤ} {q : ℕ} (hq : 0 < q) (hcop : IsCoprime (q : ℤ) a)
+    (happ : |be - (a : ℝ) / q| ≤ 1 / (q : ℝ) ^ 2) {N : ℝ} (hN : 0 ≤ N) {g : ℤ → ℝ}
+    (hg0 : ∀ k, 0 ≤ g k) (hgN : ∀ k, g k ≤ N)
+    (hgd : ∀ k, g k * (2 * RiemannHypothesis.WeylQuadratic.intDist (be * k)) ≤ 1) (x : ℤ) :
+    ∑ k ∈ Finset.Ioc x (x + q), g k ≤ 4 * N + q * (1 + Real.log q) :=
+  RiemannHypothesis.WeylQuadratic.sum_block_le hq hcop happ hN hg0 hgN hgd x
+
+/-- **The counting lemma**: `∑_{0 < k ≤ H} min(N, 1/(2‖βk‖)) ≤ (H/q + 1)(4N + q(1 + log q))`. -/
+example {be : ℝ} {a : ℤ} {q : ℕ} (hq : 0 < q) (hcop : IsCoprime (q : ℤ) a)
+    (happ : |be - (a : ℝ) / q| ≤ 1 / (q : ℝ) ^ 2) {N : ℝ} (hN : 0 ≤ N) {g : ℤ → ℝ}
+    (hg0 : ∀ k, 0 ≤ g k) (hgN : ∀ k, g k ≤ N)
+    (hgd : ∀ k, g k * (2 * RiemannHypothesis.WeylQuadratic.intDist (be * k)) ≤ 1) (H : ℕ) :
+    ∑ k ∈ Finset.Ioc (0 : ℤ) (H : ℤ), g k
+      ≤ ((H : ℝ) / q + 1) * (4 * N + q * (1 + Real.log q)) :=
+  RiemannHypothesis.WeylQuadratic.sum_Ioc_le hq hcop happ hN hg0 hgN hgd H
+
+/-- **Weyl's inequality for a quadratic phase with the counting lemma**, with the differencing
+carried out to length `N` rather than `q/2`. -/
+example {al : ℝ} {a : ℤ} {q N : ℕ} (hq : 0 < q) (hN : 0 < N) (hcop : IsCoprime (q : ℤ) a)
+    (happ : |2 * al - (a : ℝ) / q| ≤ 1 / (q : ℝ) ^ 2) :
+    ‖RiemannHypothesis.WeylEquidistribution.quadSum al N‖ ^ 2
+      ≤ 2 * N + 4 * ((N : ℝ) / q + 1) * (4 * N + q * (1 + Real.log q)) :=
+  RiemannHypothesis.WeylQuadratic.normSq_quadSum_le_of_approx_count hq hN hcop happ
+
+/-- **Square-root cancellation** for a denominator `N ≤ q ≤ 2N`. -/
+example {al : ℝ} {a : ℤ} {q N : ℕ} (hN : 0 < N) (hq1 : N ≤ q) (hq2 : q ≤ 2 * N)
+    (hcop : IsCoprime (q : ℤ) a) (happ : |2 * al - (a : ℝ) / q| ≤ 1 / (q : ℝ) ^ 2) :
+    ‖RiemannHypothesis.WeylEquidistribution.quadSum al N‖ ^ 2
+      ≤ 66 * N * (1 + Real.log (2 * N)) :=
+  RiemannHypothesis.WeylQuadratic.normSq_quadSum_le_of_approx_large hN hq1 hq2 hcop happ
+
+/-- **The exponent `1/2`, up to a logarithm**: `‖∑_{0 ≤ n < N} e(α n²)‖ ≤ 9 √(N (1 + log 2N))`. -/
+example {al : ℝ} {a : ℤ} {q N : ℕ} (hN : 0 < N) (hq1 : N ≤ q) (hq2 : q ≤ 2 * N)
+    (hcop : IsCoprime (q : ℤ) a) (happ : |2 * al - (a : ℝ) / q| ≤ 1 / (q : ℝ) ^ 2) :
+    ‖RiemannHypothesis.WeylEquidistribution.quadSum al N‖
+      ≤ 9 * Real.sqrt ((N : ℝ) * (1 + Real.log (2 * N))) :=
+  RiemannHypothesis.WeylQuadratic.norm_quadSum_le_of_approx_large hN hq1 hq2 hcop happ
+
+/-! ## M1-WEYL-BADLY-APPROXIMABLE — an unconditional rate for a badly approximable coefficient -/
+
+/-- **Dirichlet's approximation theorem** in the numerator/denominator form used here. -/
+example (x : ℝ) {n : ℕ} (hn : 0 < n) :
+    ∃ (a : ℤ) (q : ℕ), 0 < q ∧ q ≤ n ∧ IsCoprime (q : ℤ) a ∧
+      |x - (a : ℝ) / q| ≤ 1 / ((q : ℝ) * (n + 1)) :=
+  RiemannHypothesis.WeylQuadratic.exists_coprime_approx x hn
+
+/-- For a badly approximable `x` the Dirichlet denominator is large. -/
+example {x c : ℝ}
+    (hbad : ∀ (a : ℤ) (q : ℕ), 0 < q → c / (q : ℝ) ^ 2 ≤ |x - (a : ℝ) / q|)
+    {a : ℤ} {q n : ℕ} (hq : 0 < q) (happ : |x - (a : ℝ) / q| ≤ 1 / ((q : ℝ) * (n + 1))) :
+    c * ((n : ℝ) + 1) ≤ q :=
+  RiemannHypothesis.WeylQuadratic.le_den_of_badlyApproximable hbad hq happ
+
+/-- **An unconditional rate**: no hypothesis on the size of a denominator is left to the caller,
+only the Diophantine condition on `2α`. -/
+example {al c : ℝ} (hc : 0 < c)
+    (hbad : ∀ (a : ℤ) (q : ℕ), 0 < q → c / (q : ℝ) ^ 2 ≤ |2 * al - (a : ℝ) / q|)
+    {N : ℕ} (hN : 0 < N) :
+    ‖RiemannHypothesis.WeylEquidistribution.quadSum al N‖
+      ≤ Real.sqrt ((16 / c + 26) * N * (1 + Real.log N)) :=
+  RiemannHypothesis.WeylQuadratic.norm_quadSum_le_of_badlyApproximable hc hbad hN
+
+/-- `√2` is badly approximable, with constant `1/4`. -/
+example : RiemannHypothesis.WeylQuadratic.BadlyApproximable (Real.sqrt 2) :=
+  RiemannHypothesis.WeylQuadratic.badlyApproximable_sqrt_two'
+
+/-- **Square-root cancellation for an explicit irrational coefficient**, unconditionally in `N`. -/
+example {N : ℕ} (hN : 0 < N) :
+    ‖RiemannHypothesis.WeylEquidistribution.quadSum (Real.sqrt 2 / 2) N‖
+      ≤ Real.sqrt (90 * N * (1 + Real.log N)) :=
+  RiemannHypothesis.WeylQuadratic.norm_quadSum_sqrt_two_le hN
+
+/-- **Every quadratic irrational is badly approximable.** -/
+example {x : ℝ} {A B C : ℤ} (hA : A ≠ 0)
+    (hroot : (A : ℝ) * x ^ 2 + B * x + C = 0) (hirr : Irrational x) :
+    RiemannHypothesis.WeylQuadratic.BadlyApproximable x :=
+  RiemannHypothesis.WeylQuadratic.badlyApproximable_of_quadratic hA hroot hirr
+
+/-- **Square-root cancellation whenever `2α` is a quadratic irrational.** -/
+example {al : ℝ} {A B C : ℤ} (hA : A ≠ 0)
+    (hroot : (A : ℝ) * (2 * al) ^ 2 + B * (2 * al) + C = 0) (hirr : Irrational (2 * al)) :
+    ∃ K : ℝ, 0 < K ∧ ∀ N : ℕ, 0 < N →
+      ‖RiemannHypothesis.WeylEquidistribution.quadSum al N‖
+        ≤ Real.sqrt (K * N * (1 + Real.log N)) :=
+  RiemannHypothesis.WeylQuadratic.exists_norm_quadSum_le_of_quadratic hA hroot hirr
+
+/-! ## M1-WEYL-CUBIC — Weyl's bound for a cubic exponential sum -/
+
+/-- **The first differencing**: the A process applied to the cubic phase. -/
+example (al : ℝ) (N H : ℕ) (hH : 0 < H) :
+    (H : ℝ) * ‖RiemannHypothesis.WeylCubic.cubeSum al N‖ ^ 2
+      ≤ ((N : ℝ) + H - 1) * ((N : ℝ) + 2 * ∑ k ∈ Finset.Ioo (0 : ℤ) (H : ℤ),
+          RiemannHypothesis.WeylCubic.cubeInner al N k) :=
+  RiemannHypothesis.WeylCubic.mul_normSq_cubeSum_le al N H hH
+
+/-- **The second differencing**: for a fixed shift the once-differenced sum has a quadratic
+phase, and the A process bounds it by the majorants of the frequencies `6 α k l`. -/
+example (al : ℝ) {N H : ℕ} (hH : 0 < H) {k : ℤ} (hk : 0 < k) (hkN : k ≤ (N : ℤ)) :
+    (H : ℝ) * RiemannHypothesis.WeylCubic.cubeInner al N k ^ 2
+      ≤ ((N : ℝ) + H - 1) * ((N : ℝ) + 2 * ∑ l ∈ Finset.Ioo (0 : ℤ) (H : ℤ),
+          RiemannHypothesis.WeylCubic.dioMaj (6 * al) N (k * l)) :=
+  RiemannHypothesis.WeylCubic.mul_sq_cubeInner_le al hH hk hkN
+
+/-- **The double sum**, folded onto `m = k l` and bounded by the counting lemma. -/
+example {be : ℝ} {a : ℤ} {q : ℕ} (hq : 0 < q) (hcop : IsCoprime (q : ℤ) a)
+    (happ : |be - (a : ℝ) / q| ≤ 1 / (q : ℝ) ^ 2) (N H : ℕ) :
+    ∑ k ∈ Finset.Ioo (0 : ℤ) (H : ℤ), ∑ l ∈ Finset.Ioo (0 : ℤ) (H : ℤ),
+        RiemannHypothesis.WeylCubic.dioMaj be N (k * l)
+      ≤ (H : ℝ) * (((H : ℝ) ^ 2 / q + 1) * (4 * N + q * (1 + Real.log q))) :=
+  RiemannHypothesis.WeylCubic.sum_double_le hq hcop happ N H
+
+/-- **Weyl's inequality for a cubic phase**: from a coprime approximation to `6α` with a
+denominator at most `4N`, `‖∑_{0 ≤ n < N} e(α n³)‖⁸ ≤ 2²² (4N/q + 1)² N⁷ (1 + log 4N)²`. -/
+example {al : ℝ} {a : ℤ} {q N : ℕ} (hN : 0 < N) (hq : 0 < q) (hqN : (q : ℝ) ≤ 4 * N)
+    (hcop : IsCoprime (q : ℤ) a) (happ : |6 * al - (a : ℝ) / q| ≤ 1 / (q : ℝ) ^ 2) :
+    ‖RiemannHypothesis.WeylCubic.cubeSum al N‖ ^ 8
+      ≤ 2 ^ 22 * (4 * (N : ℝ) / q + 1) ^ 2 * (N : ℝ) ^ 7 * (1 + Real.log (4 * N)) ^ 2 :=
+  RiemannHypothesis.WeylCubic.norm_cubeSum_pow_eight_le_of_approx hN hq hqN hcop happ
+
+/-- **An unconditional rate** for a badly approximable coefficient: no hypothesis on the size of
+a denominator is left to the caller. -/
+example {al c : ℝ} (hc : 0 < c)
+    (hbad : ∀ (a : ℤ) (q : ℕ), 0 < q → c / (q : ℝ) ^ 2 ≤ |6 * al - (a : ℝ) / q|)
+    {N : ℕ} (hN : 0 < N) :
+    ‖RiemannHypothesis.WeylCubic.cubeSum al N‖ ^ 8
+      ≤ 2 ^ 22 * (4 / c + 1) ^ 2 * (N : ℝ) ^ 7 * (1 + Real.log (4 * N)) ^ 2 :=
+  RiemannHypothesis.WeylCubic.norm_cubeSum_pow_eight_le_of_badlyApproximable hc hbad hN
+
+/-- **A power saving for an explicit irrational coefficient**, unconditionally in `N`. -/
+example {N : ℕ} (hN : 0 < N) :
+    ‖RiemannHypothesis.WeylCubic.cubeSum (Real.sqrt 2 / 6) N‖ ^ 8
+      ≤ 2 ^ 31 * (N : ℝ) ^ 7 * (1 + Real.log (4 * N)) ^ 2 :=
+  RiemannHypothesis.WeylCubic.norm_cubeSum_sqrt_two_le hN
+
+/-! ## M1-WEYL-GENERAL — Weyl's inequality in arbitrary degree -/
+
+/-- **The `r`-fold shifted majorant sum** obeys the recursion the row describes. -/
+example (be : ℝ) (N H : ℕ) (m : ℤ) :
+    RiemannHypothesis.WeylGeneral.weylMulti be N H 0 m
+      = RiemannHypothesis.WeylCubic.dioMaj be N m :=
+  RiemannHypothesis.WeylGeneral.weylMulti_zero be N H m
+
+example (be : ℝ) (N H r : ℕ) (m : ℤ) :
+    RiemannHypothesis.WeylGeneral.weylMulti be N H (r + 1) m
+      = ∑ k ∈ Finset.range H,
+          RiemannHypothesis.WeylGeneral.weylMulti be N H r (m * (k : ℤ)) :=
+  RiemannHypothesis.WeylGeneral.weylMulti_succ be N H r m
+
+/-- **Differencing lowers the degree** and multiplies the leading coefficient by `(d + 1) k`. -/
+example {d : ℕ} {al : ℝ} {f : ℤ → ℝ}
+    (hf : RiemannHypothesis.WeylGeneral.IsPolyPhase (d + 1) al f) (k : ℤ) :
+    RiemannHypothesis.WeylGeneral.IsPolyPhase d ((d + 1 : ℕ) * (k : ℝ) * al)
+      (fun n => f (n + k) - f n) :=
+  RiemannHypothesis.WeylGeneral.IsPolyPhase.diff hf k
+
+/-- **Weyl's inequality in degree `d + 1`**, for an arbitrary polynomial phase and `H ≥ 1`
+shifts, with no additive error term. -/
+example (d : ℕ) {al : ℝ} {f : ℤ → ℝ}
+    (hf : RiemannHypothesis.WeylGeneral.IsPolyPhase (d + 1) al f) (N H : ℕ) (hH : 0 < H) :
+    ‖∑ n ∈ Finset.Ico (0 : ℤ) (N : ℤ), RiemannHypothesis.KusminLandau.e2pi (f n)‖ ^ (2 ^ d)
+        * ((H : ℝ) ^ d * ((N : ℝ) + H))
+      ≤ 8 ^ (2 ^ d) * ((N : ℝ) + H) ^ (2 ^ d)
+        * RiemannHypothesis.WeylGeneral.weylMulti ((d + 1).factorial * al) N H d 1 :=
+  RiemannHypothesis.WeylGeneral.norm_polyPhaseSum_pow_le d hf N H hH
+
+/-- **The `(r+1)`-fold majorant sum, folded onto the product of the shifts.** -/
+example (be : ℝ) (N H : ℕ) (r : ℕ) {m : ℤ} (hm : 0 < m) :
+    RiemannHypothesis.WeylGeneral.weylMulti be N H (r + 1) m
+      ≤ ((r : ℝ) + 1) * (H : ℝ) ^ r * N
+        + (H : ℝ) ^ r * RiemannHypothesis.WeylGeneral.dioSum be N (m * (H : ℤ) ^ (r + 1)) :=
+  RiemannHypothesis.WeylGeneral.weylMulti_le_dioSum be N H r hm
+
+/-- **The majorant sum estimated by the counting lemma of `M1-WEYL-MIN-SUM`.** -/
+example {be : ℝ} {a : ℤ} {q : ℕ} (hq : 0 < q) (hcop : IsCoprime (q : ℤ) a)
+    (happ : |be - (a : ℝ) / q| ≤ 1 / (q : ℝ) ^ 2) (N H r : ℕ) :
+    RiemannHypothesis.WeylGeneral.weylMulti be N H (r + 1) 1
+      ≤ ((r : ℝ) + 1) * (H : ℝ) ^ r * N
+        + (H : ℝ) ^ r * (((H : ℝ) ^ (r + 1) / q + 1) * (4 * N + q * (1 + Real.log q))) :=
+  RiemannHypothesis.WeylGeneral.weylMulti_le_of_approx hq hcop happ N H r
+
+/-- **The power saving for a monomial phase of arbitrary degree**: for `H^(r+1) ≤ q ≤ N`,
+`‖∑_{0 ≤ n < N} e(α n^(r+2))‖^(2^(r+1)) H ≤ 16^(2^(r+1)) N^(2^(r+1)) (r + 11 + 2 log N)`. -/
+example {al : ℝ} {a : ℤ} {q : ℕ} (r : ℕ) (hq : 0 < q) (hcop : IsCoprime (q : ℤ) a)
+    (happ : |((r + 2).factorial : ℝ) * al - (a : ℝ) / q| ≤ 1 / (q : ℝ) ^ 2)
+    {N H : ℕ} (hH : 0 < H) (hHq : (H : ℝ) ^ (r + 1) ≤ q) (hqN : q ≤ N) :
+    ‖∑ n ∈ Finset.Ico (0 : ℤ) (N : ℤ),
+          RiemannHypothesis.KusminLandau.e2pi (al * (n : ℝ) ^ (r + 2))‖ ^ (2 ^ (r + 1)) * H
+      ≤ 16 ^ (2 ^ (r + 1)) * (N : ℝ) ^ (2 ^ (r + 1)) * ((r : ℝ) + 11 + 2 * Real.log N) :=
+  RiemannHypothesis.WeylGeneral.norm_monomialSum_pow_mul_le_of_approx r hq hcop happ hH hHq hqN
+
+/-! ## M1-WEYL-DIVISOR — the divisor bound, and Weyl's classical exponent -/
+
+/-- **The divisor bound** `τ(n) ≤ C_ε n^ε`. -/
+example {ep : ℝ} (hep : 0 < ep) :
+    ∃ C : ℝ, 1 ≤ C ∧ ∀ n : ℕ, 0 < n → ((n.divisors.card : ℝ)) ≤ C * (n : ℝ) ^ ep :=
+  RiemannHypothesis.DivisorBound.exists_card_divisors_le hep
+
+/-- **The `(r+1)`-fold majorant sum folded onto the product of the shifts**, each product
+counted with the number `τ^r` of its factorizations. -/
+example (be : ℝ) (N H : ℕ) (s : ℕ) (m : ℤ) :
+    RiemannHypothesis.WeylGeneral.weylMulti be N H (s + 1) m
+      ≤ ((s : ℝ) + 1) * (H : ℝ) ^ s * N
+        + ∑ u ∈ Finset.Icc 1 (H ^ (s + 1)), ((u.divisors.card : ℝ)) ^ s *
+            RiemannHypothesis.WeylCubic.dioMaj be N (m * (u : ℤ)) :=
+  RiemannHypothesis.WeylDivisor.weylMulti_le_divisorSum be N H s m
+
+/-- **The majorant sum estimated with the divisor loss** `(C (H^(s+1))^ε)^s` in place of the
+crude factor `H^s`. -/
+example {be : ℝ} {a : ℤ} {q : ℕ} (hq : 0 < q) (hcop : IsCoprime (q : ℤ) a)
+    (happ : |be - (a : ℝ) / q| ≤ 1 / (q : ℝ) ^ 2) (N H s : ℕ) {ep C : ℝ} (hep : 0 < ep)
+    (hC : 1 ≤ C) (hbound : ∀ n : ℕ, 0 < n → ((n.divisors.card : ℝ)) ≤ C * (n : ℝ) ^ ep) :
+    RiemannHypothesis.WeylGeneral.weylMulti be N H (s + 1) 1
+      ≤ ((s : ℝ) + 1) * (H : ℝ) ^ s * N
+        + (C * ((H : ℝ) ^ (s + 1)) ^ ep) ^ s
+          * (((H : ℝ) ^ (s + 1) / q + 1) * (4 * N + q * (1 + Real.log q))) :=
+  RiemannHypothesis.WeylDivisor.weylMulti_le_of_approx_divisor hq hcop happ N H s hep hC hbound
+
+/-- **Weyl's inequality with the classical exponent**, for `N ≤ q ≤ N^(r+1)`. -/
+example {al : ℝ} {a : ℤ} {q : ℕ} (r : ℕ) (hq : 0 < q) (hcop : IsCoprime (q : ℤ) a)
+    (happ : |((r + 2).factorial : ℝ) * al - (a : ℝ) / q| ≤ 1 / (q : ℝ) ^ 2)
+    {N : ℕ} (hN : 0 < N) (hqN : N ≤ q) (hqNr : (q : ℝ) ≤ (N : ℝ) ^ (r + 1))
+    {ep C : ℝ} (hep : 0 < ep) (hC : 1 ≤ C)
+    (hbound : ∀ n : ℕ, 0 < n → ((n.divisors.card : ℝ)) ≤ C * (n : ℝ) ^ ep) :
+    ‖∑ n ∈ Finset.Ico (0 : ℤ) (N : ℤ),
+          RiemannHypothesis.KusminLandau.e2pi (al * (n : ℝ) ^ (r + 2))‖ ^ (2 ^ (r + 1)) * N
+      ≤ 16 ^ (2 ^ (r + 1)) * (N : ℝ) ^ (2 ^ (r + 1))
+        * (C * ((N : ℝ) ^ (r + 1)) ^ ep) ^ r
+        * ((r : ℝ) + 11 + 2 * ((r : ℝ) + 1) * Real.log N) :=
+  RiemannHypothesis.WeylDivisor.norm_monomialSum_pow_mul_le_of_approx_divisor r hq hcop happ hN
+    hqN hqNr hep hC hbound
+
+/-- **Weyl's exponent `1 − 1/2^(d−1) + ε`** for the monomial phase of degree `d = r + 2`. -/
+example (r : ℕ) {ep : ℝ} (hep : 0 < ep) :
+    ∃ C : ℝ, 1 ≤ C ∧ ∀ (al : ℝ) (a : ℤ) (q N : ℕ), 0 < q → IsCoprime (q : ℤ) a →
+      |((r + 2).factorial : ℝ) * al - (a : ℝ) / q| ≤ 1 / (q : ℝ) ^ 2 → 0 < N → N ≤ q →
+      (q : ℝ) ≤ (N : ℝ) ^ (r + 1) →
+      ‖∑ n ∈ Finset.Ico (0 : ℤ) (N : ℤ),
+            RiemannHypothesis.KusminLandau.e2pi (al * (n : ℝ) ^ (r + 2))‖ ^ (2 ^ (r + 1)) * N
+        ≤ C * (N : ℝ) ^ (2 ^ (r + 1)) * (N : ℝ) ^ ep :=
+  RiemannHypothesis.WeylDivisor.exists_norm_monomialSum_pow_mul_le r hep
+
+/-! ## M1-WEYL-CLASSICAL — Weyl's inequality in its classical three-term form -/
+
+/-- **The three-term form for an arbitrary polynomial phase** of degree at most `r + 2` with
+`n^(r+2)`-coefficient `al`. -/
+example (r : ℕ) {ep : ℝ} (hep : 0 < ep) :
+    ∃ C : ℝ, 1 ≤ C ∧ ∀ (al : ℝ) (f : ℤ → ℝ) (a : ℤ) (q N : ℕ),
+      RiemannHypothesis.WeylGeneral.IsPolyPhase (r + 2) al f → 0 < q → IsCoprime (q : ℤ) a →
+      |((r + 2).factorial : ℝ) * al - (a : ℝ) / q| ≤ 1 / (q : ℝ) ^ 2 → 0 < N →
+      (q : ℝ) ≤ (N : ℝ) ^ (r + 2) →
+      ‖∑ n ∈ Finset.Ico (0 : ℤ) (N : ℤ), RiemannHypothesis.KusminLandau.e2pi (f n)‖
+        ≤ C * (N : ℝ) ^ (1 + ep)
+          * (1 / (q : ℝ) + 1 / (N : ℝ) + (q : ℝ) / (N : ℝ) ^ (r + 2)) ^ ((1 : ℝ) / 2 ^ (r + 1)) :=
+  RiemannHypothesis.WeylClassical.exists_norm_polyPhaseSum_le_three_term r hep
+
+/-- **The three-term form with explicit constants**, for every denominator `q > 0`. -/
+example {al : ℝ} {a : ℤ} {q : ℕ} (r : ℕ) (hq : 0 < q) (hcop : IsCoprime (q : ℤ) a)
+    (happ : |((r + 2).factorial : ℝ) * al - (a : ℝ) / q| ≤ 1 / (q : ℝ) ^ 2)
+    {N : ℕ} (hN : 0 < N) {ep C : ℝ} (hep : 0 < ep) (hC : 1 ≤ C)
+    (hbound : ∀ n : ℕ, 0 < n → ((n.divisors.card : ℝ)) ≤ C * (n : ℝ) ^ ep) :
+    ‖∑ n ∈ Finset.Ico (0 : ℤ) (N : ℤ),
+          RiemannHypothesis.KusminLandau.e2pi (al * (n : ℝ) ^ (r + 2))‖ ^ (2 ^ (r + 1))
+      ≤ 16 ^ (2 ^ (r + 1)) * (N : ℝ) ^ (2 ^ (r + 1))
+        * (C * ((N : ℝ) ^ (r + 1)) ^ ep) ^ r * ((r : ℝ) + 21 + 4 * Real.log q)
+        * (1 / (q : ℝ) + 1 / (N : ℝ) + (q : ℝ) / (N : ℝ) ^ (r + 2)) :=
+  RiemannHypothesis.WeylClassical.norm_monomialSum_pow_le_three_term r hq hcop happ hN hep hC
+    hbound
+
+/-- **Weyl's inequality, classical form**: for every `ep > 0` there is a `C ≥ 1` with
+`‖∑_{n<N} e(al n^d)‖ ≤ C N^(1+ep) (1/q + 1/N + q/N^d)^(1/2^(d−1))`, `d = r + 2`. -/
+example (r : ℕ) {ep : ℝ} (hep : 0 < ep) :
+    ∃ C : ℝ, 1 ≤ C ∧ ∀ (al : ℝ) (a : ℤ) (q N : ℕ), 0 < q → IsCoprime (q : ℤ) a →
+      |((r + 2).factorial : ℝ) * al - (a : ℝ) / q| ≤ 1 / (q : ℝ) ^ 2 → 0 < N →
+      (q : ℝ) ≤ (N : ℝ) ^ (r + 2) →
+      ‖∑ n ∈ Finset.Ico (0 : ℤ) (N : ℤ),
+            RiemannHypothesis.KusminLandau.e2pi (al * (n : ℝ) ^ (r + 2))‖
+        ≤ C * (N : ℝ) ^ (1 + ep)
+          * (1 / (q : ℝ) + 1 / (N : ℝ) + (q : ℝ) / (N : ℝ) ^ (r + 2)) ^ ((1 : ℝ) / 2 ^ (r + 1)) :=
+  RiemannHypothesis.WeylClassical.exists_norm_monomialSum_le_three_term r hep
+
+/-! ## M1-WEYL-BADLY-GENERAL — Weyl's exponent for a badly approximable coefficient -/
+
+/-- **Weyl's exponent for a badly approximable leading coefficient**, for an arbitrary polynomial
+phase of degree at most `r + 2`. -/
+example (r : ℕ) {ep c : ℝ} (hep : 0 < ep) (hc : 0 < c) :
+    ∃ C : ℝ, 1 ≤ C ∧ ∀ (al : ℝ) (f : ℤ → ℝ),
+      RiemannHypothesis.WeylGeneral.IsPolyPhase (r + 2) al f →
+      (∀ (a : ℤ) (q : ℕ), 0 < q →
+        c / (q : ℝ) ^ 2 ≤ |((r + 2).factorial : ℝ) * al - (a : ℝ) / q|) →
+      ∀ N : ℕ, 0 < N →
+        ‖∑ n ∈ Finset.Ico (0 : ℤ) (N : ℤ), RiemannHypothesis.KusminLandau.e2pi (f n)‖
+          ≤ C * (N : ℝ) ^ (1 - 1 / (2 : ℝ) ^ (r + 1) + ep) :=
+  RiemannHypothesis.WeylBadlyGeneral.exists_norm_polyPhaseSum_le_of_badlyApproximable r hep hc
+
+/-- **Weyl's exponent in arbitrary degree, unconditionally in `N`**, for a coefficient whose
+`d!` multiple is badly approximable. -/
+example (r : ℕ) {ep c : ℝ} (hep : 0 < ep) (hc : 0 < c) :
+    ∃ C : ℝ, 1 ≤ C ∧ ∀ al : ℝ,
+      (∀ (a : ℤ) (q : ℕ), 0 < q →
+        c / (q : ℝ) ^ 2 ≤ |((r + 2).factorial : ℝ) * al - (a : ℝ) / q|) →
+      ∀ N : ℕ, 0 < N →
+        ‖∑ n ∈ Finset.Ico (0 : ℤ) (N : ℤ),
+            RiemannHypothesis.KusminLandau.e2pi (al * (n : ℝ) ^ (r + 2))‖
+          ≤ C * (N : ℝ) ^ (1 - 1 / (2 : ℝ) ^ (r + 1) + ep) :=
+  RiemannHypothesis.WeylBadlyGeneral.exists_norm_monomialSum_le_of_badlyApproximable r hep hc
+
+/-- **The explicit coefficient `√2/d!` in every degree.** -/
+example (r : ℕ) {ep : ℝ} (hep : 0 < ep) :
+    ∃ C : ℝ, 1 ≤ C ∧ ∀ N : ℕ, 0 < N →
+      ‖∑ n ∈ Finset.Ico (0 : ℤ) (N : ℤ),
+          RiemannHypothesis.KusminLandau.e2pi
+            (Real.sqrt 2 / ((r + 2).factorial : ℝ) * (n : ℝ) ^ (r + 2))‖
+        ≤ C * (N : ℝ) ^ (1 - 1 / (2 : ℝ) ^ (r + 1) + ep) :=
+  RiemannHypothesis.WeylBadlyGeneral.exists_norm_monomialSum_sqrt_two_le r hep
+
+/-! ## M1-WEYL-INTERVAL — Weyl's inequality over an arbitrary interval -/
+
+/-- **A translate of a polynomial phase is a polynomial phase** of the same degree, with the same
+leading coefficient. -/
+example {d : ℕ} {al : ℝ} {f : ℤ → ℝ} (hf : RiemannHypothesis.WeylGeneral.IsPolyPhase d al f)
+    (M : ℤ) :
+    RiemannHypothesis.WeylGeneral.IsPolyPhase d al (fun n : ℤ => f (n + M)) :=
+  hf.comp_add M
+
+/-- **Weyl's inequality, classical form, over an arbitrary interval**, uniformly in the starting
+point `M`. -/
+example (r : ℕ) {ep : ℝ} (hep : 0 < ep) :
+    ∃ C : ℝ, 1 ≤ C ∧ ∀ (al : ℝ) (f : ℤ → ℝ) (a : ℤ) (q N : ℕ) (M : ℤ),
+      RiemannHypothesis.WeylGeneral.IsPolyPhase (r + 2) al f → 0 < q → IsCoprime (q : ℤ) a →
+      |((r + 2).factorial : ℝ) * al - (a : ℝ) / q| ≤ 1 / (q : ℝ) ^ 2 → 0 < N →
+      (q : ℝ) ≤ (N : ℝ) ^ (r + 2) →
+      ‖∑ n ∈ Finset.Ico M (M + N), RiemannHypothesis.KusminLandau.e2pi (f n)‖
+        ≤ C * (N : ℝ) ^ (1 + ep)
+          * (1 / (q : ℝ) + 1 / (N : ℝ) + (q : ℝ) / (N : ℝ) ^ (r + 2)) ^ ((1 : ℝ) / 2 ^ (r + 1)) :=
+  RiemannHypothesis.WeylInterval.exists_norm_polyPhaseSum_Ico_le_three_term r hep
+
+/-- **Weyl's exponent for a badly approximable coefficient, over an arbitrary interval.** -/
+example (r : ℕ) {ep c : ℝ} (hep : 0 < ep) (hc : 0 < c) :
+    ∃ C : ℝ, 1 ≤ C ∧ ∀ (al : ℝ) (f : ℤ → ℝ),
+      RiemannHypothesis.WeylGeneral.IsPolyPhase (r + 2) al f →
+      (∀ (a : ℤ) (q : ℕ), 0 < q →
+        c / (q : ℝ) ^ 2 ≤ |((r + 2).factorial : ℝ) * al - (a : ℝ) / q|) →
+      ∀ (N : ℕ) (M : ℤ), 0 < N →
+        ‖∑ n ∈ Finset.Ico M (M + N), RiemannHypothesis.KusminLandau.e2pi (f n)‖
+          ≤ C * (N : ℝ) ^ (1 - 1 / (2 : ℝ) ^ (r + 1) + ep) :=
+  RiemannHypothesis.WeylInterval.exists_norm_polyPhaseSum_Ico_le_of_badlyApproximable r hep hc
+
+/-- **The explicit coefficient `√2/d!` over an arbitrary interval.** -/
+example (r : ℕ) {ep : ℝ} (hep : 0 < ep) :
+    ∃ C : ℝ, 1 ≤ C ∧ ∀ (N : ℕ) (M : ℤ), 0 < N →
+      ‖∑ n ∈ Finset.Ico M (M + N),
+          RiemannHypothesis.KusminLandau.e2pi
+            (Real.sqrt 2 / ((r + 2).factorial : ℝ) * (n : ℝ) ^ (r + 2))‖
+        ≤ C * (N : ℝ) ^ (1 - 1 / (2 : ℝ) ^ (r + 1) + ep) :=
+  RiemannHypothesis.WeylInterval.exists_norm_monomialSum_Ico_sqrt_two_le r hep
+
+/-! ## M2-LARGE-SIEVE-SIFTED — the large sieve for sifted sets -/
+
+/-- **Orthogonality of the additive characters modulo `q`.** -/
+example {q : ℕ} (hq : 0 < q) (m : ℤ) :
+    ∑ b ∈ Finset.range q, RiemannHypothesis.KusminLandau.e2pi ((m : ℝ) * b / q)
+      = if (q : ℤ) ∣ m then (q : ℂ) else 0 :=
+  RiemannHypothesis.LargeSieveSifted.sum_e2pi_mul_div hq m
+
+/-- **Parseval's identity** for the exponential sums of an indicator. -/
+example (A : Finset ℕ) {q : ℕ} (hq : 0 < q) :
+    ∑ b ∈ Finset.range q, ‖RiemannHypothesis.LargeSieveSifted.indSum A q b‖ ^ 2
+      = (q : ℝ) * ∑ r ∈ Finset.range q,
+          ((RiemannHypothesis.LargeSieveSifted.fiberCard A q r : ℝ)) ^ 2 :=
+  RiemannHypothesis.LargeSieveSifted.sum_normSq_indSum A hq
+
+/-- **The lower bound at a prime modulus.** -/
+example (A : Finset ℕ) {p w : ℕ} (hp : p.Prime) (hw : 0 < w)
+    (hAw : (A.image (fun n => n % p)).card ≤ w) :
+    (A.card : ℝ) ^ 2 * (((p : ℝ) - w) / w)
+      ≤ ∑ b ∈ (Finset.range p).filter (fun b => Nat.Coprime b p),
+          ‖RiemannHypothesis.LargeSieveSifted.indSum A p b‖ ^ 2 :=
+  RiemannHypothesis.LargeSieveSifted.sq_card_mul_le_sum_prime A hp hw hAw
+
+/-- **The large sieve for sifted sets**: a set meeting at most `w p` residue classes modulo every
+prime `p ≤ Q` satisfies `|A| ∑_{p ≤ Q} (p − w p)/(w p) ≤ Q² + π N`. -/
+example {N Q : ℕ} (hQ : 2 ≤ Q) {A : Finset ℕ} (hA : A ⊆ Finset.range N) (w : ℕ → ℕ)
+    (hwpos : ∀ p ∈ RiemannHypothesis.LargeSieveSifted.primesUpTo Q, 0 < w p)
+    (hw : ∀ p ∈ RiemannHypothesis.LargeSieveSifted.primesUpTo Q,
+      (A.image (fun n => n % p)).card ≤ w p) :
+    (A.card : ℝ) * ∑ p ∈ RiemannHypothesis.LargeSieveSifted.primesUpTo Q,
+        (((p : ℝ) - w p) / w p) ≤ (Q : ℝ) ^ 2 + Real.pi * N :=
+  RiemannHypothesis.LargeSieveSifted.card_le_sifted hQ hA w hwpos hw
+
+/-- **A set meeting at most half the classes modulo every prime `p ≤ Q` is small.** -/
+example {N Q : ℕ} (hQ : 2 ≤ Q) {A : Finset ℕ} (hA : A ⊆ Finset.range N)
+    (hhalf : ∀ p ∈ RiemannHypothesis.LargeSieveSifted.primesUpTo Q,
+      2 * (A.image (fun n => n % p)).card ≤ p) :
+    (A.card : ℝ) * ((RiemannHypothesis.LargeSieveSifted.primesUpTo Q).card : ℝ)
+      ≤ (Q : ℝ) ^ 2 + Real.pi * N :=
+  RiemannHypothesis.LargeSieveSifted.card_le_sifted_half hQ hA hhalf
+
+/-- **The worked example**: the squares below `N`, with no hypothesis left to the caller. -/
+example {N Q : ℕ} (hQ : 2 ≤ Q) :
+    ((((Finset.range N).filter (fun n => IsSquare n)).card : ℝ))
+        * (((RiemannHypothesis.LargeSieveSifted.primesUpTo Q).erase 2).card : ℝ)
+      ≤ 3 * ((Q : ℝ) ^ 2 + Real.pi * N) :=
+  RiemannHypothesis.LargeSieveSifted.card_squares_lt_le hQ
+
+/-! ## M2-LARGE-SIEVE-SQUAREFREE — Montgomery's sieve over squarefree moduli -/
+
+/-- **Parseval's identity** for the discrete Fourier transform of an arbitrary complex-valued
+function on the residues mod `q`. -/
+example {q : ℕ} (hq : 0 < q) (g : ℕ → ℂ) :
+    ∑ c ∈ Finset.range q,
+        ‖∑ r ∈ Finset.range q, g r * RiemannHypothesis.KusminLandau.e2pi ((r : ℝ) * c / q)‖ ^ 2
+      = (q : ℝ) * ∑ r ∈ Finset.range q, ‖g r‖ ^ 2 :=
+  RiemannHypothesis.LargeSieveSquarefree.sum_normSq_dft hq g
+
+/-- **The prime step**, now at an arbitrary real shift `x` of the argument. -/
+example (A : Finset ℕ) {p w : ℕ} (hp : p.Prime) (hw : 0 < w)
+    (hAw : (A.image (fun n => n % p)).card ≤ w) (x : ℝ) :
+    ‖RiemannHypothesis.LargeSieveSquarefree.expSum A x‖ ^ 2 * (((p : ℝ) - w) / w)
+      ≤ ∑ c ∈ Finset.Ico 1 p,
+          ‖RiemannHypothesis.LargeSieveSquarefree.expSum A ((c : ℝ) / p + x)‖ ^ 2 :=
+  RiemannHypothesis.LargeSieveSquarefree.sq_norm_expSum_mul_le_sum_prime A hp hw hAw x
+
+/-- **Multiplicativity of the lower bound**: `F(p m) ≥ ((p − w)/w) F(m)` for `p ∤ m`. -/
+example (A : Finset ℕ) {p m w : ℕ} (hp : p.Prime) (hm : 0 < m) (hpm : ¬ p ∣ m) (hw : 0 < w)
+    (hAw : (A.image (fun n => n % p)).card ≤ w) :
+    (((p : ℝ) - w) / w) * RiemannHypothesis.LargeSieveSquarefree.redSq A m
+      ≤ RiemannHypothesis.LargeSieveSquarefree.redSq A (p * m) :=
+  RiemannHypothesis.LargeSieveSquarefree.redSq_prime_mul_le A hp hm hpm hw hAw
+
+/-- **The multiplicative lower bound at a squarefree modulus.** -/
+example (A : Finset ℕ) (w : ℕ → ℕ) {q : ℕ} (hq : Squarefree q)
+    (hwpos : ∀ p ∈ q.primeFactors, 0 < w p) (hwle : ∀ p ∈ q.primeFactors, w p ≤ p)
+    (hAw : ∀ p ∈ q.primeFactors, (A.image (fun n => n % p)).card ≤ w p) :
+    (A.card : ℝ) ^ 2 * ∏ p ∈ q.primeFactors, (((p : ℝ) - w p) / w p)
+      ≤ RiemannHypothesis.LargeSieveSquarefree.redSq A q :=
+  RiemannHypothesis.LargeSieveSquarefree.sq_card_mul_prod_le_redSq A w hq hwpos hwle hAw
+
+/-- **Montgomery's sieve**: the sifting sum now runs over all squarefree `q ≤ Q`, with the
+multiplicative density `∏_{p ∣ q} (p − w p)/(w p)`. -/
+example {N Q : ℕ} (hQ : 2 ≤ Q) {A : Finset ℕ} (hA : A ⊆ Finset.range N) (w : ℕ → ℕ)
+    (hwpos : ∀ p, p.Prime → p ≤ Q → 0 < w p) (hwle : ∀ p, p.Prime → p ≤ Q → w p ≤ p)
+    (hAw : ∀ p, p.Prime → p ≤ Q → (A.image (fun n => n % p)).card ≤ w p) :
+    (A.card : ℝ) * ∑ q ∈ RiemannHypothesis.LargeSieveSquarefree.squarefreeUpTo Q,
+        ∏ p ∈ q.primeFactors, (((p : ℝ) - w p) / w p)
+      ≤ (Q : ℝ) ^ 2 + Real.pi * N :=
+  RiemannHypothesis.LargeSieveSquarefree.card_le_sifted_squarefree hQ hA w hwpos hwle hAw
+
+/-- **The half-classes consequence**, now with the count of all squarefree moduli up to `Q`. -/
+example {N Q : ℕ} (hQ : 2 ≤ Q) {A : Finset ℕ} (hA : A ⊆ Finset.range N)
+    (hhalf : ∀ p, p.Prime → p ≤ Q → 2 * (A.image (fun n => n % p)).card ≤ p) :
+    (A.card : ℝ) * ((RiemannHypothesis.LargeSieveSquarefree.squarefreeUpTo Q).card : ℝ)
+      ≤ (Q : ℝ) ^ 2 + Real.pi * N :=
+  RiemannHypothesis.LargeSieveSquarefree.card_le_sifted_squarefree_half hQ hA hhalf
+
+/-- **At least a quarter of the moduli up to `Q` are squarefree.** -/
+example (Q : ℕ) :
+    (Q : ℝ) / 4 ≤ ((RiemannHypothesis.LargeSieveSquarefree.squarefreeUpTo Q).card : ℝ) :=
+  RiemannHypothesis.LargeSieveSquarefree.card_squarefreeUpTo_ge Q
+
+/-- **A set below `N` meeting at most half the residue classes modulo every prime `p ≤ √N` has at
+most `34 √N` elements.** -/
+example {N : ℕ} (hN : 4 ≤ N) {A : Finset ℕ} (hA : A ⊆ Finset.range N)
+    (hhalf : ∀ p, p.Prime → p ≤ Nat.sqrt N → 2 * (A.image (fun n => n % p)).card ≤ p) :
+    (A.card : ℝ) ≤ 34 * Real.sqrt N :=
+  RiemannHypothesis.LargeSieveSquarefree.card_le_of_sifted_half_sqrt hN hA hhalf
+
+/-! ## M2-BRUN-TITCHMARSH — a Brun–Titchmarsh inequality from the squarefree large sieve -/
+
+/-- **The sifting sum dominates the squarefree harmonic sum.** -/
+example (Q : ℕ) :
+    ∑ q ∈ RiemannHypothesis.LargeSieveSquarefree.squarefreeUpTo Q, (1 : ℝ) / q
+      ≤ RiemannHypothesis.BrunTitchmarsh.siftSum Q :=
+  RiemannHypothesis.BrunTitchmarsh.sum_inv_squarefree_le_siftSum Q
+
+/-- **The reciprocals of the non-squarefree `n ≤ Q` sum to at most `(3/4)(log Q + 1)`.** -/
+example (Q : ℕ) :
+    ∑ n ∈ (Finset.Icc 1 Q).filter (fun n => ¬ Squarefree n), (1 : ℝ) / n
+      ≤ 3 / 4 * (Real.log Q + 1) :=
+  RiemannHypothesis.BrunTitchmarsh.sum_inv_not_squarefree_le Q
+
+/-- **The sifting sum is at least `(log Q)/4 − 3/4`.** -/
+example (Q : ℕ) :
+    Real.log Q / 4 - 3 / 4 ≤ RiemannHypothesis.BrunTitchmarsh.siftSum Q :=
+  RiemannHypothesis.BrunTitchmarsh.quarter_log_le_siftSum Q
+
+/-- **The large sieve for a set avoiding one residue class modulo every prime `p ≤ Q`.** -/
+example {N Q : ℕ} (hQ : 2 ≤ Q) {A : Finset ℕ} (hA : A ⊆ Finset.range N)
+    (havoid : ∀ p, p.Prime → p ≤ Q → ∃ c < p, ∀ n ∈ A, n % p ≠ c) :
+    (A.card : ℝ) * RiemannHypothesis.BrunTitchmarsh.siftSum Q ≤ (Q : ℝ) ^ 2 + Real.pi * N :=
+  RiemannHypothesis.BrunTitchmarsh.card_mul_siftSum_le hQ hA havoid
+
+/-- **The harmonic sum splits along `n = d² q` with `q` squarefree.** -/
+example (Q : ℕ) :
+    ∑ n ∈ Finset.Icc 1 Q, (1 : ℝ) / n
+      ≤ (∑ d ∈ Finset.Icc 1 Q, (1 : ℝ) / (d : ℝ) ^ 2)
+          * ∑ q ∈ RiemannHypothesis.LargeSieveSquarefree.squarefreeUpTo Q, (1 : ℝ) / q :=
+  RiemannHypothesis.BrunTitchmarsh.sum_inv_le_sum_inv_sq_mul_sum_inv_squarefree Q
+
+/-- **The squarefree harmonic sum is at least `(4/7) log Q`.** -/
+example (Q : ℕ) :
+    4 / 7 * Real.log Q
+      ≤ ∑ q ∈ RiemannHypothesis.LargeSieveSquarefree.squarefreeUpTo Q, (1 : ℝ) / q :=
+  RiemannHypothesis.BrunTitchmarsh.four_sevenths_log_le_sum_inv_squarefree Q
+
+/-- **The sifting sum is at least `(4/7) log Q`.** -/
+example (Q : ℕ) :
+    4 / 7 * Real.log Q ≤ RiemannHypothesis.BrunTitchmarsh.siftSum Q :=
+  RiemannHypothesis.BrunTitchmarsh.four_sevenths_log_le_siftSum Q
+
+/-- **The reciprocals of the `m ≤ Q` with a prescribed set `P` of prime factors sum to at most
+`∏_{p ∈ P} 1/(p − 1)`.** -/
+example (Q : ℕ) (P : Finset ℕ) (hP : ∀ p ∈ P, p.Prime) :
+    ∑ m ∈ (Finset.Icc 1 Q).filter (fun m => m.primeFactors = P), (1 : ℝ) / m
+      ≤ ∏ p ∈ P, 1 / ((p : ℝ) - 1) :=
+  RiemannHypothesis.BrunTitchmarsh.sum_inv_primeFactors_eq_le Q P hP
+
+/-- **The sifting sum is at least `log Q`**, the classical bound with the constant `1`. -/
+example (Q : ℕ) : Real.log Q ≤ RiemannHypothesis.BrunTitchmarsh.siftSum Q :=
+  RiemannHypothesis.BrunTitchmarsh.log_le_siftSum Q
+
+/-- **Brun–Titchmarsh with a non-optimal constant**: uniformly in `x`, the number of primes in
+`[x, x + y)` is at most `13 y / log y + √y + 1` once `log y ≥ 4`. -/
+example (x : ℕ) {y : ℕ} (hy : 4 ≤ Real.log y) :
+    (((Finset.Ico x (x + y)).filter Nat.Prime).card : ℝ)
+      ≤ 13 * y / Real.log y + Real.sqrt y + 1 :=
+  RiemannHypothesis.BrunTitchmarsh.card_primes_Ico_le x hy
+
+/-- **The same with the constant `9`, once `log y ≥ 24`.** -/
+example (x : ℕ) {y : ℕ} (hy : 24 ≤ Real.log y) :
+    (((Finset.Ico x (x + y)).filter Nat.Prime).card : ℝ)
+      ≤ 9 * y / Real.log y + Real.sqrt y + 1 :=
+  RiemannHypothesis.BrunTitchmarsh.card_primes_Ico_le_of_log_ge_24 x hy
+
+/-- **The sieve at a free level `Q ≥ 2`**: the bound `(Q² + π y)/log Q + Q + 1`, uniformly in the
+starting point. -/
+example (x y : ℕ) {Q : ℕ} (hQ : 2 ≤ Q) :
+    (((Finset.Ico x (x + y)).filter Nat.Prime).card : ℝ)
+      ≤ ((Q : ℝ) ^ 2 + Real.pi * y) / Real.log Q + Q + 1 :=
+  RiemannHypothesis.BrunTitchmarsh.card_primes_Ico_le_of_level x y hQ
+
+/-- **Brun–Titchmarsh with the constant `2π + ε`**, at the sieve level `Q = ⌊√y / log y⌋`. -/
+example {eps : ℝ} (heps : 0 < eps) :
+    ∃ Y : ℕ, ∀ y : ℕ, Y ≤ y → ∀ x : ℕ,
+      (((Finset.Ico x (x + y)).filter Nat.Prime).card : ℝ)
+        ≤ (2 * Real.pi + eps) * y / Real.log y :=
+  RiemannHypothesis.BrunTitchmarsh.card_primes_Ico_le_two_pi heps
+
+/-- **A Chebyshev-type upper bound with the constant `2π`**: `π(N) ≤ (2π + ε) N / log N` for all
+large `N`. -/
+example {eps : ℝ} (heps : 0 < eps) :
+    ∃ Y : ℕ, ∀ N : ℕ, Y ≤ N →
+      (((Finset.range N).filter Nat.Prime).card : ℝ)
+        ≤ (2 * Real.pi + eps) * N / Real.log N :=
+  RiemannHypothesis.BrunTitchmarsh.card_primes_range_le_two_pi heps
+
+/-- **The progression form at a free level `Q ≥ 2`.** -/
+example {q a : ℕ} (hq : 1 ≤ q) (ha : a < q) (x y : ℕ) {Q : ℕ} (hQ : 2 ≤ Q) :
+    (((Finset.Ico x (x + y)).filter (fun n => n.Prime ∧ n % q = a)).card : ℝ)
+      ≤ ((Q : ℝ) ^ 2 + Real.pi * ((y / q + 1 : ℕ) : ℝ)) * q
+            / ((q.totient : ℝ) * Real.log Q)
+          + Q + 1 :=
+  RiemannHypothesis.BrunTitchmarsh.card_primes_Ico_mod_le_of_level hq ha x y hQ
+
+/-- **Brun–Titchmarsh in arithmetic progressions with the constant `2π + ε`**, uniformly in the
+starting point, the modulus and the residue. -/
+example {eps : ℝ} (heps : 0 < eps) :
+    ∃ Y₀ : ℕ, ∀ q a : ℕ, 1 ≤ q → a < q → ∀ x y : ℕ, Y₀ ≤ y / q + 1 →
+      (((Finset.Ico x (x + y)).filter (fun n => n.Prime ∧ n % q = a)).card : ℝ)
+        ≤ (2 * Real.pi + eps) * ((q : ℝ) / (q.totient : ℝ)) * ((y / q + 1 : ℕ) : ℝ)
+            / Real.log ((y / q + 1 : ℕ) : ℝ) :=
+  RiemannHypothesis.BrunTitchmarsh.card_primes_Ico_mod_le_two_pi heps
+
+/-- **A Chebyshev-type upper bound for the prime counting function**: `π(N) ≤ 13 N / log N + √N + 1`
+once `log N ≥ 4`. -/
+example {N : ℕ} (hN : 4 ≤ Real.log N) :
+    (((Finset.range N).filter Nat.Prime).card : ℝ)
+      ≤ 13 * N / Real.log N + Real.sqrt N + 1 :=
+  RiemannHypothesis.BrunTitchmarsh.card_primes_range_le hN
+
+/-- **The reciprocals of the `n ≤ Q` coprime to `q` are dominated by the coprime sifting sum.** -/
+example (q Q : ℕ) :
+    ∑ n ∈ (Finset.Icc 1 Q).filter (fun n => Nat.Coprime n q), (1 : ℝ) / n
+      ≤ RiemannHypothesis.BrunTitchmarsh.siftSumCoprime q Q :=
+  RiemannHypothesis.BrunTitchmarsh.coprime_harmonic_le_siftSumCoprime q Q
+
+/-- **The block bound for the coprime harmonic sum.** -/
+example {q : ℕ} (hq : 1 ≤ q) (J : ℕ) :
+    ((q.totient : ℝ) / q) * ∑ j ∈ Finset.Icc 1 J, (1 : ℝ) / j
+      ≤ ∑ n ∈ (Finset.Icc 1 (J * q)).filter (fun n => Nat.Coprime n q), (1 : ℝ) / n :=
+  RiemannHypothesis.BrunTitchmarsh.totient_mul_harmonic_le_coprime_harmonic hq J
+
+/-- **The reciprocals of the `n ≤ Q` coprime to `q` sum to at least `(φ(q)/q) log Q`.** -/
+example {q : ℕ} (hq : 1 ≤ q) (Q : ℕ) :
+    ((q.totient : ℝ) / q) * Real.log Q
+      ≤ ∑ m ∈ (Finset.Icc 1 Q).filter (fun m => Nat.Coprime m q), (1 : ℝ) / m :=
+  RiemannHypothesis.BrunTitchmarsh.totient_log_le_coprime_harmonic hq Q
+
+/-- **The coprime sifting sum is at least `(φ(q)/q) log Q`.** -/
+example {q : ℕ} (hq : 1 ≤ q) (Q : ℕ) :
+    ((q.totient : ℝ) / q) * Real.log Q
+      ≤ RiemannHypothesis.BrunTitchmarsh.siftSumCoprime q Q :=
+  RiemannHypothesis.BrunTitchmarsh.totient_log_le_siftSumCoprime hq Q
+
+/-- **The large sieve for a set avoiding one residue class modulo every prime `p ≤ Q` that does
+not divide `q`.** -/
+example {N Q q : ℕ} (hQ : 2 ≤ Q) {A : Finset ℕ} (hA : A ⊆ Finset.range N)
+    (havoid : ∀ p, p.Prime → p ≤ Q → ¬ p ∣ q → ∃ c < p, ∀ n ∈ A, n % p ≠ c) :
+    (A.card : ℝ) * RiemannHypothesis.BrunTitchmarsh.siftSumCoprime q Q
+      ≤ (Q : ℝ) ^ 2 + Real.pi * N :=
+  RiemannHypothesis.BrunTitchmarsh.card_mul_siftSumCoprime_le hQ hA havoid
+
+/-- **Brun–Titchmarsh in arithmetic progressions, with a non-optimal constant**: with
+`Y = ⌊y/q⌋ + 1` and `Q = ⌊√Y⌋`, the number of primes of `[x, x + y)` congruent to `a` modulo `q`
+is at most `4.15 q Y / (φ(q) log Q) + √Y + 1`, uniformly in `x` and `a`. -/
+example {q a : ℕ} (hq : 1 ≤ q) (ha : a < q) (x y : ℕ)
+    (hQsqrt : 2 ≤ Nat.sqrt (y / q + 1)) :
+    (((Finset.Ico x (x + y)).filter (fun n => n.Prime ∧ n % q = a)).card : ℝ)
+      ≤ 4.15 * q * ((y / q + 1 : ℕ) : ℝ)
+            / ((q.totient : ℝ) * Real.log (Nat.sqrt (y / q + 1)))
+          + Real.sqrt ((y / q + 1 : ℕ) : ℝ) + 1 :=
+  RiemannHypothesis.BrunTitchmarsh.card_primes_Ico_mod_le hq ha x y hQsqrt
+
+/-! ## M2-BRUN-TWIN — Brun's twin-prime bound from the squarefree large sieve -/
+
+/-- **The odd squarefree weights dominate the odd harmonic sum**, so their total is at least
+`(log X)/2 − 1/2`. -/
+example (X : ℕ) :
+    Real.log X / 2 - 1 / 2 ≤ RiemannHypothesis.BrunTwinPrimes.oddSieveTotal X :=
+  RiemannHypothesis.BrunTwinPrimes.half_log_sub_half_le_oddSieveTotal X
+
+/-- **The coprime pairs carry at least `9/16` of the total weight of the pairs.** -/
+example (X : ℕ) :
+    9 / 16 * RiemannHypothesis.BrunTwinPrimes.oddSieveTotal X ^ 2
+      ≤ ∑ ab ∈ RiemannHypothesis.BrunTwinPrimes.coprimeOddPairs X,
+          RiemannHypothesis.BrunTwinPrimes.sieveWeight ab.1 *
+            RiemannHypothesis.BrunTwinPrimes.sieveWeight ab.2 :=
+  RiemannHypothesis.BrunTwinPrimes.nine_sixteenths_le_sum_coprime_pairs X
+
+/-- **The coprime pairs of odd squarefree numbers up to `X` are dominated by the twin sifting
+sum at any `Q ≥ X²`.** -/
+example {X Q : ℕ} (hXQ : X * X ≤ Q) :
+    ∑ ab ∈ RiemannHypothesis.BrunTwinPrimes.coprimeOddPairs X,
+        RiemannHypothesis.BrunTwinPrimes.sieveWeight ab.1 *
+          RiemannHypothesis.BrunTwinPrimes.sieveWeight ab.2
+      ≤ RiemannHypothesis.BrunTwinPrimes.twinSiftSum Q :=
+  RiemannHypothesis.BrunTwinPrimes.sum_coprime_pairs_le_twinSiftSum hXQ
+
+/-- **The twin sifting sum is of order `(log Q)²`.** -/
+example {Q : ℕ} (hQ : 1 ≤ Real.log (Nat.sqrt Q)) :
+    9 / 16 * (Real.log (Nat.sqrt Q) / 2 - 1 / 2) ^ 2
+      ≤ RiemannHypothesis.BrunTwinPrimes.twinSiftSum Q :=
+  RiemannHypothesis.BrunTwinPrimes.twinSiftSum_ge hQ
+
+/-- **The large sieve at the twin-prime weights.** -/
+example {N Q : ℕ} (hQ : 2 ≤ Q) {A : Finset ℕ} (hA : A ⊆ Finset.range N)
+    (havoid : ∀ p, p.Prime → p ≤ Q →
+      (A.image (fun n => n % p)).card ≤ RiemannHypothesis.BrunTwinPrimes.twinWeight p) :
+    (A.card : ℝ) * RiemannHypothesis.BrunTwinPrimes.twinSiftSum Q
+      ≤ (Q : ℝ) ^ 2 + Real.pi * N :=
+  RiemannHypothesis.BrunTwinPrimes.card_mul_twinSiftSum_le hQ hA havoid
+
+/-- **Brun's twin-prime bound, with a non-optimal constant**: the number of `n < N` with `n` and
+`n + 2` both prime is at most `900 N/(log N)² + √N + 1`, once `log N ≥ 32`.  No lower bound for
+the number of twin primes is claimed — that is the twin-prime conjecture, and it is open. -/
+example {N : ℕ} (hN : 32 ≤ Real.log N) :
+    (((Finset.range N).filter (fun n => n.Prime ∧ (n + 2).Prime)).card : ℝ)
+      ≤ 900 * N / Real.log N ^ 2 + Real.sqrt N + 1 :=
+  RiemannHypothesis.BrunTwinPrimes.card_twinPrimes_le hN
+
+/-! ## M2-BRUN-CONSTANT — Brun's theorem: the reciprocals of the twin primes converge -/
+
+/-- **Every dyadic block of the twin-prime reciprocal sum is `O(1/k²)`.** -/
+example (k : ℕ) :
+    RiemannHypothesis.BrunConstant.blockSum k ≤ 3753 / ((k : ℝ) + 1) ^ 2 :=
+  RiemannHypothesis.BrunConstant.blockSum_le k
+
+/-- **Brun's bound**: the reciprocals of the twin primes below `N` sum to at most `6600`,
+uniformly in `N`.  The constant is not sharp: the Brun constant is `1.902…`. -/
+example (N : ℕ) :
+    ∑ n ∈ (Finset.range N).filter (fun n => n.Prime ∧ (n + 2).Prime), (1 : ℝ) / (n : ℝ) ≤ 6600 :=
+  RiemannHypothesis.BrunConstant.sum_inv_twinPrimes_le N
+
+/-- **Brun's theorem**: the series `∑ 1/n` over the `n` with `n` and `n + 2` both prime
+converges.  Nothing follows about the number of twin primes from below: the twin-prime
+conjecture is open. -/
+example : Summable (fun n : ℕ => if n.Prime ∧ (n + 2).Prime then (1 : ℝ) / (n : ℝ) else 0) :=
+  RiemannHypothesis.BrunConstant.summable_twinInv
+
+/-- **The sum of the reciprocals of the twin primes is at most `6600`.** -/
+example :
+    ∑' n : ℕ, (if n.Prime ∧ (n + 2).Prime then (1 : ℝ) / (n : ℝ) else 0) ≤ 6600 :=
+  RiemannHypothesis.BrunConstant.tsum_twinInv_le
+
+/-- **There are infinitely many primes `p` with `p + 2` composite.**  A consequence of Brun's
+theorem: the sum of the prime reciprocals diverges while its twin part converges.  Nothing
+follows about the twin primes themselves. -/
+example : {p : ℕ | p.Prime ∧ ¬ (p + 2).Prime}.Infinite :=
+  RiemannHypothesis.BrunConstant.infinite_setOf_prime_not_prime_add_two
+
+/-! ## M1-ALMOST-ALL-STRIP — Carlson's density theorem in its `o(T)` form -/
+
+/-- **`N(σ, T) ≤ ε T` for every fixed `σ > 1/2` and every `ε > 0`, for `T` large.**  Zeroes are
+counted without multiplicity.  This is strictly stronger than the Bohr–Landau `O(T)` of
+`M2-BOHR-LANDAU`. -/
+example {σ ε : ℝ} (h0 : 1 / 2 < σ) (h1 : σ < 1) (hε : 0 < ε) :
+    ∃ T₀ : ℝ, 1 ≤ T₀ ∧ ∀ T : ℝ, T₀ ≤ T →
+      ((Set.ncard {ρ : ℂ | riemannZeta ρ = 0 ∧ σ ≤ ρ.re ∧ 0 < ρ.im ∧ ρ.im ≤ T} : ℝ)) ≤ ε * T :=
+  RiemannHypothesis.exists_ncard_zerosRightOf_le_eps h0 h1 hε
+
+/-- The limit form: `N(σ, T) / T → 0`. -/
+example {σ : ℝ} (h0 : 1 / 2 < σ) (h1 : σ < 1) :
+    Tendsto (fun T : ℝ =>
+        (Set.ncard {ρ : ℂ | riemannZeta ρ = 0 ∧ σ ≤ ρ.re ∧ 0 < ρ.im ∧ ρ.im ≤ T} : ℝ) / T)
+      atTop (𝓝 0) :=
+  RiemannHypothesis.tendsto_ncard_zerosRightOf_div_atTop h0 h1
+
+/-- **The Prop of `RiemannHypothesis/Partial.lean` that the row is measured against.** -/
+example : ∀ δ : ℝ, 0 < δ →
+    Tendsto (fun T : ℝ => (Set.ncard {s : ℂ | riemannZeta s = 0 ∧ 0 < s.im ∧ s.im < T ∧
+        δ ≤ |s.re - 1 / 2|} : ℝ) / T) atTop (𝓝 0) :=
+  RiemannHypothesis.almostAllZerosNearCriticalLine
+
+/-- The analytic input: the mean square of `ζ M_y − 1` on a vertical segment *inside* the
+critical strip, for every mollifier length `y ≥ y₀`. -/
+example {σ₀ ε : ℝ} (h0 : 1 / 2 < σ₀) (h1 : σ₀ < 1) (hε : 0 < ε) :
+    ∃ y₀ : ℕ, 4 ≤ y₀ ∧ ∀ y : ℕ, y₀ ≤ y → ∃ b₀ : ℝ, 6 ≤ b₀ ∧
+      ∀ σ : ℝ, σ₀ ≤ σ → σ ≤ 6 → ∀ a b : ℝ, 1 ≤ a → a ≤ b → b₀ ≤ b →
+        (∫ t in a..b, ‖riemannZeta ((σ : ℂ) + (t : ℂ) * I) *
+            RiemannHypothesis.Mollifier.mollifier y ((σ : ℂ) + (t : ℂ) * I) - 1‖ ^ 2) ≤ ε * b :=
+  RiemannHypothesis.exists_integral_normSq_zeta_mul_mollifier_sub_one_le h0 h1 hε
+
+/-! ## M2-DENSITY-POWER-SAVING — Carlson's density theorem with a power saving -/
+
+/-- **`N(σ, T) ≤ C T^(1−c)` with `c > 0`, for every fixed `1/2 < σ < 1` and every `T ≥ 1`.**
+Zeroes are counted without multiplicity.  This is strictly stronger than the `o(T)` of
+`M1-ALMOST-ALL-STRIP`; the saving `c` is at least `(σ − 1/2)²/64`. -/
+example {σ : ℝ} (h0 : 1 / 2 < σ) (h1 : σ < 1) :
+    ∃ c C : ℝ, 0 < c ∧ c < 1 ∧ 0 < C ∧ (σ - 1 / 2) ^ 2 / 64 ≤ c ∧ ∀ T : ℝ, 1 ≤ T →
+      ((Set.ncard {ρ : ℂ | riemannZeta ρ = 0 ∧ σ ≤ ρ.re ∧ 0 < ρ.im ∧ ρ.im ≤ T} : ℝ))
+        ≤ C * T ^ (1 - c) :=
+  RiemannHypothesis.exists_ncard_zerosRightOf_le_rpow h0 h1
+
+/-- **The same with the exponent named: `N(σ, T) ≤ C(σ) T^(1 − (σ−1/2)²/64)`.**  Only the
+constant is left implicit; the saving is an explicit function of `σ` which degrades to `0` as
+`σ ↓ 1/2`. -/
+example {σ : ℝ} (h0 : 1 / 2 < σ) (h1 : σ < 1) :
+    ∃ C : ℝ, 0 < C ∧ ∀ T : ℝ, 1 ≤ T →
+      ((Set.ncard {ρ : ℂ | riemannZeta ρ = 0 ∧ σ ≤ ρ.re ∧ 0 < ρ.im ∧ ρ.im ≤ T} : ℝ))
+        ≤ C * T ^ (1 - (σ - 1 / 2) ^ 2 / 64) :=
+  RiemannHypothesis.ncard_zerosRightOf_le_rpow_explicit h0 h1
+
+/-- The two-sided form with the explicit exponent. -/
+example {δ : ℝ} (hδ0 : 0 < δ) (hδ1 : δ < 1 / 2) :
+    ∃ C : ℝ, 0 < C ∧ ∀ T : ℝ, 1 ≤ T →
+      ((Set.ncard {ρ : ℂ | riemannZeta ρ = 0 ∧ δ ≤ |ρ.re - 1 / 2| ∧ 0 < ρ.im ∧ ρ.im ≤ T} : ℝ))
+        ≤ C * T ^ (1 - δ ^ 2 / 64) :=
+  RiemannHypothesis.ncard_zerosOffCriticalLine_le_rpow_explicit hδ0 hδ1
+
+/-- The two-sided form: the zeroes at distance at least `δ` from the critical line. -/
+example {δ : ℝ} (hδ0 : 0 < δ) (hδ1 : δ < 1 / 2) :
+    ∃ c C : ℝ, 0 < c ∧ c < 1 ∧ 0 < C ∧ ∀ T : ℝ, 1 ≤ T →
+      ((Set.ncard {ρ : ℂ | riemannZeta ρ = 0 ∧ δ ≤ |ρ.re - 1 / 2| ∧ 0 < ρ.im ∧ ρ.im ≤ T} : ℝ))
+        ≤ C * T ^ (1 - c) :=
+  RiemannHypothesis.exists_ncard_zerosOffCriticalLine_le_rpow hδ0 hδ1
+
+/-- The analytic input: the mean square of `ζ M_y − 1` for a mollifier length that is allowed
+to grow with the height, with an explicit rate in both parameters.  Both exponents are
+explicit in `θ = σ₀ − 1/2`: length up to `4 b^{θ/8}`, saving at least `3θ/8`. -/
+example {σ₀ : ℝ} (h0 : 1 / 2 < σ₀) (h1 : σ₀ < 1) :
+    ∃ C c γ : ℝ, 0 < C ∧ 0 < c ∧ c < 1 ∧ 0 < γ ∧ 3 * (σ₀ - 1 / 2) / 8 ≤ c ∧
+      γ = (σ₀ - 1 / 2) / 8 ∧ ∃ b₀ : ℝ, 6 ≤ b₀ ∧
+      ∀ σ : ℝ, σ₀ ≤ σ → σ ≤ 6 → ∀ y : ℕ, 1 ≤ y → ∀ a b : ℝ, 1 ≤ a → a ≤ b → b₀ ≤ b →
+        (y : ℝ) ≤ 4 * b ^ γ →
+        (∫ t in a..b, ‖riemannZeta ((σ : ℂ) + (t : ℂ) * I) *
+            RiemannHypothesis.Mollifier.mollifier y ((σ : ℂ) + (t : ℂ) * I) - 1‖ ^ 2)
+          ≤ C * (b * (y : ℝ) ^ (-(σ₀ - 1 / 2)) + b ^ (1 - c)) :=
+  RiemannHypothesis.exists_integral_normSq_zeta_mul_mollifier_sub_one_le_rpow h0 h1
+
+
+/-! ## The two-thirds theorem in absolute form (RiemannHypothesis/Zeta23Verification.lean)
+
+The vendored two-thirds theorem is a ratio; these pins are the statements that give it an
+absolute size, so that the denominator cannot be empty. -/
+
+/-- Riemann–von Mangoldt for the dyadic window, in this repository's counting functions. -/
+example : ∃ C T₀ : ℝ, ∀ T ≥ T₀,
+    |(RiemannHypothesis.windowCount T (2 * T) : ℝ) -
+        T / (2 * Real.pi) * (Real.log (T / (2 * Real.pi)) + 2 * Real.log 2 - 1)|
+      ≤ C * Real.log T :=
+  RiemannHypothesis.windowCount_sub_mainTerm_le
+
+/-- Theorem A in absolute form: at least `(T/8π)·log T` distinct zeroes of `ζ` on the critical
+line have ordinate in `(T, 2T]`, for all large `T`. -/
+example : ∀ᶠ T in Filter.atTop,
+    T / (8 * Real.pi) * Real.log T ≤ (RiemannHypothesis.windowCountOnLine T (2 * T) : ℝ) :=
+  RiemannHypothesis.eventually_windowCountOnLine_ge
+
+/-- Theorem B in absolute form: the same count of *simple* zeroes on the line. -/
+example : ∀ᶠ T in Filter.atTop,
+    T / (8 * Real.pi) * Real.log T ≤ (RiemannHypothesis.windowCountSimpleOnLine T (2 * T) : ℝ) :=
+  RiemannHypothesis.eventually_windowCountSimpleOnLine_ge
+
+
+/-! ## The Riemann hypothesis as an eventual counting statement
+(RiemannHypothesis/EventualCountingCriterion.lean) -/
+
+/-- The conjecture holds iff the on-line and the total distinct counts agree for all large `T`. -/
+example : RiemannHypothesis.ZetaStripForm ↔ ∀ᶠ T in Filter.atTop,
+    RiemannHypothesis.windowCountOnLine 0 T = RiemannHypothesis.windowCountDistinct 0 T :=
+  RiemannHypothesis.zetaStripForm_iff_eventually_windowCountOnLine_eq
+
+/-- The same with both sides counted with multiplicity: the denominator of the two-thirds
+theorem. -/
+example : RiemannHypothesis.ZetaStripForm ↔ ∀ᶠ T in Filter.atTop,
+    ∑ᶠ ρ ∈ RiemannHypothesis.windowZeros 0 T ∩ {ρ : ℂ | ρ.re = 1 / 2},
+      RiemannHypothesis.zeroMultiplicity ρ = RiemannHypothesis.windowCount 0 T :=
+  RiemannHypothesis.zetaStripForm_iff_eventually_windowCountOnLine_eq_windowCount
+
+/-! ## M1-WEYL-DISCREPANCY — a rate of convergence for equidistribution modulo one -/
+
+/-- **The quantitative Weyl criterion**: the average of a periodic Lipschitz test function along
+the first `N` terms differs from its mean by at most `L δ + 1/(2Mδ)` plus twice the normalized
+exponential sums below `M`. -/
+example {g : ℝ → ℝ} {L δ : ℝ} {M N : ℕ} (hM : 0 < M) (hN : 0 < N)
+    (hg0 : ∀ t, 0 ≤ g t) (hg1 : ∀ t, g t ≤ 1) (hper : ∀ t, g (t + 1) = g t)
+    (hlip : ∀ u v, |g u - g v| ≤ L * |u - v|) (hδ0 : 0 < δ) (hδ : δ ≤ 1 / 2) (x : ℕ → ℝ) :
+    |(∑ n ∈ Finset.range N, g (x n)) / N - ∫ t in (0 : ℝ)..1, g t|
+      ≤ L * δ + 1 / (2 * M * δ)
+        + 2 * ∑ m ∈ Finset.Icc (1 : ℕ) (M - 1),
+            ‖∑ n ∈ Finset.range N,
+                Complex.exp ((2 * Real.pi * ((((m : ℤ) : ℝ)) * x n) : ℝ) * Complex.I)‖ / N :=
+  RiemannHypothesis.WeylDiscrepancy.abs_avg_sub_integral_le hM hN hg0 hg1 hper hlip hδ0 hδ x
+
+/-- **The discrepancy bound**: with all parameters tied to a single `K`, the proportion of the
+first `N` fractional parts in `[a, b)` differs from `b − a` by at most `4/K` plus twice the
+normalized exponential sums below `K⁴`. -/
+example (x : ℕ → ℝ) {a b : ℝ} {K N : ℕ} (hK : 2 ≤ K) (hN : 0 < N)
+    (ha : 1 / (K : ℝ) < a) (hb : b + 1 / (K : ℝ) < 1) (hab : a + 2 / (K : ℝ) ≤ b) :
+    |((((Finset.range N).filter fun n : ℕ =>
+          a ≤ Int.fract (x n) ∧ Int.fract (x n) < b).card : ℝ)) / N - (b - a)|
+      ≤ 4 / K + 2 * ∑ m ∈ Finset.Icc (1 : ℕ) (K ^ 4 - 1),
+          ‖∑ n ∈ Finset.range N,
+              Complex.exp ((2 * Real.pi * ((((m : ℤ) : ℝ)) * x n) : ℝ) * Complex.I)‖ / N :=
+  RiemannHypothesis.WeylDiscrepancy.abs_countIn_div_sub_le_pow x hK hN ha hb hab
+
+/-- **An explicit rate**: for a badly approximable `α` the discrepancy of `α n` on an interval is
+at most `(4 + 1/c)/K` as soon as `K⁹ ≤ N`. -/
+example {α c : ℝ} (hc : 0 < c)
+    (hbad : ∀ m : ℕ, 1 ≤ m → c / m ≤ |(m : ℝ) * α - round ((m : ℝ) * α)|)
+    {a b : ℝ} {K N : ℕ} (hK : 2 ≤ K) (hNK : K ^ 9 ≤ N) (ha : 1 / (K : ℝ) < a)
+    (hb : b + 1 / (K : ℝ) < 1) (hab : a + 2 / (K : ℝ) ≤ b) :
+    |((((Finset.range N).filter fun n : ℕ =>
+          a ≤ Int.fract (α * n) ∧ Int.fract (α * n) < b).card : ℝ)) / N - (b - a)|
+      ≤ (4 + 1 / c) / K :=
+  RiemannHypothesis.WeylDiscrepancy.abs_countIn_div_sub_le_linear hc hbad hK hNK ha hb hab
+
+/-! ## M1-WEYL-DISCREPANCY-GENERAL -/
+
+/-- **The discrepancy bound for every subinterval**: no restriction on the position or the
+length of `[a, b) ⊆ [0, 1]`, at the cost of the constant `20` in place of `4`. -/
+example (x : ℕ → ℝ) {a b : ℝ} {K N : ℕ} (hK : 8 ≤ K) (hN : 0 < N) (ha : 0 ≤ a) (hab : a ≤ b)
+    (hb : b ≤ 1) :
+    |((((Finset.range N).filter fun n : ℕ =>
+          a ≤ Int.fract (x n) ∧ Int.fract (x n) < b).card : ℝ)) / N - (b - a)|
+      ≤ 20 / K + 4 * ∑ m ∈ Finset.Icc (1 : ℕ) (K ^ 4 - 1),
+          ‖∑ n ∈ Finset.range N,
+              Complex.exp ((2 * Real.pi * ((((m : ℤ) : ℝ)) * x n) : ℝ) * Complex.I)‖ / N :=
+  RiemannHypothesis.WeylDiscrepancy.abs_countIn_div_sub_le_pow_of_le x hK hN ha hab hb
+
+/-- **An explicit rate for every interval**: for a badly approximable `α` the discrepancy of
+`α n`, over all subintervals of `[0, 1]`, is at most `(20 + 2/c)/K` as soon as `K⁹ ≤ N`. -/
+example {α c : ℝ} (hc : 0 < c)
+    (hbad : ∀ m : ℕ, 1 ≤ m → c / m ≤ |(m : ℝ) * α - round ((m : ℝ) * α)|)
+    {a b : ℝ} {K N : ℕ} (hK : 8 ≤ K) (hNK : K ^ 9 ≤ N) (ha : 0 ≤ a) (hab : a ≤ b) (hb : b ≤ 1) :
+    |((((Finset.range N).filter fun n : ℕ =>
+          a ≤ Int.fract (α * n) ∧ Int.fract (α * n) < b).card : ℝ)) / N - (b - a)|
+      ≤ (20 + 2 / c) / K :=
+  RiemannHypothesis.WeylDiscrepancy.abs_countIn_div_sub_le_linear_of_le hc hbad hK hNK ha hab hb
+
+/-- The concrete quadratic instance `α = √2/2`, for every subinterval of `[0, 1]`. -/
+example {a b : ℝ} {K N : ℕ} (hK : 8 ≤ K) (hN : 0 < N) (ha : 0 ≤ a) (hab : a ≤ b) (hb : b ≤ 1) :
+    |((((Finset.range N).filter fun n : ℕ =>
+          a ≤ Int.fract (Real.sqrt 2 / 2 * (n : ℝ) ^ 2) ∧
+            Int.fract (Real.sqrt 2 / 2 * (n : ℝ) ^ 2) < b).card : ℝ)) / N - (b - a)|
+      ≤ 20 / K
+        + 4 * (K : ℝ) ^ 4 * Real.sqrt ((64 * (K : ℝ) ^ 4 + 26) * N * (1 + Real.log N)) / N :=
+  RiemannHypothesis.WeylDiscrepancy.abs_countIn_div_sub_le_sqrt_two_of_le hK hN ha hab hb
+
+/-! ## M1-DISCREPANCY -/
+
+/-- **The discrepancy** is the supremum of the interval deviations over all subintervals of
+`[0, 1]`, and it dominates each of them. -/
+example (x : ℕ → ℝ) (N : ℕ) :
+    RiemannHypothesis.WeylDiscrepancy.discrepancy x N =
+      sSup {d : ℝ | ∃ a b : ℝ, 0 ≤ a ∧ a ≤ b ∧ b ≤ 1 ∧
+        d = |((((Finset.range N).filter fun n : ℕ =>
+              a ≤ Int.fract (x n) ∧ Int.fract (x n) < b).card : ℝ)) / N - (b - a)|} := rfl
+
+/-- The discrepancy is not vacuous: the constant sequence `0` has discrepancy at least `1/2`. -/
+example (N : ℕ) :
+    (1 : ℝ) / 2 ≤ RiemannHypothesis.WeylDiscrepancy.discrepancy (fun _ : ℕ => (0 : ℝ)) N :=
+  RiemannHypothesis.WeylDiscrepancy.half_le_discrepancy_const_zero N
+
+/-- **A power saving for the discrepancy of `α n`**: for a badly approximable `α` and `N ≥ 8⁹`,
+`D_N ≤ 2 (20 + 2/c) N^(−1/9)`. -/
+example {α c : ℝ} (hc : 0 < c)
+    (hbad : ∀ m : ℕ, 1 ≤ m → c / m ≤ |(m : ℝ) * α - round ((m : ℝ) * α)|)
+    {N : ℕ} (hN : 8 ^ 9 ≤ N) :
+    RiemannHypothesis.WeylDiscrepancy.discrepancy (fun n : ℕ => α * n) N
+      ≤ 2 * (20 + 2 / c) * (N : ℝ) ^ (-(1 : ℝ) / 9) :=
+  RiemannHypothesis.WeylDiscrepancy.discrepancy_linear_le_rpow hc hbad hN
+
+/-! ## M1-DISCREPANCY-CRITERION -/
+
+/-- **Weyl's criterion in discrepancy form**: a sequence is equidistributed modulo one if and
+only if its discrepancy tends to `0`. -/
+example (x : ℕ → ℝ) :
+    RiemannHypothesis.WeylCriterion.EquidistributedMod1 x ↔
+      Tendsto (fun N : ℕ => RiemannHypothesis.WeylDiscrepancy.discrepancy x N) atTop (𝓝 0) :=
+  RiemannHypothesis.WeylDiscrepancy.equidistributedMod1_iff_tendsto_discrepancy x
+
+/-- For every irrational `α` the discrepancy of `α n²` tends to `0`. -/
+example {α : ℝ} (hα : Irrational α) :
+    Tendsto (fun N : ℕ =>
+      RiemannHypothesis.WeylDiscrepancy.discrepancy (fun n : ℕ => α * (n : ℝ) ^ 2) N) atTop
+      (𝓝 0) :=
+  RiemannHypothesis.WeylDiscrepancy.tendsto_discrepancy_quadratic hα
+
+/-- The criterion is not vacuous: the discrepancy of the constant sequence `0` does not tend to
+`0`. -/
+example : ¬ Tendsto
+    (fun N : ℕ => RiemannHypothesis.WeylDiscrepancy.discrepancy (fun _ : ℕ => (0 : ℝ)) N) atTop
+    (𝓝 0) :=
+  RiemannHypothesis.WeylDiscrepancy.not_tendsto_discrepancy_const_zero
 
 /-! ## The conjecture itself is *not* claimed
 

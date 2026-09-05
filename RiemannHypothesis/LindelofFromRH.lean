@@ -8,6 +8,7 @@ import RiemannHypothesis.XiGrowth
 import RiemannHypothesis.ZeroCountLocal
 import RiemannHypothesis.ThreeCircles
 import Mathlib.Analysis.Complex.BorelCaratheodory
+import Zeta23.FromPNTPlus.ZetaConj
 
 /-!
 # The Lindelöf bound away from the critical line, under the Riemann hypothesis
@@ -304,6 +305,41 @@ lemma re_logShift_le_log {F : ℂ → ℂ}
     ring
   linarith
 
+/-- **Borel–Carathéodory with a non-strict bound on the real part.**  Mathlib's
+`Complex.borelCaratheodory_zero` assumes `re f < M` on the ball; the same conclusion holds
+under `re f ≤ M`, by applying it with `M + ε` and letting `ε` tend to `0`. -/
+theorem borelCaratheodory_zero_of_re_le {f : ℂ → ℂ} {M R : ℝ} {z : ℂ} (hM : 0 < M)
+    (hf : DifferentiableOn ℂ f (ball 0 R))
+    (hmaps : MapsTo f (ball 0 R) {w : ℂ | w.re ≤ M})
+    (hR : 0 < R) (hz : z ∈ ball 0 R) (hf0 : f 0 = 0) :
+    ‖f z‖ ≤ 2 * M * ‖z‖ / (R - ‖z‖) := by
+  have hzR : ‖z‖ < R := by simpa using mem_ball_zero_iff.mp hz
+  have hpos : (0 : ℝ) < R - ‖z‖ := by linarith
+  have hz1 : (0 : ℝ) < ‖z‖ + 1 := by positivity
+  refine le_of_forall_pos_le_add fun δ hδ => ?_
+  set ε : ℝ := δ * (R - ‖z‖) / (2 * (‖z‖ + 1)) with hεdef
+  have hε : 0 < ε := by positivity
+  have hmaps' : MapsTo f (ball 0 R) {w : ℂ | w.re ≤ M + ε} := by
+    intro y hy
+    have := hmaps hy
+    simp only [mem_ofPred_eq] at this ⊢
+    linarith
+  have h := Complex.borelCaratheodory_zero (M := M + ε) (f := f) (R := R) (z := z)
+    (by linarith) hf hmaps' hR hz hf0
+  refine h.trans ?_
+  have hkey : 2 * ε * ‖z‖ / (R - ‖z‖) ≤ δ := by
+    rw [div_le_iff₀ hpos, hεdef,
+      show 2 * (δ * (R - ‖z‖) / (2 * (‖z‖ + 1))) * ‖z‖
+        = (δ * (R - ‖z‖)) * (‖z‖ / (‖z‖ + 1)) by field_simp]
+    have hfrac : ‖z‖ / (‖z‖ + 1) ≤ 1 := by
+      rw [div_le_one hz1]; linarith [norm_nonneg z]
+    nlinarith [mul_pos hδ hpos]
+  have e1 : 2 * (M + ε) * ‖z‖ / (R - ‖z‖)
+      = 2 * M * ‖z‖ / (R - ‖z‖) + 2 * ε * ‖z‖ / (R - ‖z‖) := by
+    field_simp
+  rw [e1]
+  linarith
+
 /-- **Borel–Carathéodory, small disc**: `‖G‖ ≤ 4` on `‖z‖ ≤ 1/2`. -/
 theorem norm_logShift_le_four {F : ℂ → ℂ}
     (hFderiv : ∀ s : ℂ, 1 / 2 < s.re → HasDerivAt F (deriv zetaPoleFree s / zetaPoleFree s) s)
@@ -316,7 +352,7 @@ theorem norm_logShift_le_four {F : ℂ → ℂ}
   have hmaps : Set.MapsTo (logShift F t) (ball (0 : ℂ) 1) {w : ℂ | w.re ≤ 2} := by
     intro y hy
     exact re_logShift_le_two hFexp ht (by simpa using mem_ball_zero_iff.mp hy)
-  have hbc := Complex.borelCaratheodory_zero (M := 2) (f := logShift F t) (R := 1) (z := z)
+  have hbc := borelCaratheodory_zero_of_re_le (M := 2) (f := logShift F t) (R := 1) (z := z)
     (by norm_num) (differentiableOn_logShift hFderiv ht6 (by norm_num)) hmaps (by norm_num)
     hball (logShift_zero F t)
   refine hbc.trans ?_
@@ -339,7 +375,7 @@ theorem norm_logShift_le_log_div {F : ℂ → ℂ}
       {w : ℂ | w.re ≤ 6 * Real.log t} := by
     intro y hy
     exact re_logShift_le_log hFexp ht (by simpa using mem_ball_zero_iff.mp hy)
-  have hbc := Complex.borelCaratheodory_zero (M := 6 * Real.log t) (f := logShift F t)
+  have hbc := borelCaratheodory_zero_of_re_le (M := 6 * Real.log t) (f := logShift F t)
     (R := 5 / 2) (z := z) (by linarith)
     (differentiableOn_logShift hFderiv ht6 (le_refl _)) hmaps (by norm_num) hball
     (logShift_zero F t)

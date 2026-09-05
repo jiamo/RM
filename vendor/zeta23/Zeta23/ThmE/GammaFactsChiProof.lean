@@ -200,7 +200,6 @@ theorem analyticAt_digamma' {z : ℂ} (hz : 0 < z.re) :
     rfl)
 
 
-set_option backward.isDefEq.respectTransparency false in
 theorem muq_smooth (κ q : ℕ) : ContDiff ℝ ⊤ (muq κ q) := by
   have hfun : muq κ q = fun τ : ℝ => (1 / (2 * Real.pi))
         * (Complex.digamma (((absc κ : ℝ) : ℂ) + Complex.I * (τ : ℂ) / 2)).re
@@ -231,7 +230,6 @@ theorem muq_smooth (κ q : ℕ) : ContDiff ℝ ⊤ (muq κ q) := by
 
 /-! ### μ_χ′ ≪ 1/|τ| (mirror of MuFields.mu_deriv_bound at abscissa a ≥ 1/4) -/
 
-set_option backward.isDefEq.respectTransparency false in
 theorem muq_deriv_bound_const (hκ : κ ≤ 1) (τ : ℝ) (hτ : 1 ≤ |τ|) :
     |deriv (muq κ q) τ| ≤ (24 / Real.pi) / |τ| := by
   have hτ0 : (0 : ℝ) < |τ| := by linarith

@@ -49,10 +49,23 @@ theorem digamma_conj (z : ℂ) :
     simp only [Function.comp_apply]
     rw [Complex.Gamma_conj]
     exact Complex.conj_conj _
+  have key : ∀ w : ℂ, DifferentiableAt ℂ Complex.Gamma w →
+      deriv Complex.Gamma ((starRingEnd ℂ) w) = (starRingEnd ℂ) (deriv Complex.Gamma w) := by
+    intro w hw
+    have h := hw.hasDerivAt.conj_conj
+    rw [hG] at h
+    exact h.deriv
   have hd : deriv Complex.Gamma ((starRingEnd ℂ) z)
       = (starRingEnd ℂ) (deriv Complex.Gamma z) := by
-    conv_lhs => rw [← hG, deriv_conj_conj]
-    simp only [Function.comp_apply, Complex.conj_conj]
+    by_cases hz : DifferentiableAt ℂ Complex.Gamma z
+    · exact key z hz
+    · have h2 : ¬ DifferentiableAt ℂ Complex.Gamma ((starRingEnd ℂ) z) := by
+        intro h
+        have h3 := h.conj_conj
+        rw [hG, Complex.conj_conj] at h3
+        exact hz h3
+      rw [deriv_zero_of_not_differentiableAt hz, deriv_zero_of_not_differentiableAt h2,
+        map_zero]
   simp only [Complex.digamma_def, logDeriv_apply]
   rw [hd, Complex.Gamma_conj, ← map_div₀]
 
@@ -91,7 +104,6 @@ private lemma analyticAt_digamma {z : ℂ} (hz : 0 < z.re) :
 -- The set_option below is Mathlib's own workaround for instance-path defeq on
 -- IsScalarTower ℝ ℂ ℂ (cf. Analysis/CStarAlgebra/ContinuousFunctionalCalculus/
 -- RealImaginaryPart.lean, "fails to find IsScalarTower ℝ ℂ A").
-set_option backward.isDefEq.respectTransparency false in
 /-- [eq:mufacts], "μ is smooth": μ ∈ C^∞(ℝ). -/
 theorem mu_smooth : ContDiff ℝ ∞ mu := by
   have hc : ContDiff ℝ ∞ (fun τ : ℝ => (1 / 4 + Complex.I * (τ : ℂ) / 2 : ℂ)) := by

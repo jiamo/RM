@@ -64,6 +64,8 @@ structure FactsD : Prop where
   cross_PPi : EvBound D.MPPi (fun T => P.L T * P.X T)
   cross_PiPi : EvBound D.MPiPi (fun T => P.L T * P.X T / T)
 
+set_option maxHeartbeats 800000 in
+-- The `gcongr`/`calc` chain below is heavy; it needs more than the default budget.
 /-- The pointwise inequality behind the D-version of [eq:tr2] ([eq:ratio-general] main term):
 with the window moments b, J symbolic and the partial-summation input |S − L³J/2| ≤ Cs·L²
 in place of the flat-top sandwich, |G2 − (TL/2π)(bℓ² + L²J)| ≤ C·E·(TL/2π)(bℓ² + L²J).

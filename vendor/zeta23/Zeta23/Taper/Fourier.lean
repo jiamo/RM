@@ -210,7 +210,7 @@ theorem paperFT_autocorr (hv : ∀ u, v (-u) = v u) (hc : Continuous v) (hs : Ha
   have hcC : Continuous (fun u => (v u : ℂ)) := Complex.continuous_ofReal.comp hc
   have hiC : Integrable (fun u => (v u : ℂ)) := hcC.integrable_of_hasCompactSupport hsC
   rw [ofReal_autocorr_eq_convolution hv, paperFT_ofReal_eq_fourier, paperFT_ofReal_eq_fourier,
-    Real.fourier_mul_convolution_eq hiC hiC, sq]
+    Real.fourier_mul_convolution_eq hiC hiC _, sq]
 
 /-! ## Fourier inversion in the paper's convention, cosine form -/
 

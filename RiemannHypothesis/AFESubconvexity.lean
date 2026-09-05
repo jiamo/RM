@@ -90,6 +90,8 @@ theorem norm_sum_weighted_le {L : ℕ} {w : ℕ → ℝ} {z : ℕ → ℂ} {B : 
   rw [h3] at h2
   nlinarith [h1, h2]
 
+set_option maxHeartbeats 1000000 in
+-- The `nlinarith` chain below is heavy; it needs more than the default heartbeat budget.
 /-- The arithmetic core of the block estimate: the shape of the third-derivative test with the
 relevant sizes of `H`, `R` and `√H/√r` substituted. -/
 theorem block_bound_numeric {P L H R A X u : ℝ} (hu : 1 ≤ u) (hP30 : 30 * u ^ 2 ≤ P)
@@ -155,6 +157,8 @@ theorem block_bound_numeric {P L H R A X u : ℝ} (hu : 1 ≤ u) (hP30 : 30 * u 
   have hfin := Real.sqrt_le_sqrt hle
   rwa [Real.sqrt_sq hX0, Real.sqrt_sq hY0] at hfin
 
+set_option maxHeartbeats 1000000 in
+-- The numerical substitutions below are heavy; they need more than the default budget.
 /-- **The third-derivative test applied to the phase of `ζ` on a block.**  For
 `30 u² ≤ M ≤ u³` and a block of length `L ≤ M` starting at `M`, the exponential sum with phase
 `−(u⁶/2π) log x` is at most `60 √M u`. -/

@@ -64,7 +64,7 @@ lemma isCompact_coordRect (a b c d : ℝ) : IsCompact (coordRect a b c d) := by
 lemma preimage_measurableEquivRealProd (a b c d : ℝ) :
     Complex.measurableEquivRealProd ⁻¹' (Icc a b ×ˢ Icc c d) = coordRect a b c d := by
   ext z
-  simp only [Set.mem_preimage, Set.mem_prod, Set.mem_Icc, coordRect, Set.mem_setOf_eq,
+  simp only [Set.mem_preimage, Set.mem_prod, Set.mem_Icc, coordRect, Set.mem_ofPred_eq,
     Complex.measurableEquivRealProd]
   tauto
 

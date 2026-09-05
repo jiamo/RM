@@ -215,7 +215,7 @@ theorem integrableOn_logDeriv_ball {f : ℂ → ℂ} {ρ : ℂ} (hf : AnalyticAt
     obtain ⟨hana, hne0⟩ := hstruct z hz1 hz2
     exact (hana.deriv.continuousAt.div hana.continuousAt hne0).continuousWithinAt
   have hdom : IntegrableOn (fun z : ℂ => C / ‖z - ρ‖) S volume :=
-    (integrableOn_inv_norm_sub_ball (C := C) (r := r) hC ρ).mono_set (Set.diff_subset)
+    (integrableOn_inv_norm_sub_ball (C := C) (r := r) hC ρ).mono_set (Set.sdiff_subset)
   have hintS : IntegrableOn (logDeriv f) S volume := by
     refine Integrable.mono' hdom (hcontS.aestronglyMeasurable hSmeas) ?_
     filter_upwards [ae_restrict_mem hSmeas] with z hz
@@ -224,7 +224,7 @@ theorem integrableOn_logDeriv_ball {f : ℂ → ℂ} {ρ : ℂ} (hf : AnalyticAt
   -- adding back the single point `ρ` does not change integrability
   have hpt : IntegrableOn (logDeriv f) {ρ} volume := by
     simp [IntegrableOn, Measure.restrict_singleton, measure_singleton]
-  rw [← Set.diff_union_of_subset (Set.singleton_subset_iff.mpr (mem_ball_self hr))]
+  rw [← Set.sdiff_union_of_subset (Set.singleton_subset_iff.mpr (mem_ball_self hr))]
   exact hintS.union hpt
 
 /-- **`logDeriv f` is locally integrable on an open set of analyticity.**  No zero-freeness is

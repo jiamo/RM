@@ -103,7 +103,7 @@ lemma xiDerivWindowZeros_eq (T₁ T₂ : ℝ) :
     xiDerivWindowZeros T₁ T₂ = Zeta23.XiPrime.zerosIn T₁ T₂ := by
   ext ρ
   simp only [xiDerivWindowZeros, Zeta23.XiPrime.zerosIn, Zeta23.XiPrime.IsXiDerivZero,
-    xiDerivFn_eq, Set.mem_setOf_eq]
+    xiDerivFn_eq, Set.mem_ofPred_eq]
 
 lemma xiDerivWindowCount_eq (T₁ T₂ : ℝ) :
     xiDerivWindowCount T₁ T₂ = Zeta23.XiPrime.Ncount T₁ T₂ := by

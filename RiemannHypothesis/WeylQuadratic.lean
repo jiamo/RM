@@ -134,24 +134,17 @@ theorem norm_geomSum_e2pi_le {θ : ℝ} (hθ : intDist θ ≠ 0) (M : ℕ) (c : 
 /-- A sum over the integer interval `[0, b)` is a sum over `range b.toNat`. -/
 theorem sum_Ico_int_eq_sum_range (b : ℤ) (g : ℤ → ℂ) :
     ∑ n ∈ Finset.Ico (0 : ℤ) b, g n = ∑ j ∈ range b.toNat, g (j : ℤ) := by
-  refine Finset.sum_nbij' (fun n => n.toNat) (fun j => (j : ℤ)) ?_ ?_ ?_ ?_ ?_
-  · intro a ha
-    rw [Finset.mem_Ico] at ha
-    rw [Finset.mem_range]
-    omega
-  · intro j hj
-    rw [Finset.mem_range] at hj
-    rw [Finset.mem_Ico]
-    omega
-  · intro a ha
-    rw [Finset.mem_Ico] at ha
-    omega
-  · intro j _
-    omega
-  · intro a ha
-    rw [Finset.mem_Ico] at ha
-    congr 1
-    omega
+  have hset : Finset.Ico (0 : ℤ) b = (range b.toNat).image (fun j : ℕ => (j : ℤ)) := by
+    ext n
+    simp only [Finset.mem_Ico, Finset.mem_image, Finset.mem_range]
+    constructor
+    · intro h
+      exact ⟨n.toNat, by omega, by omega⟩
+    · rintro ⟨j, hj, rfl⟩
+      omega
+  rw [hset, Finset.sum_image]
+  intro x _ y _ h
+  simpa using h
 
 /-- The differenced phase of `α n²` is linear. -/
 theorem quadratic_diff (α : ℝ) (k n : ℤ) :

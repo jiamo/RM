@@ -24,7 +24,6 @@ open scoped Real FourierTransform ComplexConjugate
 
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
 
 namespace Zeta23
 namespace EF

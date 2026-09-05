@@ -129,7 +129,7 @@ lemma xiDerivWindowZeros_split (T₁ T₂ : ℝ) :
       xiDerivWindowZeros T₁ T₂ := by
   ext ρ
   simp only [xiDerivWindowZerosOffLine, xiDerivWindowZerosOnLine, Set.mem_union,
-    Set.mem_inter_iff, Set.mem_setOf_eq]
+    Set.mem_inter_iff, Set.mem_ofPred_eq]
   constructor
   · rintro (⟨hs, -⟩ | ⟨hs, -⟩) <;> exact hs
   · intro hs
@@ -279,7 +279,7 @@ lemma sum_xiDerivMultiplicity_onLine_ge (T₁ T₂ : ℝ) :
   have hM : windowZerosOnLine T₁ T₂ ∩ {ρ : ℂ | 2 ≤ zeroMultiplicity ρ} =
       ↑(F.filter fun ρ => 2 ≤ zeroMultiplicity ρ) := by
     ext ρ
-    simp only [Finset.coe_filter, Set.mem_inter_iff, Set.mem_setOf_eq, hmem]
+    simp only [Finset.coe_filter, Set.mem_inter_iff, Set.mem_ofPred_eq, hmem]
   rw [windowCountOnLineMult, finsum_mem_eq_finite_toFinset_sum _ hfin, hM,
     finsum_mem_coe_finset, windowCountOnLine_eq_ncard, Set.ncard_eq_toFinset_card _ hfin,
     ← hF]

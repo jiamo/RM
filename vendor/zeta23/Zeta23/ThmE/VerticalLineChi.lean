@@ -13,7 +13,6 @@ import Zeta23.ThmE.LandauChi
 
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
 
 open Complex MeasureTheory Real Set
 open scoped BigOperators ArithmeticFunction LSeries.notation

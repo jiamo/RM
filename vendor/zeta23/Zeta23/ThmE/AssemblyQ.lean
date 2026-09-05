@@ -414,6 +414,8 @@ end MainChi
 section MainBCChi
 open Assembly Filter Asymptotics Topology
 
+set_option maxHeartbeats 800000 in
+-- The final `nlinarith` call is heavy; it needs more than the default budget.
 /-- **Theorems E.B / E.C core at fixed `λ ∈ (0,1)`, abstract zero configuration** (mirror of
 `Assembly.thmBC_core` with the χ-scalars). -/
 theorem thmE_BC_core (Z : ZeroConfig) (κ : ℕ) {q : ℕ} (hq : 1 ≤ q) (cf : ℕ → ℂ)

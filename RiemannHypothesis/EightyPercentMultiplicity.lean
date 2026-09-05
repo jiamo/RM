@@ -76,7 +76,7 @@ lemma windowZerosOffLine_union_onLine (T₁ T₂ : ℝ) :
     windowZerosOffLine T₁ T₂ ∪ windowZerosOnLine T₁ T₂ = windowZeros T₁ T₂ := by
   ext ρ
   simp only [windowZerosOffLine, windowZerosOnLine, Set.mem_union, Set.mem_inter_iff,
-    Set.mem_setOf_eq]
+    Set.mem_ofPred_eq]
   constructor
   · rintro (⟨hs, -⟩ | ⟨hs, -⟩) <;> exact hs
   · intro hs
@@ -130,7 +130,7 @@ lemma windowCountOffLineMult_eq (T₁ T₂ : ℝ) :
   have hM : windowZerosOffLineMultiple T₁ T₂ =
       ↑(F.filter fun ρ => 2 ≤ zeroMultiplicity ρ) := by
     ext ρ
-    simp only [windowZerosOffLineMultiple, Finset.coe_filter, Set.mem_setOf_eq, hmem]
+    simp only [windowZerosOffLineMultiple, Finset.coe_filter, Set.mem_ofPred_eq, hmem]
   rw [windowCountOffLineMult, finsum_mem_eq_finite_toFinset_sum _ hfin, windowCountOffLine,
     Set.ncard_eq_toFinset_card _ hfin, windowMultipleOffLineExcess, hM, finsum_mem_coe_finset,
     ← hF]

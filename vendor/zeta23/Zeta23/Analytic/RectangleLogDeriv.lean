@@ -37,7 +37,7 @@ theorem residueTheorem_finset {f : ℂ → ℂ} {z w : ℂ} (hre : z.re ≤ w.re
   classical
   induction S using Finset.induction_on generalizing f with
   | empty =>
-    simp only [Finset.coe_empty, sdiff_empty] at fHolo
+    simp only [Finset.coe_empty, Set.diff_empty] at fHolo
     rw [Finset.sum_empty]
     show (1 / (2 * π * I)) • RectangleIntegral f z w = 0
     rw [fHolo.vanishesOnRectangle subset_rfl, smul_zero]
@@ -73,7 +73,7 @@ theorem residueTheorem_finset {f : ℂ → ℂ} {z w : ℂ} (hre : z.re ≤ w.re
       simp only [Finset.coe_insert, mem_insert_iff, Finset.mem_coe, not_or]
       exact ⟨by simpa using hsp, by simpa using hsS⟩
     have hbddV : BddAbove (norm ∘ f₁ '' ((U ∩ (Rectangle z w \ (S : Set ℂ))) \ {p})) :=
-      hbdd.mono (image_mono (Set.sdiff_subset_sdiff_left inter_subset_left))
+      hbdd.mono (image_mono (Set.diff_subset_diff_left inter_subset_left))
     have hf₂V : DifferentiableOn ℂ f₂ (U ∩ (Rectangle z w \ (S : Set ℂ))) :=
       differentiableOn_update_limUnder_of_bddAbove hV hf₁V hbddV
     have hf₂eq : ∀ s, s ≠ p → f₂ s = f₁ s := fun s hs => Function.update_of_ne hs _ _
@@ -91,7 +91,7 @@ theorem residueTheorem_finset {f : ℂ → ℂ} {z w : ℂ} (hre : z.re ≤ w.re
         have hset : (Rectangle z w \ ((insert p S : Finset ℂ) : Set ℂ))
             = (Rectangle z w \ (S : Set ℂ)) ∩ {p}ᶜ := by
           ext x
-          simp only [Finset.coe_insert, Set.mem_sdiff, mem_insert_iff, Finset.mem_coe, not_or,
+          simp only [Finset.coe_insert, Set.mem_diff, mem_insert_iff, Finset.mem_coe, not_or,
             mem_inter_iff, mem_compl_iff, mem_singleton_iff]
           tauto
         rw [hset] at h1
@@ -289,7 +289,7 @@ theorem rectangleIntegral'_mul_logDeriv_of_poles {f g : ℂ → ℂ} {z w : ℂ}
       have hGq : G q = c := Function.update_self _ _ _
       have hGF : ∀ s, s ≠ q → G s = F s := fun s hs => Function.update_of_ne hs _ _
       have hPc : ((P : Set ℂ) \ {q})ᶜ ∈ 𝓝 q :=
-        (P.finite_toSet.subset Set.sdiff_subset).isClosed.isOpen_compl.mem_nhds (by simp)
+        (P.finite_toSet.subset Set.diff_subset).isClosed.isOpen_compl.mem_nhds (by simp)
       have hnear : ∀ᶠ s in 𝓝[≠] q, s ≠ q ∧ s ∈ Rectangle z w \ (P : Set ℂ) := by
         filter_upwards [mem_nhdsWithin_of_mem_nhds (hPint q hp),
           mem_nhdsWithin_of_mem_nhds hPc, self_mem_nhdsWithin] with s h1 h2 h3

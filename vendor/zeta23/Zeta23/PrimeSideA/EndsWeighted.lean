@@ -15,7 +15,6 @@ import Zeta23.PrimeSideA.EndsCore
 
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
 
 open MeasureTheory Real Set
 

@@ -60,7 +60,7 @@ lemma isSquare_of_factorization_even {n : ℕ} (hn : n ≠ 0)
     congr 1
     obtain ⟨m, hm⟩ := h p
     omega
-  rw [hprod, Nat.factorization_prod_pow_eq_self hn]
+  rw [hprod, Nat.prod_factorization_pow_eq_self hn]
 
 lemma isSquare_iff_factorization_even {n : ℕ} (hn : n ≠ 0) :
     IsSquare n ↔ ∀ p, Even (n.factorization p) := by

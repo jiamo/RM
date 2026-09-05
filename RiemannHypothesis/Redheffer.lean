@@ -78,7 +78,7 @@ lemma divisorMatrix_isUpperTriangular (n : ℕ) : (divisorMatrix n).BlockTriangu
   simp [divisorMatrix, this]
 
 lemma det_divisorMatrix (n : ℕ) : (divisorMatrix n).det = 1 := by
-  rw [Matrix.det_of_upperTriangular (divisorMatrix_isUpperTriangular n)]
+  rw [Matrix.det_of_isUpperTriangular (divisorMatrix_isUpperTriangular n)]
   simp [divisorMatrix]
 
 lemma mertensColumn_isLowerTriangular (n : ℕ) :
@@ -91,7 +91,7 @@ lemma mertensColumn_isLowerTriangular (n : ℕ) :
   simp [mertensColumn, hj, hne]
 
 lemma det_mertensColumn {n : ℕ} (hn : 1 ≤ n) : (mertensColumn n).det = mertens n := by
-  rw [Matrix.det_of_lowerTriangular _ (mertensColumn_isLowerTriangular n)]
+  rw [Matrix.det_of_isLowerTriangular _ (mertensColumn_isLowerTriangular n)]
   rw [← Finset.prod_erase_mul _ _ (Finset.mem_univ (⟨0, hn⟩ : Fin n))]
   have hrest : ∀ i ∈ (Finset.univ : Finset (Fin n)).erase ⟨0, hn⟩,
       mertensColumn n i i = 1 := by

@@ -1,3 +1,405 @@
+# Summary of changes for run 51974088-7ebe-4277-b7d7-5569abdd3146
+I picked up the Riemann-hypothesis formalization project and made three kinds of progress: I restored the build, and I closed two recorded gaps plus added a capstone equivalence, all machine-checked.
+
+**1. The project would not build as delivered.** Its dependency manifest did not match the vendored `Zeta23` path dependency and the pinned Mathlib revision, so `lake build` failed immediately with `dependency 'Zeta23' not in manifest`. I re-resolved the dependencies against the project's own pins (`lean-toolchain` and `lakefile.toml` untouched) and committed the regenerated manifest. `lake build` now succeeds (9203 targets, zero errors) and `scripts/audit.sh` reports `OK`.
+
+**2. `RiemannHypothesis/WeylDiscrepancyGeneral.lean` — the Erdős–Turán bound for every subinterval.** The existing discrepancy inequality only covered intervals `[a,b) ⊆ [0,1]` satisfying `1/K < a`, `b + 1/K < 1` and `a + 2/K ≤ b`, which the task board recorded as an open boundary; short intervals and intervals touching `0` or `1` — exactly the ones a discrepancy supremum is attained on — were excluded. I proved the inequality for **every** `0 ≤ a ≤ b ≤ 1`, with the constant `20/K` in place of `4/K`, using a rotation (translation multiplies each exponential sum by a unimodular factor), an enlargement of short intervals, and the complement identity `#[0,a) + #[a,b) + #[b,1) = N`. The rates for `α n` and for `α n²` with `2α` badly approximable are carried over to all intervals.
+
+**3. `RiemannHypothesis/Discrepancy.lean` — the discrepancy itself, and a power saving.** Defines `D_N(x)` as the supremum of the interval deviations (nonempty, bounded by 1), with the interface lemmas, a non-vacuity check (the constant sequence `0` has `D_N ≥ 1/2`), the Erdős–Turán bound in discrepancy form, and the power saving `D_N(α n) ≤ 2(20 + 2/c)·N^(−1/9)` for badly approximable `α` and `N ≥ 8⁹` — obtained with `K = ⌊N^(1/9)⌋` — hence `D_N(α n) → 0`.
+
+**4. `RiemannHypothesis/DiscrepancyCriterion.lean` — Weyl's criterion in discrepancy form.** A sequence is equidistributed modulo one exactly when `D_N → 0`. The forward direction is not a repackaging of the pointwise limits (a supremum of infinitely many null sequences need not be null): it chooses `K` with `20/K < ε/2` first and only then passes to the limit in the remaining finitely many exponential sums. Corollaries: `D_N(α n²) → 0` for every irrational `α`, and the constant sequence `0` shows the criterion separates sequences.
+
+All new code is free of `sorry` (the only `sorry`s in the repository remain the three deliberate ones in `Challenge.lean`, which `Solution.lean` discharges), and every new theorem's axioms are exactly `propext`, `Classical.choice`, `Quot.sound`. I followed the repository's own conventions throughout: new task-board rows (`M1-WEYL-DISCREPANCY-GENERAL`, `M1-DISCREPANCY`, `M1-DISCREPANCY-CRITERION`, all `DONE_STRONG` with empty open boundaries), evidence files with adversarial-revalidation sections, fully expanded statement pins in `scripts/revalidation.lean`, `#print axioms` entries in `scripts/audit.sh`, README module rows, a regenerated `docs/goal/conditional-theorems.txt` (one new DEFINITIONAL line), and a regenerated `docs/current-goal-state.md`. The board now validates 159 tasks and the full audit reports `OK`.
+
+The Riemann hypothesis itself remains open and unproved here, as the repository states; the rows recording that (including `M4-RH`) are unchanged. Everything is committed and pushed.
+
+# Summary of changes for run 47ed40fe-827d-46e5-a22a-7358eddec39d
+## 简短回答：**没有全部完成**——而且我发现交付状态下项目根本编译不起来，已经修好。
+
+### 现在的真实状态（都是我这次亲自跑出来的，不是转述）
+
+**任务板（`docs/goal/task-board.yaml`）共 154 行：`DONE_STRONG` 95 条，`DONE_WEAK` 49 条，`TODO_NEEDS_DESIGN` 10 条。**
+- `DONE_WEAK` 是「做了一部分、`open_boundary` 里明确写着还缺什么」的行（例如临界线上的均方渐近、大筛法的最优常数、Weyl 指数的对数因子、Montgomery–Vaughan 形式等）。
+- `TODO_NEEDS_DESIGN` 里包括 `M4-RH`（黎曼猜想本身）、Selberg 中心极限定理、对关联、Vinogradov、零点间隙、3×10¹² 高度的数值验证等。**黎曼猜想仍是未解决问题，仓库里没有、也不声称有它的证明**；仓库中不存在任何 `ZetaForm` 类型的项。
+
+### 这次做了什么
+
+1. **修好「拿到手就编译不了」的问题（重要）。** `lake-manifest.json` 与仓库自己的 `lakefile.toml` 不一致：manifest 里记的是另一个 Mathlib 版本，并且完全没有 vendor 的 `Zeta23` 路径依赖，Lake 直接报 `dependency 'Zeta23' not in manifest`。我按仓库自己的 pin（`lean-toolchain` v4.33.0、`lakefile.toml` 指定的 Mathlib 版本，二者均未改动）重新解析依赖并提交了新的 manifest。现在 **`lake build` 成功（9201 个目标，零错误）**，`bash scripts/audit.sh` 报 `OK`。
+2. **清掉了 vendor 之外的全部编译告警。** 约 130 处 Mathlib 弃用重命名（`Set.mem_setOf_eq → Set.mem_ofPred_eq`、`integral_finset_sum → integral_finsetSum`、`Set.mem_diff → Set.mem_sdiff`、`push_neg → push Not` 等）、两条空操作策略、一个未被使用的假设（顺带把 `sum_sieveWeight_dvd_le` 的语句变得更一般）。现在除 `Challenge.lean` 里按仓库约定故意保留的三个 `sorry` 外，非 vendor 代码零告警、零 `sorry`。
+3. **新增一条真正的数学结果并关闭了一个明确记录的缺口：** 新模块 `RiemannHypothesis/WeylPortmanteau.lean`，把 Weyl 判别法补成**计数形式**。此前仓库只有「等分布 ⟹ 每个子区间的计数比例趋于区间长度」；反方向缺失，而这正是判别法通常被使用的形式。现在证明了
+   - `weylSumsVanish_of_countsEquidistribute`：只要对每个 `0 ≤ a < b ≤ 1` 有 `#{n<N : {xₙ}∈[a,b)}/N → b−a`，则每个非零频率的指数和都是 `o(N)`；
+   - 由此 `equidistributedMod1_iff_countsEquidistribute`、`weylSumsVanish_iff_countsEquidistribute`：三种表述互相等价，判别法不再需要连续检验函数或测度；
+   - `countsEquidistribute_quadratic`：对每个无理数 α，`α n²` 的小数部分满足该计数形式。
+   证明思路：把 `[0,1)` 分成 `K > |m|` 个等长格子，用相位的 2π-Lipschitz 性把每项换成所在格子左端点的值（总误差 ≤ `N·2π|m|/K`），剩下的是各格计数的加权和，其极限是 `e(m·)` 在 `K` 次单位根上的平均，因 `K ∤ m` 而为 0。
+   **无 `sorry`，公理恰为 `propext, Classical.choice, Quot.sound`。** 同时按仓库既有规范补齐了：任务板新行 `M1-WEYL-PORTMANTEAU`（含对抗性复核小节的 evidence 文件）、`scripts/revalidation.lean` 中三条完全展开的语句钉子、`scripts/audit.sh` 的公理检查、条件/无条件边界分类（新的 `CountsEquidistribute` 归入 DEFINITIONAL 并重新生成 `docs/goal/conditional-theorems.txt`）、README 模块表、以及重新渲染的 `docs/current-goal-state.md`。
+
+### 验证
+`lake build` 成功；`bash scripts/audit.sh` 输出 `OK`（2057 条定理全部公理审计通过、0 条越界；154 条任务通过校验）；非 vendor 代码中除 `Challenge.lean` 的三个约定 `sorry` 外没有任何 `sorry`。所有改动已提交并推送。
+
+### 还剩什么
+上面那 49 条 `DONE_WEAK` 与 10 条 `TODO_NEEDS_DESIGN`，各行的 `open_boundary` 里逐条写明了缺口；其中黎曼猜想本身是公开的未解决问题，仍未证明。
+
+
+# Summary of changes for run 52bd440b-1337-4cd2-a619-bb3cb85e3d3b
+按您给的顺序 4 → 2 → 1 → 3 → 5 全部做完了。完整报告写在 `docs/audit-review-2026-09-06.md`，下面是结论。
+
+**4. 编译（先做，几分钟就暴露了问题）——交付状态下编译不起来，已修好。**
+`lake build` 根本没能启动：`lake-manifest.json` 与仓库自己的 pin 不一致（Mathlib 记的是另一个 revision/URL，且完全没提 vendor 的 `Zeta23` path 依赖，Lake 直接报 `dependency 'Zeta23' not in manifest`）。按仓库自己的 pin 重新解析依赖后（`lean-toolchain` v4.33.0、`lakefile.toml` 的 Mathlib v4.33.0 都没动，只改了 manifest）：**`lake build` 成功，9200 个目标，零错误**。三轮合并的十一个新模块全部编译通过，**没有 API 漂移**；只有 Mathlib 的 deprecation 警告（我改到的文件里已顺手改掉）。担心的「来源 pin v4.28.0」没有发生：vendor/zeta23 pin 的就是同一个 v4.33.0 Mathlib。唯一的 `sorry` 警告是 `Challenge.lean` 里设计好的三个。
+
+**2. 公理审计覆盖率 719/2030（35%）——已整类关掉，不是补清单。**
+新增 `scripts/axiom_audit.lean`：遍历环境，对本仓库每一个 theorem 收集其证明真正依赖的公理，报出任何超出 `propext, Classical.choice, Quot.sound` 的。当前结果：**2255 条定理全查，0 条越界**；新定理天生被覆盖，不需要往任何清单里加行。已接进 `scripts/audit.sh`（步骤 3b）。做了阳性对照：往叶子模块塞一条 `by sorry` 的定理并重编译，工具报 `NONSTANDARD … : [sorryAx]`，随后撤掉。旧的手写清单保留（它是「被比对的结论」名单），其覆盖率现在被报告出来，并且**清单里若出现库中已不存在的名字就直接判失败**——写工具时就抓到 4 个这样的失效名并修正。
+
+**1. vendor/zeta23 的 2/3 定理：是真结果，不是定义的把戏。**
+(a) 公理我自己重跑：`thmA₀ / thmA₀_cumulative / thmB₀ / thmC₀ / thmA₀_N0` 以及本仓库的 `two_thirds_on_critical_line` 都恰是标准三公理；`thmA₀ = thmA₁ zetaEF`，而 `zetaEF` 是定理不是假设，所以 Theorem A 无任何前提。
+(b) 语句直接对着 Mathlib 读：`zerosIn` 就是 `riemannZeta ρ = 0 ∧ 0 < re ρ < 1 ∧ T₁ < im ρ ≤ T₂`，`zeroMult` 就是 `analyticOrderAt riemannZeta`；归一化确实是文献的，且左带重数、右数不同点，方向是更强而不是更弱。
+(c) 关键补的是「分母非空」：新模块 `RiemannHypothesis/Zeta23Verification.lean` 把比例式变成绝对计数——`windowCount_sub_mainTerm_le`（|N(T,2T) − (T/2π)(log(T/2π)+2log2−1)| ≤ C log T，即 windowCount 就是文献的 N）、`eventually_windowCount_ge`（N(T,2T) ≥ (T/4π)log T）、`eventually_windowCountOnLine_ge`（大 T 时临界线上至少 (T/8π)·log T 个**不同**零点）、`eventually_windowCountSimpleOnLine_ge`（同样多的**单**零点）。常数是故意保守的（丢掉一半主项换显式阈值）。这不代替对解析论证本身的独立复核，那仍要走 vendor 的 comparator。
+
+**3. 条件定理分类：确实是穷尽的，但检测器原来有四个盲区，已补上。**
+补的是：Prop 值的 structure/class/inductive 也算 statement；扫描 vendor `Zeta23` 自己的假设；纳入 Mathlib 的 `RiemannHypothesis`（`ZetaForm` 只是它的 abbrev）；以及「是否已被证明」改为按**整个命题连同参数**匹配，而不是只看头常量（否则 `P a` 会被 `P b` 的证明清掉）。**加强后输出与记录的清单逐字节相同**（36 条、三类、无 UNCLASSIFIED），所以原分类是穷尽的。阳性对照证实三项新能力真实有效（旧版对这些探针一律看不见）。
+
+**5. 冲终极问题。** 黎曼猜想仍然是开问题，仓库里没有、也不声称有它的证明。能诚实做到的是把「还差什么」变成定理，并且发现通行的直觉有一处是错的：新模块 `RiemannHypothesis/EventualCountingCriterion.lean` 证明 `zetaStripForm_of_eventually_windowCountOnLine_eq`——只要对**一切充分大的 T** 有 N₀*(0,T) = N_d(0,T)，猜想即成立，**完全不需要对低高度零点另做有限验证**：线外零点总可取正纵坐标（ζ 在 (0,1) 上无实零点，零点集对共轭封闭），于是它被其纵坐标以上的**每一个**窗口遗漏，亏损是永久的。配套给出等价形式（含重数版本，即 2/3 定理的那个分母；以及把猜想呈现为 `(c−ε)N ≤ N₀*` 这族命题在 c = 1 处的端点，而已证的是 c = 2/3）。这是归约不是进展：其前提与猜想同难，`CorpusCeiling` 的 67% 天花板依旧。
+
+**记账（按仓库自己的协议）**：新增两个模块、两个 board 行（M1-TWO-THIRDS-ABSOLUTE、M3-EVENTUAL-COUNTING-CRITERION，都是 DONE_WEAK 并写明边界；归约行按板子规则不得标 DONE_STRONG）、一个 M0-AUDIT-COVERAGE 治理行、证据文件 `docs/goal/evidence/2026-09-06-m1-two-thirds-absolute.md`（含对抗式复核与两个阳性对照）、`scripts/revalidation.lean` 语句钉桩、`audit.sh` 公理行、README 与 `docs/current-goal-state.md` 已更新，`docs/goal/conditional-theorems.txt` 重新生成（新增三条都是「前提就是黎曼猜想」的预期条目）。`bash scripts/audit.sh` 打印 `OK`（153 行任务全部校验通过）。全部已 commit + push。
+
+# Summary of changes for run 290ea71f-4e50-41b2-ae35-0db0a4a59221
+Short answer: **no — not everything on the project's own task board is finished, and the Riemann hypothesis itself is of course still open.** Here is the verified state, plus what I did this session.
+
+**1. The project did not build as delivered — fixed.**
+`lake build` failed immediately on a fresh checkout: the dependency lock file (`lake-manifest.json`) disagreed with the project's own pins (`lakefile.toml`, `lean-toolchain`) — it recorded a different Mathlib revision, on a different Lean toolchain than the one the project requires, and omitted the vendored `Zeta23` path dependency. I re-resolved the dependencies against the project's own pins; only `lake-manifest.json` changed. The whole library, the vendored `Zeta23`, `Challenge` and `Solution` now build clean.
+
+**2. Verified, not assumed.** With the build restored I ran the project's full audit (`scripts/audit.sh`) end to end: `lake build` succeeds; there is no `sorry` anywhere outside `Challenge.lean` (whose three `sorry`s are by design — it is the statement-of-record file, and `Solution.lean` proves all three theorems from `RiemannHypothesis.Main`); the compared theorems depend on exactly `propext`, `Classical.choice`, `Quot.sound`; the claims of every closed row are pinned and elaborate in `scripts/revalidation.lean`; the conditional/unconditional boundary matches its manifest; the board validates. The audit prints `OK`.
+
+**3. What remains open.** Of the 150 rows on `docs/goal/task-board.yaml`: 93 are `DONE_STRONG`, **47 are `DONE_WEAK`** (each with an explicit written `open_boundary` — e.g. the sharp Hardy–Littlewood mean-square asymptotic, the fourth moment, the density theorems, the mollifier work, the Weyl-sum family), and **10 are `TODO_NEEDS_DESIGN`**. Nothing in the repository proves the Riemann hypothesis, and no claim here should be read as doing so; what is proved is the equivalence of its three standard formulations, plus a body of classical prerequisites and partial results.
+
+**4. New mathematics added this session** (`RiemannHypothesis/SubconvexityLogFree.lean`, `sorry`-free, axioms exactly `propext, Classical.choice, Quot.sound`): the subconvex bound on the closed critical strip, with the logarithm removed. Writing `e(σ) = max((1−σ)/3, 1/2 − 2σ/3)` for the strip's subconvex exponent,
+- `norm_riemannZeta_le_subconvexity_logfree` — for every `ε > 0` a constant `C`, uniform in `σ`, with `‖ζ(s)‖ ≤ C|t|^(e(σ)+ε)` for `0 ≤ σ ≤ 1`, `|t| ≥ 3`;
+- `norm_riemannZeta_le_subconvexity_logfree_fixed` — at every fixed `σ ∈ (0,1)`, with no logarithm and no `ε`, `‖ζ(σ+it)‖ ≤ C|t|^((1−σ)/2 − min(σ,1−σ)/12)` for all `|t| ≥ 3`, an exponent strictly below the convexity exponent `(1−σ)/2` (the gap `(1−σ)/2 − e(σ)` is `σ/6` on the left half of the strip and `(1−σ)/6` on the right, so half of it pays for the logarithm and half is kept);
+- `isBigO_riemannZeta_subconvexity_logfree` — the same in `O`-notation.
+
+This strengthens the existing logarithm-free convexity bound. It is recorded on the board as a new row `M1-SUBCONVEXITY-LOGFREE`, with an adversarial-revalidation note in `docs/goal/evidence/2026-09-05-m1-subconvexity-logfree.md` and statement pins in `scripts/revalidation.lean`; `docs/current-goal-state.md` was regenerated. All work is committed and pushed.
+
+# Summary of changes for run fb66b7d3-74d8-40d8-a4d4-eac95072328d
+I picked the project up where it stood, restored a working build, and pushed the analytic side of it forward with new, `sorry`-free mathematics. `lake build` succeeds and `scripts/audit.sh` prints `OK` (no `sorry` outside `Challenge.lean`, every new result depending on exactly `propext, Classical.choice, Quot.sound`, all new claims pinned in `scripts/revalidation.lean`, task board validating). Everything is committed and pushed.
+
+**On the headline question:** the Riemann hypothesis itself is still open — nothing here proves it, and I would not claim otherwise. What I did was close the top-priority open row of the project's own task board (`M1-GROWTH`) and strengthen the growth theory around it.
+
+**1. Build repair.** The delivered dependency lock file did not match the project's own pins (`lakefile.toml`, `lean-toolchain`): it recorded a different Mathlib revision and omitted the vendored `Zeta23` path dependency, so `lake build` refused to start. I re-resolved the dependencies against the project's own pins; only `lake-manifest.json` changed. The whole library, including the vendored `Zeta23`, now builds clean.
+
+**2. Subconvexity in the left half of the critical strip** (new `RiemannHypothesis/SubconvexityLeft.lean`). Before this, nothing better than the convexity bound was proved for `σ ≤ 1/2`.
+- `exists_bound_criticalLine_sixth` — `‖ζ(1/2+it)‖ ≤ A|t|^(1/6)(1+log|t|)` at *every* height `|t| ≥ 3` and both signs of `t` (the project's existing bound needed `t ≥ 10⁹`).
+- `norm_riemannZeta_le_subconvexity_left` — `‖ζ(σ+it)‖ ≤ C(1+log|t|)|t|^(1/2−2σ/3)` for `0 ≤ σ ≤ 1/2`, `|t| ≥ 3`, by Phragmén–Lindelöf between the functional-equation bound on `re s = 0` and the Weyl exponent `1/6` on the critical line, using the same interpolating apparatus (`u^(−w)/log u`) as the existing convexity files.
+
+**3. The convexity bound with no logarithm and no ε** (new `RiemannHypothesis/ConvexityLogFree.lean`), the first exit criterion of `M1-GROWTH`, previously recorded as still open:
+- `norm_riemannZeta_le_convexity_logfree` — for every fixed `σ ∈ (0,1)` there is `C` with `‖ζ(σ+it)‖ ≤ C|t|^((1−σ)/2)` for all `|t| ≥ 3`, and `isBigO_riemannZeta_convexity_logfree` in `O`-notation. The logarithm is removed because each half of the strip now has a subconvex exponent saving a fixed positive power of `|t|` at fixed `σ`, and a fixed positive power swallows `1+log|t|`. The constant must depend on `σ`, and the docstring says so.
+- `norm_riemannZeta_le_log_div_of_one_lt_re` — the second exit criterion, `‖ζ(σ+it)‖ ≤ 2log|t|/(σ−1)` for `1 < σ ≤ 2`, `|t| ≥ 3`.
+
+**4. One subconvex bound for the whole closed strip** (new `RiemannHypothesis/SubconvexityClosedStrip.lean`): the `t ≥ 10⁹` threshold and the restriction to positive `t` are removed from the right-hand bound (`norm_riemannZeta_le_subconvexity_right`), and the two halves are merged into `norm_riemannZeta_le_subconvexity_closed_strip`: `‖ζ(s)‖ ≤ C(1+log|t|)|t|^max((1−σ)/3, 1/2−2σ/3)` for `0 ≤ σ ≤ 1`, `|t| ≥ 3` — the exponent is `1/6` on the critical line and below the convexity exponent for every `σ ∈ (0,1]`.
+
+**5. Bookkeeping the project asks for.** The new modules are imported by `RiemannHypothesis.lean`, their axioms are checked by `scripts/audit.sh`, every new claim is pinned (statement written out, repository declaration as proof term) in `scripts/revalidation.lean`, a new evidence file `docs/goal/evidence/2026-09-04-m1-convexity-logfree.md` records the arguments and the adversarial revalidation of each row, `M1-GROWTH` is now `DONE_STRONG` with an empty open boundary, two new rows (`M1-SUBCONVEXITY-LEFT`, `M1-SUBCONVEXITY-CLOSED-STRIP`) are added, and `docs/current-goal-state.md` is regenerated. The list of conditional theorems is unchanged: everything added is unconditional.
+
+What remains out of reach and is stated as such: the Lindelöf exponent, any improvement of the constants, and any consequence for the zeroes — these bounds are pointwise, and no mean value, density estimate or zero-free region follows from them.
+
+# Summary of changes for run 60cfe46b-2689-45d1-9c7d-99455318f983
+I picked up the Riemann-hypothesis project, restored a working build, and closed the task board's headline analytic boundary with new, `sorry`-free mathematics. `lake build` succeeds and `./scripts/audit.sh` prints `OK` (no `sorry` outside `Challenge.lean`, every new result depending on exactly `propext, Classical.choice, Quot.sound`, all new claims pinned in `scripts/revalidation.lean`, task board validating). Everything is committed.
+
+**Build repair.** The delivered dependency lock file did not match the project's own pins: it recorded a different Mathlib revision and omitted the vendored `Zeta23` path dependency, so `lake build` refused to start, and with the recorded revision a dozen modules failed to compile. I re-resolved the dependencies against the project's own pins; `lakefile.toml` and `lean-toolchain` are unchanged, only `lake-manifest.json` differs. The whole library, including the vendored `Zeta23`, now builds clean.
+
+**1. Subconvexity on the critical line, with no hypothesis** (new `RiemannHypothesis/SubconvexityUnconditional.lean`). The board's row M1-AFE-SUBCONVEXITY had the classical exponent 1/6 only *conditionally* on the approximate functional equation, which is merely recorded, not proved. That hypothesis is now gone:
+- `norm_riemannZeta_criticalLine_le` — unconditionally, `‖ζ(1/2+it)‖ ≤ 200 t^(1/6)(log t + 1)` for `t ≥ 10⁹`.
+
+The approximate functional equation is not needed if the Dirichlet polynomial is taken longer and *every* dyadic block of it is bounded. The Euler–Maclaurin representation at length `⌈t²⌉` has both error terms `O(1)` (`norm_riemannZeta_sub_zetaSum_le`, using a telescoping tail bound `∑_{n≥N}(n+1)^(-3/2) ≤ 2/√N`), and the blocks are covered by three different van der Corput tests: the third-derivative test up to `t^(2/3)` (its range extended from the previous `√t`), the second-derivative test up to `2t`, and Kusmin–Landau beyond `2t`, where the phase derivative `t/2πx` is below `1/4π` and therefore is itself its distance to the nearest integer (`norm_sum_e2pi_logPhase_block_le_all`).
+
+**2. Subconvexity inside the strip** (new `RiemannHypothesis/SubconvexityStrip.lean`). The block estimates are about the phase alone, so they do not depend on the line; only the Abel-summation weight does:
+- `norm_riemannZeta_strip_le` — unconditionally, `‖ζ(σ+it)‖ ≤ 400 t^((1−σ)/3)(log t + 1)` for `1/2 ≤ σ ≤ 1`, `t ≥ 10⁹`. For `σ > 1/2` the exponent `(1−σ)/3` beats the convexity exponent `(1−σ)/2` by a fixed power of `t`, which addresses the M1-GROWTH boundary in a stronger (though not logarithm-free) form.
+
+Both results are recorded on the task board as new rows (`M1-SUBCONVEXITY-UNCONDITIONAL`, `M1-SUBCONVEXITY-STRIP`) with evidence and adversarial-revalidation notes under `docs/goal/evidence/`, are pinned in `scripts/revalidation.lean` and `scripts/audit.sh`, and are described in `README.md`; the boundaries of the rows they improve were updated accordingly. What remains open is stated honestly in those rows: the constants and thresholds are explicit but not optimized, the logarithms are not removed, nothing is claimed for `σ ≤ 1/2` off the critical line, no moment, density estimate or zero-free region follows from a pointwise bound, and the B process (Poisson summation with stationary phase) is still not formalized, so exponents beyond `(1/6, 2/3)` and the Lindelöf hypothesis remain out of reach. The Riemann hypothesis itself is of course still open, and the repository continues to state it rather than prove it.
+
+# Summary of changes for run 4b2132e5-8279-4251-bd4d-94aa9dff97ba
+I picked up the Riemann-hypothesis project, restored a green build, and closed two of the task board's named open boundaries with new, `sorry`-free mathematics. Everything is committed; `lake build` succeeds (9195 jobs) and `./scripts/audit.sh` prints `OK` (no `sorry` outside `Challenge.lean`, every new result depending on exactly `propext, Classical.choice, Quot.sound`, all new claims pinned in `scripts/revalidation.lean`).
+
+**Build repair.** The delivered dependency lock file did not match the versions the project itself pins: it recorded a different Mathlib revision and omitted the vendored `Zeta23` path dependency, so `lake build` refused to start. I re-resolved the dependencies against the project's own pins; `lakefile.toml` and `lean-toolchain` are unchanged, only `lake-manifest.json` differs.
+
+**1. Kusmin–Landau over a general range** (new `RiemannHypothesis/KusminLandauGeneral.lean`). The board's row M1-KUSMIN-LANDAU said plainly that "splitting a general range into such subranges is not done here": the existing first-derivative test needed `f'` trapped between two consecutive integers. Now proved, with `e(θ) = exp(2πiθ)`:
+- `norm_sum_e2pi_le_of_deriv_block` — one block, under the separation hypothesis `λ ≤ |f'(x) − m|` for every integer `m`;
+- `norm_sum_e2pi_le_of_deriv_floor` — the general monotone range, with the exact block count: `‖∑_{j ≤ K} e(f(c+j))‖ ≤ (⌊f'(c+K)⌋ − ⌊f'(c)⌋ + 1)(1 + 2/λ)`;
+- `norm_sum_e2pi_le_of_deriv_general` — the same in terms of the total variation `V = |f'(c+K) − f'(c)|`, for `f'` monotone *or* antitone: `≤ (V + 2)(1 + 2/λ)`, the classical shape of the test.
+The proof is strong induction on the length of the range: on the maximal initial block where `⌊f'⌋` is constant the old bound applies uniformly in its length, and past it `⌊f'⌋` has grown by at least one; the antitone case follows by conjugation.
+
+**2. Brun–Titchmarsh with the constant `2π + ε`** (new `RiemannHypothesis/BrunTitchmarshSharp.lean`, plus a generalization inside `RiemannHypothesis/BrunTitchmarshProgressions.lean`). The row M2-BRUN-TITCHMARSH named its own remedy — "with the factor π kept and Q optimized it would give 2π + o(1)" — and that is now carried out:
+- `card_primes_Ico_le_of_level` — the sieve at an arbitrary level `Q ≥ 2`: at most `(Q² + π y)/log Q + Q + 1` primes in `[x, x + y)`, uniformly in `x`;
+- `card_primes_Ico_le_two_pi` — for every `ε > 0` there is a `Y` with at most `(2π + ε) y / log y` primes in `[x, x + y)` for all `y ≥ Y` and all `x` (previously `13 y/log y + √y + 1`, or `9` above `log y ≥ 24`), by sieving at `Q = ⌊√y / log y⌋`; `card_primes_Ico_le_two_pi_aux` makes the threshold explicit (`log y ≥ (1000/ε)² + 10⁶`);
+- `card_primes_range_le_two_pi` — the case `x = 0`: `π(N) ≤ (2π + ε) N / log N` for large `N`;
+- `card_primes_Ico_mod_le_of_level` and `card_primes_Ico_mod_le_two_pi` — the same for arithmetic progressions: the existing progression bound is generalized to a free level (its old statement retained as the level `⌊√Y⌋`), and with `Y = ⌊y/q⌋ + 1` the count of primes of `[x, x + y)` in a class `a` mod `q` is at most `(2π + ε)(q/φ(q)) Y / log Y`, uniformly in `x`, `q` and `a` (previously the same shape with `8.3`).
+What still separates this from the classical `2 + o(1)` is exactly the factor `π` that this project's large sieve carries in place of `1`; that is recorded, not papered over.
+
+**Bookkeeping**, following the repository's own protocol: two new evidence files under `docs/goal/evidence/`, updated `latest_update`, `open_boundary`, exit criteria and gates for the two rows (both remain `DONE_WEAK`, since their constants are still not sharp), regenerated `docs/current-goal-state.md`, new axiom checks in `scripts/audit.sh`, new pinned statements in `scripts/revalidation.lean`, and a README entry for the new Kusmin–Landau module (I also corrected the README's description of the older one, which overstated its hypothesis).
+
+**What is not finished.** "All tasks" cannot be completed: the board's remaining 56 open rows culminate in the Riemann hypothesis itself, which is an open problem, and most of the rest need inputs that exist in neither Mathlib nor this project — the approximate functional equation (van der Corput's B process), Selberg's majorant or the Montgomery–Vaughan Hilbert inequality for the sharp large sieve constant, a sharp fourth moment, Vinogradov's mean value theorem. Those boundaries are stated honestly in the task board and I did not weaken any of them.
+
+# Summary of changes for run 35293947-4625-4ae3-aa9b-a6cc27e96e7c
+按您的建议做了 M2-DENSITY 的显式化：把 Carlson 链条里的每个指数都用 θ = σ₀ − 1/2 追踪出来，从「∀σ ∃c」升级成「c 是 σ 的显式函数」。全仓 `lake build` 通过（9190 个目标），`scripts/audit.sh` 打印 `OK`，无 `sorry`，新结果的 `#print axioms` 恰为 `propext, Classical.choice, Quot.sound`。
+
+**新的主结论**（`RiemannHypothesis/CarlsonDensityPowerSaving.lean`）
+
+- `ncard_zerosRightOf_le_rpow_explicit`：对 1/2 < σ < 1，存在 C > 0 使得对一切 T ≥ 1，N(σ, T) ≤ C·T^(1 − (σ−1/2)²/64)。
+- `ncard_zerosOffCriticalLine_le_rpow_explicit`：双侧形式，指数 1 − δ²/64。
+- 原有的存在性命题 `exists_ncard_zerosRightOf_high_le_rpow`、`exists_ncard_zerosRightOf_le_rpow` 现在多带一个合取项 `(σ − 1/2)²/64 ≤ c`。
+
+**常数是怎么追出来的**（`RiemannHypothesis/CarlsonPowerSaving.lean`，语句都加了显式合取项）
+
+- Montgomery–Vaughan 那一半：γ = α(3/2 − σ₀) 恰等于 1 − θ/2（一行恒等式）。
+- Euler–Maclaurin 那一半：β = 2α(1 − σ₀) ≤ 1 − θ（写成 u = 3/2 − σ₀ 后即 u + 1/2 − 1/(2u) ≤ u）。
+- 关键改动：mollifier 指数原来取的是 (1 − max(γ,β))/4——只有上界、没有下界，正是「一串 min」的源头；现在直接定义为 θ/8，仍满足 γ′+γ ≤ 1 − 3θ/8 与 2γ′+β ≤ 1 − 3θ/4，于是均方节省 ≥ 3θ/8。
+- 圆周平均层：σ₀ = min(3−R, 3/4) 给出 θ = min(5/2−R, 1/4) 的等式。
+- 计数层：κ = (σ−1/2)/4、R = 3−σ+2κ 使 θ = (σ−1/2)/2，三项平衡后 c ≥ θ²/16 = (σ−1/2)²/64。
+
+**诚实的边界**（已写进模块 docstring、任务板、证据文件、README）
+
+- 得到的节省是 (σ−1/2) 的**二次式**，不是 exit criteria 里写的线性形 O(T^(1−c(σ−1/2)))。线性节省是 Selberg/Ingham 的强度，需要 sharp mean value theorem 或四阶矩，库里和 mathlib 都没有——所以 M2-DENSITY 这一行我标成 DONE_WEAK，并把「线性形未证、以及缺什么前置定理」明确写进 open_boundary 和改写后的 exit criteria，而不是假装达标。
+- 与 Carlson 的 4(σ−1/2)² 相比形状相同、常数差 256 倍；C(σ) 仍不显式；对 σ 不一致、σ = 1/2 处无任何结论；零点不计重数。
+
+**记账**：新增证据文件 `docs/goal/evidence/2026-09-02-m2-density-explicit-exponent.md`；更新 M2-DENSITY 与 M2-DENSITY-POWER-SAVING 两行（`python3 scripts/goal_state.py validate` 通过，145 行；`render` 已重生成 `docs/current-goal-state.md`）；两个显式命题按仓库惯例钉进 `scripts/revalidation.lean`、加进 `scripts/audit.sh` 的公理检查；README 相应段落与表格已更新。旧证据文件末尾追加了一条指向新结论的更新说明（未删改原文）。
+
+**M2-MOLLIFIER 未动**，与您的判断一致：临界线上 γ = (5/2−σ₀)/2 在 σ₀ = 1/2 处恰好退化为 1，不是调参能救的，缺的是前置定理而非设计。
+
+另外，交付时的依赖锁文件与 `lakefile.toml` 的固定版本不一致（缺少 vendored `Zeta23` 的 path 依赖、Mathlib 修订与 toolchain 不匹配），已重新解析依赖使其与项目自身的固定版本一致后再构建。
+
+# Summary of changes for run 66fe9c79-b333-4421-8df9-b9c479cb1441
+I picked up the open boundary that the previous round of work had explicitly left in the twin-prime file and closed it, so the project now contains Brun's theorem itself, not just the counting bound behind it.
+
+**New module `RiemannHypothesis/BrunConstant.lean`** (sorry-free; every result checked to depend on exactly the standard axioms `propext`, `Classical.choice`, `Quot.sound`):
+
+- `twinInv` — `1/n` restricted to the `n` with `n` and `n + 2` both prime — and `blockSum`, its dyadic blocks over `[2ᵏ, 2ᵏ⁺¹)`.
+- `blockSum_le` — every dyadic block is at most `3753/(k+1)²`. For `k ≥ 46` this comes from the twin-prime counting bound `card_twinPrimes_le` already in the project (`≤ 900 N/(log N)² + √N + 1` for `log N ≥ 32`), applied at the block endpoint `M = 2ᵏ⁺¹`, using `log M = (k+1) log 2 ≥ 32`, the elementary induction `k⁴ ≤ 2ᵏ` for `k ≥ 47` (which controls the `√M` and the additive `1`), and `(log 2)² ≥ 0.48`; for `k < 46` the trivial bound `blockSum k ≤ 1` suffices.
+- `sum_inv_twinPrimes_le` — the reciprocals of the twin primes below `N` sum to at most `6600`, uniformly in `N`, by summing the blocks against `∑ 1/d² ≤ 7/4`.
+- `summable_twinInv` — **Brun's theorem**: the series of the reciprocals of the twin primes converges; and `tsum_twinInv_le`, its sum is at most `6600`.
+- `infinite_setOf_prime_not_prime_add_two` — a corollary: there are infinitely many primes `p` with `p + 2` composite, since the sum of all prime reciprocals diverges while its twin part converges.
+
+Stated scope, recorded in the module docstring, the task-board row and the evidence file: the constant `6600` is an upper bound only and is far from the Brun constant `1.902…` (it inherits the non-sharp constant `900` and uses crude dyadic summation); no digit of that constant is certified; no lower bound is claimed, and nothing follows about the twin-prime conjecture, which stays open — convergence is compatible with there being only finitely many twin primes. Nothing about ζ follows.
+
+**Repository bookkeeping**, following the project's own conventions: the module is imported from `RiemannHypothesis.lean`; the five main statements are pinned in full in `scripts/revalidation.lean` under a new `M2-BRUN-CONSTANT` heading; six `#print axioms` checks were added to `scripts/audit.sh`; a new task-board row `M2-BRUN-CONSTANT` and the evidence file `docs/goal/evidence/2026-09-01-m2-brun-constant.md` were written, the superseded "no convergence statement is drawn" notes in the twin-prime module and its evidence file were corrected, and `docs/current-goal-state.md` regenerated (145 tasks validate).
+
+**Gates**: `lake build` completes with no errors; `scripts/revalidation.lean` elaborates cleanly; the full audit script ran to completion twice with no failures, all 688 axiom checks reporting exactly the three standard axioms. The properties table is reconciled: the twin-prime bound, sifting-sum and sieve statements from the earlier work, and the four new Brun results, are all marked proved.
+
+
+# Summary of changes for run a09cdc0f-9896-4d2c-a6b9-e8b986205af6
+I continued the project by closing the next open boundary the repository itself recorded: the large sieve over squarefree moduli was proved, but no sieve consequence had been drawn from it. That consequence is now proved.
+
+**New module `RiemannHypothesis/BrunTitchmarsh.lean`** (namespace `RiemannHypothesis.BrunTitchmarsh`), sorry-free and warning-free:
+
+- `siftSum Q` — the sifting sum of the large sieve at the weights `w p = p − 1`, i.e. `∑_{q ≤ Q squarefree} ∏_{p ∣ q} 1/(p − 1)`.
+- `inv_le_prod_inv_sub_one`, `sum_inv_squarefree_le_siftSum` — `∑_{q ≤ Q squarefree} 1/q ≤ siftSum Q`, since a squarefree `q` is the product of its prime factors and `1/p ≤ 1/(p − 1)`.
+- `harmonic_cast`, `log_le_sum_inv`, `sum_inv_le_log_add_one` — `log Q ≤ ∑_{n ≤ Q} 1/n ≤ log Q + 1`.
+- `sum_inv_multiples_le`, `sum_biUnion_le_sum_sum`, `sum_inv_not_squarefree_le` — the reciprocals of the non-squarefree `n ≤ Q` sum to at most `(3/4)(log Q + 1)`, by reindexing the multiples of `d²` and a union bound over `d ∈ [2, Q]`.
+- `quarter_log_le_sum_inv_squarefree`, `quarter_log_le_siftSum` — `siftSum Q ≥ (log Q)/4 − 3/4`.
+- `card_mul_siftSum_le` — the sieve for a set `A ⊆ [0, N)` avoiding one residue class modulo every prime `p ≤ Q`: `|A| · siftSum Q ≤ Q² + π N`.
+- `card_primes_Ico_eq`, `shifted_primes_avoid`, `half_log_sub_log_two_le_log_sqrt` — the three ingredients of the application.
+- `card_primes_Ico_le` — **a Brun–Titchmarsh inequality**: uniformly in the starting point `x`, the number of primes in `[x, x + y)` is at most `70 y / log y + √y + 1`, whenever `log y ≥ 24`.
+- `card_primes_range_le` — its case `x = 0`, a Chebyshev-type upper bound `π(N) ≤ 70 N / log N + √N + 1`.
+
+The constant `70` and the threshold `log y ≥ 24` are honest artefacts of the crude bounds used (the sharp constant is `2`); this is stated in the module docstring, the board row's open boundary and the evidence note, together with what is *not* proved (no arithmetic-progression form, no Bombieri–Vinogradov, nothing about `ζ`).
+
+**Repository bookkeeping.** The module is imported from `RiemannHypothesis.lean`; the six main statements are pinned in `scripts/revalidation.lean` under a new `M2-BRUN-TITCHMARSH` heading (statement written out, repository declaration supplied as the proof term) and their axiom checks added to `scripts/audit.sh`; a new board row `M2-BRUN-TITCHMARSH` was added to `docs/goal/task-board.yaml` with exit criteria, open boundary and required gates, together with the evidence note `docs/goal/evidence/2026-09-01-m2-brun-titchmarsh.md` containing the required adversarial-revalidation section; the open boundary of `M2-LARGE-SIEVE-SQUAREFREE` was amended to point at what is now closed, and `docs/current-goal-state.md` was regenerated.
+
+**Verification.** `lake build RiemannHypothesis.BrunTitchmarsh` succeeds with no errors and no warnings; `bash scripts/audit.sh` runs end to end and prints `OK` (exit 0), which includes the full build, the sorry scan, the axiom checks and the board validation (143 tasks). `#print axioms` for every new statement reports exactly `[propext, Classical.choice, Quot.sound]`. No `sorry` exists anywhere outside `Challenge.lean`, whose three sorries are the repository's intended statement of record. `ARISTOTLE_SUMMARY.md` was left untouched. All work is committed and pushed.
+
+
+# Summary of changes for run 89f2c688-637d-4f9f-a5dc-99ca55612aa0
+This session added two completed, fully documented increments to the project's task board, both machine-checked and with every repository gate green.
+
+**1. Weyl's inequality generalized from monomial to arbitrary polynomial phases** (rows `M1-WEYL-CLASSICAL`, `M1-WEYL-BADLY-GENERAL`)
+
+`RiemannHypothesis/WeylClassical.lean` and `RiemannHypothesis/WeylBadlyGeneral.lean` now state their results for an arbitrary polynomial phase `f` of degree at most `d = r + 2` with leading coefficient `α`, instead of only the monomial phase `α n^d` (which is kept as one-line corollaries):
+
+* `norm_polyPhaseSum_pow_le_three_term` — the classical three-term inequality with explicit constants, for every denominator `q > 0`;
+* `exists_norm_polyPhaseSum_pow_le_three_term` — divisor loss and logarithm absorbed into `N^ε`;
+* `exists_norm_polyPhaseSum_le_three_term` — `‖∑ e(f n)‖ ≤ C N^(1+ε) (1/q + 1/N + q/N^d)^(1/2^(d−1))`;
+* `exists_norm_polyPhaseSum_pow_mul_le_of_badlyApproximable`, `exists_norm_polyPhaseSum_le_of_badlyApproximable` — Weyl's exponent `1 − 1/2^(d−1) + ε` when `d!α` is badly approximable, plus the explicit coefficient `√2/d!`.
+
+The two task-board rows, their evidence files, the revalidation pins and the axiom checks were updated accordingly.
+
+**2. A new row, `M1-WEYL-INTERVAL`: Weyl's inequality over an arbitrary interval** (new module `RiemannHypothesis/WeylInterval.lean`)
+
+* `WeylGeneral.IsPolyPhase.comp_add` — a translate `n ↦ f (n + M)` of a polynomial phase is a polynomial phase of the same degree with the *same* leading coefficient (binomial expansion plus an exchange of sums);
+* `sum_e2pi_Ico_shift` — `∑_{M ≤ n < M+N} e(f n) = ∑_{0 ≤ n < N} e(f (n+M))`;
+* `norm_polyPhaseSum_Ico_pow_le_three_term`, `exists_norm_polyPhaseSum_Ico_pow_le_three_term`, `exists_norm_polyPhaseSum_Ico_le_three_term` — the three-term Weyl inequality over `[M, M+N)`, with constants and exponents independent of the starting point `M`;
+* `exists_norm_polyPhaseSum_Ico_le_of_badlyApproximable` — Weyl's exponent over an arbitrary interval;
+* monomial corollaries and the explicit example `α = √2/d!` over an arbitrary interval.
+
+The new module is imported by `RiemannHypothesis.lean`, its declarations are axiom-checked in `scripts/audit.sh`, pinned by `example`s in `scripts/revalidation.lean`, documented in `docs/goal/evidence/2026-08-31-m1-weyl-interval.md` (including the adversarial-revalidation section), and registered as a row in `docs/goal/task-board.yaml`.
+
+**Verification.** Full `lake build` succeeds; `lake env lean scripts/revalidation.lean` is clean; `docs/goal/conditional-theorems.txt` was regenerated (the two new entries appear only in the `DEFINITIONAL` section, i.e. hypotheses on the theorem's own argument, not open assumptions, and this is recorded in the evidence files); `python3 scripts/goal_state.py validate` reports `OK: 141 tasks validate`; a full `bash scripts/audit.sh` run started after all edits reports `OK`. Every new declaration has axioms exactly `[propext, Classical.choice, Quot.sound]`, and there is no `sorry` anywhere outside `Challenge.lean`. All work is committed and pushed.
+
+The Riemann hypothesis itself remains open in the repository; these rows are prerequisites in the analytic-number-theory track and claim nothing about ζ.
+
+# Summary of changes for run c95a03b2-c891-4b30-b3a3-3f1f75de7885
+I continued the Weyl-inequality strand of the project and closed the item that several rows of the task board named as their open boundary: the general degree-`d` Weyl inequality and the evaluation of its right-hand side. The Riemann Hypothesis itself remains open in the repository, as expected.
+
+**New machine-checked mathematics** (all in `RiemannHypothesis/WeylGeneral.lean`, which builds with `lake build RiemannHypothesis.WeylGeneral`, contains no `sorry`, and whose results use exactly the axioms `propext`, `Classical.choice`, `Quot.sound`):
+
+- `weylMulti` — the `r`-fold shifted majorant sum `W₀(m) = min(N, 1/(2‖βm‖))`, `W_{r+1}(m) = ∑_{k<H} W_r(mk)`, with the zero shifts included.
+- `IsPolyPhase` and `IsPolyPhase.diff` — differencing a polynomial phase lowers its degree by one and multiplies the leading coefficient by `(d+1)k`.
+- `norm_polyPhaseSum_pow_le` — **Weyl's inequality in arbitrary degree**, by induction on `d`: for any polynomial phase of degree ≤ `d+1` with `n^{d+1}`-coefficient `α` and any `H ≥ 1`, `‖∑_{0≤n<N} e(f n)‖^{2^d} · H^d(N+H) ≤ 8^{2^d}(N+H)^{2^d} · W_d((d+1)!α)`, with no additive error term (each diagonal is absorbed by the zero shift).
+- `dioSum`, `dioSum_le_of_approx`, `weylMulti_le_dioSum`, `weylMulti_le_of_approx` — the `r+1` shifts folded onto their product, and the resulting one-dimensional majorant sum estimated by the repository's existing counting lemma from a coprime approximation `|d!α − a/q| ≤ 1/q²`.
+- `norm_monomialSum_pow_le_of_approx` and `norm_monomialSum_pow_mul_le_of_approx` — the two combined for the monomial phase `α n^d`, the latter in the clean form `‖∑_{n<N} e(α n^{r+2})‖^{2^{r+1}} · H ≤ 16^{2^{r+1}} N^{2^{r+1}} (r + 11 + 2 log N)` valid whenever `H^{r+1} ≤ q ≤ N`; for `H` of size `N^{1/(r+1)}` this is a saving of `N^{−1/((d−1)2^{d−1})}` over the trivial bound, up to a logarithm.
+
+The exponent reached is `1 − 1/((d−1)2^{d−1})`, weaker than the classical `1 − 1/2^{d−1}`; the loss is the crude fold of the shift tuples onto their product, where the classical argument uses the average divisor bound, which is not formalized here. No Vinogradov mean value theorem, no unconditional badly-approximable form in general degree, and nothing about `ζ` follows. These limitations are stated in the module docstring, the task-board row and the evidence file rather than glossed over.
+
+**Repository bookkeeping**, following the project's own conventions: new row `M1-WEYL-GENERAL` (status `DONE_WEAK`, with an explicit open boundary) in `docs/goal/task-board.yaml` (validates: 135 tasks); the stale "the general degree-`d` case is not formalized" clauses in the quadratic, min-sum and cubic rows updated; new evidence file `docs/goal/evidence/2026-08-30-m1-weyl-general.md` including an adversarial-revalidation section; statement pins for the six new results added to `scripts/revalidation.lean` (verified to elaborate); `#print axioms` checks and the module import added to `scripts/audit.sh`; the module added to `RiemannHypothesis.lean` and to the README module table; `docs/current-goal-state.md` regenerated.
+
+Two caveats about this environment, unchanged from the previous session: the available Mathlib is an earlier revision than the one the project pins, so roughly fifty pre-existing modules and the vendored `Zeta23` library still fail to compile for version-drift reasons, and consequently a full `lake build` and `./scripts/audit.sh` cannot pass here. That is pre-existing and independent of the new module, which builds cleanly on its own. All work is committed and pushed.
+
+# Summary of changes for run 5167c987-42bc-4232-bf59-20aa72e64c5b
+Continued and completed the next stage of the project. Everything below builds with `lake build` and passes the repository's own audit script end to end (`./scripts/audit.sh` → OK), with no `sorry` outside `Challenge.lean` and axioms exactly `propext`, `Classical.choice`, `Quot.sound` for every new statement. All work is committed and pushed.
+
+**1. Finished integrating the cubic Weyl bound (`RiemannHypothesis/WeylCubic.lean`).**
+The module itself was already proved; this session completed everything the repository requires around it: a new task-board row `M1-WEYL-CUBIC` with an honest open boundary, a new evidence file `docs/goal/evidence/2026-08-30-m1-weyl-cubic.md` (claim / proof / why the row exists / scope / adversarial revalidation), axiom checks in `scripts/audit.sh`, pinned statements in `scripts/revalidation.lean`, a README row, and a regenerated `docs/current-goal-state.md`. The open boundaries of the quadratic rows, which said the degree-3 case was missing, were corrected to point at the new row. Main results: `‖∑_{0≤n<N} e(α n³)‖⁸ ≤ 2²² (4N/q+1)² N⁷ (1+log 4N)²` from a coprime approximation `|6α − a/q| ≤ 1/q²` with `q ≤ 4N`; the unconditional form for badly approximable `6α`; and the explicit instance `α = √2/6`. The exponent obtained is 7/8, weaker than the classical 3/4, and this is stated in the module, the row and the evidence.
+
+**2. New mathematics: the large sieve for sifted sets (`RiemannHypothesis/LargeSieveSifted.lean`).**
+This closes, over prime moduli, the gap named by the existing Farey large sieve row ("the large sieve for exponential sums at rational points only", with no sieve consequence drawn). Proved from scratch: orthogonality of the additive characters modulo `q`; Parseval's identity `∑_{b<q} ‖∑_{n∈A} e(nb/q)‖² = q ∑_r (#{n ∈ A : n ≡ r})²`; the Cauchy–Schwarz lower bound over the classes a set actually meets; the lower bound at a prime modulus; and hence Montgomery's inequality `|A| ∑_{p≤Q} (p − ω_p)/ω_p ≤ Q² + πN` for `A ⊆ [0,N)` meeting at most `ω_p` residue classes modulo each prime `p ≤ Q`. Two consequences are drawn: a set meeting at most half the classes modulo every prime `p ≤ Q` satisfies `|A| · #{p ≤ Q} ≤ Q² + πN`; and, as a worked example with no hypothesis left to the caller, the squares below `N` satisfy `#{n < N : n is a square} · #{odd primes p ≤ Q} ≤ 3(Q² + πN)`, using that the squares meet at most `(p+1)/2` classes modulo an odd prime. The module records that only prime moduli are treated — the multiplicative extension to squarefree moduli via the Chinese remainder theorem, which is what a Selberg- or Bombieri–Vinogradov-strength application would need, is not formalized — that the constant carries the inherited factor `π`, that for the squares themselves the bound is weaker than the trivial `√N`, and that nothing about `ζ` follows.
+
+The module was given the same treatment as the rest of the repository: imported from `RiemannHypothesis.lean`, a new board row `M2-LARGE-SIEVE-SIFTED`, an evidence file `docs/goal/evidence/2026-08-30-m2-large-sieve-sifted.md`, ten axiom checks in `scripts/audit.sh`, six pinned statements in `scripts/revalidation.lean`, a README row, and a regenerated goal state (`134 tasks validate`).
+
+The Riemann Hypothesis itself remains open and is not claimed anywhere; the frontier rows of the board (RH, Vinogradov, the density and mollifier rows) are still marked as needing design, as before.
+
+# Summary of changes for run bcc26a7a-b332-48be-8545-1a0809760325
+I picked up the project, restored its build, and added two new pieces of formalized mathematics, each fully integrated into the repository's own evidence/audit machinery.
+
+**Build repair.** The delivered `lake-manifest.json` had lost the `vendor/zeta23` path dependency and pointed at a mathlib revision incompatible with the pinned `lean-toolchain`, so nothing compiled. Restoring the pinned toolchain (`v4.33.0`) in both `lean-toolchain` files and re-resolving the dependencies fixed it; `lake build` now completes with 0 errors.
+
+**New: `RiemannHypothesis/WeylMinSum.lean` — the counting lemma of Weyl's method.** This closes the gap explicitly named in the scope section of `RiemannHypothesis/WeylQuadraticQuantitative.lean` and in the board row `M1-WEYL-QUADRATIC`. For a rational approximation `|β − a/q| ≤ 1/q²` with `a`, `q` coprime, and any majorant `g` of `min(N, 1/(2‖βk‖))`:
+- `sum_block_le`: over `q` consecutive integers, `∑ g k ≤ 4N + q(1 + log q)` (the classical grid argument: `gridIndex`, `grid_sub_le_intDist`, `gridIndex_injOn`, plus a harmonic sum);
+- `sum_Ioc_le`: the counting lemma `∑_{0 < k ≤ H} g k ≤ (H/q + 1)(4N + q(1 + log q))`;
+- `normSq_quadSum_le_of_approx_count`, `normSq_quadSum_le_of_approx_large`, `norm_quadSum_le_of_approx_large`: feeding it into the differencing inequality with `H = N` rather than `H = q/2` gives `‖∑_{n<N} e(α n²)‖ ≤ 9 √(N(1 + log 2N))`, improving the repository's previous exponent `3/4` to `1/2` up to a logarithm.
+
+**New: `RiemannHypothesis/WeylBadlyApproximable.lean` — an unconditional rate.** The bounds above are conditional on the existence of an approximation with a denominator in a prescribed range. Using Dirichlet's approximation theorem, that hypothesis is discharged for the badly approximable coefficients:
+- `BadlyApproximable`, `exists_coprime_approx`, `le_den_of_badlyApproximable`, `normSq_quadSum_le_of_den_le`;
+- `norm_quadSum_le_of_badlyApproximable`: if `2α` is badly approximable with constant `c`, then `‖∑_{n<N} e(α n²)‖ ≤ √((16/c + 26) N (1 + log N))` for every `N ≥ 1`, with no hypothesis left to the caller;
+- `badlyApproximable_of_quadratic`: every quadratic irrational is badly approximable (Liouville's argument, with the explicit constant `1/(|A|(2|x|+1) + |B|)`), hence `exists_norm_quadSum_le_of_quadratic`;
+- `badlyApproximable_sqrt_two` and `norm_quadSum_sqrt_two_le`: the fully explicit instance `‖∑_{n<N} e((√2/2) n²)‖ ≤ √(90 N (1 + log N))`.
+
+Both files build with no `sorry` and no warnings; `#print axioms` reports exactly `propext, Classical.choice, Quot.sound` for every statement. Both modules are imported by `RiemannHypothesis.lean`; their main statements are pinned in `scripts/revalidation.lean` (statement written out, repository declaration supplied as the proof term) and their axiom checks added to `scripts/audit.sh`. Two evidence notes were added under `docs/goal/evidence/`, two new rows (`M1-WEYL-MIN-SUM`, `M1-WEYL-BADLY-APPROXIMABLE`) added to `docs/goal/task-board.yaml` with their open boundaries stated, the boundaries of `M1-WEYL-QUADRATIC` and `M1-WEYL-EQUIDISTRIBUTION` updated to point at what is now closed, and `README.md` and `docs/current-goal-state.md` regenerated. `scripts/audit.sh` passes end to end and the board validator reports 129 tasks valid.
+
+**What is not done, honestly.** The Riemann hypothesis itself is not proved, and no route to it is claimed: the board's `M4-RH` row and the research rows it depends on (`M3-GAP`, `M3-VINOGRADOV`, `M2-DENSITY`, `M2-SELBERG-CLT`, `M2-PAIR-CORRELATION`, `M1-NUMERICAL`, and the rest) remain `TODO_NEEDS_DESIGN`. Most previously `DONE_WEAK` rows still carry their recorded open boundaries. Nothing in the new work says anything about the zeta function: it is about exponential sums only, no subconvexity bound, approximate functional equation or density estimate follows. Within the new work itself, the logarithm is not removed (the bound is `√(N log N)`, not `N^{1/2+ε}`), the constants are not optimized, only the quadratic phase is treated — the general degree-`d` Weyl inequality is still open — and only the badly approximable coefficients get a rate. The `sorry`s in `Challenge.lean` are the repository's intended problem statement and are answered in `Solution.lean`; they were left untouched.
+
+# Summary of changes for run a16999a2-f560-434b-9791-7f5f3a8bb93b
+I continued the Riemann Hypothesis formalization from where the previous session stopped, and closed out the piece of work that was still open: the **power saving in Carlson's density theorem**.
+
+**What was unfinished:** `RiemannHypothesis/CarlsonPowerSaving.lean` contained four `sorry`s — the combination of the two halves of the quantitative mean square, its transport to circle averages, the counting argument, and the two-sided form.
+
+**What I proved (all sorry-free, verified by a full build):**
+
+- `exists_integral_normSq_zeta_mul_mollifier_sub_one_le_rpow` — the mean square of `ζ M_y − 1` on a vertical segment for a mollifier length that may grow with the height: `∫_a^b ‖ζ M_y − 1‖² ≤ C (b y^{−(σ₀−1/2)} + b^{1−c})` whenever `y ≤ 4 b^γ`, obtained from the Montgomery–Vaughan half and the Euler–Maclaurin half with explicit exponent bookkeeping (plus a small auxiliary fact `four_mul_rpow_le_self`).
+- `exists_integral_circleAverage_normSq_mollifiedZeta_sub_one_le_rpow` — the same estimate for circle averages, by Fubini, with the shifted endpoints costing at most a factor two.
+- In a new file `RiemannHypothesis/CarlsonDensityPowerSaving.lean` (the mean-square file was getting long, so the counting argument lives separately):
+  - `exists_ncard_zerosRightOf_high_le_rpow` — the Jensen counting inequality run with `y = ⌈T^γ⌉` and `λ = T^{c'}`, balancing the three terms;
+  - `exists_ncard_zerosRightOf_le_rpow` — **`N(σ, T) ≤ C·T^{1−c}` with `c > 0`, for every fixed `1/2 < σ < 1` and every `T ≥ 1`**, strengthening the previously available `o(T)`;
+  - `exists_ncard_zerosOffCriticalLine_le_rpow` — the two-sided form.
+
+Zeroes are counted without multiplicity. The exponent `c` is not explicit and is far from Carlson's `1 − 4σ(1−σ)`: only the existence of *some* power saving is claimed. Nothing about the location of individual zeroes follows, and the Riemann hypothesis is neither proved nor disproved.
+
+**Project hygiene:** the two new modules are imported from `RiemannHypothesis.lean`; the new statements are pinned in `scripts/revalidation.lean` and their axioms checked in `scripts/audit.sh` (they use exactly `propext`, `Classical.choice`, `Quot.sound`); a new task-board row `M2-DENSITY-POWER-SAVING` with an evidence file under `docs/goal/evidence/` was added, the board re-validated (127 tasks) and `docs/current-goal-state.md` regenerated; the README module table and the density section were updated. The full `lake build` succeeds, `scripts/audit.sh` ends in `OK`, and the only remaining `sorry`s in Lean code are the three intentional ones in `Challenge.lean`. All work is committed and pushed.
+
+# Summary of changes for run fb179065-9a28-48f9-be2c-5d7c294c2e09
+I continued the project by closing the gap the repository's own notes recorded as open: the mean value theorem for Dirichlet polynomials with the error term *inside* the sum (the Montgomery–Vaughan shape), and its discrete counterpart. Both are now proved without `sorry`, and both are fully wired into the repository's bookkeeping and audit gates.
+
+**New module `RiemannHypothesis/GaussianMeanValue.lean` (completed).** The three remaining unproved statements in this file are now proved, so the module is sorry-free:
+
+- `integral_normSq_dirichletPoly_le_mv` — for `T ≥ 6`,
+  `∫₋ᵀᵀ ‖D(σ + i t)‖² dt ≤ 58 ∑_{n ≤ N} ‖a n‖² n^(−2σ) (T + n)`,
+  and `integral_Icc_normSq_dirichletPoly_le_mv`, the same over `[0, T]`.
+- `sum_exp_neg_sq_log_sub_le` — the arithmetic input: `∑_{n ≤ N} exp(−L²(log n − log m)²) ≤ 1 + 6 m / L` for `L ≥ 3`.
+
+The route is the Gaussian majorant rather than the generalized Hilbert inequality: on `[−T, T]` the indicator is at most `e·exp(−t²/T²)`; the resulting oscillatory integral turns the weighted mean square into a bilinear form with kernel `exp(−(T/2)²(log n − log m)²)`; the row sums of that kernel are bounded by splitting at `n = 2m` (near the diagonal, the logarithmic separation is compared with the integer separation and the resulting Gaussian is summed by the integral test; far from it, the kernel is dominated by `m²/n²` times a small constant); Schur's test then gives the bilinear bound. Supporting lemmas proved along the way include the integral test for Gaussians, `|y − x| / max x y ≤ |log y − log x|`, the tail bound `∑_{n > M} 1/n² ≤ 1/M`, and the numerical estimate `e√π ≤ 4.8182`.
+
+**New module `RiemannHypothesis/GaussianMeanValueDiscrete.lean`.** Feeding the above into the repository's Gallagher/Sobolev lemma gives the discrete version in the same shape:
+`∑_i ‖D(σ + i t_i)‖² ≤ 58 (2/δ + δ (log N)²) ∑_{n ≤ N} ‖a n‖² n^(−2σ) (T + n)` for `δ`-separated `t_i ∈ [δ/2, T − δ/2]` and `T ≥ 6`, together with the corresponding large-values count.
+
+**Honest scope.** The constant `58` is explicit but not sharp (Montgomery and Vaughan's theorem has the asymptotically optimal main term); only the *shape* of the error term is claimed. All statements are about Dirichlet polynomials, not about ζ: no zero-density estimate follows and no zero is located. These caveats are recorded in the module docstrings, the task-board rows, and the evidence notes.
+
+**Repository bookkeeping and verification.** Both modules are imported from the root `RiemannHypothesis.lean`; two new task-board rows (`M2-MEANVALUE-MV`, `M2-DISCRETE-MEANVALUE-MV`) with exit criteria and explicit open boundaries were added, with matching evidence notes under `docs/goal/evidence/`; the eight new statements are pinned in `scripts/revalidation.lean` and their axioms checked in `scripts/audit.sh`; `docs/current-goal-state.md` was regenerated. The full `lake build` succeeds, `#print axioms` on every new result gives exactly `propext, Classical.choice, Quot.sound`, no `sorry` remains outside `Challenge.lean`, and `./scripts/audit.sh` ends with `OK` (125 tasks validate). All work is committed and pushed. `ARISTOTLE_SUMMARY.md` was left untouched.
+
+# Summary of changes for run 5ec97750-dcad-46e1-9621-9dd2c101b3f6
+Short answer: **no — not everything on the project's task board is finished, and it cannot honestly be marked as such.** The Riemann hypothesis itself is still open and is not proved here. What I did this session was restore the project to a verified, building state and clean it up; here is the exact status.
+
+**What I verified (not just claimed)**
+- `lake build` completes with **0 errors** (9158 jobs), and the repository's own `scripts/audit.sh` prints `OK`.
+- The **only** `sorry`s anywhere in the build are the three intentional ones in `Challenge.lean` — the statement of record, which the repository's convention requires to be left unproved there and which `Solution.lean` discharges. No other source file (including the vendored library) contains a `sorry`; the remaining textual matches there are comments.
+- The audit's other checks pass: every compared theorem depends on exactly `propext`, `Classical.choice`, `Quot.sound`; no `Float`; the closed task-board rows are pinned in `scripts/revalidation.lean`; the board validates (119 tasks).
+
+**What I fixed this session**
+1. *The project as delivered did not build at all.* `lake-manifest.json` was inconsistent with `lakefile.toml`: it named a different mathlib revision and URL, and it was missing the vendored `Zeta23` path dependency, so every `lake` command failed before compiling a single file. I re-resolved the dependencies so the manifest now agrees with `lakefile.toml` (mathlib `db584cd6…`) and with `lean-toolchain` (`v4.33.0`), and committed the corrected manifest so the problem does not recur.
+2. *Linter and deprecation cleanup in this repository's own sources.* I applied every mathlib deprecation rename flagged by the build (e.g. `Set.mem_setOf_eq → Set.mem_ofPred_eq`, `Set.Finite.diff → Set.Finite.sdiff`, `intervalIntegral.integral_finset_sum → intervalIntegral.integral_finsetSum`, `Matrix.det_of_upperTriangular → Matrix.det_of_isUpperTriangular`, `ENat.toNat_coe → ENat.toNat_natCast`, and others), replaced the deprecated `push_neg` uses, and added the explanatory comment the style linter requires next to a `maxHeartbeats` override. After this, the build emits **no warnings at all** from this repository's files apart from the three intentional `sorry` notices in `Challenge.lean`. I fixed the code rather than disabling any linter, and left the third-party vendored library untouched.
+
+**What remains open (from `docs/current-goal-state.md`, 119 tasks)**
+- `DONE_STRONG`: 83 · `DONE_WEAK`: 25 · `TODO_NEEDS_DESIGN`: 10 · `TODO_READY`: 1.
+- Still genuinely open, and honestly marked so on the board: the Riemann hypothesis itself (`M4-RH`, and the `M3-GAP` row it depends on — no known route); Carlson's density theorem behind `M1-ALMOST-ALL-STRIP` (the Bohr–Landau `O(T)` bounds proved here do not reach the required `o(T)`; a mollified mean square is needed); the logarithm-free convexity exponent in `M1-GROWTH`; the mollifier, density, Selberg CLT and pair-correlation rows in M2; Vinogradov's method, the Atiyah verification and the geometric route in M3; and the large-scale numerical verification.
+
+So: the repository is in a clean, fully verified, reproducible state, and all the work that *is* claimed there is machine-checked — but the task board is deliberately not complete, because the mathematics of its top rows is open research rather than unfinished formalization. All changes are committed and pushed.
+
+# Summary of changes for run 74add9e2-7953-4cee-82d1-92a36d2bb758
+## About `lean-toolchain` and "4.28"
+
+`lean-toolchain` still reads `leanprover/lean4:v4.33.0` — it was never changed. What showed `4.28` was `lake-manifest.json`: its mathlib entry carried `inputRev: "v4.28.0"` together with a mathlib revision from the 4.28 line, which contradicted the mathlib commit pinned in `lakefile.toml` (a Lean 4.33 mathlib). That inconsistency was what broke the build. It has been fixed by re-resolving the dependencies, so the manifest now agrees with `lakefile.toml` and with toolchain v4.33.0; the vendored `Zeta23` path dependency (`vendor/zeta23`), which was missing from the manifest, is also present again. The full build and the repository's own audit both pass.
+
+## Work completed this session
+
+**Build and audit.** `lake build` succeeds (9157 jobs, 0 errors) and `scripts/audit.sh` prints `OK`: no `sorry` outside `Challenge.lean` (whose 3 `sorry`s are the statement of record, discharged in `Solution.lean`), no `Float`, all compared theorems depending on exactly `propext`, `Classical.choice`, `Quot.sound`, all closed task-board rows pinned in `scripts/revalidation.lean`, and the task board validating (119 tasks).
+
+**New mathematics: a discrete mean value theorem (`RiemannHypothesis/GallagherDiscrete.lean`).** This supplies the Sobolev/Gallagher step that the large-values row previously left open. All of it is sorry-free with the three standard axioms:
+
+- `Gallagher.hasDerivAt_normSq_comp` — the derivative of `t ↦ ‖f t‖²` is `2 Re(conj(f t)·f' t)`, bounded by `2‖f‖‖f'‖`.
+- `Gallagher.mul_normSq_le_integral_of_mem_Icc` — the one-interval Sobolev inequality, from the fundamental theorem of calculus.
+- `Gallagher.sum_integral_window_le` — the windows around δ-separated points are disjoint, so their integrals add up to at most the integral over the enclosing interval.
+- `Gallagher.sum_normSq_le_of_separated` — **Gallagher's lemma**: `δ ∑ ‖f(tᵢ)‖² ≤ 2 ∫_A^B ‖f‖² + δ² ∫_A^B ‖f'‖²`.
+- `hasDerivAt_dirichletPoly_line` — the derivative of a Dirichlet polynomial along a vertical line is `−i` times the polynomial with coefficients `aₙ log n`; `sum_normSq_logCoeff_le` bounds the new mean-square weight by `(log N)²` times the old one.
+- `sum_normSq_dirichletPoly_at_separated_le` — the **discrete mean value theorem**: for δ-separated `tᵢ ∈ [δ/2, T−δ/2]`, `∑ᵢ ‖D(σ+itᵢ)‖² ≤ (2/δ + δ(log N)²)(T + 8N(1+log N)) ∑_{n≤N} ‖aₙ‖² n^(−2σ)`.
+- `card_le_of_dirichletPoly_large_separated` — the large-values count that follows by Chebyshev.
+
+Scope, stated explicitly in the module docstring and the task-board row: these are statements about Dirichlet polynomials, not about ζ; the constants are the elementary ones (an `N log N` error rather than the Montgomery–Vaughan `N`); no zero-density estimate is claimed and no zero of ζ is located.
+
+**Documentation and gates.** Added the task-board rows `M2-MOLLIFIED-MEAN-SQUARE` and `M2-DISCRETE-MEANVALUE` with evidence files `docs/goal/evidence/2026-08-28-m2-mollified-mean-square.md` and `docs/goal/evidence/2026-08-28-m2-discrete-meanvalue.md`; refreshed the open boundary of `M2-LARGE-VALUES`; regenerated `docs/current-goal-state.md`; pinned all the new statements in `scripts/revalidation.lean` and added the corresponding `#print axioms` checks to `scripts/audit.sh`. The new module is imported from the root `RiemannHypothesis.lean`.
+
+All work is committed and pushed.
+
+
+# Summary of changes for run b2a2f651-e889-4b18-88a8-056320c2a1cb
+密度这条线的前三步现在都已形式化并通过完整构建,四步中的第四步(组装成 Ingham 型密度估计)仍然是未完成的。所有内容无 `sorry`,公理恰为 `propext, Classical.choice, Quot.sound`,`scripts/audit.sh` 输出 `OK`。
+
+## 第 1 步:大筛不等式 — `RiemannHypothesis/LargeSieve.lean`
+
+- `intDist θ = |θ − round θ|`(到最近整数的距离)及其基本性质,包括 Jordan 不等式 `2‖θ‖ ≤ |sin πθ|`。
+- Dirichlet 核 `kernel N θ = ∑_{n<N} e(nθ)`,核估计 `‖K(θ)‖ ≤ 1/(2‖θ‖)`,以及 δ-分离点上的行和界 `sum_norm_kernel_row_le`。
+- `large_sieve`:对模 1 两两 δ-分离的点,`∑_i ‖∑_{n<N} a_n e(n t_i)‖² ≤ (N + δ⁻¹(1 + log (2δ)⁻¹)) ∑_n ‖a_n‖²`,以及计数形式 `card_le_of_large_values`。
+- 常数带对数损失(尖锐常数 `N + δ⁻¹` 需要 Selberg 主项函数,未形式化),这一点在文档和 open_boundary 里写明了。
+
+## 第 2 步:Halász–Montgomery 大值估计 — `RiemannHypothesis/HalaszMontgomery.lean`
+
+- `sum_normSq_le_of_rowSum_le`(坐标形式,对偶 + Cauchy–Schwarz + Gram 行和)与 `halasz_montgomery`(内积空间形式)。
+- 特化到 Dirichlet 多项式:`sum_normSq_dirichletPoly_le` 与大值计数 `card_le_of_dirichletPoly_large`(`R ≤ Δ‖a‖²/V²`)。
+- 说明其范围:Gram 行和界 `Δ` 是假设而非供给。把已有的 `integral_normSq_dirichletPoly_mvt_zero` 转到离散分离点上需要 Gallagher/Sobolev 那一步,仓库里没有;所以这里没有声称任何数值型大值定理。
+
+## 第 3 步:Mollifier 零点检测 — `RiemannHypothesis/Mollifier.lean`(本次新增)
+
+- `mollifier y s = ∑_{n≤y} μ(n) n^{−s}`,系数 `detectCoeff y n = ∑_{d∣n, d≤y} μ(d)`。
+- 初始区间的消失:`detectCoeff_one`(`c₁ = 1`)与 `detectCoeff_eq_zero_of_le`(`2 ≤ n ≤ y` 时 `c_n = 0`),用的正是仓库 `MertensSums.lean` 里的 `sum_divisors_moebius`。
+- `zeta_mul_mollifier_eq_one_add_tail`:`re s > 1` 时 `ζ(s)M_y(s) = 1 + ∑_{n>y} c_n n^{−s}`;`LSeries_tailCoeff_eq` 给出尾部 `= ζ(s)M_y(s) − 1`,故在零点处为 `−1`。
+- 另外给出**有限形式、对一切 `s` 成立、不需任何收敛条件**的恒等式:`mollified_partialSum` 与 `mollified_partialSum_eq_one_add_tail`,即 `M_y(s)∑_{k≤K}k^{−s} = 1 + ∑_{y<m≤yK} c_{y,K}(m) m^{−s}`,系数 `c_{y,K}(m) = ∑_{d∣m, d≤y, m/d≤K} μ(d)` 在 `2 ≤ m ≤ min(y,K)` 上消失。
+- 诚实的范围说明:无穷级数版本住在 `re s > 1`,那里 ζ 没有零点,所以它本身检测不到零点;要把它带进临界带需要 AFE 或围道移位,这里没有做,因此**没有**任何密度估计从这个文件推出。
+
+## 第二候选:把 MethodCeiling 的手法推广到这条线上(本次新增)
+
+- 大筛的天花板(`LargeSieve.lean`):定义 `AdmissibleConstant C`(常数 `C δ N` 使大筛不等式对一切 δ-分离族成立)。两个构型给出下界——单点全 1 系数迫使 `C ≥ N`;`⌊(2δ)⁻¹⌋+1` 个点 `0, δ, 2δ, …` 配单点支撑系数迫使 `C ≥ ⌊(2δ)⁻¹⌋+1`。合起来 `le_of_admissibleConstant : max N (2δ)⁻¹ ≤ C δ N`。所以常数的两项都不可去,唯一还开着的就是那个对数因子。
+- 大值估计的天花板(`HalaszMontgomery.lean`):`exists_sharp_rowSum` 给出正交构型,使不等式在 `Δ = 1` 时取等;`largeValues_constant_ge_one` 由此证明任何普适常数 `c ≥ 1`。也就是说 `R ≤ Δ‖a‖²/V²` 的常数已经最优,想改进大值计数就必须用到 Gram 行和之外的信息(这正是 Guth–Maynard 那类工作在做的事)。
+
+## 第 4 步:仍未完成
+
+组装出 `N(σ,T) ≪ T^{3(1−σ)/(2−σ)+ε}` 需要两块本仓库还没有的东西:把 mollifier 恒等式带进临界带的显式误差项,以及把积分型均值定理转成离散分离点上的 Gram 行和界。这两点都在相应的 `open_boundary` 字段里写明,没有作任何未经证明的声称。
+
+## 仓库簿记
+
+按仓库自己的约定做了登记:README 模块表新增三行;`docs/goal/task-board.yaml` 新增 `M2-LARGE-SIEVE`、`M2-LARGE-VALUES`、`M2-ZERO-DETECTION` 三行(状态 DONE_WEAK,含 exit_criteria 与 open_boundary);`docs/goal/evidence/` 新增三份证据说明;所有主要命题在 `scripts/revalidation.lean` 中被完整写出并钉住;`scripts/audit.sh` 新增 19 项 `#print axioms` 检查;`docs/current-goal-state.md` 已重新生成。完整 `lake build` 成功(9155 个任务),`scripts/audit.sh` 输出 `OK`。所有改动已提交并推送。
+
 # Summary of changes for run 86d92e93-19c3-430b-8fc5-d05582c13fbc
 ## What I did
 

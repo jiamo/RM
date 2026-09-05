@@ -107,7 +107,7 @@ lemma logDeriv_split {f : ℂ → ℂ} (hfa : AnalyticOnNhd ℂ f (Metric.closed
     Finset.prod_ne_zero_iff.mpr fun ρ hρ => pow_ne_zero _ (sub_ne_zero.mpr (hzne ρ hρ))
   have hCfz : Cf r f z ≠ 0 := Cf_ne_zero hfa hf0 hr1 hfin hz.le
   have hdP0 : DifferentiableAt ℂ P0 z :=
-    DifferentiableAt.fun_finsetProd fun ρ _ =>
+    DifferentiableAt.fun_finset_prod fun ρ _ =>
       ((differentiable_id.sub_const ρ).differentiableAt).pow _
   have hdCf : DifferentiableAt ℂ (Cf r f) z := by
     have hR : r < (r + 1) / 2 := by linarith
@@ -373,7 +373,7 @@ theorem logDeriv_partial_fraction_disk {f : ℂ → ℂ} {s₀ : ℂ} {R B : ℝ
   have hφd : ∀ w : ℂ, deriv φ w = (R : ℂ) := by
     intro w
     rw [hφ]
-    simp
+    simpa using ((hasDerivAt_id w).const_mul (R : ℂ)).deriv
   have hφinj : Function.Injective φ := by
     intro a b hab
     rw [hφ] at hab

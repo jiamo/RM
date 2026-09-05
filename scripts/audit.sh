@@ -2,7 +2,9 @@
 # Check the trust conditions of the formalization:
 #  1. everything builds;
 #  2. no `sorry` anywhere outside Challenge.lean (which is allowed to have them);
-#  3. the compared theorems depend only on propext, Quot.sound, Classical.choice;
+#  3. the compared theorems depend only on propext, Quot.sound, Classical.choice, and — 3b —
+#     so does EVERY theorem of the library, checked exhaustively from the environment rather
+#     than from a hand-maintained list (3c reports the coverage of that list);
 #  4. no Float in any statement or proof;
 #  5. every claim of a closed task-board row is pinned in scripts/revalidation.lean;
 #  6. every conditional theorem (one whose hypotheses mention an unproved Prop of this
@@ -130,23 +132,73 @@ import RiemannHypothesis.BacklundZeta
 import RiemannHypothesis.ZetaDensityLittlewood
 import RiemannHypothesis.CriticalLineMeanSquare
 import RiemannHypothesis.MethodCeiling
+import RiemannHypothesis.CorpusCeiling
 import RiemannHypothesis.VanDerCorput
 import RiemannHypothesis.KusminLandau
+import RiemannHypothesis.KusminLandauGeneral
 import RiemannHypothesis.VanDerCorputSums
 import RiemannHypothesis.WeylDifferencing
 import RiemannHypothesis.WeylQuadratic
 import RiemannHypothesis.WeylEquidistribution
+import RiemannHypothesis.WeylQuadraticQuantitative
+import RiemannHypothesis.WeylMinSum
+import RiemannHypothesis.WeylBadlyApproximable
+import RiemannHypothesis.WeylCubic
+import RiemannHypothesis.WeylGeneral
+import RiemannHypothesis.DivisorBound
+import RiemannHypothesis.WeylDivisor
+import RiemannHypothesis.WeylClassical
+import RiemannHypothesis.WeylBadlyGeneral
+import RiemannHypothesis.WeylInterval
 import RiemannHypothesis.WeylCriterion
 import RiemannHypothesis.WeylCount
 import RiemannHypothesis.WeylCountGeneral
 import RiemannHypothesis.WeylLinear
 import RiemannHypothesis.WeylCountArc
+import RiemannHypothesis.WeylPortmanteau
+import RiemannHypothesis.WeylDiscrepancy
+import RiemannHypothesis.WeylDiscrepancyQuadratic
+import RiemannHypothesis.WeylDiscrepancyGeneral
+import RiemannHypothesis.Discrepancy
+import RiemannHypothesis.DiscrepancyCriterion
+import RiemannHypothesis.WeylDifferenceTheorem
+import RiemannHypothesis.WeylPolynomial
+import RiemannHypothesis.WeylPolynomialGeneral
 import RiemannHypothesis.SqrtHarmonic
 import RiemannHypothesis.ZetaChi
 import RiemannHypothesis.ApproximateFunctionalEquation
 import RiemannHypothesis.VanDerCorputThird
 import RiemannHypothesis.AFESubconvexity
+import RiemannHypothesis.SubconvexityUnconditional
+import RiemannHypothesis.SubconvexityStrip
+import RiemannHypothesis.SubconvexityLeft
+import RiemannHypothesis.ConvexityLogFree
+import RiemannHypothesis.SubconvexityClosedStrip
 import RiemannHypothesis.LindelofFromRH
+import RiemannHypothesis.HalaszMontgomery
+import RiemannHypothesis.LargeSieve
+import RiemannHypothesis.LargeSieveGallagher
+import RiemannHypothesis.LargeSieveFarey
+import RiemannHypothesis.LargeSieveDual
+import RiemannHypothesis.LargeSieveSifted
+import RiemannHypothesis.LargeSieveSquarefree
+import RiemannHypothesis.BrunTitchmarsh
+import RiemannHypothesis.BrunTitchmarshSharp
+import RiemannHypothesis.BrunTwinPrimes
+import RiemannHypothesis.BrunConstant
+import RiemannHypothesis.Mollifier
+import RiemannHypothesis.DivisorSquareSum
+import RiemannHypothesis.MollifiedMeanSquare
+import RiemannHypothesis.GallagherDiscrete
+import RiemannHypothesis.GaussianMeanValue
+import RiemannHypothesis.GaussianMeanValueDiscrete
+import RiemannHypothesis.MollifiedZetaMeanSquare
+import RiemannHypothesis.MollifiedZetaCircle
+import RiemannHypothesis.CarlsonDensity
+import RiemannHypothesis.CarlsonPowerSaving
+import RiemannHypothesis.CarlsonDensityPowerSaving
+import RiemannHypothesis.Zeta23Verification
+import RiemannHypothesis.EventualCountingCriterion
 
 #print axioms RiemannHypothesisConjecture.zeta_strip_iff_eta
 #print axioms RiemannHypothesisConjecture.zeta_iff_zeta_strip
@@ -602,6 +654,8 @@ import RiemannHypothesis.LindelofFromRH
 #print axioms RiemannHypothesis.KusminLandau.norm_sum_e2pi_le
 #print axioms RiemannHypothesis.KusminLandau.norm_sum_e2pi_le_of_deriv
 #print axioms RiemannHypothesis.KusminLandau.norm_sum_e2pi_le_of_deriv_sub_int
+#print axioms RiemannHypothesis.KusminLandau.norm_sum_e2pi_le_of_deriv_floor
+#print axioms RiemannHypothesis.KusminLandau.norm_sum_e2pi_le_of_deriv_general
 #print axioms RiemannHypothesis.VanDerCorputSums.norm_fiber_sum_le
 #print axioms RiemannHypothesis.VanDerCorputSums.norm_sum_e2pi_le_of_grow
 #print axioms RiemannHypothesis.VanDerCorputSums.norm_sum_e2pi_le_of_grow_sqrt
@@ -617,10 +671,119 @@ import RiemannHypothesis.LindelofFromRH
 #print axioms RiemannHypothesis.WeylEquidistribution.exists_pos_le_intDist_of_irrational
 #print axioms RiemannHypothesis.WeylEquidistribution.exists_normSq_quadSum_le
 #print axioms RiemannHypothesis.WeylEquidistribution.tendsto_norm_quadSum_div_atTop
+#print axioms RiemannHypothesis.WeylQuadratic.inv_le_intDist_intCast_div
+#print axioms RiemannHypothesis.WeylQuadratic.intDist_le_intDist_add_abs_sub
+#print axioms RiemannHypothesis.WeylQuadratic.inv_two_mul_le_intDist_of_approx
+#print axioms RiemannHypothesis.WeylQuadratic.normSq_quadSum_le_of_approx
+#print axioms RiemannHypothesis.WeylQuadratic.normSq_quadSum_le_of_approx_sqrt
+#print axioms RiemannHypothesis.WeylQuadratic.norm_quadSum_pow_four_le_of_approx_sqrt
+#print axioms RiemannHypothesis.WeylQuadratic.norm_quadSum_le_of_approx_sqrt
+#print axioms RiemannHypothesis.WeylQuadratic.sum_block_le
+#print axioms RiemannHypothesis.WeylQuadratic.sum_Ioc_le
+#print axioms RiemannHypothesis.WeylQuadratic.normSq_quadSum_le_of_approx_count
+#print axioms RiemannHypothesis.WeylQuadratic.normSq_quadSum_le_of_approx_large
+#print axioms RiemannHypothesis.WeylQuadratic.norm_quadSum_le_of_approx_large
+#print axioms RiemannHypothesis.WeylQuadratic.normSq_quadSum_le_of_den_le
+#print axioms RiemannHypothesis.WeylQuadratic.exists_coprime_approx
+#print axioms RiemannHypothesis.WeylQuadratic.le_den_of_badlyApproximable
+#print axioms RiemannHypothesis.WeylQuadratic.normSq_quadSum_le_of_badlyApproximable
+#print axioms RiemannHypothesis.WeylQuadratic.norm_quadSum_le_of_badlyApproximable
+#print axioms RiemannHypothesis.WeylQuadratic.badlyApproximable_sqrt_two
+#print axioms RiemannHypothesis.WeylQuadratic.norm_quadSum_sqrt_two_le
+#print axioms RiemannHypothesis.WeylQuadratic.inv_le_abs_sub_div_of_quadratic
+#print axioms RiemannHypothesis.WeylQuadratic.badlyApproximable_of_quadratic
+#print axioms RiemannHypothesis.WeylQuadratic.exists_norm_quadSum_le_of_badlyApproximable
+#print axioms RiemannHypothesis.WeylQuadratic.exists_norm_quadSum_le_of_quadratic
+#print axioms RiemannHypothesis.WeylCubic.norm_linSum_le_dioMaj
+#print axioms RiemannHypothesis.WeylCubic.mul_normSq_cubeSum_le
+#print axioms RiemannHypothesis.WeylCubic.mul_sq_cubeInner_le
+#print axioms RiemannHypothesis.WeylCubic.sum_double_le
+#print axioms RiemannHypothesis.WeylCubic.norm_cubeSum_pow_four_le_of_approx
+#print axioms RiemannHypothesis.WeylCubic.norm_cubeSum_pow_eight_le_of_approx
+#print axioms RiemannHypothesis.WeylCubic.norm_cubeSum_pow_eight_le_of_badlyApproximable
+#print axioms RiemannHypothesis.WeylCubic.norm_cubeSum_sqrt_two_le
+#print axioms RiemannHypothesis.WeylGeneral.IsPolyPhase.diff
+#print axioms RiemannHypothesis.WeylGeneral.norm_polyPhaseSum_pow_le
+#print axioms RiemannHypothesis.WeylGeneral.weylMulti_le_dioSum
+#print axioms RiemannHypothesis.WeylGeneral.dioSum_le_of_approx
+#print axioms RiemannHypothesis.WeylGeneral.weylMulti_le_of_approx
+#print axioms RiemannHypothesis.WeylGeneral.norm_monomialSum_pow_le_of_approx
+#print axioms RiemannHypothesis.WeylGeneral.norm_monomialSum_pow_mul_le_of_approx
+#print axioms RiemannHypothesis.DivisorBound.exists_card_divisors_le
+#print axioms RiemannHypothesis.DivisorBound.sum_mul_divisor_le
+#print axioms RiemannHypothesis.DivisorBound.card_divisors_pow_le
+#print axioms RiemannHypothesis.WeylDivisor.weylMulti_le_divisorSum
+#print axioms RiemannHypothesis.WeylDivisor.sum_divisorWeight_le
+#print axioms RiemannHypothesis.WeylDivisor.weylMulti_le_of_approx_divisor
+#print axioms RiemannHypothesis.WeylDivisor.norm_monomialSum_pow_mul_le_of_approx_divisor
+#print axioms RiemannHypothesis.WeylDivisor.exists_norm_monomialSum_pow_mul_le
+#print axioms RiemannHypothesis.WeylClassical.norm_polyPhaseSum_pow_le_three_term
+#print axioms RiemannHypothesis.WeylClassical.exists_norm_polyPhaseSum_pow_le_three_term
+#print axioms RiemannHypothesis.WeylClassical.exists_norm_polyPhaseSum_le_three_term
+#print axioms RiemannHypothesis.WeylClassical.norm_monomialSum_pow_le_three_term
+#print axioms RiemannHypothesis.WeylClassical.exists_norm_monomialSum_pow_le_three_term
+#print axioms RiemannHypothesis.WeylClassical.exists_norm_monomialSum_le_three_term
+#print axioms RiemannHypothesis.WeylBadlyGeneral.exists_norm_polyPhaseSum_pow_mul_le_of_badlyApproximable
+#print axioms RiemannHypothesis.WeylBadlyGeneral.exists_norm_polyPhaseSum_le_of_badlyApproximable
+#print axioms RiemannHypothesis.WeylBadlyGeneral.exists_norm_monomialSum_pow_mul_le_of_badlyApproximable
+#print axioms RiemannHypothesis.WeylBadlyGeneral.exists_norm_monomialSum_le_of_badlyApproximable
+#print axioms RiemannHypothesis.WeylBadlyGeneral.exists_norm_monomialSum_sqrt_two_le
+#print axioms RiemannHypothesis.WeylGeneral.IsPolyPhase.comp_add
+#print axioms RiemannHypothesis.WeylInterval.sum_e2pi_Ico_shift
+#print axioms RiemannHypothesis.WeylInterval.norm_polyPhaseSum_Ico_pow_le_three_term
+#print axioms RiemannHypothesis.WeylInterval.exists_norm_polyPhaseSum_Ico_pow_le_three_term
+#print axioms RiemannHypothesis.WeylInterval.exists_norm_polyPhaseSum_Ico_le_three_term
+#print axioms RiemannHypothesis.WeylInterval.exists_norm_monomialSum_Ico_le_three_term
+#print axioms RiemannHypothesis.WeylInterval.exists_norm_polyPhaseSum_Ico_le_of_badlyApproximable
+#print axioms RiemannHypothesis.WeylInterval.exists_norm_monomialSum_Ico_le_of_badlyApproximable
+#print axioms RiemannHypothesis.WeylInterval.exists_norm_monomialSum_Ico_sqrt_two_le
 #print axioms RiemannHypothesis.WeylCriterion.integral_fourier_eq_zero
 #print axioms RiemannHypothesis.WeylCriterion.equidistributedMod1_iff_weylSumsVanish
 #print axioms RiemannHypothesis.WeylCriterion.equidistributedMod1_quadratic
 #print axioms RiemannHypothesis.WeylCriterion.not_equidistributedMod1_const_zero
+#print axioms RiemannHypothesis.WeylPortmanteau.sum_e2pi_roots_eq_zero
+#print axioms RiemannHypothesis.WeylPortmanteau.norm_sum_e2pi_sub_stepSum_le
+#print axioms RiemannHypothesis.WeylPortmanteau.weylSumsVanish_of_countsEquidistribute
+#print axioms RiemannHypothesis.WeylPortmanteau.equidistributedMod1_iff_countsEquidistribute
+#print axioms RiemannHypothesis.WeylPortmanteau.weylSumsVanish_iff_countsEquidistribute
+#print axioms RiemannHypothesis.WeylPortmanteau.countsEquidistribute_quadratic
+#print axioms RiemannHypothesis.WeylDiscrepancy.integral_kern
+#print axioms RiemannHypothesis.WeylDiscrepancy.kern_le_inv
+#print axioms RiemannHypothesis.WeylDiscrepancy.integral_kern_tail
+#print axioms RiemannHypothesis.WeylDiscrepancy.abs_sub_smoothing_le
+#print axioms RiemannHypothesis.WeylDiscrepancy.abs_avg_smoothing_sub_integral_le
+#print axioms RiemannHypothesis.WeylDiscrepancy.abs_avg_sub_integral_le
+#print axioms RiemannHypothesis.WeylDiscrepancy.abs_countIn_div_sub_le
+#print axioms RiemannHypothesis.WeylDiscrepancy.abs_countIn_div_sub_le_pow
+#print axioms RiemannHypothesis.WeylDiscrepancy.norm_expSum_linear_le
+#print axioms RiemannHypothesis.WeylDiscrepancy.abs_countIn_div_sub_le_linear
+#print axioms RiemannHypothesis.WeylDiscrepancy.badlyApproximable_natMul
+#print axioms RiemannHypothesis.WeylDiscrepancy.expSum_quadratic_eq
+#print axioms RiemannHypothesis.WeylDiscrepancy.norm_expSum_quadratic_le
+#print axioms RiemannHypothesis.WeylDiscrepancy.abs_countIn_div_sub_le_quadratic
+#print axioms RiemannHypothesis.WeylDiscrepancy.abs_countIn_div_sub_le_sqrt_two
+#print axioms RiemannHypothesis.WeylDiscrepancy.norm_expSum_add_const
+#print axioms RiemannHypothesis.WeylDiscrepancy.countIn_add_countIn
+#print axioms RiemannHypothesis.WeylDiscrepancy.abs_countIn_div_sub_le_pow_shift
+#print axioms RiemannHypothesis.WeylDiscrepancy.countIn_div_le_of_le
+#print axioms RiemannHypothesis.WeylDiscrepancy.abs_countIn_div_sub_le_pow_of_le
+#print axioms RiemannHypothesis.WeylDiscrepancy.abs_countIn_div_sub_le_linear_of_le
+#print axioms RiemannHypothesis.WeylDiscrepancy.abs_countIn_div_sub_le_quadratic_of_le
+#print axioms RiemannHypothesis.WeylDiscrepancy.abs_countIn_div_sub_le_sqrt_two_of_le
+#print axioms RiemannHypothesis.WeylDiscrepancy.le_discrepancy
+#print axioms RiemannHypothesis.WeylDiscrepancy.discrepancy_le_of_forall
+#print axioms RiemannHypothesis.WeylDiscrepancy.half_le_discrepancy_const_zero
+#print axioms RiemannHypothesis.WeylDiscrepancy.discrepancy_le_pow
+#print axioms RiemannHypothesis.WeylDiscrepancy.discrepancy_linear_le
+#print axioms RiemannHypothesis.WeylDiscrepancy.discrepancy_linear_le_rpow
+#print axioms RiemannHypothesis.WeylDiscrepancy.tendsto_discrepancy_linear
+#print axioms RiemannHypothesis.WeylDiscrepancy.tendsto_discrepancy_of_weylSumsVanish
+#print axioms RiemannHypothesis.WeylDiscrepancy.countsEquidistribute_of_tendsto_discrepancy
+#print axioms RiemannHypothesis.WeylDiscrepancy.equidistributedMod1_iff_tendsto_discrepancy
+#print axioms RiemannHypothesis.WeylDiscrepancy.weylSumsVanish_iff_tendsto_discrepancy
+#print axioms RiemannHypothesis.WeylDiscrepancy.countsEquidistribute_iff_tendsto_discrepancy
+#print axioms RiemannHypothesis.WeylDiscrepancy.tendsto_discrepancy_quadratic
+#print axioms RiemannHypothesis.WeylDiscrepancy.not_tendsto_discrepancy_const_zero
 #print axioms RiemannHypothesis.WeylCount.tendsto_avg_real
 #print axioms RiemannHypothesis.WeylCount.tendsto_countIn_div
 #print axioms RiemannHypothesis.WeylCount.tendsto_countIn_div_quadratic
@@ -634,6 +797,20 @@ import RiemannHypothesis.LindelofFromRH
 #print axioms RiemannHypothesis.WeylCount.tendsto_countArc_div
 #print axioms RiemannHypothesis.WeylCount.tendsto_countArc_div_quadratic
 #print axioms RiemannHypothesis.WeylCount.tendsto_countArc_div_linear
+#print axioms RiemannHypothesis.WeylDifference.mul_normSq_weylSum_le
+#print axioms RiemannHypothesis.WeylDifference.weylSumsVanish_of_diff
+#print axioms RiemannHypothesis.WeylDifference.equidistributedMod1_of_diff
+#print axioms RiemannHypothesis.WeylPolynomial.coeff_diffPoly_pred
+#print axioms RiemannHypothesis.WeylPolynomial.natDegree_diffPoly
+#print axioms RiemannHypothesis.WeylPolynomial.equidistributedMod1_polyEval
+#print axioms RiemannHypothesis.WeylPolynomial.tendsto_countIn_div_polyEval
+#print axioms RiemannHypothesis.WeylPolynomial.equidistributedMod1_monomial
+#print axioms RiemannHypothesis.WeylPolynomial.tendsto_countIn_div_monomial
+#print axioms RiemannHypothesis.WeylPolynomial.equidistributedMod1_of_sub_int
+#print axioms RiemannHypothesis.WeylPolynomial.equidistributedMod1_of_residue_classes
+#print axioms RiemannHypothesis.WeylPolynomial.equidistributedMod1_polyEval_of_exists_irrational
+#print axioms RiemannHypothesis.WeylPolynomial.not_equidistributedMod1_polyEval_of_forall_rat
+#print axioms RiemannHypothesis.WeylPolynomial.equidistributedMod1_polyEval_iff
 #print axioms RiemannHypothesis.sum_one_div_sqrt_le
 #print axioms RiemannHypothesis.sum_sqrt_le
 #print axioms RiemannHypothesis.riemannZeta_eq_zetaChi_mul
@@ -650,8 +827,149 @@ import RiemannHypothesis.LindelofFromRH
 #print axioms RiemannHypothesis.AFESubconvexity.norm_sum_block_criticalLine_le
 #print axioms RiemannHypothesis.AFESubconvexity.norm_zetaSum_le_of_le_cube
 #print axioms RiemannHypothesis.AFESubconvexity.norm_riemannZeta_criticalLine_le_of_afe
+#print axioms RiemannHypothesis.SubconvexityUnconditional.block_bound_numeric_quartic
+#print axioms RiemannHypothesis.SubconvexityUnconditional.norm_sum_e2pi_logPhase_block_le_quartic
+#print axioms RiemannHypothesis.SubconvexityUnconditional.norm_sum_e2pi_logPhase_block_le_mid
+#print axioms RiemannHypothesis.SubconvexityUnconditional.norm_sum_e2pi_logPhase_block_le_long
+#print axioms RiemannHypothesis.SubconvexityUnconditional.norm_sum_e2pi_logPhase_block_le_all
+#print axioms RiemannHypothesis.SubconvexityUnconditional.norm_sum_block_criticalLine_le_all
+#print axioms RiemannHypothesis.SubconvexityUnconditional.norm_zetaSum_le_of_le_pow_twelve
+#print axioms RiemannHypothesis.SubconvexityUnconditional.tsum_shift_rpow_neg_three_halves_le
+#print axioms RiemannHypothesis.SubconvexityUnconditional.norm_riemannZeta_sub_zetaSum_le
+#print axioms RiemannHypothesis.SubconvexityUnconditional.norm_riemannZeta_criticalLine_le
+#print axioms RiemannHypothesis.SubconvexityStrip.cpow_strip_eq
+#print axioms RiemannHypothesis.SubconvexityStrip.norm_sum_block_strip_le
+#print axioms RiemannHypothesis.SubconvexityStrip.sum_Icc_rpow_neg_le
+#print axioms RiemannHypothesis.SubconvexityStrip.norm_zetaSum_strip_le
+#print axioms RiemannHypothesis.SubconvexityStrip.norm_riemannZeta_sub_zetaSum_strip_le
+#print axioms RiemannHypothesis.SubconvexityStrip.norm_riemannZeta_strip_le
+#print axioms RiemannHypothesis.exists_bound_criticalLine_sixth
+#print axioms RiemannHypothesis.norm_riemannZeta_le_subconvexity_left
+#print axioms RiemannHypothesis.norm_riemannZeta_le_convexity_logfree
+#print axioms RiemannHypothesis.isBigO_riemannZeta_convexity_logfree
+#print axioms RiemannHypothesis.norm_riemannZeta_le_log_div_of_one_lt_re
+#print axioms RiemannHypothesis.norm_riemannZeta_le_subconvexity_right
+#print axioms RiemannHypothesis.norm_riemannZeta_le_subconvexity_closed_strip
+#print axioms RiemannHypothesis.HalaszMontgomery.sum_normSq_le_of_rowSum_le
+#print axioms RiemannHypothesis.HalaszMontgomery.halasz_montgomery
+#print axioms RiemannHypothesis.HalaszMontgomery.sum_normSq_dirichletPoly_le
+#print axioms RiemannHypothesis.HalaszMontgomery.card_le_of_dirichletPoly_large
+#print axioms RiemannHypothesis.LargeSieve.norm_kernel_le_inv_intDist
+#print axioms RiemannHypothesis.LargeSieve.sum_norm_kernel_row_le
+#print axioms RiemannHypothesis.LargeSieve.large_sieve
+#print axioms RiemannHypothesis.LargeSieve.card_le_of_large_values
+#print axioms RiemannHypothesis.LargeSieve.le_of_admissibleConstant
+#print axioms RiemannHypothesis.LargeSieveGallagher.integral_normSq_expPoly
+#print axioms RiemannHypothesis.LargeSieveGallagher.hasDerivAt_expPoly
+#print axioms RiemannHypothesis.LargeSieveGallagher.integral_normSq_deriv_le
+#print axioms RiemannHypothesis.LargeSieveGallagher.sum_normSq_le_of_separated_sharp
+#print axioms RiemannHypothesis.LargeSieveGallagher.sum_normSq_expPoly_le
+#print axioms RiemannHypothesis.LargeSieveGallagher.large_sieve_gallagher
+#print axioms RiemannHypothesis.LargeSieveGallagher.card_le_of_large_values_gallagher
+#print axioms RiemannHypothesis.LargeSieveFarey.one_div_den_le_intDist
+#print axioms RiemannHypothesis.LargeSieveFarey.inv_sq_le_intDist_sub
+#print axioms RiemannHypothesis.LargeSieveFarey.large_sieve_farey
+#print axioms RiemannHypothesis.LargeSieveFarey.large_sieve_farey_pairs
+#print axioms RiemannHypothesis.LargeSieveFarey.card_le_of_large_values_farey
+#print axioms RiemannHypothesis.LargeSieveDual.sum_normSq_adjoint_le
+#print axioms RiemannHypothesis.LargeSieveDual.large_sieve_dual
+#print axioms RiemannHypothesis.LargeSieveDual.large_sieve_dual_farey
+#print axioms RiemannHypothesis.LargeSieveSquarefree.sum_normSq_dft
+#print axioms RiemannHypothesis.LargeSieveSquarefree.sq_norm_expSum_mul_le_sum_prime
+#print axioms RiemannHypothesis.LargeSieveSquarefree.redSq_prime_mul_le
+#print axioms RiemannHypothesis.LargeSieveSquarefree.sq_card_mul_prod_le_redSq
+#print axioms RiemannHypothesis.LargeSieveSquarefree.card_le_sifted_squarefree
+#print axioms RiemannHypothesis.LargeSieveSquarefree.card_le_sifted_squarefree_half
+#print axioms RiemannHypothesis.LargeSieveSquarefree.card_squarefreeUpTo_ge
+#print axioms RiemannHypothesis.LargeSieveSquarefree.card_le_of_sifted_half_sqrt
+#print axioms RiemannHypothesis.BrunTitchmarsh.sum_inv_squarefree_le_siftSum
+#print axioms RiemannHypothesis.BrunTitchmarsh.sum_inv_not_squarefree_le
+#print axioms RiemannHypothesis.BrunTitchmarsh.quarter_log_le_siftSum
+#print axioms RiemannHypothesis.BrunTitchmarsh.card_mul_siftSum_le
+#print axioms RiemannHypothesis.BrunTitchmarsh.card_primes_Ico_le
+#print axioms RiemannHypothesis.BrunTitchmarsh.card_primes_range_le
+#print axioms RiemannHypothesis.BrunTitchmarsh.card_primes_Ico_le_of_level
+#print axioms RiemannHypothesis.BrunTitchmarsh.card_primes_Ico_le_two_pi
+#print axioms RiemannHypothesis.BrunTitchmarsh.card_primes_range_le_two_pi
+#print axioms RiemannHypothesis.BrunTitchmarsh.card_primes_Ico_mod_le_of_level
+#print axioms RiemannHypothesis.BrunTitchmarsh.card_primes_Ico_mod_le_two_pi
+#print axioms RiemannHypothesis.BrunTwinPrimes.half_log_sub_half_le_oddSieveTotal
+#print axioms RiemannHypothesis.BrunTwinPrimes.nine_sixteenths_le_sum_coprime_pairs
+#print axioms RiemannHypothesis.BrunTwinPrimes.sum_coprime_pairs_le_twinSiftSum
+#print axioms RiemannHypothesis.BrunTwinPrimes.twinSiftSum_ge
+#print axioms RiemannHypothesis.BrunTwinPrimes.card_mul_twinSiftSum_le
+#print axioms RiemannHypothesis.BrunTwinPrimes.card_twinPrimes_le
+#print axioms RiemannHypothesis.BrunConstant.blockSum_le
+#print axioms RiemannHypothesis.BrunConstant.sum_inv_twinPrimes_le
+#print axioms RiemannHypothesis.BrunConstant.summable_twinInv
+#print axioms RiemannHypothesis.BrunConstant.tsum_twinInv_le
+#print axioms RiemannHypothesis.BrunConstant.not_summable_nonTwinInv
+#print axioms RiemannHypothesis.BrunConstant.infinite_setOf_prime_not_prime_add_two
+#print axioms RiemannHypothesis.LargeSieveSifted.sum_e2pi_mul_div
+#print axioms RiemannHypothesis.LargeSieveSifted.sum_normSq_indSum
+#print axioms RiemannHypothesis.LargeSieveSifted.sq_card_le_mul_sum_sq_fiber
+#print axioms RiemannHypothesis.LargeSieveSifted.filter_coprime_prime
+#print axioms RiemannHypothesis.LargeSieveSifted.sq_card_mul_le_sum_prime
+#print axioms RiemannHypothesis.LargeSieveSifted.card_le_sifted
+#print axioms RiemannHypothesis.LargeSieveSifted.card_le_sifted_half
+#print axioms RiemannHypothesis.LargeSieveSifted.card_image_mod_le_of_isSquare
+#print axioms RiemannHypothesis.LargeSieveSifted.card_le_of_isSquare
+#print axioms RiemannHypothesis.LargeSieveSifted.card_squares_lt_le
+#print axioms RiemannHypothesis.HalaszMontgomery.exists_sharp_rowSum
+#print axioms RiemannHypothesis.HalaszMontgomery.largeValues_constant_ge_one
+#print axioms RiemannHypothesis.Mollifier.detectCoeff_eq_zero_of_le
+#print axioms RiemannHypothesis.Mollifier.zeta_mul_mollifier_eq_one_add_tail
+#print axioms RiemannHypothesis.Mollifier.LSeries_tailCoeff_eq
+#print axioms RiemannHypothesis.Mollifier.finiteDetectCoeff_eq_zero_of_le
+#print axioms RiemannHypothesis.Mollifier.mollified_partialSum
+#print axioms RiemannHypothesis.Mollifier.mollified_partialSum_eq_one_add_tail
+#print axioms RiemannHypothesis.divisorCount_le_mul_of_dvd
+#print axioms RiemannHypothesis.divisorCount_sq_le_divisorCount4
+#print axioms RiemannHypothesis.summable_divisorCount_sq_rpow
+#print axioms RiemannHypothesis.exists_tsum_divisorCount_sq_tail_lt
+#print axioms RiemannHypothesis.exists_tsum_normSq_tailCoeff_lt
+#print axioms RiemannHypothesis.mollifiedTail_eq
+#print axioms RiemannHypothesis.integral_normSq_mollified_partialSum_sub_one_le
+#print axioms RiemannHypothesis.exists_integral_normSq_mollified_partialSum_sub_one_le
+#print axioms RiemannHypothesis.exists_volume_norm_mollified_partialSum_sub_one_ge_le
+#print axioms RiemannHypothesis.Gallagher.mul_normSq_le_integral_of_mem_Icc
+#print axioms RiemannHypothesis.Gallagher.sum_integral_window_le
+#print axioms RiemannHypothesis.Gallagher.sum_normSq_le_of_separated
+#print axioms RiemannHypothesis.hasDerivAt_dirichletPoly_line
+#print axioms RiemannHypothesis.sum_normSq_logCoeff_le
+#print axioms RiemannHypothesis.sum_normSq_dirichletPoly_at_separated_le
+#print axioms RiemannHypothesis.card_le_of_dirichletPoly_large_separated
 #print axioms RiemannHypothesis.norm_riemannZeta_le_exp_of_zetaStripForm
 #print axioms RiemannHypothesis.exists_bound_riemannZeta_of_zetaStripForm
+#print axioms RiemannHypothesis.integral_exp_mul_I_gaussian
+#print axioms RiemannHypothesis.integral_normSq_dirichletPoly_gaussian_le
+#print axioms RiemannHypothesis.sum_exp_neg_sq_log_sub_le
+#print axioms RiemannHypothesis.integral_normSq_dirichletPoly_le_mv
+#print axioms RiemannHypothesis.integral_Icc_normSq_dirichletPoly_le_mv
+#print axioms RiemannHypothesis.sum_normSq_logCoeff_weighted_le
+#print axioms RiemannHypothesis.sum_normSq_dirichletPoly_at_separated_le_mv
+#print axioms RiemannHypothesis.card_le_of_dirichletPoly_large_separated_mv
+#print axioms RiemannHypothesis.exists_integral_normSq_zeta_mul_mollifier_sub_one_le
+#print axioms RiemannHypothesis.exists_integral_circleAverage_normSq_mollifiedZeta_sub_one_le
+#print axioms RiemannHypothesis.exists_ncard_zerosRightOf_le_eps
+#print axioms RiemannHypothesis.tendsto_ncard_zerosRightOf_div_atTop
+#print axioms RiemannHypothesis.tendsto_ncard_zerosOffCriticalLine_div_atTop
+#print axioms RiemannHypothesis.almostAllZerosNearCriticalLine
+#print axioms RiemannHypothesis.exists_integral_normSq_zeta_mul_mollifier_sub_one_le_rpow
+#print axioms RiemannHypothesis.exists_integral_circleAverage_normSq_mollifiedZeta_sub_one_le_rpow
+#print axioms RiemannHypothesis.exists_ncard_zerosRightOf_high_le_rpow
+#print axioms RiemannHypothesis.exists_ncard_zerosRightOf_le_rpow
+#print axioms RiemannHypothesis.exists_ncard_zerosOffCriticalLine_le_rpow
+#print axioms RiemannHypothesis.ncard_zerosRightOf_le_rpow_explicit
+#print axioms RiemannHypothesis.ncard_zerosOffCriticalLine_le_rpow_explicit
+#print axioms RiemannHypothesis.windowCount_sub_mainTerm_le
+#print axioms RiemannHypothesis.eventually_windowCount_ge
+#print axioms RiemannHypothesis.eventually_windowCountOnLine_ge
+#print axioms RiemannHypothesis.eventually_windowCountSimpleOnLine_ge
+#print axioms RiemannHypothesis.zetaStripForm_of_eventually_windowCountOnLine_eq
+#print axioms RiemannHypothesis.zetaStripForm_iff_eventually_windowCountOnLine_eq
+#print axioms RiemannHypothesis.zetaStripForm_iff_eventually_windowCountOnLine_eq_windowCount
+#print axioms RiemannHypothesis.zetaStripForm_iff_eventually_windowCountDistinct_le
 EOF
 lake env lean .lake/build/axioms.lean > .lake/build/axioms.out
 cat .lake/build/axioms.out
@@ -669,6 +987,36 @@ if tr '\n' ' ' < .lake/build/axioms.out | tr -s ' ' \
     | grep -o "depends on axioms: \[[^]]*\]" \
     | grep -v "\[propext, Classical.choice, Quot.sound\]" ; then
   echo "unexpected axioms"; fail=1
+fi
+
+# 3b. the same check, exhaustively: `scripts/axiom_audit.lean` walks the environment and
+#     collects the axioms of EVERY theorem declared in a module of this repository, so a new
+#     theorem is covered whether or not anybody remembered to add a `#print axioms` line for
+#     it above.  (The pinned list in step 3 is kept: it names the results the repository is
+#     compared on, and a renamed or deleted one makes that step fail loudly.)
+echo "==> exhaustive axiom audit (scripts/axiom_audit.lean)"
+if ! lake env lean scripts/axiom_audit.lean > .lake/build/axiom_audit.out 2>&1; then
+  cat .lake/build/axiom_audit.out
+  echo "axiom_audit.lean failed to elaborate"; fail=1
+else
+  grep -v '^warning: ' .lake/build/axiom_audit.out || true
+  if ! grep -q '^OK$' .lake/build/axiom_audit.out; then
+    echo "theorems depending on something other than propext, Classical.choice, Quot.sound"; fail=1
+  fi
+fi
+
+# 3c. coverage of the hand-maintained list of step 3, reported (not enforced): a stale line —
+#     a name step 3 checks that the library no longer exports — is a hard failure, since
+#     `#print axioms` on an unknown name checks nothing.
+echo "==> coverage of the pinned axiom checks (scripts/audit_coverage.py)"
+if ! lake env lean scripts/list_theorems.lean > .lake/build/theorems.txt 2>&1; then
+  cat .lake/build/theorems.txt
+  echo "list_theorems.lean failed to elaborate"; fail=1
+else
+  grep -v '^warning: ' .lake/build/theorems.txt > .lake/build/theorems.out || true
+  if ! python3 scripts/audit_coverage.py .lake/build/theorems.out --summary; then
+    echo "scripts/audit.sh names a theorem the library does not export"; fail=1
+  fi
 fi
 
 # 4. no Float

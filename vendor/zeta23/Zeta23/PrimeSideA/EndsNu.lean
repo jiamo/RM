@@ -23,7 +23,6 @@ import Zeta23.PrimeSideA.EndsWeighted
 
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
 
 open MeasureTheory Real Set
 

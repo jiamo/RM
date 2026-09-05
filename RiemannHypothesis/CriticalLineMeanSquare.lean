@@ -396,7 +396,7 @@ theorem exists_volume_norm_riemannZeta_ge_le_critical_line {ε : ℝ} (hε : 0 <
       = {t : ℝ | t ∈ Set.Ioc (0 : ℝ) T ∧
           V ≤ ‖riemannZeta (((1 / 2 : ℝ) : ℂ) + (t : ℂ) * I)‖} := by
     ext t
-    simp only [Set.mem_inter_iff, Set.mem_setOf_eq, hf]
+    simp only [Set.mem_inter_iff, Set.mem_ofPred_eq, hf]
     constructor
     · rintro ⟨hle, ht⟩
       exact ⟨ht, by nlinarith [norm_nonneg (riemannZeta (((1 / 2 : ℝ) : ℂ) + (t : ℂ) * I))]⟩

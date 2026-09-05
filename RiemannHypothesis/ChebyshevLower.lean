@@ -43,7 +43,7 @@ namespace RiemannHypothesis
 factorization. -/
 lemma log_eq_sum_factorization_mul_log {m : ℕ} (hm : m ≠ 0) :
     Real.log m = ∑ p ∈ m.primeFactors, (m.factorization p : ℝ) * Real.log p := by
-  conv_lhs => rw [← Nat.factorization_prod_pow_eq_self hm]
+  conv_lhs => rw [← Nat.prod_factorization_pow_eq_self hm]
   rw [Nat.prod_factorization_eq_prod_primeFactors]
   push_cast
   rw [Real.log_prod]

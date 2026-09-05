@@ -83,7 +83,7 @@ theorem xiDerivMultiplicity_add_one {s : ℂ} (h0 : 0 < s.re) (h1 : s.re < 1)
   have hcast : ((n : ℕ∞) + 1) = ((n + 1 : ℕ) : ℕ∞) := by push_cast; ring
   unfold xiDerivMultiplicity zeroMultiplicity
   rw [← h, ← hn, hcast]
-  simp only [ENat.toNat_coe]
+  simp only [ENat.toNat_natCast]
 
 /-- **A multiple nontrivial zero of `ζ` is a zero of `ξ′`.**  This is the local — and
 unconditional — half of Speiser's transfer: it moves every zero of `ζ` of multiplicity at least
@@ -148,7 +148,7 @@ theorem sum_xiDerivMultiplicity_offLine_add_simpleOnLine_le (T₁ T₂ : ℝ) :
       {ρ : ℂ | xiDerivMultiplicity ρ = 1} = ↑sB := by
     ext ρ
     simp only [hsB, hs, Finset.coe_filter, Set.Finite.mem_toFinset, Set.mem_inter_iff,
-      Set.mem_setOf_eq]
+      Set.mem_ofPred_eq]
     tauto
   have hcount : xiDerivWindowCount T₁ T₂ = ∑ ρ ∈ s, xiDerivMultiplicity ρ := by
     rw [xiDerivWindowCount, finsum_mem_eq_finite_toFinset_sum _ hZ]

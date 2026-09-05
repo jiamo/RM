@@ -217,9 +217,9 @@ lemma Mform_PX_PX (hT : 0 ≤ T) (hΦ : Continuous Φ) (X : ℝ) :
         (volume.restrict (Icc T (2 * T) ×ˢ Icc T (2 * T))) := fun n m =>
       (Mform_integrableOn hΦ (u := fun τ => Real.cos (τ * Real.log n))
         (v := fun τ => Real.cos (τ * Real.log m)) (by fun_prop) (by fun_prop)).const_mul _
-    rw [integral_finsetSum _ (fun n _ => integrable_finsetSum _ (fun m _ => hint n m))]
+    rw [integral_finset_sum _ (fun n _ => integrable_finset_sum _ (fun m _ => hint n m))]
     refine Finset.sum_congr rfl fun n _ => ?_
-    rw [integral_finsetSum _ (fun m _ => hint n m)]
+    rw [integral_finset_sum _ (fun m _ => hint n m)]
     refine Finset.sum_congr rfl fun m _ => ?_
     rw [integral_const_mul]
   -- Step 2: per pair, 𝓜[cos,cos] = (A⁻+A⁺)/2, and split the A⁻ double sum into n=m / n≠m

@@ -19,7 +19,6 @@ import Zeta23.WeilEF.ZeroSummabilityGen
 
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
 
 open Complex MeasureTheory Real Set Topology Filter DirichletCharacter
 open scoped BigOperators

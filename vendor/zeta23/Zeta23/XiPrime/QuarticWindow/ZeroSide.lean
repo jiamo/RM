@@ -159,9 +159,11 @@ theorem aV_range_of (hP : P.Valid) {T : ℝ} (h8 : 8 * P.w ≤ P.L T) :
     (Taper.one_sub_le_bConst hP.taper hw0 h2).trans (Taper.bConst_le_aConst hP.taper hw0 h2)
   have hwL : 2 * P.w / P.L T ≤ 1 / 4 := by rw [div_le_iff₀ hL]; linarith
   have hint : Integrable (fun u => P.phiV vQuartic T u ^ 2) := hW.integrable_pow two_pos
+  have hcs : HasCompactSupport (fun u => P.phi T u ^ 2) :=
+    (Params.phi_hasCompactSupport hP (T := T)).comp_left (g := fun t : ℝ => t ^ 2) (by norm_num)
   have hint' : Integrable (fun u => 27 / 40 * P.phi T u ^ 2) :=
-    ((Params.phi_continuous hP (by linarith)).fun_pow 2 |>.integrable_of_hasCompactSupport
-      ((Params.phi_hasCompactSupport hP).comp_left (g := fun t => t ^ 2) (by norm_num))).const_mul _
+    ((Params.phi_continuous hP (by linarith)).pow 2 |>.integrable_of_hasCompactSupport
+      hcs).const_mul _
   have hcmp : 27 / 40 * ∫ u, P.phi T u ^ 2 ≤ ∫ u, P.phiV vQuartic T u ^ 2 := by
     rw [← integral_const_mul]
     exact integral_mono hint' hint (phiV_quartic_sq_ge hP h8)

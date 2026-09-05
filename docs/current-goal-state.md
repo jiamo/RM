@@ -12,16 +12,15 @@
 ## Active milestone
 
 - Milestone: `M1`
-- Tasks in milestone: `65`
-- Tasks total: `114`
-- `DONE_STRONG`: `83`
-- `DONE_WEAK`: `20`
+- Tasks in milestone: `89`
+- Tasks total: `159`
+- `DONE_STRONG`: `98`
+- `DONE_WEAK`: `51`
 - `TODO_NEEDS_DESIGN`: `10`
-- `TODO_READY`: `1`
-- Next dependency-ready task: `M1-GROWTH`
-- Next title: Growth estimates and trigonometric-sum bounds for zeta in the critical strip
-- Next depends on: `M0-EQUIV` (DONE_STRONG), `M1-STRIP-TRIVIAL-BOUND` (DONE_STRONG), `M1-CONVEXITY` (DONE_STRONG), `M1-CONVEXITY-LOG` (DONE_STRONG)
-- Next open boundary: Still open: the logarithm-free convexity bound |zeta(sigma + i t)| = O(t^((1-sigma)/2)) for 0 < sigma < 1. What is proved is the classical convexity bound with a single logarithm (M1-CONVEXITY-LOG), or with an arbitrary epsilon loss (M1-CONVEXITY); removing the logarithm needs the approximate functional equation or van der Corput's method, neither of which is in mathlib or in this repository. Also still open, a fortiori, is the Lindelof hypothesis exponent eps in place of (1-sigma)/2.
+- Next dependency-ready task: `M1-STRIP-MEAN-SQUARE`
+- Next title: The mean square of zeta on a vertical line inside the critical strip
+- Next depends on: `M1-MEAN-SQUARE` (DONE_STRONG), `M1-ZETA-CONTINUATION` (DONE_STRONG)
+- Next open boundary: What remains open is not the range of sigma but the strength of the statement. (i) The rows of this file state an upper bound of the correct order of magnitude; the asymptotic int_0^T ||zeta||^2 ~ zeta(2 sigma) T is now proved in the same range sigma > 1/2 by M1-STRIP-MEAN-SQUARE-ASYMPTOTIC, but no second order term is extracted. (ii) Nothing is claimed on the critical line sigma = 1/2, where the Hardy-Littlewood asymptotic int_0^T ||zeta(1/2 + i t)||^2 ~ T log T needs the approximate functional equation; the constant produced here blows up as sigma decreases to 1/2, as it must. (iii) Higher moments (the fourth moment of Ingham) are not addressed. (iv) No consequence for the zeroes is drawn: the density theorem M1-ALMOST-ALL-STRIP needs the mean square of zeta against a mollifier, not of zeta alone.
 
 ## Active task table
 
@@ -29,11 +28,23 @@
 |---:|---|---|---|---|
 | 29.8 | `M1-STRIP-MEAN-SQUARE` | P1 | `DONE_WEAK` | `M1-MEAN-SQUARE`, `M1-ZETA-CONTINUATION` |
 | 29.9 | `M1-STRIP-MEAN-SQUARE-ASYMPTOTIC` | P1 | `DONE_WEAK` | `M1-STRIP-MEAN-SQUARE` |
-| 30 | `M1-GROWTH` | P0 | `DONE_WEAK` | `M0-EQUIV`, `M1-STRIP-TRIVIAL-BOUND`, `M1-CONVEXITY`, `M1-CONVEXITY-LOG` |
+| 33.45 | `M1-TWO-THIRDS-ABSOLUTE` | P1 | `DONE_WEAK` | `M1-TWO-THIRDS` |
+| 34.765 | `M1-WEYL-INTERVAL` | P1 | `DONE_WEAK` | `M1-WEYL-CLASSICAL`, `M1-WEYL-BADLY-GENERAL`, `M1-WEYL-GENERAL` |
+| 34.77 | `M1-WEYL-BADLY-GENERAL` | P1 | `DONE_WEAK` | `M1-WEYL-CLASSICAL`, `M1-WEYL-BADLY-APPROXIMABLE` |
+| 34.775 | `M1-WEYL-CLASSICAL` | P1 | `DONE_WEAK` | `M1-WEYL-DIVISOR`, `M1-WEYL-GENERAL`, `M1-WEYL-MIN-SUM` |
+| 34.78 | `M1-WEYL-DIVISOR` | P1 | `DONE_WEAK` | `M1-WEYL-GENERAL`, `M1-WEYL-MIN-SUM` |
+| 34.79 | `M1-WEYL-GENERAL` | P1 | `DONE_WEAK` | `M1-WEYL-CUBIC`, `M1-WEYL-MIN-SUM`, `M1-WEYL-DIFFERENCING` |
 | 34.8 | `M1-EIGHTY-CRITICAL-ROUTE` | P1 | `DONE_WEAK` | `M1-TWO-THIRDS`, `M1-SIMPLE-EIGHTY` |
+| 34.8 | `M1-WEYL-CUBIC` | P1 | `DONE_WEAK` | `M1-WEYL-MIN-SUM`, `M1-WEYL-DIFFERENCING`, `M1-WEYL-BADLY-APPROXIMABLE` |
+| 34.81 | `M1-WEYL-BADLY-APPROXIMABLE` | P1 | `DONE_WEAK` | `M1-WEYL-MIN-SUM` |
+| 34.82 | `M1-WEYL-MIN-SUM` | P1 | `DONE_WEAK` | `M1-WEYL-QUADRATIC-QUANTITATIVE` |
 | 34.85 | `M1-AFE-SUBCONVEXITY` | P1 | `DONE_WEAK` | `M1-ZETA-CHI-AFE`, `M1-VDC-THIRD-DERIVATIVE` |
 | 34.855 | `M1-VDC-THIRD-DERIVATIVE` | P1 | `DONE_WEAK` | `M1-VDC-SECOND-DERIVATIVE`, `M1-WEYL-DIFFERENCING` |
 | 34.86 | `M1-ZETA-CHI-AFE` | P1 | `DONE_WEAK` | `M1-CRITICAL-LINE-MEAN-SQUARE` |
+| 34.86 | `M1-SUBCONVEXITY-UNCONDITIONAL` | P1 | `DONE_WEAK` | `M1-AFE-SUBCONVEXITY`, `M1-VDC-SECOND-DERIVATIVE`, `M1-KUSMIN-LANDAU` |
+| 34.87 | `M1-SUBCONVEXITY-STRIP` | P1 | `DONE_WEAK` | `M1-SUBCONVEXITY-UNCONDITIONAL` |
+| 34.874 | `M1-WEYL-DISCREPANCY-QUADRATIC` | P1 | `DONE_WEAK` | `M1-WEYL-DISCREPANCY`, `M1-WEYL-BADLY-APPROXIMABLE` |
+| 34.875 | `M1-WEYL-DISCREPANCY` | P1 | `DONE_WEAK` | `M1-WEYL-PORTMANTEAU`, `M1-WEYL-QUADRATIC` |
 | 34.9 | `M1-WEYL-COUNT` | P1 | `DONE_WEAK` | `M1-WEYL-CRITERION` |
 | 34.91 | `M1-WEYL-CRITERION` | P1 | `DONE_WEAK` | `M1-WEYL-EQUIDISTRIBUTION` |
 | 34.92 | `M1-WEYL-EQUIDISTRIBUTION` | P1 | `DONE_WEAK` | `M1-WEYL-QUADRATIC` |
@@ -43,18 +54,36 @@
 | 34.95 | `M1-KUSMIN-LANDAU` | P1 | `DONE_WEAK` |  |
 | 34.96 | `M1-VAN-DER-CORPUT` | P1 | `DONE_WEAK` |  |
 | 34.99 | `M1-CRITICAL-LINE-MEAN-SQUARE` | P1 | `DONE_WEAK` | `M1-STRIP-MEAN-SQUARE` |
-| 35 | `M1-ALMOST-ALL-STRIP` | P1 | `TODO_READY` | `M1-GROWTH` |
 | 36 | `M1-NUMERICAL` | P2 | `TODO_NEEDS_DESIGN` | `M0-EQUIV` |
 | 40 | `M2-MEANVALUE` | P0 | `DONE_WEAK` | `M1-GROWTH` |
 | 41 | `M2-MOLLIFIER` | P0 | `TODO_NEEDS_DESIGN` | `M2-MEANVALUE` |
-| 45 | `M2-DENSITY` | P1 | `TODO_NEEDS_DESIGN` | `M2-MEANVALUE` |
+| 45 | `M2-DENSITY` | P1 | `DONE_WEAK` | `M2-MEANVALUE`, `M2-DENSITY-POWER-SAVING` |
 | 46 | `M2-SELBERG-CLT` | P1 | `TODO_NEEDS_DESIGN` | `M2-MEANVALUE` |
 | 47 | `M2-PAIR-CORRELATION` | P2 | `TODO_NEEDS_DESIGN` | `M2-MEANVALUE`, `M1-EXPLICIT` |
 | 49 | `M2-WEIL-POSITIVITY` | P1 | `DONE_WEAK` | `M1-EXPLICIT` |
+| 50.97 | `M2-CORPUS-INSTANCE` | P2 | `TODO_NEEDS_DESIGN` | `M2-CORPUS-CEILING` |
 | 50.985 | `M2-LINDELOF-DENSITY` | P1 | `DONE_WEAK` | `M2-BOHR-LANDAU` |
 | 50.987 | `M2-LINDELOF-FROM-RH` | P1 | `DONE_WEAK` | `M2-THREE-CIRCLES` |
+| 50.988 | `M2-LARGE-SIEVE` | P0 | `DONE_WEAK` | `M2-MEANVALUE` |
+| 50.9885 | `M2-LARGE-SIEVE-GALLAGHER` | P0 | `DONE_WEAK` | `M2-LARGE-SIEVE`, `M2-DISCRETE-MEANVALUE` |
+| 50.9886 | `M2-LARGE-SIEVE-FAREY` | P0 | `DONE_WEAK` | `M2-LARGE-SIEVE-GALLAGHER` |
+| 50.9887 | `M2-LARGE-SIEVE-DUAL` | P0 | `DONE_WEAK` | `M2-LARGE-SIEVE-GALLAGHER`, `M2-LARGE-SIEVE-FAREY` |
+| 50.9888 | `M2-LARGE-SIEVE-SIFTED` | P0 | `DONE_WEAK` | `M2-LARGE-SIEVE-FAREY` |
+| 50.9889 | `M2-LARGE-SIEVE-SQUAREFREE` | P0 | `DONE_WEAK` | `M2-LARGE-SIEVE-FAREY`, `M2-LARGE-SIEVE-SIFTED` |
+| 50.98895 | `M2-BRUN-TITCHMARSH` | P0 | `DONE_WEAK` | `M2-LARGE-SIEVE-SQUAREFREE` |
+| 50.988957 | `M2-BRUN-TWIN` | P0 | `DONE_WEAK` | `M2-LARGE-SIEVE-SQUAREFREE`, `M2-BRUN-TITCHMARSH` |
+| 50.98896 | `M2-BRUN-CONSTANT` | P0 | `DONE_WEAK` | `M2-BRUN-TWIN` |
+| 50.989 | `M2-LARGE-VALUES` | P0 | `DONE_WEAK` | `M2-MEANVALUE` |
+| 50.99 | `M2-ZERO-DETECTION` | P0 | `DONE_WEAK` | `M2-MEANVALUE` |
+| 50.991 | `M2-MOLLIFIED-MEAN-SQUARE` | P0 | `DONE_WEAK` | `M2-MEANVALUE`, `M2-ZERO-DETECTION` |
+| 50.992 | `M2-DISCRETE-MEANVALUE` | P0 | `DONE_WEAK` | `M2-MEANVALUE`, `M2-LARGE-VALUES` |
+| 50.993 | `M2-MEANVALUE-MV` | P0 | `DONE_WEAK` | `M2-MEANVALUE` |
+| 50.994 | `M2-DISCRETE-MEANVALUE-MV` | P0 | `DONE_WEAK` | `M2-MEANVALUE-MV`, `M2-DISCRETE-MEANVALUE` |
+| 50.995 | `M2-MOLLIFIED-ZETA-MEAN-SQUARE` | P0 | `DONE_WEAK` | `M2-MOLLIFIED-MEAN-SQUARE`, `M2-MEANVALUE-MV`, `M1-STRIP-MEAN-SQUARE` |
+| 50.996 | `M2-DENSITY-POWER-SAVING` | P0 | `DONE_WEAK` | `M2-MOLLIFIED-ZETA-MEAN-SQUARE`, `M1-ALMOST-ALL-STRIP` |
 | 50 | `M3-VINOGRADOV` | P2 | `TODO_NEEDS_DESIGN` | `M1-ZERO-FREE-REGION` |
 | 51 | `M3-GAP` | P0 | `TODO_NEEDS_DESIGN` | `M2-CONREY`, `M2-DENSITY`, `M3-VINOGRADOV` |
 | 52 | `M3-ATIYAH-VERIFICATION` | P2 | `TODO_NEEDS_DESIGN` | `M0-STATEMENTS` |
 | 53 | `M3-GEOMETRY` | P1 | `TODO_NEEDS_DESIGN` | `M1-SPECTRAL-INTERPRETATION`, `M1-EXPLICIT` |
+| 60 | `M3-EVENTUAL-COUNTING-CRITERION` | P1 | `DONE_WEAK` | `M1-TWO-THIRDS`, `M0-STATEMENTS` |
 | 60 | `M4-RH` | P0 | `TODO_NEEDS_DESIGN` | `M3-GAP` |

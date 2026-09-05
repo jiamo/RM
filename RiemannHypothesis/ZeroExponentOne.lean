@@ -190,7 +190,7 @@ theorem sInf_exponent_summable_eq_one :
     sInf {e : ℝ | Summable (fun ρ : nontrivialZeroSet => ‖(ρ : ℂ)‖ ^ (-e))} = 1 := by
   have hset : {e : ℝ | Summable (fun ρ : nontrivialZeroSet => ‖(ρ : ℂ)‖ ^ (-e))} = Set.Ioi 1 := by
     ext e
-    simp only [Set.mem_setOf_eq, Set.mem_Ioi]
+    simp only [Set.mem_ofPred_eq, Set.mem_Ioi]
     constructor
     · intro h
       by_contra hlt

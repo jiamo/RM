@@ -42,7 +42,6 @@ noncomputable section
 
 -- as in Zeta23/ExplicitFormula.lean and ~40 other files of the tree: lets `rw` match `deriv`/`∫` terms whose
 -- (defeq) instance arguments were synthesized along different paths in different files.
-set_option backward.isDefEq.respectTransparency false
 
 namespace Zeta23
 namespace XiPrime

@@ -136,7 +136,7 @@ lemma leftCorner_self (z : ℂ) : leftCorner z.re z = z := by
 theorem rectZeros_leftCorner (hre : z.re ≤ w.re) {σ : ℝ} (hσ : σ ∈ Icc z.re w.re) :
     rectZeros f (leftCorner σ z) w = {ρ ∈ rectZeros f z w | σ ≤ ρ.re} := by
   ext s
-  simp only [mem_rectZeros_iff, Set.mem_setOf_eq, Rectangle, Complex.mem_reProdIm,
+  simp only [mem_rectZeros_iff, Set.mem_ofPred_eq, Rectangle, Complex.mem_reProdIm,
     leftCorner_re, leftCorner_im, Set.uIcc_of_le hre, Set.uIcc_of_le hσ.2]
   constructor
   · rintro ⟨⟨⟨h1, h2⟩, hi⟩, hs⟩
@@ -225,7 +225,7 @@ theorem integral_rectZeroCount_eq_finsum (hre : z.re ≤ w.re)
     intro ρ _
     by_cases h : σ ≤ ρ.re <;> simp [h]
   rw [intervalIntegral.integral_congr hstep,
-    intervalIntegral.integral_finset_sum
+    intervalIntegral.integral_finsetSum
       (fun ρ _ => intervalIntegrable_indicator z.re w.re ρ.re _)]
   have hcalc : ∀ ρ ∈ Z,
       (∫ σ in z.re..w.re, Set.indicator {x : ℝ | x ≤ ρ.re}

@@ -145,7 +145,7 @@ theorem zeta_of_littleMertensBound (hm : LittleMertensBoundForm) : ZetaForm := b
       riemannZeta_mul_moebiusOverNAbel hm hw0, mul_one]
   have heq := hG.eqOn_of_preconnected_of_eventuallyEq hH hUconn hmem1 hev
   have hsU : s - 1 ∈ U := by
-    simp only [hU, Set.mem_setOf_eq, Complex.sub_re, Complex.one_re]
+    simp only [hU, Set.mem_ofPred_eq, Complex.sub_re, Complex.one_re]
     linarith
   have hval := heq hsU
   simp only [show s - 1 + 1 = s by ring] at hval

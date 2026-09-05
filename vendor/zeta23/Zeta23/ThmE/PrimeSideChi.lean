@@ -143,6 +143,7 @@ lemma PXc_abs_le (hcheb : ChebyshevMertens) (hc : CoeffOK q c) :
       rw [hre, Real.rpow_neg (Nat.cast_nonneg n), ← Real.sqrt_eq_rpow, one_div]
     rw [h1, h2]
     calc Λ n * ‖c n‖ * (1 / Real.sqrt n) ≤ Λ n * 1 * (1 / Real.sqrt n) := by
+          have hΛ : 0 ≤ Λ n := ArithmeticFunction.vonMangoldt_nonneg
           gcongr
           exact hc.norm_le n
       _ = Λ n / Real.sqrt n := by ring
@@ -555,7 +556,7 @@ lemma P_part_chi_eq (hF : LocalHypsCoreW cϱ p F) (c : ℕ → ℂ) (t : ℝ) :
     refine Finset.sum_congr rfl fun n _ => ?_
     rw [show (t + r) * Real.log n = (t + r) * Real.log n from rfl]
     ring
-  rw [h1, MeasureTheory.integral_finsetSum]
+  rw [h1, MeasureTheory.integral_finset_sum]
   · rw [Finset.mul_sum]
     refine Finset.sum_congr rfl fun n _ => ?_
     rw [MeasureTheory.integral_const_mul, MeasureTheory.integral_add, 
@@ -580,7 +581,7 @@ lemma PXc_continuous (_hX : 0 < X) : Continuous (PXc c X) := by
   unfold PXc
   apply Continuous.mul continuous_const
   apply Complex.continuous_re.comp
-  apply continuous_finsetSum
+  apply continuous_finset_sum
   intro n hn
   have hn0 : 0 < n := (Finset.mem_Ioc.1 hn).1
   have hnC : (n : ℂ) ≠ 0 := Nat.cast_ne_zero.2 hn0.ne'
@@ -679,7 +680,7 @@ lemma muq_part_integrable (hΓq : GammaFactsChi κ q) (hq : 1 ≤ q) (hF : Local
 lemma PXc_part_integrable (hF : LocalHypsCoreW cϱ p F) (hc : CoeffOK q c) (t : ℝ) :
     MeasureTheory.Integrable (fun r => F.phiHat r ^ 2 * PXc c p.X (t + r)) := by
   refine hF.phiHat_sq_mul_integrable_of_bdd
-    ((PXc_continuous c p.X_pos).comp (continuous_const_add t))
+    ((PXc_continuous c p.X_pos).comp (continuous_add_left t))
     (c := 1 / Real.pi * ∑ n ∈ Finset.Ioc 0 ⌊p.X⌋₊,
       (Λ n : ℝ) * (n : ℝ) ^ (-(1/2 : ℝ)) * 2) (fun x => ?_)
   rw [PXc_eq_sum_cos_sin, abs_mul, abs_neg,

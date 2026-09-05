@@ -16,7 +16,6 @@ import Zeta23.ThmE.LGrowth
 
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
 
 open Complex MeasureTheory Real Set
 open scoped BigOperators

@@ -144,10 +144,10 @@ theorem exists_rootMultiset_factorization_aux : ∀ (N : ℕ) (f : ℂ → ℂ),
       rw [hordmul σ, hlin0, zero_add]
     have hata : analyticOrderNatAt f a = analyticOrderNatAt (dslope f a) a + 1 := by
       obtain ⟨x, hx⟩ : ∃ x : ℕ, analyticOrderAt (dslope f a) a = (x : ℕ∞) :=
-        ⟨_, (ENat.coe_toNat (hne₁ a)).symm⟩
+        ⟨_, (ENat.natCast_toNat (hne₁ a)).symm⟩
       unfold analyticOrderNatAt
       rw [hordmul a, hlin1, hx, show (1 : ℕ∞) + (x : ℕ∞) = ((1 + x : ℕ) : ℕ∞) by push_cast; ring]
-      simp only [ENat.toNat_coe]
+      simp only [ENat.toNat_natCast]
       omega
     have hsum₁ : (∑ ρ ∈ S, analyticOrderNatAt (dslope f a) ρ) ≤ N := by
       have h1 : ∑ ρ ∈ S, analyticOrderNatAt f ρ

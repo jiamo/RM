@@ -22,7 +22,7 @@ import Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset
 import Mathlib.Analysis.CStarAlgebra.Classes
 import Mathlib.Analysis.Complex.HasPrimitives
 import Mathlib.Data.Rat.Cast.OfScientific
-import Mathlib.Algebra.Order.Star.Real
+import Mathlib.Algebra.Order.Star.Basic
 import Mathlib.RingTheory.SimpleRing.Principal
 import Mathlib.Analysis.Complex.BorelCaratheodory
 import Mathlib.Analysis.Analytic.Order
@@ -67,7 +67,11 @@ theorem borelCaratheodory' {M r R : ℝ} {f : ℂ → ℂ} {z : ℂ}
   rw [mem_closedBall_iff_norm, sub_zero] at hyp_z
   refine le_trans h_limit ?_;
   gcongr
-  · exact mul_nonneg (mul_nonneg (zero_le_two) (le_of_lt Mpos)) (le_trans (norm_nonneg z) hyp_z)
+  all_goals
+    first
+      | exact mul_nonneg (mul_nonneg (zero_le_two) (le_of_lt Mpos))
+          (le_trans (norm_nonneg z) hyp_z)
+      | linarith
 
 lemma cauchy_formula_deriv {r r' R : ℝ} {f : ℂ → ℂ} {z : ℂ}
     (r_lt_r' : r < r') (r'_lt_R : r' < R)
@@ -104,6 +108,7 @@ lemma DerivativeBound {M r r' R : ℝ} {f : ℂ → ℂ} {z : ℂ}
       exact le_trans (by linarith) (norm_sub_norm_le z' z)
     rw [norm_pow, norm_inv, one_div, inv_pow]
     gcongr
+    all_goals nlinarith
 
 theorem BorelCaratheodoryDeriv {M r R : ℝ} {f : ℂ → ℂ} {z : ℂ}
     (Mpos : 0 < M) (rpos : 0 < r) (hyp_r : r < R)
@@ -142,11 +147,18 @@ theorem LogOfAnalyticFunction {r R : ℝ} {B : ℂ → ℂ}
       fun z hz ↦ (hJ z hz).sub_const _
     have hH_deriv : ∀ z ∈ Metric.ball 0 R, HasDerivAt H 0 z := by
       intro z hz
-      have := (Complex.hasDerivAt_exp _).comp z (hJB_deriv z hz)
-      convert! this.div (BanalyticOnNhdOfDR.differentiableOn.differentiableAt
-        (Metric.closedBall_mem_nhds_of_mem hz) |>.hasDerivAt)
-        (Bnonzero z <| Metric.ball_subset_closedBall hz) using 1
-      ring_nf!; grind
+      have hexp := (Complex.hasDerivAt_exp _).comp z (hJB_deriv z hz)
+      have hBne := Bnonzero z <| Metric.ball_subset_closedBall hz
+      have hdiv := hexp.div (BanalyticOnNhdOfDR.differentiableOn.differentiableAt
+        (Metric.closedBall_mem_nhds_of_mem hz) |>.hasDerivAt) hBne
+      simp only [Function.comp_apply] at hdiv
+      have hzero : (Complex.exp (J z - J 0) * f z * B z
+          - Complex.exp (J z - J 0) * deriv B z) / B z ^ 2 = 0 := by
+        simp only [f]
+        field_simp
+        ring
+      rw [hzero] at hdiv
+      exact hdiv
     have hH_const : ∀ z ∈ Metric.ball 0 R, H z = H 0 := by
       intro z hz
       have h_diffOn : DifferentiableOn ℂ H (Metric.ball 0 R) :=
@@ -283,7 +295,7 @@ lemma CfAnalytic {r R : ℝ} {f : ℂ → ℂ}
             exact absurd hfz (mul_ne_zero (pow_ne_zero _ (sub_ne_zero_of_ne h)) hz')
           rw [dif_neg z_not_in, hz]
           have hw_mem : w ∈ finite_zeros_mono.toFinset := finite_zeros_mono.mem_toFinset.mpr w_in_zeros
-          rw [Finset.prod_eq_prod_sdiff_singleton_mul hw_mem (fun ρ => (z - ρ) ^ analyticOrderNatAt f ρ)]
+          rw [Finset.prod_eq_prod_diff_singleton_mul hw_mem (fun ρ => (z - ρ) ^ analyticOrderNatAt f ρ)]
           rw [mul_comm ((z - w) ^ analyticOrderNatAt f w) (h_w z)]
           rw [mul_div_mul_right _ _ (pow_ne_zero _ (sub_ne_zero_of_ne h))]
       apply hh_w_analytic.div _ _ |> fun h => h.congr _;

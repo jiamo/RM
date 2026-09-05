@@ -93,7 +93,9 @@ lemma fourier_starReflect (g : ℝ → ℂ) (ξ : ℝ) :
     ring
   rw [hexp]
 
-/-- The transform of a convolution square is `|ĝ|²`. -/
+/-- The transform of a convolution square is `|ĝ|²`, by mathlib's
+`Real.fourier_mul_convolution_eq`, which computes the Fourier transform of a convolution of
+integrable factors. -/
 theorem testTransform_weilSquare {g : ℝ → ℂ} (hg : Integrable g) (r : ℝ) :
     testTransform (weilSquare g) (r : ℂ) = ((‖𝓕 g (-(r / (2 * Real.pi)))‖ ^ 2 : ℝ) : ℂ) := by
   have hstar : Integrable (starReflect g) := integrable_starReflect hg
@@ -115,7 +117,8 @@ theorem isPositiveTestFunction_weilSquare {g : ℝ → ℂ} (hg2 : ContDiff ℝ 
   · exact hgc.convolution (μ := volume) (L := ContinuousLinearMap.mul ℂ ℂ)
       (hasCompactSupport_starReflect hgc)
   · intro r
-    exact ⟨‖𝓕 g (-(r / (2 * Real.pi)))‖ ^ 2, by positivity, testTransform_weilSquare hint r⟩
+    exact ⟨‖𝓕 g (-(r / (2 * Real.pi)))‖ ^ 2, by positivity,
+      testTransform_weilSquare hint r⟩
 
 /-- The value of a convolution square at the origin is the `L²` norm of `g`. -/
 theorem weilSquare_zero (g : ℝ → ℂ) :

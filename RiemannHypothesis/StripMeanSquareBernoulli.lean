@@ -443,6 +443,7 @@ theorem norm_riemannZeta_sub_dirichletPoly_le_bern {σ : ℝ} (h0 : 0 < σ) (h1 
 /-! ## The mean square of `ζ` for `σ > 4/7` -/
 
 set_option maxHeartbeats 1000000 in
+-- the pointwise bound combines several estimates and needs a long arithmetic normalisation
 /-- The pointwise bound behind the mean square estimate, with the second-order error term. -/
 theorem normSq_riemannZeta_le_pointwise_bern {σ : ℝ} (h0 : 0 < σ) (h1 : σ < 1) {N : ℕ}
     (hN : 1 ≤ N) {T t : ℝ} (ht0 : 0 ≤ t) (htT : t ≤ T) :
@@ -796,7 +797,7 @@ theorem exists_volume_norm_riemannZeta_ge_le_four_sevenths {σ : ℝ} (h0 : 4 / 
   have hset : {t : ℝ | V ^ 2 ≤ f t} ∩ Set.Ioc (0 : ℝ) T
       = {t : ℝ | t ∈ Set.Ioc (0 : ℝ) T ∧ V ≤ ‖riemannZeta ((σ : ℂ) + (t : ℂ) * I)‖} := by
     ext t
-    simp only [Set.mem_inter_iff, Set.mem_setOf_eq, hf]
+    simp only [Set.mem_inter_iff, Set.mem_ofPred_eq, hf]
     constructor
     · rintro ⟨hle, ht⟩
       exact ⟨ht, by nlinarith [norm_nonneg (riemannZeta ((σ : ℂ) + (t : ℂ) * I))]⟩

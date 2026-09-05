@@ -698,9 +698,9 @@ lemma PX_abs_le (hcheb : Zeta23.ChebyshevMertens) :
     refine (Finset.abs_sum_le_sum_abs _ _).trans (Finset.sum_le_sum fun n _ => ?_)
     rw [abs_mul, abs_of_nonneg (div_nonneg ArithmeticFunction.vonMangoldt_nonneg (Real.sqrt_nonneg _))]
     calc (Λ n : ℝ) / Real.sqrt n * |Real.cos (τ * Real.log n)|
-        ≤ (Λ n : ℝ) / Real.sqrt n * 1 := by
-          gcongr
-          exact Real.abs_cos_le_one _
+        ≤ (Λ n : ℝ) / Real.sqrt n * 1 :=
+          mul_le_mul_of_nonneg_left (Real.abs_cos_le_one _)
+            (div_nonneg ArithmeticFunction.vonMangoldt_nonneg (Real.sqrt_nonneg _))
       _ = _ := mul_one _
   have h3 : (3:ℝ) ≤ Real.pi := by linarith [Real.pi_gt_three]
   calc 1 / Real.pi * |∑ n ∈ Finset.Ioc 0 ⌊X⌋₊, (Λ n : ℝ) / Real.sqrt n * Real.cos (τ * Real.log n)|
@@ -1146,7 +1146,7 @@ lemma P_part_eq (hF : LocalHypsCore cϱ p F) (t : ℝ) :
     funext r
     rw [PX_eq, Finset.mul_sum, Finset.mul_sum]
     exact Finset.sum_congr rfl fun n _ => by ring
-  rw [h1, integral_finsetSum _ (fun n _ =>
+  rw [h1, integral_finset_sum _ (fun n _ =>
     ((hF.phiHat_sq_mul_integrable_of_bdd (by fun_prop) (fun x => Real.abs_cos_le_one _)).const_mul _))]
   simp_rw [integral_const_mul, integral_phiHat_sq_mul_cos_shift hF]
   rw [Finset.mul_sum]
@@ -1225,14 +1225,14 @@ lemma Pi_part_bound (hF : LocalHypsCore cϱ p F) {t : ℝ} (ht : 2 ≤ t) :
 /-- Integrability of `φ̂(r)² Π_X(t+r)` (bounded × integrable). -/
 lemma Pi_part_integrable (hF : LocalHypsCore cϱ p F) (t : ℝ) :
     Integrable (fun r => F.phiHat r ^ 2 * Zeta23.PiX p.X (t + r)) := by
-  refine hF.phiHat_sq_mul_integrable_of_bdd (hF.PiX_cont.comp (continuous_const_add t))
+  refine hF.phiHat_sq_mul_integrable_of_bdd (hF.PiX_cont.comp (continuous_add_left t))
     (c := 3 * Real.sqrt p.X) (fun x => (hF.PiX_bound _).trans ?_)
   exact div_le_self (by positivity) (by linarith [abs_nonneg (t + x)])
 
 /-- Integrability of `φ̂(r)² P_X(t+r)` (bounded × integrable). -/
 lemma P_part_integrable (hF : LocalHypsCore cϱ p F) (t : ℝ) :
     Integrable (fun r => F.phiHat r ^ 2 * Zeta23.PX p.X (t + r)) := by
-  refine hF.phiHat_sq_mul_integrable_of_bdd ((PX_continuous p.X).comp (continuous_const_add t))
+  refine hF.phiHat_sq_mul_integrable_of_bdd ((PX_continuous p.X).comp (continuous_add_left t))
     (c := 1 / Real.pi * ∑ n ∈ primeRange p.X, acoef n) (fun x => ?_)
   simp only [PX_eq]
   rw [abs_mul, abs_neg, abs_of_pos (by positivity : (0:ℝ) < 1 / Real.pi)]

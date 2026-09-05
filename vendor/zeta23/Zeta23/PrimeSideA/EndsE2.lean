@@ -13,7 +13,6 @@ import Zeta23.PrimeSideA.EndsNu
 
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
 
 open MeasureTheory Real Set
 
@@ -72,7 +71,7 @@ theorem majK2_integrable (hνc : Continuous ν) (hF : LocalHypsCoreW cϱ p F) (h
     fun k hk => integrable_psiA_shift_mul_nu hνc hF hν' hB1 hT1 (htau k hk)
   have h : Integrable (fun q : ℝ × ℝ => ∑ k ∈ Finset.range p.d,
       (p.L ^ 2 * (psiA cϱ p (q.1 - p.tau k) * |ν q.1|)) * (psiA cϱ p (q.2 - p.tau k) * |ν q.2|)) := by
-    refine integrable_finsetSum _ fun k hk => ?_
+    refine integrable_finset_sum _ fun k hk => ?_
     exact ((hwk k hk).const_mul (p.L ^ 2)).mul_prod (hwk k hk)
   refine h.congr (Filter.Eventually.of_forall fun q => ?_)
   simp only [majK2]
@@ -118,7 +117,7 @@ theorem setIntegral_compl_sqI_majK2_le (hνc : Continuous ν) (hF : LocalHypsCor
     fun k hk => integrable_psiA_shift_mul_nu hνc hF hν hB1 hT1 (htau k hk)
   have hsum_int : Integrable (fun τ : ℝ =>
       (∑ k ∈ Finset.range p.d, psiA cϱ p (τ - p.tau k)) * |ν τ|) := by
-    have := integrable_finsetSum (Finset.range p.d) hwk
+    have := integrable_finset_sum (Finset.range p.d) hwk
     refine this.congr (Filter.Eventually.of_forall fun τ => ?_)
     simp only [Finset.sum_mul]
   have hψnn : ∀ (τ : ℝ) (k : ℕ), 0 ≤ psiA cϱ p (τ - p.tau k) :=
@@ -130,7 +129,7 @@ theorem setIntegral_compl_sqI_majK2_le (hνc : Continuous ν) (hF : LocalHypsCor
   have habs : Integrable (fun q : ℝ × ℝ => majK2 cϱ p ν q) := by
     have h : Integrable (fun q : ℝ × ℝ => ∑ k ∈ Finset.range p.d,
         (p.L ^ 2 * (psiA cϱ p (q.1 - p.tau k) * |ν q.1|)) * (psiA cϱ p (q.2 - p.tau k) * |ν q.2|)) := by
-      refine integrable_finsetSum _ fun k hk => ?_
+      refine integrable_finset_sum _ fun k hk => ?_
       exact ((hwk k hk).const_mul (p.L ^ 2)).mul_prod (hwk k hk)
     refine h.congr (Filter.Eventually.of_forall fun q => ?_)
     simp only [majK2]
@@ -159,13 +158,13 @@ theorem setIntegral_compl_sqI_majK2_le (hνc : Continuous ν) (hF : LocalHypsCor
         (Filter.Eventually.of_forall fun q => hMnn q)
         hsub.eventuallyLE
     refine h1.trans ?_
-    rw [← Set.union_sdiff_self]
+    rw [← Set.union_diff_self]
     rw [setIntegral_union disjoint_sdiff_self_right (hmS₂.diff hmS₁)
       habs.integrableOn habs.integrableOn]
     have hmono : ∫ q in S₂ \ S₁, majK2 cϱ p ν q ≤ ∫ q in S₂, majK2 cϱ p ν q :=
       setIntegral_mono_set habs.integrableOn
         (Filter.Eventually.of_forall fun q => hMnn q)
-        ((Set.sdiff_subset : S₂ \ S₁ ⊆ S₂).eventuallyLE)
+        ((Set.diff_subset : S₂ \ S₁ ⊆ S₂).eventuallyLE)
     linarith
   -- Step C: iterated-integral bound over S₁ (constrained first coordinate)
   have hrestrict1 : (volume : Measure (ℝ × ℝ)).restrict S₁
@@ -193,7 +192,7 @@ theorem setIntegral_compl_sqI_majK2_le (hνc : Continuous ν) (hF : LocalHypsCor
   have hmaj_int : ∀ τ : ℝ, Integrable (fun τ' : ℝ =>
       ∑ k ∈ Finset.range p.d, (p.L ^ 2 * psiA cϱ p (τ - p.tau k) * |ν τ|)
         * (psiA cϱ p (τ' - p.tau k) * |ν τ'|)) :=
-    fun τ => integrable_finsetSum _ (fun k hk => (hwk k hk).const_mul _)
+    fun τ => integrable_finset_sum _ (fun k hk => (hwk k hk).const_mul _)
   have hinner1 : ∀ τ : ℝ, (∫ τ', majK2 cϱ p ν (τ, τ'))
       ≤ p.L ^ 2 * M1 * ((∑ k ∈ Finset.range p.d, psiA cϱ p (τ - p.tau k)) * |ν τ|) := by
     intro τ
@@ -203,7 +202,7 @@ theorem setIntegral_compl_sqI_majK2_le (hνc : Continuous ν) (hF : LocalHypsCor
       integral_mono_of_nonneg (Filter.Eventually.of_forall fun τ' => hMnn (τ, τ'))
         (hmaj_int τ) (Filter.Eventually.of_forall fun τ' => hprod_bound τ τ')
     refine h1.trans ?_
-    rw [integral_finsetSum _ (fun k hk => (hwk k hk).const_mul _)]
+    rw [integral_finset_sum _ (fun k hk => (hwk k hk).const_mul _)]
     have h2 : ∀ k ∈ Finset.range p.d,
         (∫ τ', (p.L ^ 2 * psiA cϱ p (τ - p.tau k) * |ν τ|)
           * (psiA cϱ p (τ' - p.tau k) * |ν τ'|))

@@ -234,7 +234,7 @@ theorem Efn_line_identity {c : ℝ} (hc1 : 1 < c) (hc2 : c ≤ 3/2) {k : ℝ →
     have hsummable_gen : ∀ (g : ℝ → ℂ), (∀ u, g u ≠ 0 → |u| ≤ max B₁ 0) →
         Summable (fun n : ℕ => ((Λ n / Real.sqrt n : ℝ) : ℂ) * g (Real.log n)) := by
       intro g hg
-      refine summable_of_hasFiniteSupport ?_
+      refine summable_of_finite_support ?_
       have hsub : Function.support (fun n : ℕ => ((Λ n / Real.sqrt n : ℝ) : ℂ) * g (Real.log n))
           ⊆ Set.Iic ⌈Real.exp (max B₁ 0)⌉₊ := by
         intro n hn

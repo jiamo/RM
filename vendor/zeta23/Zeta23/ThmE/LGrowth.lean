@@ -55,7 +55,7 @@ lemma sum_Ico_add_period_eq_zero (hχ1 : χ ≠ 1) (N : ℕ) :
       ZMod.card]
   calc ∑ k ∈ Finset.range q, χ ((N + k : ℕ) : ZMod q)
       = ∑ a ∈ (Finset.range q).image (fun k : ℕ => ((N + k : ℕ) : ZMod q)), χ a :=
-        (Finset.sum_image hinj).symm
+        (Finset.sum_image (fun a ha b hb h => hinj a ha b hb h)).symm
     _ = ∑ a, χ a := by rw [himage]
     _ = 0 := MulChar.sum_eq_zero_of_ne_one hχ1
 

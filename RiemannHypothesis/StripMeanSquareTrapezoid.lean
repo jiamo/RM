@@ -700,7 +700,7 @@ theorem exists_volume_norm_riemannZeta_ge_le_three_fifths {σ : ℝ} (h0 : 3 / 5
   have hset : {t : ℝ | V ^ 2 ≤ f t} ∩ Set.Ioc (0 : ℝ) T
       = {t : ℝ | t ∈ Set.Ioc (0 : ℝ) T ∧ V ≤ ‖riemannZeta ((σ : ℂ) + (t : ℂ) * I)‖} := by
     ext t
-    simp only [Set.mem_inter_iff, Set.mem_setOf_eq, hf]
+    simp only [Set.mem_inter_iff, Set.mem_ofPred_eq, hf]
     constructor
     · rintro ⟨hle, ht⟩
       exact ⟨ht, by nlinarith [norm_nonneg (riemannZeta ((σ : ℂ) + (t : ℂ) * I))]⟩

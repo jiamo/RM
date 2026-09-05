@@ -722,6 +722,8 @@ theorem calE1_maj_bound :
     _ = 4 * (180 + 40 * cϱ ^ 2) * (p.L ^ 3 * B ^ 2 * p.l) := by ring
 
 
+set_option maxHeartbeats 1600000 in
+-- the nonlinear arithmetic steps below need more than the default heartbeat budget
 /-- **Majorant bound behind 𝓔₁, L-intrinsic form** (no bandwidth cap):
 ∬_{I×I} majK1(ν) ≤ C·L³B²·(L + l) for T ≥ T₀ (l = log(T/2π) carries the genuine log T). -/
 theorem calE1_maj_bound_L :

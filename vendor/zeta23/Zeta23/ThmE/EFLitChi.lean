@@ -21,7 +21,6 @@ import Zeta23.ExplicitFormula.Bridge
 
 noncomputable section
 
-set_option backward.isDefEq.respectTransparency false
 
 open MeasureTheory Real Set Complex
 open scoped BigOperators ArithmeticFunction
@@ -173,7 +172,7 @@ theorem prime_term_chi {q : ℕ} {c : ℕ → ℂ} {k : ℝ → ℂ} {L : ℝ} (
     rw [hpow]
     push_cast
     ring
-  rw [step2, integral_finsetSum _ (fun n _ => (hint n).const_mul _)]
+  rw [step2, integral_finset_sum _ (fun n _ => (hint n).const_mul _)]
   rw [← Finset.sum_neg_distrib]
   refine Finset.sum_congr rfl fun n _ => ?_
   rw [Zeta23.EF.cintegral_const_mul]
@@ -226,7 +225,7 @@ theorem integrable_paperFT_mul_PXc {k : ℝ → ℂ} (c : ℕ → ℂ) (L : ℝ)
     push_cast
     ring
   rw [step2]
-  exact integrable_finsetSum _ (fun n _ => (hint n).const_mul _)
+  exact integrable_finset_sum _ (fun n _ => (hint n).const_mul _)
 
 /-- Mirror of Zeta23.EF.literatureRHS_eq_integral_nu — NO pole term for q > 1. -/
 theorem literatureRHSchi_eq_integral_nu {κ q : ℕ} {c : ℕ → ℂ} {k : ℝ → ℂ} {L : ℝ}

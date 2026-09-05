@@ -354,7 +354,6 @@ lemma summable_quarter_line (t : ℝ) :
     gcongr
     nlinarith
 
-set_option backward.isDefEq.respectTransparency false in
 /-- [eq:mufacts] "μ′(τ) ≪ |τ|⁻¹" (the GammaFacts.deriv_bound field shape). -/
 theorem mu_deriv_bound : ∃ C : ℝ, ∀ τ : ℝ, 1 ≤ |τ| → |deriv Zeta23.mu τ| ≤ C / |τ| := by
   refine ⟨24 / Real.pi, fun τ hτ => ?_⟩

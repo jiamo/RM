@@ -48,7 +48,7 @@ lemma Mform_mu_PXc_eq {Φ : ℝ → ℝ} (hΦ : Continuous Φ) {u : ℝ → ℝ}
     rw [PXc_eq_sum_cos_sin, Finset.mul_sum, Finset.mul_sum]
     refine Finset.sum_congr rfl fun n _ => ?_
     ring
-  rw [h1, integral_finsetSum]
+  rw [h1, integral_finset_sum]
   · refine Finset.sum_congr rfl fun n _ => ?_
     rw [integral_const_mul]
     congr 1

@@ -144,7 +144,7 @@ lemma gammaFactor_analyticAt {w : ℂ} (h0 : 0 < w.re) :
         rw [analyticAt_iff_eventually_differentiableAt]
         have hopen : IsOpen {z : ℂ | 0 < (z + a).re} := by
           have : Continuous fun z : ℂ => (z + a).re :=
-            Complex.continuous_re.comp (continuous_add_const a)
+            Complex.continuous_re.comp (continuous_add_right a)
           exact isOpen_lt continuous_const this
         filter_upwards [hopen.mem_nhds ha] with z hz
         have hd : DifferentiableAt ℂ Complex.Gamma ((z + a) / 2) := by

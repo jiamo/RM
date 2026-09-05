@@ -93,7 +93,7 @@ lemma two_mul_ncard_le_ncard_simple_add_finsum {S : Set ℂ} (hS : S.Finite) (m 
     rw [← Set.ncard_coe_finset, Finset.coe_filter]
     congr 1
     ext ρ
-    simp only [Set.mem_inter_iff, Set.mem_setOf_eq, hmemF]
+    simp only [Set.mem_inter_iff, Set.mem_ofPred_eq, hmemF]
   have hsplit := Finset.sum_filter_add_sum_filter_not F (fun ρ => m ρ = 1) m
   have h1 : ∑ ρ ∈ F.filter (fun ρ => m ρ = 1), m ρ = (F.filter fun ρ => m ρ = 1).card := by
     rw [Finset.sum_congr rfl fun ρ hρ => (Finset.mem_filter.mp hρ).2, Finset.sum_const,

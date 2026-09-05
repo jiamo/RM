@@ -106,7 +106,7 @@ lemma criticalZeroCount_eq (T T' : ℝ) (h : openWindowZeros T = windowZeros 0 T
   rw [criticalZeroCount, windowCountOnLine, ← h]
   congr 1
   ext s
-  simp only [Set.mem_setOf_eq, Set.mem_inter_iff, openWindowZeros]
+  simp only [Set.mem_ofPred_eq, Set.mem_inter_iff, openWindowZeros]
   tauto
 
 /-! ## The counting functions in half-open windows -/

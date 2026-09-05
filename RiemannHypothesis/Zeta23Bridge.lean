@@ -95,7 +95,7 @@ lemma zeroMultiplicity_eq (ρ : ℂ) : zeroMultiplicity ρ = Zeta23.zeroMult ρ 
 lemma windowZeros_eq (T₁ T₂ : ℝ) : windowZeros T₁ T₂ = Zeta23.zerosIn T₁ T₂ := by
   ext ρ
   simp only [windowZeros, nontrivialZeroSet, Zeta23.zerosIn, Zeta23.IsNontrivialZero,
-    Set.mem_setOf_eq]
+    Set.mem_ofPred_eq]
 
 lemma windowCount_eq (T₁ T₂ : ℝ) : windowCount T₁ T₂ = Zeta23.Ncount T₁ T₂ := by
   simp only [windowCount, Zeta23.Ncount, windowZeros_eq, zeroMultiplicity]
@@ -143,7 +143,7 @@ def windowCountSimpleOnLineL (T₁ T₂ : ℝ) : ℕ :=
 lemma windowZerosL_eq (T₁ T₂ : ℝ) : windowZerosL χ T₁ T₂ = Zeta23.ThmE.zerosInL χ T₁ T₂ := by
   ext ρ
   simp only [windowZerosL, Zeta23.ThmE.zerosInL, Zeta23.ThmE.IsNontrivialZeroL,
-    Set.mem_setOf_eq]
+    Set.mem_ofPred_eq]
   tauto
 
 lemma windowCountL_eq (T₁ T₂ : ℝ) : windowCountL χ T₁ T₂ = Zeta23.ThmE.NcountL χ T₁ T₂ := by

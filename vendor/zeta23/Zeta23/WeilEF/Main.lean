@@ -35,7 +35,7 @@ theorem Hfn_mirror (k : ℝ → ℂ) (c t : ℝ) :
     ring
   rw [harg, Complex.exp_add, ← Complex.ofReal_exp]
   push_cast
-  ring
+  ring_nf
 
 /-- The literature-form Weil explicit formula holds for Mathlib's ζ
 (zero set = IsNontrivialZero, multiplicities = analyticOrderAt).  Together with Zeta23.EF.explicitFormulaPaper_of_lit + GammaFacts this yields
@@ -196,7 +196,7 @@ theorem EF_lit_zeta (hs : ZetaSeam) : Zeta23.EF.EF_lit (zetaZeros hs) := by
   have hsummable_gen : ∀ (g : ℝ → ℂ), (∀ u, g u ≠ 0 → |u| ≤ max B₁ 0) →
       Summable (fun n : ℕ => ((Λ n / Real.sqrt n : ℝ) : ℂ) * g (Real.log n)) := by
     intro g hg
-    refine summable_of_hasFiniteSupport ?_
+    refine summable_of_finite_support ?_
     have hsub : Function.support (fun n : ℕ => ((Λ n / Real.sqrt n : ℝ) : ℂ) * g (Real.log n))
         ⊆ Set.Iic ⌈Real.exp (max B₁ 0)⌉₊ := by
       intro n hn

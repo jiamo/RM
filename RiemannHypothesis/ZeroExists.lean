@@ -116,7 +116,7 @@ theorem linear_of_re_le {g : ℂ → ℂ} (hg : Differentiable ℂ g) {C D : ℝ
         refine mul_le_mul (mul_le_mul_of_nonneg_left (by linarith) hC) h1
           (Real.log_nonneg (by linarith)) (by positivity)
       have := hre w
-      simp only [Set.mem_setOf_eq, hM]
+      simp only [Set.mem_ofPred_eq, hM]
       linarith
     have hzball : z ∈ ball (0 : ℂ) R := by
       simp only [mem_ball, dist_zero_right]

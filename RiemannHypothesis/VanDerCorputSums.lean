@@ -126,7 +126,7 @@ lemma cls_eq_of_between (hlam : 0 < lam) {i j m : ℕ}
     have hmfalse : (cls g a lam m).2 = false := by rw [← him]; exact hb
     have hmlt : g (a + m) < (k : ℝ) + lam := by
       by_contra hcon
-      push_neg at hcon
+      push Not at hcon
       have : (cls g a lam m).2 = true := cls_snd_iff.mpr (by rw [hkm]; linarith)
       rw [hmfalse] at this
       exact Bool.noConfusion this
@@ -258,7 +258,7 @@ theorem norm_fiber_sum_le (hr : 0 < r) (hlam : 0 < lam)
       rwa [hclsq] at this
     have hmhigh : g (a + m) < (p.1 : ℝ) + lam := by
       by_contra hcon
-      push_neg at hcon
+      push Not at hcon
       have : (cls g a lam m).2 = true := cls_snd_iff.mpr (by rw [hclsm]; linarith)
       rw [hclsm, hp2] at this
       exact Bool.noConfusion this

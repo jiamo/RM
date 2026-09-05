@@ -469,7 +469,7 @@ theorem continuous_normSq_dirichletPoly_line {σ : ℝ} (N : ℕ) :
     Continuous (fun t : ℝ => ‖dirichletPoly (fun _ => 1) N ((σ : ℂ) + (t : ℂ) * I)‖ ^ 2) := by
   refine (Continuous.norm ?_).pow 2
   unfold dirichletPoly
-  refine continuous_finset_sum _ fun n hn => ?_
+  refine continuous_finsetSum _ fun n hn => ?_
   simp only [Finset.mem_Icc] at hn
   have hn0 : (0 : ℝ) < (n : ℝ) := by exact_mod_cast hn.1
   have hc : Continuous (fun t : ℝ => ((n : ℂ)) ^ (-((σ : ℂ) + (t : ℂ) * I))) := by
@@ -769,7 +769,7 @@ theorem exists_volume_norm_riemannZeta_ge_le {σ : ℝ} (h0 : 2 / 3 < σ) (h1 : 
   have hset : {t : ℝ | V ^ 2 ≤ f t} ∩ Set.Ioc (0 : ℝ) T
       = {t : ℝ | t ∈ Set.Ioc (0 : ℝ) T ∧ V ≤ ‖riemannZeta ((σ : ℂ) + (t : ℂ) * I)‖} := by
     ext t
-    simp only [Set.mem_inter_iff, Set.mem_setOf_eq, hf]
+    simp only [Set.mem_inter_iff, Set.mem_ofPred_eq, hf]
     constructor
     · rintro ⟨hle, ht⟩
       exact ⟨ht, by nlinarith [norm_nonneg (riemannZeta ((σ : ℂ) + (t : ℂ) * I))]⟩

@@ -173,7 +173,7 @@ theorem g_even (y : ℝ) : g ϱ L w (-y) = g ϱ L w y :=
 theorem g_ge (hϱ : TaperProfile ϱ) (hw : 0 < w) (hwL : 2 * w ≤ L) (y : ℝ) :
     max (L - 2 * w - |y|) 0 ≤ g ϱ L w y := by
   have h := le_autocorr_of_plateau (fun u => phi ϱ L w u ^ 2) (M := L / 2 - w)
-    (fun u => sq_nonneg _) (fun u hu => by rw [phi_eq_one hϱ hw hu, one_pow])
+    (fun u => sq_nonneg _) (fun u hu => by simp only [phi_eq_one hϱ hw hu, one_pow])
     (integrable_phi_sq_mul_shift hϱ hw hwL y)
   rw [show 2 * (L / 2 - w) = L - 2 * w by ring] at h
   exact h

@@ -72,7 +72,7 @@ lemma exists_goodHeightL (hq : 1 < q) (hprim : χ.IsPrimitive) (a : ℝ) :
     exact ⟨by rwa [LZeros_carrier], h1, h2⟩
   have hSfin : ((fun ρ : ℂ => ρ.im) '' zerosInL χ (a - 1) (a + 2)).Finite := hfin.image _
   have hinf : (Set.Icc a (a + 1)).Infinite := Set.Icc_infinite (by linarith)
-  obtain ⟨T, hTd⟩ := (hinf.sdiff hSfin).nonempty
+  obtain ⟨T, hTd⟩ := (hinf.diff hSfin).nonempty
   obtain ⟨hT, hTnot⟩ := hTd
   refine ⟨T, hT, fun ρ hρ him => hTnot ?_⟩
   refine ⟨ρ, ⟨hρ, ?_, ?_⟩, him⟩

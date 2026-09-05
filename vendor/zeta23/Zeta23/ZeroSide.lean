@@ -527,7 +527,7 @@ theorem rtrace_blockP_le {c : ℝ} (hc : 0 < c)
 omit [Fintype ι] [DecidableEq ι] [Fintype d] [DecidableEq d] in
 lemma isHermitian_real_smul {A : Matrix d d ℂ} (hA : A.IsHermitian) (r : ℝ) :
     ((r : ℂ) • A).IsHermitian :=
-  hA.smul (by rw [IsSelfAdjoint, Complex.star_def, Complex.conj_ofReal])
+  IsSelfAdjoint.smul (by rw [IsSelfAdjoint, Complex.star_def, Complex.conj_ofReal]) hA
 
 /-- Q is Hermitian (real symmetric). -/
 theorem blockQ_isHermitian (c : ℝ) : (D.blockQ c).IsHermitian :=
@@ -715,14 +715,14 @@ lemma s1_eq_mk : Z.s1 T = (mkData Z T v hv).s₁ := by
   rw [ZeroConfig.s1, S1_eq, Set.ncard_coe_finset, ZeroBlockData.s₁, ZeroBlockData.S₁]
   convert (card_filter_coe (ZI Z T) (fun ρ => ρ.re = 1 / 2 ∧ Z.mult ρ = 1)
     (fun z => (mkData Z T v hv).σ z = z ∧ (mkData Z T v hv).m z = 1)
-    fun z => by rw [mkData_σ_eq_iff]; rfl).symm using 2
+    fun z => by simp [mkData_σ_eq_iff]).symm using 2
   all_goals first | exact Finset.filter_congr_decidable _ _ _ | exact (Finset.filter_congr_decidable _ _ _).symm
 
 lemma s2_eq_mk : Z.s2 T = (mkData Z T v hv).s₂ := by
   rw [ZeroConfig.s2, S2_eq, Set.ncard_coe_finset, ZeroBlockData.s₂, ZeroBlockData.S₂]
   convert (card_filter_coe (ZI Z T) (fun ρ => ρ.re = 1 / 2 ∧ 2 ≤ Z.mult ρ)
     (fun z => (mkData Z T v hv).σ z = z ∧ 2 ≤ (mkData Z T v hv).m z)
-    fun z => by rw [mkData_σ_eq_iff]; rfl).symm using 2
+    fun z => by simp [mkData_σ_eq_iff]).symm using 2
   all_goals first | exact Finset.filter_congr_decidable _ _ _ | exact (Finset.filter_congr_decidable _ _ _).symm
 
 /-- #offLine = 2p. -/
@@ -757,8 +757,7 @@ lemma NonIprime_eq_mk : Z.NonIprime T = (mkData Z T v hv).Non := by
   rw [hset, finsum_mem_coe_finset]
   convert (sum_filter_coe (ZI Z T) (fun ρ => ρ.re = 1 / 2) (fun z => (mkData Z T v hv).σ z = z)
     (fun z => mkData_σ_eq_iff Z T v hv z) (fun ρ => Z.mult ρ)).symm using 2
-  · ext; simp
-  · rfl
+  all_goals first | rfl | (ext; simp)
 
 end mk
 

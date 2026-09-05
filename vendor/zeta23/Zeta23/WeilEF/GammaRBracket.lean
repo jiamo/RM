@@ -66,8 +66,7 @@ theorem logDeriv_Gammaℝ {s : ℂ} (hs : 0 < s.re) :
       ((Real.pi : ℂ) ^ (-s / 2) * Complex.log Real.pi * (-1 / 2)) s := by
     have h := ((hasDerivAt_id s).neg.div_const 2).const_cpow (c := (Real.pi : ℂ)) (Or.inl hπ)
     convert h using 1
-    · funext x; simp
-    · simp
+    all_goals simp [id]
   have hdiff_pow : DifferentiableAt ℂ (fun s : ℂ => (Real.pi : ℂ) ^ (-s / 2)) s :=
     hdpow.differentiableAt
   have hΓdiff : DifferentiableAt ℂ Complex.Gamma (s / 2) := by
