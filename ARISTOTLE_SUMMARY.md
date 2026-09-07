@@ -1,3 +1,38 @@
+# Summary of changes for run 7cf3dcec-b038-4fd5-a8e1-e96aae57cab0
+继续完成了这一轮工作：先修好交付状态下无法编译的依赖，再在任务板上关闭了两个明确记录的缺口，全部机器验证通过。
+
+**1. 恢复构建。** 交付时 `lake-manifest.json` 与仓库自己的 pin（`lakefile.toml`、`lean-toolchain`，二者均未改动）不一致，`lake build` 直接以 `dependency 'Zeta23' not in manifest` 失败。我按仓库自身的 pin 重新解析依赖并提交了新的 manifest；现在 `lake build` 成功（9213 个目标，零错误）。
+
+**2. 新模块 `RiemannHypothesis/KoksmaVariation.lean` —— 用总变差表述的 Koksma 不等式。** 此前仓库只有单调被积函数、或写成两个单调函数之差的版本，常数依赖于所选分解；任务板把「没有总变差泛函」记为未决边界。本模块用 Mathlib 的 `eVariationOn` 定义 `unitVariation f = V(f)`，并证明：对 `[0,1]` 上任意有界变差（不假设连续）的 `f`、任意序列 `x`、任意 `N ≥ 1`，
+`|(1/N)∑_{n<N} f({xₙ}) − ∫₀¹ f| ≤ (2V(f) − |f 1 − f 0|)·D_N(x)`，特别地 `≤ 2V(f)·D_N(x)`；
+证明是把两个 Jordan 分解 `f = V_f − (V_f − f)` 与 `f = (V_f + f) − V_f` 分别代入已有的差分形式。附带：单调时 `V(f) = f 1 − f 0`（新常数恰好退化为旧常数）、Lipschitz 常数由 `3L` 改进为 `2L`、以及「判别序列的差异度趋于 0 ⇒ 正确积分每个有界变差函数」的极限形式（含 `α n²`、`α` 无理的具体实例）。
+
+**3. 新模块 `RiemannHypothesis/KoksmaSharp.lean` —— Lipschitz 情形的最优常数。** 完全绕开单调分解：把分部求和步骤推广到任意权重序列（`abs_sum_weight_cellDev_le`，以权重沿格点的变差代替单调升幅），再证明两个离散化误差（平均值 vs 格点阶梯平均、积分 vs 黎曼和）各不超过 `L/K`，于是误差 `≤ L·D_N(x) + 2L/K` 对每个 `K ≥ 1` 成立，从而
+`|(1/N)∑_{n<N} f({xₙ}) − ∫₀¹ f| ≤ L·D_N(x)`（`koksma_lipschitz_sharp`），这是经典的最优常数，取代了先前的 `3L` 与 `2L`。同时给出其极限形式。
+
+**如实说明尚未做到的部分。** 一般有界变差情形的最优常数仍是 `V(f)` 而非 `2V(f)`：那需要对 `d f` 的 Riemann–Stieltjes 分部积分，Mathlib 与本仓库都没有这套机制；任务板对应行如实标为未决。黎曼猜想本身仍是公开未解决问题，本轮新增内容都是围绕它的无条件分析结果，与其真假无关。
+
+**记账与验证**（沿用仓库既有规范）：新增任务板行 `M1-KOKSMA-VARIATION`（DONE_WEAK，边界写明常数非最优）与 `M1-KOKSMA-LIPSCHITZ-SHARP`（DONE_STRONG，边界为空），并相应更新了 `M1-KOKSMA` 的未决边界；两个 evidence 文件（含对抗性复核小节）；`scripts/revalidation.lean` 中逐条完整钉住语句；`scripts/audit.sh` 增加导入与 `#print axioms` 检查；README 模块表新增两行；重新生成 `docs/current-goal-state.md`。验证结果：`lake build` 成功；`bash scripts/audit.sh` 输出 `OK`（2442 条定理公理审计通过、0 条越界；165 条任务校验通过）；新模块无 `sorry`（全仓库仅剩 `Challenge.lean` 中按约定保留的三个），新定理公理恰为 `propext`、`Classical.choice`、`Quot.sound`。所有改动已提交并推送。
+
+# Summary of changes for run fa0c2a1f-da61-4fe1-a61d-040dc236b397
+I picked the Riemann-hypothesis formalization up where it stood and made two kinds of progress: I restored the build, and I added a new, fully machine-checked module.
+
+**1. The project did not build as delivered.** Its dependency manifest did not match the Mathlib revision pinned in `lakefile.toml`, so `lake build` failed immediately (`dependency 'Zeta23' not in manifest`, plus a Mathlib revision mismatch). I re-resolved the dependencies against the project's own pins — `lean-toolchain` and `lakefile.toml` untouched — and committed the regenerated `lake-manifest.json`. `lake build` now completes successfully (9211 targets, no errors) and `scripts/audit.sh` reports `OK`.
+
+**2. New module `RiemannHypothesis/Koksma.lean` — Koksma's inequality.** The repository already had the discrepancy `D_N(x)` and Weyl's criterion in discrepancy form, but nothing connecting the discrepancy to what it is for: the error of numerical integration along the sequence. This module proves, quantitatively and with no limit taken:
+
+* `koksma_monotone` — for a nondecreasing `f` on `[0,1]`, every sequence `x` and every `N ≥ 1`,
+  `|(1/N) ∑_{n<N} f({xₙ}) − ∫₀¹ f| ≤ (f 1 − f 0) · D_N(x)`. No continuity is assumed: the integrand may have jumps.
+* `koksma_sub_monotone` — the bounded-variation form, for an integrand written as a difference `f = g − h` of two nondecreasing functions, with the sum of the two rises.
+* `koksma_lipschitz` — the Lipschitz form, with constant `3 L` (not the sharp `L`).
+* `tendsto_average_of_tendsto_discrepancy` and `tendsto_average_quadratic` — the limiting consequences, the second for `α n²` with `α` irrational.
+
+The proof cuts `[0,1)` into `K` cells: monotonicity brackets the average between the two step averages built from the cell endpoints and brackets the integral between the corresponding Riemann sums, which differ by `(f 1 − f 0)/K`; the remaining cell-deviation sums are handled by summation by parts, which turns them into consecutive differences of `f` weighted by the deviations of the tail intervals `[j/K, 1)`, each bounded by `D_N`. The boundary terms vanish because the full interval and the empty interval have deviation `0`.
+
+**Verification and bookkeeping.** The module is `sorry`-free; the axioms of all four headline theorems are exactly `propext`, `Classical.choice`, `Quot.sound`. The module is imported by the root `RiemannHypothesis.lean`, its theorems are added to the axiom checks in `scripts/audit.sh` and pinned statement-by-statement in `scripts/revalidation.lean`, and a task-board row `M1-KOKSMA` with an evidence file under `docs/goal/evidence/` records what is proved and what remains open (no total-variation functional; the Lipschitz constant is not sharp). `README.md` and `docs/current-goal-state.md` are updated. The only `sorry`s left in the repository are the three in `Challenge.lean`, which the repository's own convention requires to be unproved there and proved in `Solution.lean`.
+
+As before, and stated plainly: the Riemann hypothesis itself is open and is not proved here; everything added is unconditional analysis around it. All work is committed and pushed.
+
 # Summary of changes for run 51974088-7ebe-4277-b7d7-5569abdd3146
 I picked up the Riemann-hypothesis formalization project and made three kinds of progress: I restored the build, and I closed two recorded gaps plus added a capstone equivalence, all machine-checked.
 

@@ -55,6 +55,13 @@
   RiemannHypothesis.windowCountOffLineMult_le_of_speiserTransfer <- RiemannHypothesis.SpeiserTransfer
 # DEFINITIONAL: hypotheses on an argument of the theorem, not open assumptions
   RiemannHypothesis.PartialSumBound.exists_nonneg <- RiemannHypothesis.PartialSumBound
+  RiemannHypothesis.Vinogradov.vinogradovEq_dilate <- RiemannHypothesis.Vinogradov.VinogradovEq
+  RiemannHypothesis.Vinogradov.vinogradovEq_translate <- RiemannHypothesis.Vinogradov.VinogradovEq
+  RiemannHypothesis.WellSpaced.card_fiber_le_two <- RiemannHypothesis.WellSpaced.Separated
+  RiemannHypothesis.WellSpaced.integral_Ioc_normSq_expSum_le_mv <- RiemannHypothesis.WellSpaced.Separated
+  RiemannHypothesis.WellSpaced.integral_normSq_expSum_le <- RiemannHypothesis.WellSpaced.Separated
+  RiemannHypothesis.WellSpaced.integral_normSq_expSum_le_mv <- RiemannHypothesis.WellSpaced.Separated
+  RiemannHypothesis.WellSpaced.rowSum_le <- RiemannHypothesis.WellSpaced.Separated
   RiemannHypothesis.WeylClassical.norm_polyPhaseSum_pow_le_three_term <- RiemannHypothesis.WeylGeneral.IsPolyPhase
   RiemannHypothesis.WeylCount.equidistributedMod1_add_const <- RiemannHypothesis.WeylCriterion.EquidistributedMod1
   RiemannHypothesis.WeylCount.tendsto_avg_real <- RiemannHypothesis.WeylCriterion.EquidistributedMod1

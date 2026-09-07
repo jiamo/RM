@@ -136,7 +136,10 @@ mixing them dilutes the signal the audit exists to give:
   `RiemannHypothesis/CorpusCeiling.lean`, which are unconditional theorems about a constraint
   system and assume nothing about `ζ`.  `UniformDensity` is likewise a hypothesis on the
   abstract corpus supplied by the caller, used there to measure what a density bound uniform in
-  the distance to the critical line would contribute.
+  the distance to the critical line would contribute.  `WellSpaced.Separated δ Λ` ("the
+  frequencies `Λ` are `δ`-separated") and `Vinogradov.VinogradovEq k s x` ("the tuple `x`
+  solves the Vinogradov system of degree `k` in `2s` variables") are of the same kind:
+  properties of an argument supplied by the caller.
 * `ROUTE_CLOSED` — a hypothesis of a route that has been abandoned: the Speiser transfer
   family, whose direction is the reverse of the free inequality (see the hypothesis-hygiene
   section of `AGENTS.md`).  Kept for the record, not to be built on.
@@ -170,7 +173,9 @@ def definitionalStatements : List Name :=
    `RiemannHypothesis.WindowCounts.SatisfiesBudgetMult,
    `RiemannHypothesis.RHCounts,
    `RiemannHypothesis.UniformDensity,
-   `RiemannHypothesis.WeylGeneral.IsPolyPhase]
+   `RiemannHypothesis.WeylGeneral.IsPolyPhase,
+   `RiemannHypothesis.WellSpaced.Separated,
+   `RiemannHypothesis.Vinogradov.VinogradovEq]
 
 /-- Hypotheses of routes that have been closed; kept for the record. -/
 def routeClosedStatements : List Name :=

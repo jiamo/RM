@@ -161,6 +161,9 @@ import RiemannHypothesis.WeylDiscrepancyQuadratic
 import RiemannHypothesis.WeylDiscrepancyGeneral
 import RiemannHypothesis.Discrepancy
 import RiemannHypothesis.DiscrepancyCriterion
+import RiemannHypothesis.Koksma
+import RiemannHypothesis.KoksmaVariation
+import RiemannHypothesis.KoksmaSharp
 import RiemannHypothesis.WeylDifferenceTheorem
 import RiemannHypothesis.WeylPolynomial
 import RiemannHypothesis.WeylPolynomialGeneral
@@ -199,6 +202,10 @@ import RiemannHypothesis.CarlsonPowerSaving
 import RiemannHypothesis.CarlsonDensityPowerSaving
 import RiemannHypothesis.Zeta23Verification
 import RiemannHypothesis.EventualCountingCriterion
+import RiemannHypothesis.MeanValueWellSpaced
+import RiemannHypothesis.VaughanIdentity
+import RiemannHypothesis.CorpusInstance
+import RiemannHypothesis.VinogradovMeanValue
 
 #print axioms RiemannHypothesisConjecture.zeta_strip_iff_eta
 #print axioms RiemannHypothesisConjecture.zeta_iff_zeta_strip
@@ -784,6 +791,22 @@ import RiemannHypothesis.EventualCountingCriterion
 #print axioms RiemannHypothesis.WeylDiscrepancy.countsEquidistribute_iff_tendsto_discrepancy
 #print axioms RiemannHypothesis.WeylDiscrepancy.tendsto_discrepancy_quadratic
 #print axioms RiemannHypothesis.WeylDiscrepancy.not_tendsto_discrepancy_const_zero
+#print axioms RiemannHypothesis.WeylDiscrepancy.koksma_monotone
+#print axioms RiemannHypothesis.WeylDiscrepancy.koksma_sub_monotone
+#print axioms RiemannHypothesis.WeylDiscrepancy.koksma_lipschitz
+#print axioms RiemannHypothesis.WeylDiscrepancy.tendsto_average_of_tendsto_discrepancy
+#print axioms RiemannHypothesis.WeylDiscrepancy.tendsto_average_quadratic
+#print axioms RiemannHypothesis.WeylDiscrepancy.unitVariation_of_monotoneOn
+#print axioms RiemannHypothesis.WeylDiscrepancy.koksma_variation_sub
+#print axioms RiemannHypothesis.WeylDiscrepancy.koksma_variation_add
+#print axioms RiemannHypothesis.WeylDiscrepancy.koksma_variation
+#print axioms RiemannHypothesis.WeylDiscrepancy.koksma_variation_le
+#print axioms RiemannHypothesis.WeylDiscrepancy.koksma_lipschitz_two
+#print axioms RiemannHypothesis.WeylDiscrepancy.tendsto_average_of_tendsto_discrepancy_variation
+#print axioms RiemannHypothesis.WeylDiscrepancy.tendsto_average_quadratic_variation
+#print axioms RiemannHypothesis.WeylDiscrepancy.abs_sum_weight_cellDev_le
+#print axioms RiemannHypothesis.WeylDiscrepancy.koksma_lipschitz_sharp
+#print axioms RiemannHypothesis.WeylDiscrepancy.tendsto_average_of_tendsto_discrepancy_lipschitz
 #print axioms RiemannHypothesis.WeylCount.tendsto_avg_real
 #print axioms RiemannHypothesis.WeylCount.tendsto_countIn_div
 #print axioms RiemannHypothesis.WeylCount.tendsto_countIn_div_quadratic
@@ -970,6 +993,23 @@ import RiemannHypothesis.EventualCountingCriterion
 #print axioms RiemannHypothesis.zetaStripForm_iff_eventually_windowCountOnLine_eq
 #print axioms RiemannHypothesis.zetaStripForm_iff_eventually_windowCountOnLine_eq_windowCount
 #print axioms RiemannHypothesis.zetaStripForm_iff_eventually_windowCountDistinct_le
+#print axioms RiemannHypothesis.WellSpaced.rowSum_le
+#print axioms RiemannHypothesis.WellSpaced.integral_normSq_expSum_le
+#print axioms RiemannHypothesis.WellSpaced.integral_normSq_expSum_le_mv
+#print axioms RiemannHypothesis.WellSpaced.integral_Ioc_normSq_expSum_le_mv
+#print axioms RiemannHypothesis.Vaughan.vaughan_identity
+#print axioms RiemannHypothesis.Vaughan.vonMangoldt_eq_of_lt
+#print axioms RiemannHypothesis.Vaughan.sum_vonMangoldt_eq
+#print axioms RiemannHypothesis.windowCountDistinct_add
+#print axioms RiemannHypothesis.ncard_even_of_criticalReflect
+#print axioms RiemannHypothesis.windowCount_le_log_mul_windowCountDistinct
+#print axioms RiemannHypothesis.exists_offAtSet_eq_empty
+#print axioms RiemannHypothesis.zeta_windowOff_le
+#print axioms RiemannHypothesis.zetaStripForm_iff_rhCounts_zetaCorpus
+#print axioms RiemannHypothesis.rh_not_derivable_from_zeta_corpus
+#print axioms RiemannHypothesis.Vinogradov.vinogradovEq_translate
+#print axioms RiemannHypothesis.Vinogradov.pow_card_le_vinogradovCount
+#print axioms RiemannHypothesis.Vinogradov.vinogradovCount_one_one
 EOF
 lake env lean .lake/build/axioms.lean > .lake/build/axioms.out
 cat .lake/build/axioms.out

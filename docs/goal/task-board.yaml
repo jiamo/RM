@@ -1378,7 +1378,7 @@ tasks:
     title: "Mean-value theorems and the large sieve for zeta on the critical line"
     latest_evidence: docs/goal/evidence/2026-08-24-m2-meanvalue.md
     latest_update: "2026-08-24 DONE_WEAK: the elementary mean value theorem for Dirichlet polynomials with arbitrary coefficients is proved in RiemannHypothesis/DirichletPolyMeanValue.lean. offDiagSum_le bounds the off-diagonal remainder by 8 N (1 + log N) times the diagonal, and abs_integral_normSq_dirichletPoly_sub_diag_le_mvt gives the two-sided statement int_0^T ||D(sigma + i t)||^2 dt = (T + O(N log N)) sum ||a n||^2 n^(-2 sigma) with an explicit constant; integral_normSq_dirichletPoly_mvt_zero is the sigma = 0 form. No sorry; axioms exactly propext, Classical.choice, Quot.sound."
-    open_boundary: "Two items remain. (i) The sharp Montgomery-Vaughan form, int_0^T |D(i t)|^2 dt = sum |a n|^2 (T + O(n)), needs the generalized Hilbert inequality of Montgomery and Vaughan, and the discrete large sieve over well-spaced points needs a duality argument on top of it; neither is formalized. (ii) The fourth moment of zeta on the critical line needs the approximate functional equation and the divisor correlation sums, which are not available in this repository or in mathlib."
+    open_boundary: "Two items remain. (i) The sharp Montgomery-Vaughan form, int_0^T |D(i t)|^2 dt = sum |a n|^2 (T + O(n)), needs the generalized Hilbert inequality of Montgomery and Vaughan, and the discrete large sieve over well-spaced points needs a duality argument on top of it; neither is formalized in that shape - what is now available is the substitute the applications use, the delta-separated bound of M2-MEANVALUE-WELLSPACED, int_{-T}^{T} ||sum_r x_r e^{i lam_r t}||^2 <= 18 (T + 1/delta) sum ||x_r||^2, with an explicit but non-optimal constant. (ii) The fourth moment of zeta on the critical line needs the approximate functional equation and the divisor correlation sums, which are not available in this repository or in mathlib."
     milestone: M2
     depends_on:
       - M1-GROWTH
@@ -1391,6 +1391,66 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.DirichletPolyMeanValue"
       - "lake build"
+
+  - id: M2-MEANVALUE-WELLSPACED
+    priority: P0
+    status: DONE_STRONG
+    track: modern
+    title: "The mean value theorem for exponential sums with well-spaced frequencies"
+    latest_evidence: docs/goal/evidence/2026-09-06-next-round.md
+    revalidation: docs/goal/evidence/2026-09-06-next-round.md
+    latest_update: "2026-09-06 DONE_STRONG: RiemannHypothesis/MeanValueWellSpaced.lean proves, for real frequencies lam r that are delta-separated on a finite index set and arbitrary complex coefficients x r, the bound int_{-T}^{T} ||sum_r x_r e^{i lam_r t}||^2 dt <= 18 (T + 1/delta) sum_r ||x_r||^2, and the sharper explicit form with constant e (sqrt(pi) T + 2 pi/delta). This is the estimate for which the literature uses Montgomery and Vaughan's generalized Hilbert inequality; the proof here is the Gaussian majorant method, whose only arithmetic input is card_fiber_le_two: at most two frequencies lie at distance in [k delta, (k+1) delta) from a given one. Also proved: rowSum_le, the row sums 1 + 2 sqrt(pi b)/delta of the Gaussian kernel, and bilinear_le_of_rowSum_le, Schur's test. No sorry; axioms exactly propext, Classical.choice, Quot.sound; three statements pinned in scripts/revalidation.lean."
+    open_boundary: ""
+    milestone: M2
+    depends_on:
+      - M1-GROWTH
+    rank: 40.5
+    exit_criteria:
+      - "integral_normSq_expSum_le_mv : the T + 1/delta bound for delta-separated frequencies, pinned in scripts/revalidation.lean."
+      - "rowSum_le : the row sums of the Gaussian kernel over separated frequencies, pinned."
+      - "The row is explicit that the generalized Hilbert inequality itself, and the sharp constant 1 on the main term, are not proved."
+    required_gates:
+      - "lake build RiemannHypothesis.MeanValueWellSpaced"
+      - "./scripts/audit.sh"
+
+  - id: M2-VAUGHAN
+    priority: P1
+    status: DONE_STRONG
+    track: modern
+    title: "Vaughan's identity"
+    latest_evidence: docs/goal/evidence/2026-09-06-next-round.md
+    revalidation: docs/goal/evidence/2026-09-06-next-round.md
+    latest_update: "2026-09-06 DONE_STRONG: RiemannHypothesis/VaughanIdentity.lean proves Vaughan's identity in the Dirichlet convolution ring ArithmeticFunction R: Lambda = Lambda_{<=U} + log * mu_{<=V} - Lambda_{<=U} * zeta * mu_{<=V} + Lambda_{>U} * zeta * mu_{>V}, from Lambda * zeta = log and zeta * mu = 1 alone; vonMangoldt_eq_of_lt evaluates it at n > U, typeI_apply, typeII_apply and typeIII_apply write the three terms as sums over the triples b c m = n with the constraints that make the last two bilinear, and sum_vonMangoldt_eq sums the identity against an arbitrary weight over U < n <= N. This is the combinatorial input of the Bombieri-Vinogradov theorem and of Vinogradov's estimates for sums over primes. No sorry; axioms exactly propext, Classical.choice, Quot.sound; the identity is pinned in scripts/revalidation.lean."
+    open_boundary: ""
+    milestone: M2
+    depends_on: []
+    rank: 40.6
+    exit_criteria:
+      - "vaughan_identity : the identity of arithmetic functions, pinned in scripts/revalidation.lean."
+      - "vonMangoldt_eq_of_lt : its pointwise form above the first threshold."
+      - "The row is explicit that neither bilinear sum is estimated, so Bombieri-Vinogradov does not follow."
+    required_gates:
+      - "lake build RiemannHypothesis.VaughanIdentity"
+      - "./scripts/audit.sh"
+
+  - id: M3-VINOGRADOV-SYSTEM
+    priority: P2
+    status: DONE_WEAK
+    track: research
+    title: "The Vinogradov system: the counting object, its invariances and its elementary bounds"
+    latest_evidence: docs/goal/evidence/2026-09-06-next-round.md
+    latest_update: "2026-09-06 DONE_WEAK: RiemannHypothesis/VinogradovMeanValue.lean fixes J_{s,k}(X) as the number of solutions of x_1^j + ... + x_s^j = y_1^j + ... + y_s^j (1 <= j <= k) with variables in [1, X], and proves the elementary facts an efficient-congruencing argument starts from: vinogradovEq_translate (translation invariance, the feature that distinguishes the Vinogradov system), vinogradovEq_dilate, pow_card_le_vinogradovCount (the diagonal bound X^s <= J), vinogradovCount_le_pow (the trivial bound X^{2s}) and vinogradovCount_one_one (J_{1,1}(X) = X). VinogradovMeanValueBound records the theorem itself as a Prop. No sorry; axioms exactly propext, Classical.choice, Quot.sound."
+    open_boundary: "The mean value theorem itself is not proved: neither Wooley's efficient congruencing nor the decoupling route is formalized, and the lower bound X^{2s - k(k+1)/2} for the non-diagonal contribution, which shows the second term of the conjectured bound is necessary, needs a major-arc argument that is not here. Nothing about exponential sums or about the zero-free region follows from this file."
+    milestone: M3
+    depends_on: []
+    rank: 49.5
+    exit_criteria:
+      - "vinogradovCount : the solution count of the Vinogradov system."
+      - "vinogradovEq_translate : translation invariance, pinned in scripts/revalidation.lean."
+      - "pow_card_le_vinogradovCount and vinogradovCount_one_one : the diagonal bound and a non-vacuity check, pinned."
+    required_gates:
+      - "lake build RiemannHypothesis.VinogradovMeanValue"
+      - "./scripts/audit.sh"
 
   - id: M2-MOLLIFIER
     priority: P0
@@ -1530,7 +1590,7 @@ tasks:
     title: "Vinogradov-Korobov zero-free region"
     latest_evidence: ""
     latest_update: "2026-08-19 scoped: the best known zero-free region re s > 1 - c / (log |t|)^(2/3); a deep exponential-sum estimate."
-    open_boundary: "Requires Vinogradov's method for exponential sums with smooth phases; far from the current mathlib surface. Not on the critical path to any other row except M3-GAP."
+    open_boundary: "Requires Vinogradov's method for exponential sums with smooth phases; far from the current mathlib surface. Not on the critical path to any other row except M3-GAP. The counting substrate now exists (M3-VINOGRADOV-SYSTEM: the solution count J_{s,k}(X), its translation and dilation invariances, the diagonal bound), but the mean value theorem itself - by efficient congruencing or by decoupling - is not formalized, and without it no zero-free region follows."
     milestone: M3
     depends_on:
       - M1-ZERO-FREE-REGION
@@ -2963,6 +3023,80 @@ tasks:
       - "lake build RiemannHypothesis.DiscrepancyCriterion"
       - "./scripts/audit.sh"
 
+  - id: M1-KOKSMA
+    priority: P1
+    status: DONE_WEAK
+    track: analysis
+    title: "Koksma's inequality: the discrepancy bounds the error of numerical integration"
+    latest_evidence: docs/goal/evidence/2026-09-06-m1-koksma.md
+    revalidation: docs/goal/evidence/2026-09-06-m1-koksma.md
+    latest_update: "2026-09-06 DONE_WEAK: RiemannHypothesis/Koksma.lean proves what makes the discrepancy of M1-DISCREPANCY the right measure of equidistribution, namely that it controls the error of numerical integration along the sequence. koksma_monotone: for a nondecreasing f on [0,1] - no continuity assumed, jumps allowed - every sequence x and every N >= 1, |(1/N) sum_{n<N} f(fract x_n) - int_0^1 f| <= (f 1 - f 0) D_N(x), quantitatively and with no limit taken. The proof cuts [0,1) into K cells: monotonicity brackets the average between the two step averages built from the values of f at the left and the right endpoints of the cells (sum_stepLeft_le_sum_fract, sum_fract_le_sum_stepRight) and brackets the integral between the corresponding left and right Riemann sums (riemannSum_le_integral_le), which differ by (f 1 - f 0)/K (riemannSum_right_sub_left). Each of the two cell deviation sums sum_j w_j (c_j/N - 1/K) is handled by summation by parts (sum_mul_sub_succ, sum_mul_sub_succ'"'"'), which rewrites it as consecutive differences of f against the deviations S_j of the tail intervals [j/K,1), each at most D_N by le_discrepancy, the differences nonnegative and telescoping to at most f 1 - f 0 (abs_sum_cellDev_le, abs_sum_cellDev_right_le); the boundary terms vanish because S_0 = S_K = 0. Letting K grow removes the (f 1 - f 0)/K. koksma_sub_monotone extends the bound to a difference f = g - h of two nondecreasing functions, with the sum of the two rises, which is the bounded-variation case; koksma_lipschitz is the Lipschitz form, |...| <= 3 L D_N(x). tendsto_average_of_tendsto_discrepancy and tendsto_average_quadratic draw the limiting consequences, the latter for alpha n^2 with alpha irrational via M1-DISCREPANCY-CRITERION. No sorry; axioms exactly propext, Classical.choice, Quot.sound; no unproved Prop of the repository is used; four statements pinned in scripts/revalidation.lean."
+    open_boundary: "The total variation part of this boundary is closed by M1-KOKSMA-VARIATION, which states the inequality for a general function of bounded variation with the constant 2 V(f) - |f 1 - f 0|, and the Lipschitz constant is now sharp, L, by M1-KOKSMA-LIPSCHITZ-SHARP. What remains open is the sharp constant V(f) for a general function of bounded variation. Nothing about zeta is claimed: these are not zeta phases."
+    milestone: M1
+    depends_on:
+      - M1-DISCREPANCY
+      - M1-DISCREPANCY-CRITERION
+    rank: 34.879
+    exit_criteria:
+      - "sum_mul_sub_succ, sum_mul_sub_succ'"'"' : summation by parts with explicit boundary terms, weights at either endpoint."
+      - "abs_sum_cellDev_le, abs_sum_cellDev_right_le : the cell deviation sums are at most (f 1 - f 0) D_N."
+      - "riemannSum_le_integral_le, riemannSum_right_sub_left : the Riemann sums bracket the integral and differ by (f 1 - f 0)/K."
+      - "koksma_monotone : Koksma'"'"'s inequality for a nondecreasing integrand, with no continuity hypothesis."
+      - "koksma_sub_monotone : the bound for a difference of two nondecreasing functions."
+      - "koksma_lipschitz : Koksma'"'"'s inequality for a Lipschitz integrand, with constant 3 L."
+      - "tendsto_average_of_tendsto_discrepancy, tendsto_average_quadratic : the limiting forms."
+    required_gates:
+      - "lake build RiemannHypothesis.Koksma"
+      - "./scripts/audit.sh"
+
+  - id: M1-KOKSMA-VARIATION
+    priority: P1
+    status: DONE_WEAK
+    track: analysis
+    title: "Koksma's inequality for a general function of bounded variation, with the total variation as the constant"
+    latest_evidence: docs/goal/evidence/2026-09-07-m1-koksma-variation.md
+    revalidation: docs/goal/evidence/2026-09-07-m1-koksma-variation.md
+    latest_update: "2026-09-07 DONE_WEAK: RiemannHypothesis/KoksmaVariation.lean closes the total variation part of the open boundary of M1-KOKSMA. unitVariation f = (eVariationOn f (Set.Icc 0 1)).toReal is the total variation of f on the unit interval; unitVariation_of_monotoneOn identifies it with the rise f 1 - f 0 for a nondecreasing f and abs_sub_le_unitVariation bounds the rise by it. koksma_variation: for every f of bounded variation on [0,1] - no continuity, no chosen decomposition - every sequence x and every N >= 1, |(1/N) sum_{n<N} f(fract x_n) - int_0^1 f| <= (2 V(f) - |f 1 - f 0|) D_N(x), and koksma_variation_le is the readable form with 2 V(f). The proof feeds the two Jordan decompositions f = V_f - (V_f - f) and f = (V_f + f) - V_f, where V_f x = variationOnFromTo f (Set.Icc 0 1) 0 x, into koksma_sub_monotone of M1-KOKSMA; mathlib's variationOnFromTo.monotoneOn, sub_self_monotoneOn and add_self_monotoneOn supply the monotonicity, V_f 0 = 0 and V_f 1 = V(f) the constants, and taking the smaller of the two constants gives the absolute value. unitVariation_le_of_lipschitz bounds the total variation of an L-Lipschitz function by L through LipschitzOnWith.comp_eVariationOn_le and eVariationOn_id_Icc, so koksma_lipschitz_two improves the Lipschitz constant of M1-KOKSMA from 3 L to 2 L. tendsto_average_of_tendsto_discrepancy_variation and tendsto_average_quadratic_variation draw the limiting consequences for every function of bounded variation, the second for alpha n^2 with alpha irrational. No sorry; axioms exactly propext, Classical.choice, Quot.sound; no unproved Prop of the repository is used; five statements pinned in scripts/revalidation.lean."
+    open_boundary: "The constant is 2 V(f) - |f 1 - f 0|, not the sharp V(f) of the classical statement; the sharp constant for a general function of bounded variation is proved by Riemann-Stieltjes integration by parts against d f, and neither the Riemann-Stieltjes integral nor an integration by parts formula for it is available in mathlib or in this repository. The Lipschitz case is settled sharply, with the constant L, by M1-KOKSMA-LIPSCHITZ-SHARP, which bypasses the Jordan decomposition; the same route bounds the in-cell oscillation of a bounded-variation integrand only by the cell variations, whose maximum needs the continuity of the variation function. For a nondecreasing f the constant is exactly V(f), so no sharpness is lost in that case. No functional-variation theory beyond mathlib's eVariationOn is developed, and nothing about zeta is claimed."
+    milestone: M1
+    depends_on:
+      - M1-KOKSMA
+    rank: 34.87
+    exit_criteria:
+      - "unitVariation, unitVariation_of_monotoneOn, abs_sub_le_unitVariation : the total variation on [0,1] as a real number, equal to the rise for a nondecreasing integrand and bounding the rise in general."
+      - "koksma_variation_sub, koksma_variation_add : the two one-sided forms, with the constants 2 V(f) - (f 1 - f 0) and 2 V(f) + (f 1 - f 0)."
+      - "koksma_variation, koksma_variation_le : Koksma's inequality for a general function of bounded variation, with the constants 2 V(f) - |f 1 - f 0| and 2 V(f)."
+      - "unitVariation_le_of_lipschitz, koksma_lipschitz_two : the Lipschitz form with the constant 2 L, improving the 3 L of M1-KOKSMA."
+      - "tendsto_average_of_tendsto_discrepancy_variation, tendsto_average_quadratic_variation : the limiting forms, for every function of bounded variation."
+    required_gates:
+      - "lake build RiemannHypothesis.KoksmaVariation"
+      - "./scripts/audit.sh"
+
+  - id: M1-KOKSMA-LIPSCHITZ-SHARP
+    priority: P1
+    status: DONE_STRONG
+    track: analysis
+    title: "Koksma's inequality for a Lipschitz integrand, with the sharp constant L"
+    latest_evidence: docs/goal/evidence/2026-09-07-m1-koksma-lipschitz-sharp.md
+    revalidation: docs/goal/evidence/2026-09-07-m1-koksma-lipschitz-sharp.md
+    latest_update: "2026-09-07 DONE_STRONG: RiemannHypothesis/KoksmaSharp.lean closes the Lipschitz sharpness gap recorded by M1-KOKSMA and M1-KOKSMA-VARIATION. koksma_lipschitz_sharp: for every L-Lipschitz f on [0,1], every sequence x and every N >= 1, |(1/N) sum_{n<N} f(fract x_n) - int_0^1 f| <= L D_N(x), replacing the 3 L of M1-KOKSMA and the 2 L of M1-KOKSMA-VARIATION. The proof removes the detour through monotone functions. abs_sum_weight_cellDev_le proves the summation by parts step for an arbitrary weight sequence a, |sum_{j<K} a_j (c_j/N - 1/K)| <= (sum_{j<K} |a_{j+1} - a_j|) D_N(x), with no monotonicity: the boundary terms vanish because the tail deviations at 0 and at 1 are zero, and each tail deviation is at most D_N. With a_j = f(j/K) the grid variation is at most K (L/K) = L (sum_abs_grid_diff_le). The two discretisation errors are each at most L/K: abs_avg_sub_stepAvg_le because every point of a cell is within 1/K of its left endpoint, and abs_integral_sub_riemannSum_le by splitting the integral with intervalIntegral.sum_integral_adjacent_intervals and estimating each cell with intervalIntegral.norm_integral_le_of_norm_le_const. Hence abs_avg_sub_integral_le_add: the error is at most L D_N(x) + 2 L/K for every K >= 1, and letting K grow gives the sharp bound; no limit is taken in N. tendsto_average_of_tendsto_discrepancy_lipschitz is the limiting form. No sorry; axioms exactly propext, Classical.choice, Quot.sound; no unproved Prop of the repository is used; two statements pinned in scripts/revalidation.lean."
+    open_boundary: ""
+    milestone: M1
+    depends_on:
+      - M1-KOKSMA
+      - M1-KOKSMA-VARIATION
+    rank: 34.865
+    exit_criteria:
+      - "abs_sum_weight_cellDev_le : the cell deviation sum for an arbitrary weight sequence, with the grid variation of the weights in place of a rise."
+      - "abs_avg_sub_stepAvg_le, abs_integral_sub_riemannSum_le : the two discretisation errors of an L-Lipschitz integrand are at most L/K each."
+      - "sum_abs_grid_diff_le : the grid variation of an L-Lipschitz integrand is at most L."
+      - "abs_avg_sub_integral_le_add : the quantitative bound L D_N(x) + 2 L/K, for every K >= 1."
+      - "koksma_lipschitz_sharp : Koksma's inequality for a Lipschitz integrand with the sharp constant L."
+      - "tendsto_average_of_tendsto_discrepancy_lipschitz : the limiting form."
+    required_gates:
+      - "lake build RiemannHypothesis.KoksmaSharp"
+      - "./scripts/audit.sh"
+
   - id: M1-WEYL-DIFFERENCE-THEOREM
     priority: P1
     status: DONE_STRONG
@@ -3582,12 +3716,13 @@ tasks:
 
   - id: M2-CORPUS-INSTANCE
     priority: P2
-    status: TODO_NEEDS_DESIGN
+    status: DONE_STRONG
     track: analysis
     title: "Build the instance ZeroCorpus 0.33 from the counting functions of zeta, so that the abstraction of M2-CORPUS-CEILING is machine-checked"
-    latest_evidence: docs/goal/evidence/2026-08-30-m2-corpus-ceiling.md
-    latest_update: "2026-08-30 scoped: the fields of ZeroCorpus are transcriptions, by hand, of named theorems of this repository into the vocabulary of abstract counting functions; the module docstring tabulates the correspondence but Lean does not check it. This row asks for the instance itself, with total = windowCount 0 T, distinct = windowCountDistinct 0 T, onLine = windowCountOnLine 0 T, off = windowCountOffLine 0 T and offAt delta T = (zerosOffCriticalLine delta T).ncard. Once it exists, M2-CORPUS-CEILING becomes a statement about a system that provably holds of zeta, and the non-derivability results become genuine independence results relative to the formalized corpus."
-    open_boundary: "The missing inputs are bookkeeping rather than analysis: additivity of the four window counts over ordinate windows, so that the dyadic window statement of sixty_seven_percent_on_critical_line becomes a difference of cumulative counts; the inclusion zerosOffCriticalLine delta T subset windowZerosOffLine 0 T with the finiteness needed for ncard monotonicity; the pairing rho -> 1 - conj rho on the off-line zeroes of a fixed ordinate range, already available as ncard_upperOffLineNontrivialZeros_eq_two_mul; and a cumulative form of the O(log T) multiplicity bound."
+    latest_evidence: docs/goal/evidence/2026-09-06-next-round.md
+    revalidation: docs/goal/evidence/2026-09-06-next-round.md
+    latest_update: "2026-09-06 DONE_STRONG: RiemannHypothesis/CorpusInstance.lean builds zetaCorpus : ZeroCorpus 0.33 out of the counting functions of zeta - total = windowCount 0 T, distinct = windowCountDistinct 0 T, onLine = windowCountOnLine 0 T, off = windowCountOffLine 0 T, offAt delta T = (offAtSet delta T).ncard, the last equal to (zerosOffCriticalLine delta T).ncard for delta > 0 (ncard_offAtSet_eq). Every field is discharged from a theorem of this repository, so Lean now checks the correspondence that the docstring of CorpusCeiling only tabulated. The missing bookkeeping is supplied: windowCountDistinct_add, windowCountOnLine_add and windowCountOffLine_add (additivity of the distinct counts over adjacent windows, which turns the dyadic statement of sixty_seven_percent_on_critical_line into a difference of cumulative counts), ncard_even_of_criticalReflect (a finite off-line set stable under rho -> 1 - conj rho has even cardinality), windowCount_le_log_mul_windowCountDistinct (the cumulative O(log T) multiplicity bound), exists_offAtSet_eq_empty (the classical zero-free region in counting form, with the low zeroes excluded by riemannZeta_ne_zero_of_abs_im_le) and exists_ncard_offAtSet_eq_windowCountOffLine (the off-line count is attained at a positive distance). The consequences are restated for zeta: zeta_windowOff_le, zetaStripForm_iff_rhCounts_zetaCorpus (the Riemann hypothesis is exactly the vanishing of the off-line count of the corpus) and rh_not_derivable_from_zeta_corpus, a machine-checked independence statement relative to the formalized corpus - it delimits what the list of facts entails and is not evidence about the conjecture. No sorry; axioms exactly propext, Classical.choice, Quot.sound; ten statements pinned in scripts/revalidation.lean."
+    open_boundary: ""
     milestone: M2
     depends_on:
       - M2-CORPUS-CEILING

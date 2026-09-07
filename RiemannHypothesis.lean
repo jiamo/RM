@@ -69,6 +69,9 @@ import RiemannHypothesis.WeylDiscrepancyQuadratic
 import RiemannHypothesis.WeylDiscrepancyGeneral
 import RiemannHypothesis.Discrepancy
 import RiemannHypothesis.DiscrepancyCriterion
+import RiemannHypothesis.Koksma
+import RiemannHypothesis.KoksmaVariation
+import RiemannHypothesis.KoksmaSharp
 import RiemannHypothesis.WeylDifferenceTheorem
 import RiemannHypothesis.WeylPolynomial
 import RiemannHypothesis.WeylPolynomialGeneral
@@ -181,3 +184,7 @@ import RiemannHypothesis.BrunTwinPrimes
 import RiemannHypothesis.BrunConstant
 import RiemannHypothesis.GaussianMeanValue
 import RiemannHypothesis.GaussianMeanValueDiscrete
+import RiemannHypothesis.MeanValueWellSpaced
+import RiemannHypothesis.VaughanIdentity
+import RiemannHypothesis.CorpusInstance
+import RiemannHypothesis.VinogradovMeanValue

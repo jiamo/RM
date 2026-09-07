@@ -4485,6 +4485,202 @@ example : ¬ Tendsto
     (𝓝 0) :=
   RiemannHypothesis.WeylDiscrepancy.not_tendsto_discrepancy_const_zero
 
+
+/-! ## M1-KOKSMA -/
+
+/-- **Koksma's inequality**: for a nondecreasing integrand the error of the average along the
+first `N` terms is at most `(f 1 - f 0)` times the discrepancy.  No continuity is assumed. -/
+example {f : ℝ → ℝ} (hmono : MonotoneOn f (Set.Icc 0 1)) (x : ℕ → ℝ) {N : ℕ} (hN : 0 < N) :
+    |(∑ n ∈ Finset.range N, f (Int.fract (x n))) / N - ∫ t in (0 : ℝ)..1, f t|
+      ≤ (f 1 - f 0) * RiemannHypothesis.WeylDiscrepancy.discrepancy x N :=
+  RiemannHypothesis.WeylDiscrepancy.koksma_monotone hmono x hN
+
+/-- Koksma's inequality for a difference of two nondecreasing functions. -/
+example {f g h : ℝ → ℝ} (hfgh : ∀ t ∈ Set.Icc (0 : ℝ) 1, f t = g t - h t)
+    (hgmono : MonotoneOn g (Set.Icc 0 1)) (hhmono : MonotoneOn h (Set.Icc 0 1))
+    (x : ℕ → ℝ) {N : ℕ} (hN : 0 < N) :
+    |(∑ n ∈ Finset.range N, f (Int.fract (x n))) / N - ∫ t in (0 : ℝ)..1, f t|
+      ≤ ((g 1 - g 0) + (h 1 - h 0)) * RiemannHypothesis.WeylDiscrepancy.discrepancy x N :=
+  RiemannHypothesis.WeylDiscrepancy.koksma_sub_monotone hfgh hgmono hhmono x hN
+
+/-- Koksma's inequality for a Lipschitz integrand, with the constant `3 L`. -/
+example {f : ℝ → ℝ} {L : ℝ} (hL : 0 ≤ L)
+    (hlip : ∀ s t : ℝ, s ∈ Set.Icc (0 : ℝ) 1 → t ∈ Set.Icc (0 : ℝ) 1 → |f t - f s| ≤ L * |t - s|)
+    (x : ℕ → ℝ) {N : ℕ} (hN : 0 < N) :
+    |(∑ n ∈ Finset.range N, f (Int.fract (x n))) / N - ∫ t in (0 : ℝ)..1, f t|
+      ≤ 3 * L * RiemannHypothesis.WeylDiscrepancy.discrepancy x N :=
+  RiemannHypothesis.WeylDiscrepancy.koksma_lipschitz hL hlip x hN
+
+/-- A sequence of vanishing discrepancy integrates every monotone function correctly; the
+concrete instance is `α n²` for an irrational `α`. -/
+example {f : ℝ → ℝ} (hmono : MonotoneOn f (Set.Icc 0 1)) {α : ℝ} (hα : Irrational α) :
+    Tendsto (fun N : ℕ => (∑ n ∈ Finset.range N, f (Int.fract (α * (n : ℝ) ^ 2))) / N) atTop
+      (𝓝 (∫ t in (0 : ℝ)..1, f t)) :=
+  RiemannHypothesis.WeylDiscrepancy.tendsto_average_quadratic hmono hα
+
+
+/-! ## M1-KOKSMA-VARIATION -/
+
+/-- For a nondecreasing integrand the total variation on `[0,1]` is the rise. -/
+example {f : ℝ → ℝ} (hmono : MonotoneOn f (Set.Icc 0 1)) :
+    RiemannHypothesis.WeylDiscrepancy.unitVariation f = f 1 - f 0 :=
+  RiemannHypothesis.WeylDiscrepancy.unitVariation_of_monotoneOn hmono
+
+/-- **Koksma's inequality with the total variation**: for every integrand of bounded variation on
+`[0,1]` the error of the average along the first `N` terms is at most
+`(2 V(f) - |f 1 - f 0|)` times the discrepancy.  No continuity is assumed. -/
+example {f : ℝ → ℝ} (hf : BoundedVariationOn f (Set.Icc (0 : ℝ) 1)) (x : ℕ → ℝ) {N : ℕ}
+    (hN : 0 < N) :
+    |(∑ n ∈ Finset.range N, f (Int.fract (x n))) / N - ∫ t in (0 : ℝ)..1, f t|
+      ≤ (2 * RiemannHypothesis.WeylDiscrepancy.unitVariation f - |f 1 - f 0|)
+          * RiemannHypothesis.WeylDiscrepancy.discrepancy x N :=
+  RiemannHypothesis.WeylDiscrepancy.koksma_variation hf x hN
+
+/-- The same, in the readable form `2 V(f) D_N(x)`. -/
+example {f : ℝ → ℝ} (hf : BoundedVariationOn f (Set.Icc (0 : ℝ) 1)) (x : ℕ → ℝ) {N : ℕ}
+    (hN : 0 < N) :
+    |(∑ n ∈ Finset.range N, f (Int.fract (x n))) / N - ∫ t in (0 : ℝ)..1, f t|
+      ≤ 2 * RiemannHypothesis.WeylDiscrepancy.unitVariation f
+          * RiemannHypothesis.WeylDiscrepancy.discrepancy x N :=
+  RiemannHypothesis.WeylDiscrepancy.koksma_variation_le hf x hN
+
+/-- Koksma's inequality for a Lipschitz integrand, with the constant `2 L`. -/
+example {f : ℝ → ℝ} {L : ℝ} (hL : 0 ≤ L)
+    (hlip : ∀ s t : ℝ, s ∈ Set.Icc (0 : ℝ) 1 → t ∈ Set.Icc (0 : ℝ) 1 → |f t - f s| ≤ L * |t - s|)
+    (x : ℕ → ℝ) {N : ℕ} (hN : 0 < N) :
+    |(∑ n ∈ Finset.range N, f (Int.fract (x n))) / N - ∫ t in (0 : ℝ)..1, f t|
+      ≤ 2 * L * RiemannHypothesis.WeylDiscrepancy.discrepancy x N :=
+  RiemannHypothesis.WeylDiscrepancy.koksma_lipschitz_two hL hlip x hN
+
+/-- A sequence of vanishing discrepancy integrates every function of bounded variation correctly;
+the concrete instance is `α n²` for an irrational `α`. -/
+example {f : ℝ → ℝ} (hf : BoundedVariationOn f (Set.Icc (0 : ℝ) 1)) {α : ℝ} (hα : Irrational α) :
+    Tendsto (fun N : ℕ => (∑ n ∈ Finset.range N, f (Int.fract (α * (n : ℝ) ^ 2))) / N) atTop
+      (𝓝 (∫ t in (0 : ℝ)..1, f t)) :=
+  RiemannHypothesis.WeylDiscrepancy.tendsto_average_quadratic_variation hf hα
+
+
+/-! ## M1-KOKSMA-LIPSCHITZ-SHARP -/
+
+/-- The cell deviation sum for an arbitrary weight sequence: summation by parts against the
+deviations of the tail intervals. -/
+example (x : ℕ → ℝ) (a : ℕ → ℝ) {K N : ℕ} (hK : 0 < K) (hN : 0 < N) :
+    |∑ j ∈ Finset.range K,
+        a j * ((RiemannHypothesis.WeylCount.countIn x ((j : ℝ) / K) (((j : ℝ) + 1) / K) N : ℝ) / N
+          - 1 / K)|
+      ≤ (∑ j ∈ Finset.range K, |a (j + 1) - a j|)
+          * RiemannHypothesis.WeylDiscrepancy.discrepancy x N :=
+  RiemannHypothesis.WeylDiscrepancy.abs_sum_weight_cellDev_le x a hK hN
+
+/-- **Koksma's inequality for a Lipschitz integrand, with the sharp constant `L`.** -/
+example {f : ℝ → ℝ} {L : ℝ} (hL : 0 ≤ L)
+    (hlip : ∀ s t : ℝ, s ∈ Set.Icc (0 : ℝ) 1 → t ∈ Set.Icc (0 : ℝ) 1 → |f t - f s| ≤ L * |t - s|)
+    (x : ℕ → ℝ) {N : ℕ} (hN : 0 < N) :
+    |(∑ n ∈ Finset.range N, f (Int.fract (x n))) / N - ∫ t in (0 : ℝ)..1, f t|
+      ≤ L * RiemannHypothesis.WeylDiscrepancy.discrepancy x N :=
+  RiemannHypothesis.WeylDiscrepancy.koksma_lipschitz_sharp hL hlip x hN
+
+
+/-! ## M2-MEANVALUE-WELLSPACED — the mean value theorem for well-spaced frequencies -/
+
+/-- The row sums of the Gaussian kernel over `δ`-separated frequencies. -/
+example {ι : Type} [DecidableEq ι] {S : Finset ι} {lam : ι → ℝ} {δ b : ℝ} (hδ : 0 < δ)
+    (hb : 0 < b) (hsep : RiemannHypothesis.WellSpaced.Separated S lam δ) {r : ι} (hr : r ∈ S) :
+    ∑ s ∈ S, Real.exp (-(lam r - lam s) ^ 2 / (4 * b))
+      ≤ 1 + 2 * Real.sqrt (Real.pi * b) / δ :=
+  RiemannHypothesis.WellSpaced.rowSum_le hδ hb hsep hr
+
+/-- **The mean value theorem for well-spaced frequencies**, with the explicit constant. -/
+example {ι : Type} {S : Finset ι} {lam : ι → ℝ} (x : ι → ℂ) {δ T : ℝ} (hδ : 0 < δ) (hT : 0 < T)
+    (hsep : RiemannHypothesis.WellSpaced.Separated S lam δ) :
+    (∫ t in (-T)..T, ‖RiemannHypothesis.WellSpaced.expSum S lam x t‖ ^ 2)
+      ≤ Real.exp 1 * (Real.sqrt Real.pi * T + 2 * Real.pi / δ) * ∑ r ∈ S, ‖x r‖ ^ 2 :=
+  RiemannHypothesis.WellSpaced.integral_normSq_expSum_le x hδ hT hsep
+
+/-- The same with the round constant `18 (T + 1/δ)`. -/
+example {ι : Type} {S : Finset ι} {lam : ι → ℝ} (x : ι → ℂ) {δ T : ℝ} (hδ : 0 < δ) (hT : 0 < T)
+    (hsep : RiemannHypothesis.WellSpaced.Separated S lam δ) :
+    (∫ t in (-T)..T, ‖RiemannHypothesis.WellSpaced.expSum S lam x t‖ ^ 2)
+      ≤ 18 * (T + 1 / δ) * ∑ r ∈ S, ‖x r‖ ^ 2 :=
+  RiemannHypothesis.WellSpaced.integral_normSq_expSum_le_mv x hδ hT hsep
+
+/-! ## M2-VAUGHAN — Vaughan's identity -/
+
+/-- **Vaughan's identity** as an identity of arithmetic functions. -/
+example (U V : ℕ) :
+    (ArithmeticFunction.vonMangoldt : ArithmeticFunction ℝ)
+      = RiemannHypothesis.Vaughan.truncLE ArithmeticFunction.vonMangoldt U
+        + ArithmeticFunction.log *
+            RiemannHypothesis.Vaughan.truncLE
+              (ArithmeticFunction.moebius : ArithmeticFunction ℝ) V
+        - RiemannHypothesis.Vaughan.truncLE ArithmeticFunction.vonMangoldt U *
+            (ArithmeticFunction.zeta : ArithmeticFunction ℝ) *
+            RiemannHypothesis.Vaughan.truncLE
+              (ArithmeticFunction.moebius : ArithmeticFunction ℝ) V
+        + RiemannHypothesis.Vaughan.truncGT ArithmeticFunction.vonMangoldt U *
+            (ArithmeticFunction.zeta : ArithmeticFunction ℝ) *
+            RiemannHypothesis.Vaughan.truncGT
+              (ArithmeticFunction.moebius : ArithmeticFunction ℝ) V :=
+  RiemannHypothesis.Vaughan.vaughan_identity U V
+
+/-! ## M2-CORPUS-INSTANCE — the counting system of `CorpusCeiling` holds of the zeroes of `ζ` -/
+
+/-- The instance exists: the zeroes of `ζ` are a model of `ZeroCorpus 0.33`. -/
+noncomputable example : RiemannHypothesis.ZeroCorpus 0.33 := RiemannHypothesis.zetaCorpus
+
+/-- Its five counting functions are the repository's counting functions of `ζ`. -/
+example : RiemannHypothesis.zetaCorpus.total
+    = fun T : ℝ => (RiemannHypothesis.windowCount 0 T : ℝ) := rfl
+
+example : RiemannHypothesis.zetaCorpus.distinct
+    = fun T : ℝ => (RiemannHypothesis.windowCountDistinct 0 T : ℝ) := rfl
+
+example : RiemannHypothesis.zetaCorpus.onLine
+    = fun T : ℝ => (RiemannHypothesis.windowCountOnLine 0 T : ℝ) := rfl
+
+example : RiemannHypothesis.zetaCorpus.off
+    = fun T : ℝ => (RiemannHypothesis.windowCountOffLine 0 T : ℝ) := rfl
+
+/-- The `offAt` field counts what the density theorems bound. -/
+example {δ : ℝ} (hδ : 0 < δ) (T : ℝ) :
+    (RiemannHypothesis.offAtSet δ T).ncard
+      = (RiemannHypothesis.zerosOffCriticalLine δ T).ncard :=
+  RiemannHypothesis.ncard_offAtSet_eq hδ T
+
+/-- Soundness for `ζ`: at most `33 %` of the zeroes of a dyadic window are off the line. -/
+example : ∃ T₀ : ℝ, ∀ T ≥ T₀,
+    (RiemannHypothesis.windowCountOffLine T (2 * T) : ℝ)
+      ≤ 0.33 * (RiemannHypothesis.windowCount T (2 * T) : ℝ) :=
+  RiemannHypothesis.zeta_windowOff_le
+
+/-- The Riemann hypothesis is exactly the vanishing of the off-line count of the corpus. -/
+example : RiemannHypothesis.ZetaStripForm
+    ↔ RiemannHypothesis.RHCounts RiemannHypothesis.zetaCorpus :=
+  RiemannHypothesis.zetaStripForm_iff_rhCounts_zetaCorpus
+
+/-- **Relative independence**: the corpus that `ζ` provably satisfies has a model violating the
+Riemann hypothesis. -/
+example : (∃ Z : RiemannHypothesis.ZeroCorpus 0.33, ¬ RiemannHypothesis.RHCounts Z)
+    ∧ (RiemannHypothesis.ZetaStripForm
+      ↔ RiemannHypothesis.RHCounts RiemannHypothesis.zetaCorpus) :=
+  RiemannHypothesis.rh_not_derivable_from_zeta_corpus
+
+/-! ## M3-VINOGRADOV-SYSTEM — the Vinogradov system and its invariances -/
+
+/-- Translation invariance of the Vinogradov system. -/
+example {k s : ℕ} {x y : Fin s → ℕ}
+    (h : RiemannHypothesis.Vinogradov.VinogradovEq k x y) (a : ℕ) :
+    RiemannHypothesis.Vinogradov.VinogradovEq k (fun i => x i + a) (fun i => y i + a) :=
+  RiemannHypothesis.Vinogradov.vinogradovEq_translate h a
+
+/-- The diagonal lower bound `X^s ≤ J_{s,k}(X)`. -/
+example (k s X : ℕ) : X ^ s ≤ RiemannHypothesis.Vinogradov.vinogradovCount k s X :=
+  RiemannHypothesis.Vinogradov.pow_card_le_vinogradovCount k s X
+
+/-- The count is not vacuous: `J_{1,1}(X) = X`. -/
+example (X : ℕ) : RiemannHypothesis.Vinogradov.vinogradovCount 1 1 X = X :=
+  RiemannHypothesis.Vinogradov.vinogradovCount_one_one X
+
 /-! ## The conjecture itself is *not* claimed
 
 There is deliberately no term of type `RiemannHypothesis.ZetaForm` anywhere in this
