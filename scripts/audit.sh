@@ -164,6 +164,7 @@ import RiemannHypothesis.DiscrepancyCriterion
 import RiemannHypothesis.Koksma
 import RiemannHypothesis.KoksmaVariation
 import RiemannHypothesis.KoksmaSharp
+import RiemannHypothesis.VanDerCorputSequence
 import RiemannHypothesis.WeylDifferenceTheorem
 import RiemannHypothesis.WeylPolynomial
 import RiemannHypothesis.WeylPolynomialGeneral
@@ -205,7 +206,12 @@ import RiemannHypothesis.EventualCountingCriterion
 import RiemannHypothesis.MeanValueWellSpaced
 import RiemannHypothesis.VaughanIdentity
 import RiemannHypothesis.CorpusInstance
+import RiemannHypothesis.CorpusRich
+import RiemannHypothesis.CorpusRichInstance
 import RiemannHypothesis.VinogradovMeanValue
+import RiemannHypothesis.VinogradovCongruencing
+import RiemannHypothesis.VinogradovConditioning
+import RiemannHypothesis.HilbertInequality
 
 #print axioms RiemannHypothesisConjecture.zeta_strip_iff_eta
 #print axioms RiemannHypothesisConjecture.zeta_iff_zeta_strip
@@ -806,6 +812,14 @@ import RiemannHypothesis.VinogradovMeanValue
 #print axioms RiemannHypothesis.WeylDiscrepancy.tendsto_average_quadratic_variation
 #print axioms RiemannHypothesis.WeylDiscrepancy.abs_sum_weight_cellDev_le
 #print axioms RiemannHypothesis.WeylDiscrepancy.koksma_lipschitz_sharp
+#print axioms RiemannHypothesis.VanDerCorput.image_revBits_block
+#print axioms RiemannHypothesis.VanDerCorput.abs_count_sub_le_size
+#print axioms RiemannHypothesis.VanDerCorput.discrepancy_vdc_le
+#print axioms RiemannHypothesis.VanDerCorput.abs_countIn_zero_sub_le_size
+#print axioms RiemannHypothesis.VanDerCorput.one_div_two_mul_le_discrepancy
+#print axioms RiemannHypothesis.VanDerCorput.discrepancy_vdc_bounds
+#print axioms RiemannHypothesis.VanDerCorput.tendsto_discrepancy_vdc
+#print axioms RiemannHypothesis.VanDerCorput.koksma_vdc_lipschitz
 #print axioms RiemannHypothesis.WeylDiscrepancy.tendsto_average_of_tendsto_discrepancy_lipschitz
 #print axioms RiemannHypothesis.WeylCount.tendsto_avg_real
 #print axioms RiemannHypothesis.WeylCount.tendsto_countIn_div
@@ -1007,7 +1021,19 @@ import RiemannHypothesis.VinogradovMeanValue
 #print axioms RiemannHypothesis.zeta_windowOff_le
 #print axioms RiemannHypothesis.zetaStripForm_iff_rhCounts_zetaCorpus
 #print axioms RiemannHypothesis.rh_not_derivable_from_zeta_corpus
+#print axioms RiemannHypothesis.rh_not_derivable_from_zeta_rich_corpus
+#print axioms RiemannHypothesis.rich_corpus_window_ceiling
 #print axioms RiemannHypothesis.Vinogradov.vinogradovEq_translate
+#print axioms RiemannHypothesis.Vinogradov.vinogradovEq_of_affine
+#print axioms RiemannHypothesis.Vinogradov.congruentCount_le
+#print axioms RiemannHypothesis.Vinogradov.vinogradovCount_eq_sum_fiber
+#print axioms RiemannHypothesis.Vinogradov.esymm_eq_of_powerSum_eq
+#print axioms RiemannHypothesis.Vinogradov.multiset_map_eq_of_powerSum_eq
+#print axioms RiemannHypothesis.Vinogradov.multiset_map_eq_of_powerSum_eq_zmod
+#print axioms RiemannHypothesis.Vinogradov.exists_perm_of_entries_eq
+#print axioms RiemannHypothesis.Vinogradov.card_congruenceSolutions_le_factorial
+#print axioms RiemannHypothesis.Hilbert.hilbert_inequality
+#print axioms RiemannHypothesis.Hilbert.hilbert_inequality_lattice
 #print axioms RiemannHypothesis.Vinogradov.pow_card_le_vinogradovCount
 #print axioms RiemannHypothesis.Vinogradov.vinogradovCount_one_one
 EOF

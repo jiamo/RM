@@ -4581,6 +4581,87 @@ example {f : ℝ → ℝ} {L : ℝ} (hL : 0 ≤ L)
   RiemannHypothesis.WeylDiscrepancy.koksma_lipschitz_sharp hL hlip x hN
 
 
+
+/-! ## M1-VDC-SEQUENCE — the van der Corput sequence -/
+
+/-- The van der Corput sequence lives in `[0, 1)`. -/
+example (n : ℕ) : 0 ≤ RiemannHypothesis.VanDerCorput.vdc n ∧
+    RiemannHypothesis.VanDerCorput.vdc n < 1 :=
+  ⟨RiemannHypothesis.VanDerCorput.vdc_nonneg n, RiemannHypothesis.VanDerCorput.vdc_lt_one n⟩
+
+/-- On any `2^j` consecutive indices each dyadic cell of length `2^(-j)` receives exactly one
+point of the van der Corput sequence. -/
+example (j a : ℕ) :
+    Finset.image (RiemannHypothesis.VanDerCorput.revBits j) (Finset.Ico a (a + 2 ^ j))
+      = Finset.range (2 ^ j) :=
+  RiemannHypothesis.VanDerCorput.image_revBits_block j a
+
+/-- The counting error over an arbitrary block of `N` consecutive indices is at most
+`log₂ N + 1`. -/
+example (a N : ℕ) {x : ℝ} (hx0 : 0 ≤ x) (hx1 : x ≤ 1) :
+    |(RiemannHypothesis.VanDerCorput.countLt x a N : ℝ) - N * x| ≤ Nat.size N :=
+  RiemannHypothesis.VanDerCorput.abs_count_sub_le_size a N hx0 hx1
+
+/-- **The van der Corput sequence has discrepancy at most `2 (log₂ N + 1)/N`.** -/
+example {N : ℕ} (hN : 0 < N) :
+    RiemannHypothesis.WeylDiscrepancy.discrepancy RiemannHypothesis.VanDerCorput.vdc N
+      ≤ 2 * Nat.size N / N :=
+  RiemannHypothesis.VanDerCorput.discrepancy_vdc_le hN
+
+/-- Its discrepancy tends to zero. -/
+example : Filter.Tendsto
+    (fun N : ℕ => RiemannHypothesis.WeylDiscrepancy.discrepancy
+      RiemannHypothesis.VanDerCorput.vdc N) Filter.atTop (nhds 0) :=
+  RiemannHypothesis.VanDerCorput.tendsto_discrepancy_vdc
+
+/-- The counting form of the discrepancy bound. -/
+example {a b : ℝ} (ha : 0 ≤ a) (hab : a ≤ b) (hb : b ≤ 1) {N : ℕ} (hN : 0 < N) :
+    |(RiemannHypothesis.WeylCount.countIn RiemannHypothesis.VanDerCorput.vdc a b N : ℝ) / N
+        - (b - a)| ≤ 2 * Nat.size N / N :=
+  RiemannHypothesis.VanDerCorput.abs_countIn_vdc_div_sub_le ha hab hb hN
+
+/-- The star form of the counting bound, with the constant `1`. -/
+example {x : ℝ} (hx0 : 0 ≤ x) (hx1 : x ≤ 1) {N : ℕ} (hN : 0 < N) :
+    |(RiemannHypothesis.WeylCount.countIn RiemannHypothesis.VanDerCorput.vdc 0 x N : ℝ) / N - x|
+      ≤ Nat.size N / N :=
+  RiemannHypothesis.VanDerCorput.abs_countIn_zero_sub_le_size hx0 hx1 hN
+
+/-- **No sequence has discrepancy below `1/(2N)`.** -/
+example (x : ℕ → ℝ) {N : ℕ} (hN : 0 < N) :
+    1 / (2 * N) ≤ RiemannHypothesis.WeylDiscrepancy.discrepancy x N :=
+  RiemannHypothesis.VanDerCorput.one_div_two_mul_le_discrepancy x hN
+
+/-- The rate is optimal up to the logarithm. -/
+example {N : ℕ} (hN : 0 < N) :
+    1 / (2 * N)
+        ≤ RiemannHypothesis.WeylDiscrepancy.discrepancy RiemannHypothesis.VanDerCorput.vdc N ∧
+      RiemannHypothesis.WeylDiscrepancy.discrepancy RiemannHypothesis.VanDerCorput.vdc N
+        ≤ 2 * Nat.size N / N :=
+  RiemannHypothesis.VanDerCorput.discrepancy_vdc_bounds hN
+
+/-- **Quadrature at the van der Corput points**, for a Lipschitz integrand. -/
+example {f : ℝ → ℝ} {L : ℝ} (hL : 0 ≤ L)
+    (hlip : ∀ s t : ℝ, s ∈ Set.Icc (0 : ℝ) 1 → t ∈ Set.Icc (0 : ℝ) 1 → |f t - f s| ≤ L * |t - s|)
+    {N : ℕ} (hN : 0 < N) :
+    |(∑ n ∈ Finset.range N, f (RiemannHypothesis.VanDerCorput.vdc n)) / N
+        - ∫ t in (0 : ℝ)..1, f t| ≤ L * (2 * Nat.size N / N) :=
+  RiemannHypothesis.VanDerCorput.koksma_vdc_lipschitz hL hlip hN
+
+/-- Quadrature at the van der Corput points, for an integrand of bounded variation. -/
+example {f : ℝ → ℝ} (hf : BoundedVariationOn f (Set.Icc (0 : ℝ) 1)) {N : ℕ} (hN : 0 < N) :
+    |(∑ n ∈ Finset.range N, f (RiemannHypothesis.VanDerCorput.vdc n)) / N
+        - ∫ t in (0 : ℝ)..1, f t|
+      ≤ 2 * RiemannHypothesis.WeylDiscrepancy.unitVariation f * (2 * Nat.size N / N) :=
+  RiemannHypothesis.VanDerCorput.koksma_vdc_variation hf hN
+
+/-- The van der Corput sequence integrates every function of bounded variation correctly. -/
+example {f : ℝ → ℝ} (hf : BoundedVariationOn f (Set.Icc (0 : ℝ) 1)) :
+    Filter.Tendsto
+      (fun N : ℕ => (∑ n ∈ Finset.range N, f (RiemannHypothesis.VanDerCorput.vdc n)) / N)
+      Filter.atTop (nhds (∫ t in (0 : ℝ)..1, f t)) :=
+  RiemannHypothesis.VanDerCorput.tendsto_average_vdc_variation hf
+
+
 /-! ## M2-MEANVALUE-WELLSPACED — the mean value theorem for well-spaced frequencies -/
 
 /-- The row sums of the Gaussian kernel over `δ`-separated frequencies. -/
@@ -4680,6 +4761,83 @@ example (k s X : ℕ) : X ^ s ≤ RiemannHypothesis.Vinogradov.vinogradovCount k
 /-- The count is not vacuous: `J_{1,1}(X) = X`. -/
 example (X : ℕ) : RiemannHypothesis.Vinogradov.vinogradovCount 1 1 X = X :=
   RiemannHypothesis.Vinogradov.vinogradovCount_one_one X
+
+/-! ## M3-VINOGRADOV-CONGRUENCING — the congruencing step of efficient congruencing -/
+
+/-- The descent: if `(r + q u, r + q v)` solves the system, so does `(u, v)`. -/
+example {k s r q : ℕ} (hq : 0 < q) {u v : Fin s → ℕ}
+    (h : RiemannHypothesis.Vinogradov.VinogradovEq k (fun i => r + q * u i)
+      (fun i => r + q * v i)) : RiemannHypothesis.Vinogradov.VinogradovEq k u v :=
+  RiemannHypothesis.Vinogradov.vinogradovEq_of_affine hq h
+
+/-- The congruencing lemma: one residue class contributes at most `J_{s,k}(X/q + 1)`. -/
+example (k s X q r : ℕ) (hq : 0 < q) :
+    RiemannHypothesis.Vinogradov.congruentCount k s X q r
+      ≤ RiemannHypothesis.Vinogradov.vinogradovCount k s (X / q + 1) :=
+  RiemannHypothesis.Vinogradov.congruentCount_le k s X q r hq
+
+/-- The iterated form, at the modulus `p^m`. -/
+example (k s X p m : ℕ) (hp : 0 < p) :
+    ∑ r ∈ Finset.range (p ^ m), RiemannHypothesis.Vinogradov.congruentCount k s X (p ^ m) r
+      ≤ p ^ m * RiemannHypothesis.Vinogradov.vinogradovCount k s (X / p ^ m + 1) :=
+  RiemannHypothesis.Vinogradov.diagonalClassCount_le_pow k s X p m hp
+
+/-! ## M3-VINOGRADOV-CONDITIONING — a tuple is determined by its power sums -/
+
+/-- Equal power sums up to degree `k` force equal elementary symmetric functions. -/
+example {F : Type} [Field F] {k : ℕ} (hchar : ∀ m : ℕ, 0 < m → m ≤ k → (m : F) ≠ 0)
+    (x y : Fin k → F) (h : ∀ j : ℕ, 0 < j → j ≤ k → ∑ i, x i ^ j = ∑ i, y i ^ j) :
+    ∀ n ≤ k, (RiemannHypothesis.Vinogradov.entries x).esymm n
+      = (RiemannHypothesis.Vinogradov.entries y).esymm n :=
+  RiemannHypothesis.Vinogradov.esymm_eq_of_powerSum_eq hchar x y h
+
+/-- Modulo a prime `p > k`, two solutions of the Vinogradov congruence system of degree `k` are
+rearrangements of one another. -/
+example {p k : ℕ} [Fact p.Prime] (hk : k < p) (x y : Fin k → ZMod p)
+    (h : ∀ j : ℕ, 0 < j → j ≤ k → ∑ i, x i ^ j = ∑ i, y i ^ j) :
+    RiemannHypothesis.Vinogradov.entries x = RiemannHypothesis.Vinogradov.entries y :=
+  RiemannHypothesis.Vinogradov.multiset_map_eq_of_powerSum_eq_zmod hk x y h
+
+open scoped Classical in
+/-- **The conditioning bound**: at most `k !` solutions of the congruence system of degree `k`
+modulo a prime `p > k` share a prescribed vector of power sums. -/
+example {p k : ℕ} [Fact p.Prime] (hk : k < p) (c : ℕ → ZMod p) :
+    (Finset.univ.filter
+        (fun x : Fin k → ZMod p => ∀ j : ℕ, 0 < j → j ≤ k → ∑ i, x i ^ j = c j)).card
+      ≤ Nat.factorial k :=
+  RiemannHypothesis.Vinogradov.card_congruenceSolutions_le_factorial hk c
+
+/-! ## M2-HILBERT-INEQUALITY — Hilbert's inequality with the constant `π` -/
+
+/-- **Hilbert's inequality** for distinct integer frequencies. -/
+example {ι : Type*} [DecidableEq ι] (S : Finset ι) (k : ι → ℤ) (hk : Set.InjOn k S) (x : ι → ℂ) :
+    ‖∑ r ∈ S, ∑ s ∈ S.erase r, x r * (starRingEnd ℂ) (x s) / ((k r : ℂ) - (k s : ℂ))‖
+      ≤ Real.pi * ∑ r ∈ S, ‖x r‖ ^ 2 :=
+  RiemannHypothesis.Hilbert.hilbert_inequality S k hk x
+
+/-- The Montgomery–Vaughan bound `π/δ` for frequencies in the lattice `δ ℤ`. -/
+example {ι : Type*} [DecidableEq ι] (S : Finset ι) (k : ι → ℤ) (hk : Set.InjOn k S) (x : ι → ℂ)
+    {δ : ℝ} (hδ : 0 < δ) :
+    ‖∑ r ∈ S, ∑ s ∈ S.erase r,
+        x r * (starRingEnd ℂ) (x s) / (((δ * k r : ℝ) : ℂ) - ((δ * k s : ℝ) : ℂ))‖
+      ≤ Real.pi / δ * ∑ r ∈ S, ‖x r‖ ^ 2 :=
+  RiemannHypothesis.Hilbert.hilbert_inequality_lattice S k hk x hδ
+
+/-! ## M2-CORPUS-RICH — the thicker corpus, and its unchanged ceiling -/
+
+/-- The zeroes of `ζ` satisfy the enlarged list of facts, and it still has a model violating the
+Riemann hypothesis. -/
+example : (∃ Z : RiemannHypothesis.RichZeroCorpus 0.33,
+      ¬ RiemannHypothesis.RHCounts Z.toZeroCorpus)
+    ∧ (RiemannHypothesis.ZetaStripForm
+      ↔ RiemannHypothesis.RHCounts RiemannHypothesis.zetaRichCorpus.toZeroCorpus) :=
+  RiemannHypothesis.rh_not_derivable_from_zeta_rich_corpus
+
+/-- The ceiling of the enlarged corpus is `67 %`, exactly as before. -/
+example {p : ℝ} :
+    (∀ Z : RiemannHypothesis.RichZeroCorpus 0.33, ∃ T₀ : ℝ, ∀ T ≥ T₀,
+        p * Z.toZeroCorpus.windowTotal T ≤ Z.toZeroCorpus.windowOn T) ↔ p ≤ 0.67 :=
+  RiemannHypothesis.zeta_rich_corpus_window_ceiling
 
 /-! ## The conjecture itself is *not* claimed
 

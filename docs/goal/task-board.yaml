@@ -3097,6 +3097,36 @@ tasks:
       - "lake build RiemannHypothesis.KoksmaSharp"
       - "./scripts/audit.sh"
 
+  - id: M1-VDC-SEQUENCE
+    priority: P1
+    status: DONE_WEAK
+    track: analysis
+    title: "An explicit sequence of low discrepancy: the van der Corput sequence"
+    latest_evidence: docs/goal/evidence/2026-09-08-m1-vdc-sequence.md
+    revalidation: docs/goal/evidence/2026-09-08-m1-vdc-sequence.md
+    latest_update: "2026-09-08 DONE_WEAK: RiemannHypothesis/VanDerCorputSequence.lean supplies what the discrepancy rows lacked, a sequence whose discrepancy is known to decay at the logarithmic rate. vdc is the base two radical inverse, defined by vdc n = (n mod 2 + vdc (n div 2))/2; its first values 0, 1/2, 1/4, 3/4, 1/8, 5/8, 3/8, 7/8 are proved, and vdc_nonneg, vdc_lt_one place it in [0,1) so that fract vdc n = vdc n. vdc_split proves the digit identity vdc n = (revBits j n + vdc (n div 2^j))/2^j, where revBits j n reverses the lowest j binary digits of n, so vdc n lies in the dyadic cell of length 2^(-j) indexed by revBits j n. revBits_inj_mod shows the cell index determines n modulo 2^j, whence image_revBits_block: on any 2^j consecutive indices the cell index is a bijection onto {0, ..., 2^j - 1}, one point in each dyadic cell. abs_blockCount_sub_le_one turns this into a counting error at most 1 for the initial segment [0, x) over such a block, and abs_count_sub_le_size splits an arbitrary block of N consecutive indices along the binary digits of N to give |#{n in [a, a+N) : vdc n < x} - N x| <= Nat.size N = log2 N + 1, for every offset a and every x in [0,1]. Writing [a, b) as a difference of two initial segments, discrepancy_vdc_le: D_N(vdc) <= 2 (log2 N + 1)/N for N >= 1. tendsto_size_div_atTop (through the elementary k^2 <= 4 . 2^k) gives tendsto_discrepancy_vdc, D_N(vdc) -> 0, and the Koksma inequalities of M1-KOKSMA-LIPSCHITZ-SHARP and M1-KOKSMA-VARIATION then give koksma_vdc_lipschitz, |(1/N) sum_{n<N} f(vdc n) - int_0^1 f| <= L . 2 (log2 N + 1)/N for L-Lipschitz f, koksma_vdc_variation for bounded variation f, and tendsto_average_vdc_variation. In the other direction one_div_two_mul_le_discrepancy proves, for every sequence and every N >= 1, the trivial lower bound D_N >= 1/(2N): among the 2N cells of length 1/(2N) the first N points miss one, by pigeonhole on n |-> floor(2 N fract x n), and that cell witnesses the deviation. discrepancy_vdc_bounds combines the two, 1/(2N) <= D_N(vdc) <= 2 (log2 N + 1)/N, so the rate proved is optimal up to the logarithm. No sorry; axioms exactly propext, Classical.choice, Quot.sound; no unproved Prop of the repository is used; five statements pinned in scripts/revalidation.lean."
+    open_boundary: "The constant is not optimal. The factor 2 comes from writing [a, b) as a difference of two initial segments; the star discrepancy bound proved on the way, abs_count_sub_le_size with a = 0, carries the constant 1, and the classical constant for the extreme discrepancy of this sequence is smaller than 2. The matching lower bound is only the trivial one: one_div_two_mul_le_discrepancy gives D_N >= 1/(2N) for every sequence, a factor log N away from the upper bound proved here, and Schmidt's theorem, that N D_N is unbounded for every sequence - so that the logarithmic rate is optimal - is not formalized, and neither is the exact asymptotic of N D_N(vdc). Only the base two sequence is treated: no general base b radical inverse, no Halton or Hammersley point set, no multidimensional discrepancy. Nothing here concerns zeta: the sequence is a quadrature construction, and the discrepancy rows it feeds (M1-WEYL-DISCREPANCY, M1-KOKSMA) are about equidistribution, not about the zeroes."
+    milestone: M1
+    depends_on:
+      - M1-DISCREPANCY
+      - M1-KOKSMA-LIPSCHITZ-SHARP
+      - M1-KOKSMA-VARIATION
+    rank: 34.864
+    exit_criteria:
+      - "vdc, vdc_nonneg, vdc_lt_one, fract_vdc, and the first eight values : the sequence and its basic interface."
+      - "vdc_split, vdc_mem_cell : the digit identity and the dyadic cell of a point."
+      - "image_revBits_block : on any 2^j consecutive indices each dyadic cell of length 2^(-j) receives exactly one point."
+      - "abs_blockCount_sub_le_one, abs_count_sub_le_size : the counting error is at most 1 over a dyadic block and at most log2 N + 1 over an arbitrary block of N consecutive indices."
+      - "discrepancy_vdc_le : D_N(vdc) <= 2 (log2 N + 1)/N for N >= 1, pinned in scripts/revalidation.lean."
+      - "abs_countIn_vdc_div_sub_le : the counting form of the bound for every subinterval, pinned in scripts/revalidation.lean."
+      - "abs_countIn_zero_sub_le_size : the star form, with the constant 1, pinned in scripts/revalidation.lean."
+      - "one_div_two_mul_le_discrepancy, discrepancy_vdc_bounds : the trivial lower bound D_N >= 1/(2N), valid for every sequence, and the resulting two-sided bound for vdc, pinned in scripts/revalidation.lean."
+      - "tendsto_discrepancy_vdc : D_N(vdc) -> 0, pinned in scripts/revalidation.lean."
+      - "koksma_vdc_lipschitz, koksma_vdc_variation, tendsto_average_vdc_variation : the quadrature consequences, pinned in scripts/revalidation.lean."
+    required_gates:
+      - "lake build RiemannHypothesis.VanDerCorputSequence"
+      - "./scripts/audit.sh"
+
   - id: M1-WEYL-DIFFERENCE-THEOREM
     priority: P1
     status: DONE_STRONG
@@ -3733,6 +3763,90 @@ tasks:
       - "The non-derivability results of M2-CORPUS-CEILING are restated against the instance."
     required_gates:
       - "lake build RiemannHypothesis.CorpusCeiling"
+      - "./scripts/audit.sh"
+
+  - id: M3-VINOGRADOV-CONGRUENCING
+    priority: P2
+    status: DONE_WEAK
+    track: research
+    title: "The congruencing step: decompose J_{s,k}(X) along the residue classes of a modulus and descend"
+    latest_evidence: docs/goal/evidence/2026-09-07-m3-vinogradov-congruencing.md
+    latest_update: "2026-09-07 DONE_WEAK: RiemannHypothesis/VinogradovCongruencing.lean proves the congruencing lemma of Wooley's efficient congruencing, for an arbitrary modulus q. vinogradovEq_of_affine is the descent: if (r + q u, r + q v) solves the Vinogradov system of degree k then so does (u, v), by strong induction on the degree through the binomial expansion sum_affine_pow_eq, whose leading coefficient is q^j - this is the step that the translation invariance of M3-VINOGRADOV-SYSTEM was recorded for. residuePair and vinogradovCount_eq_sum_fiber decompose J_{s,k}(X) as the sum over pairs of residue profiles modulo q of the counts with those profiles. congruentCount_le is the congruencing lemma itself: the solutions all of whose 2s variables lie in one class modulo q number at most J_{s,k}(X/q + 1), by x -> x/q + 1 (the descent followed by the translation of the box). diagonalClassCount_le sums it over the q classes to q J_{s,k}(X/q + 1), diagonalClassCount_le_pow is the iterated form at the modulus p^m, and diagonalClassCount_le' bounds the whole diagonal profile. No sorry; axioms exactly propext, Classical.choice, Quot.sound; four statements pinned in scripts/revalidation.lean."
+    open_boundary: "One congruencing step is proved, not the induction that efficient congruencing runs on it: the real argument works with two distinct blocks of variables and a tuned pair of parameters, tracks a family of conditioned counts rather than the single diagonal profile, and closes with a convexity argument over that family. The well-conditioning half - that a k-tuple of residues modulo a prime p > k is determined up to permutation by its power sums, which is what bounds the non-diagonal profiles - is proved separately in M3-VINOGRADOV-CONDITIONING, but its counting consequence is not drawn here. Vinogradov's mean value theorem therefore remains unproved (VinogradovMeanValueBound is still only a statement), and no zero-free region follows."
+    milestone: M3
+    depends_on:
+      - M3-VINOGRADOV-SYSTEM
+    rank: 49.6
+    exit_criteria:
+      - "vinogradovEq_of_affine : the descent along a congruence class, pinned in scripts/revalidation.lean."
+      - "vinogradovCount_eq_sum_fiber : the decomposition of J_{s,k}(X) along the residue profiles."
+      - "congruentCount_le : one class contributes at most J_{s,k}(X/q + 1), pinned."
+      - "diagonalClassCount_le_pow : the iterated form at the modulus p^m, pinned."
+    required_gates:
+      - "lake build RiemannHypothesis.VinogradovCongruencing"
+      - "./scripts/audit.sh"
+
+  - id: M2-HILBERT-INEQUALITY
+    priority: P1
+    status: DONE_WEAK
+    track: analysis
+    title: "Hilbert's inequality with the constant pi, and the Montgomery-Vaughan bound for lattice frequencies"
+    latest_evidence: docs/goal/evidence/2026-09-07-m2-hilbert-inequality.md
+    latest_update: "2026-09-07 DONE_WEAK: RiemannHypothesis/HilbertInequality.lean proves Hilbert's inequality in the form of Schur and Montgomery: for distinct integers k_r and complex x_r, the norm of the sum over r <> s of x_r conj(x_s)/(k_r - k_s) is at most pi times the sum of |x_r|^2 (hilbert_inequality). The proof is the Fourier one: integral_sawtooth_exp computes the Fourier coefficients 1/m of the sawtooth pi - theta on (0, 2 pi) by an explicit antiderivative, integral_exp_int_mul is the orthogonality of the characters, integral_normSq_trigSum is Parseval, and integral_sawtooth_normSq_trigSum identifies the sawtooth mean of |f|^2 with 2 pi i times the Hilbert form; the bound |pi - theta| <= pi then gives the constant. hilbert_inequality_lattice rescales to frequencies delta k_r in the lattice delta Z, which are delta-separated, with the constant pi/delta - the Montgomery-Vaughan bound in the lattice case. GeneralizedHilbertInequality records the general theorem as an unproved Prop with the four hypothesis-hygiene answers, and generalizedHilbert_of_lattice exhibits the proved case inside it. No sorry; axioms exactly propext, Classical.choice, Quot.sound; two statements pinned in scripts/revalidation.lean."
+    open_boundary: "The theorem of Montgomery and Vaughan - the same constant pi/delta for an arbitrary delta-separated family of real frequencies - is not proved; only the case of frequencies in a common lattice is. The Fourier argument uses the lattice essentially, since it needs the characters to be orthogonal on a fixed period, and the extremal problem that replaces it for general frequencies is the content of the theorem. Nothing in this repository assumes the general form: the mean value theorem actually used, in MeanValueWellSpaced, is proved unconditionally by the Gaussian majorant method with the worse constant 18(T + 1/delta), and it is not improved here. The optimality of the constant pi is also not proved."
+    milestone: M2
+    depends_on: []
+    rank: 50.9884
+    exit_criteria:
+      - "hilbert_inequality : the sharp-constant inequality for distinct integer frequencies, pinned in scripts/revalidation.lean."
+      - "hilbert_inequality_lattice : the constant pi/delta for frequencies in delta Z, pinned."
+      - "GeneralizedHilbertInequality : the general Montgomery-Vaughan statement, recorded as unproved with its hygiene answers."
+    required_gates:
+      - "lake build RiemannHypothesis.HilbertInequality"
+      - "./scripts/audit.sh"
+
+  - id: M2-CORPUS-RICH
+    priority: P2
+    status: DONE_STRONG
+    track: analysis
+    title: "Thicken the corpus: four more unconditional facts about the zeroes, and the same ceiling"
+    latest_evidence: docs/goal/evidence/2026-09-07-m2-corpus-rich.md
+    revalidation: docs/goal/evidence/2026-09-07-m2-corpus-rich.md
+    latest_update: "2026-09-07 DONE_STRONG: RiemannHypothesis/CorpusRich.lean defines RichZeroCorpus theta, which extends ZeroCorpus theta by four further theorems of this repository: a fifth counting function simpleOnLine with the same 1 - theta proportion of a dyadic window (sixty_seven_percent_simple_on_critical_line), distinct_ratio, Theorem C's N_d >= (5/6 - eps) N (five_sixths_distinct), localCount, the local Riemann-von Mangoldt bound N(T+1) - N(T) = O(log T) (sum_zeroMultiplicity_zerosNearHeight_le), and strip, the containment of every nontrivial zero in the open critical strip. richModelCorpus shows the counting configuration of modelCorpus satisfies all four as well - rvmModel_unit_window_le is the new estimate needed - so rh_not_derivable_from_rich_corpus, rich_offLine_positive_proportion_consistent and rich_density_not_sufficient hold against the longer list, and rich_corpus_window_ceiling proves that the ceiling is still exactly 1 - theta. RiemannHypothesis/CorpusRichInstance.lean builds zetaRichCorpus : RichZeroCorpus 0.33 from the counting functions of zeta, supplying windowCountSimpleOnLine_add, windowCount_unit_window_le and offAtSet_half_eq_empty, and restates the consequences: rh_not_derivable_from_zeta_rich_corpus and zeta_rich_corpus_window_ceiling. Because the list of facts is strictly longer than that of M2-CORPUS-CEILING, both the independence statement and the ceiling are strictly stronger. No sorry; axioms exactly propext, Classical.choice, Quot.sound; four statements pinned in scripts/revalidation.lean."
+    open_boundary: ""
+    milestone: M2
+    depends_on:
+      - M2-CORPUS-CEILING
+      - M2-CORPUS-INSTANCE
+    rank: 50.969
+    exit_criteria:
+      - "RichZeroCorpus : ZeroCorpus enlarged by four further unconditional facts, each citing its repository theorem."
+      - "zetaRichCorpus : the instance, all of whose fields are discharged from theorems about zeta."
+      - "rh_not_derivable_from_zeta_rich_corpus : the enlarged list still has a model with off-line zeroes, pinned in scripts/revalidation.lean."
+      - "rich_corpus_window_ceiling : the ceiling of the enlarged list is still 1 - theta, pinned."
+    required_gates:
+      - "lake build RiemannHypothesis.CorpusRichInstance"
+      - "./scripts/audit.sh"
+
+  - id: M3-VINOGRADOV-CONDITIONING
+    priority: P2
+    status: DONE_WEAK
+    track: research
+    title: "Conditioning: a tuple of residues is determined by its power sums"
+    latest_evidence: docs/goal/evidence/2026-09-07-m3-vinogradov-conditioning.md
+    latest_update: "2026-09-07 DONE_WEAK: RiemannHypothesis/VinogradovConditioning.lean proves the algebraic core of the conditioning half of efficient congruencing. natCast_mul_esymm_eq_sum evaluates mathlib's Newton identities at a tuple: n e_n(x) = (-1)^(n+1) sum over i + j = n with i < n of (-1)^i e_i(x) p_j(x). esymm_eq_of_powerSum_eq deduces, by strong induction on the degree over a field in which 1, ..., k are invertible, that equal power sums of degrees 1, ..., k force equal elementary symmetric functions of degrees at most k. multiset_map_eq_of_powerSum_eq then compares the monic polynomials prod (X - x_i) and prod (X - y_i) coefficientwise through Vieta's formulas and reads off the multiset of roots, so the two tuples are rearrangements of one another; multiset_map_eq_of_powerSum_eq_zmod is the arithmetic form over ZMod p with k < p. exists_perm_of_entries_eq turns equal multisets of entries into a permutation of the indices, by induction on k through Equiv.Perm.decomposeFin, and card_congruenceSolutions_le_factorial is the conditioning bound itself: at most k! tuples modulo p share a prescribed vector of power sums of degrees 1, ..., k. No sorry; axioms exactly propext, Classical.choice, Quot.sound; three statements pinned in scripts/revalidation.lean."
+    open_boundary: "The conditioning bound is proved for one prescribed vector of power sums; what is not proved is its interleaving with the descent of M3-VINOGRADOV-CONGRUENCING. Efficient congruencing alternates the two over a family of conditioned counts with a tuned pair of parameters and closes with a convexity argument over that family; none of that induction is formalized. Vinogradov's mean value theorem therefore remains unproved (VinogradovMeanValueBound is still only a statement), and no zero-free region follows."
+    milestone: M3
+    depends_on:
+      - M3-VINOGRADOV-CONGRUENCING
+    rank: 49.7
+    exit_criteria:
+      - "esymm_eq_of_powerSum_eq : equal power sums force equal elementary symmetric functions, pinned in scripts/revalidation.lean."
+      - "multiset_map_eq_of_powerSum_eq : hence the tuples have the same multiset of entries."
+      - "multiset_map_eq_of_powerSum_eq_zmod : the form over ZMod p with k < p, pinned."
+      - "card_congruenceSolutions_le_factorial : at most k! solutions of the congruence system modulo p share a prescribed vector of power sums, pinned."
+    required_gates:
+      - "lake build RiemannHypothesis.VinogradovConditioning"
       - "./scripts/audit.sh"
 
   - id: M3-ATIYAH-VERIFICATION

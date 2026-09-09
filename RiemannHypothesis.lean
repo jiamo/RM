@@ -72,6 +72,7 @@ import RiemannHypothesis.DiscrepancyCriterion
 import RiemannHypothesis.Koksma
 import RiemannHypothesis.KoksmaVariation
 import RiemannHypothesis.KoksmaSharp
+import RiemannHypothesis.VanDerCorputSequence
 import RiemannHypothesis.WeylDifferenceTheorem
 import RiemannHypothesis.WeylPolynomial
 import RiemannHypothesis.WeylPolynomialGeneral
@@ -79,6 +80,7 @@ import RiemannHypothesis.StripMeanSquareAsymptotic
 import RiemannHypothesis.StripMeanSquareAsymptoticHalf
 import RiemannHypothesis.DirichletPolyMeanValue
 import RiemannHypothesis.HalaszMontgomery
+import RiemannHypothesis.HilbertInequality
 import RiemannHypothesis.LargeSieve
 import RiemannHypothesis.Mollifier
 import RiemannHypothesis.LogDerivIntegrable
@@ -187,4 +189,8 @@ import RiemannHypothesis.GaussianMeanValueDiscrete
 import RiemannHypothesis.MeanValueWellSpaced
 import RiemannHypothesis.VaughanIdentity
 import RiemannHypothesis.CorpusInstance
+import RiemannHypothesis.CorpusRich
+import RiemannHypothesis.CorpusRichInstance
 import RiemannHypothesis.VinogradovMeanValue
+import RiemannHypothesis.VinogradovCongruencing
+import RiemannHypothesis.VinogradovConditioning

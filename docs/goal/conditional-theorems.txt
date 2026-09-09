@@ -56,6 +56,7 @@
 # DEFINITIONAL: hypotheses on an argument of the theorem, not open assumptions
   RiemannHypothesis.PartialSumBound.exists_nonneg <- RiemannHypothesis.PartialSumBound
   RiemannHypothesis.Vinogradov.vinogradovEq_dilate <- RiemannHypothesis.Vinogradov.VinogradovEq
+  RiemannHypothesis.Vinogradov.vinogradovEq_of_affine <- RiemannHypothesis.Vinogradov.VinogradovEq
   RiemannHypothesis.Vinogradov.vinogradovEq_translate <- RiemannHypothesis.Vinogradov.VinogradovEq
   RiemannHypothesis.WellSpaced.card_fiber_le_two <- RiemannHypothesis.WellSpaced.Separated
   RiemannHypothesis.WellSpaced.integral_Ioc_normSq_expSum_le_mv <- RiemannHypothesis.WellSpaced.Separated
