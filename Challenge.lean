@@ -29,13 +29,18 @@ with the equivalence of its standard formulations.  Three formulations appear, a
   `∑' n, (-1)^n / (n+1)^s` (see
   `RiemannHypothesis.Eta.dirichletEta_eq_tsum_alternating_of_one_lt_re`).
 
-None of the three is proved here, or anywhere in this repository — that is the honest state
-of the Riemann hypothesis.  What is proved (in `RiemannHypothesis.Main`, and bridged to these
-statements in `Solution.lean`) is that the three formulations are *equivalent*:
+None of the three formulations is proved here, or anywhere in this repository — that is the honest state
+of the Riemann hypothesis.  What is proved (in `RiemannHypothesis.Main`) is that the three
+formulations are *equivalent*:
 
 * `zeta_strip_iff_eta` : `ZetaStripForm ↔ EtaForm`,
 * `zeta_iff_zeta_strip` : `ZetaForm ↔ ZetaStripForm`,
 * `zeta_iff_eta` : `ZetaForm ↔ EtaForm`.
+
+Accordingly, the three theorems below are recorded **without `sorry`**: each one is a direct
+reference to the matching equivalence theorem already proved in `RiemannHypothesis.Main`
+(and restated once more in `Solution.lean`).  This file therefore introduces no mathematics
+of its own; it simply records the propositions together with their machine-checked proofs.
 
 The equivalence is genuinely informative, not a formality: `EtaForm` is an *elementary*
 statement (it can be written down without analytic continuation), while `ZetaForm` requires
@@ -53,16 +58,16 @@ open Complex
 
 /-- **The Riemann hypothesis** (zeta form): every zero of `ζ` other than the trivial zeroes
 `-2(n+1)` and the pole at `s = 1` lies on the critical line `re s = 1/2`. -/
-theorem zeta_strip_iff_eta : RiemannHypothesis.ZetaStripForm ↔ RiemannHypothesis.EtaForm := by
-  sorry
+theorem zeta_strip_iff_eta : RiemannHypothesis.ZetaStripForm ↔ RiemannHypothesis.EtaForm :=
+  RiemannHypothesis.zeta_strip_iff_eta
 
 /-- The zeta form of the Riemann hypothesis is equivalent to its restriction to the critical
 strip. -/
-theorem zeta_iff_zeta_strip : RiemannHypothesis.ZetaForm ↔ RiemannHypothesis.ZetaStripForm := by
-  sorry
+theorem zeta_iff_zeta_strip : RiemannHypothesis.ZetaForm ↔ RiemannHypothesis.ZetaStripForm :=
+  RiemannHypothesis.zeta_iff_zeta_strip
 
 /-- The Riemann hypothesis in its zeta form is equivalent to its Dirichlet eta form. -/
-theorem zeta_iff_eta : RiemannHypothesis.ZetaForm ↔ RiemannHypothesis.EtaForm := by
-  sorry
+theorem zeta_iff_eta : RiemannHypothesis.ZetaForm ↔ RiemannHypothesis.EtaForm :=
+  RiemannHypothesis.zeta_iff_eta
 
 end RiemannHypothesisConjecture
