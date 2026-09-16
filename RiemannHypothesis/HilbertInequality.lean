@@ -64,8 +64,46 @@ essential way (the characters `e^{i k θ}` are orthogonal on a fixed period), an
 problem that replaces it for general frequencies is the content of the theorem.  Nothing in this
 repository assumes the general form: the mean value theorem actually used, in
 `RiemannHypothesis/MeanValueWellSpaced.lean`, is proved unconditionally by the Gaussian majorant
-method, with a worse constant.
--/
+
+
+## Attempts toward the general form (recorded 2026-09-16)
+
+The residual content named above — the passage from lattice frequencies to arbitrary `δ`-separated
+real frequencies, with the *same* sharp constant `π δ⁻¹` — is not a bookkeeping gap. It is the hard
+part of the Montgomery–Vaughan theorem, and it remains open in this repository. Three things are now
+known about it:
+
+* **The naive route cannot work.** Separation puts at most two frequencies in each annulus
+  `[r δ, (r+1) δ)`, so the row sums of the kernel `|1/(λ_r − λ_s)|` diverge like the harmonic series:
+  the triangle inequality plus separation yields only the free bound `O(δ⁻¹ log R)` already mentioned
+  here. Beating the logarithm requires exploiting *cancellation*, not absolute values.
+
+* **A widely circulated “elementary” proof does not formalize.** Notes in circulation derive the key
+  ℓ² estimate `∑_r |∑_{s ≠ r} z_s/(λ_r − λ_s)|² ≤ (π/δ)² ∑_r |z_r|²` by expanding the square and using the
+  partial-fraction identity
+  `1/((λ_r − λ_s)(λ_r − λ_t)) = (1/(λ_s − λ_t))(1/(λ_r − λ_s) − 1/(λ_r − λ_t))`. The step recorded there as
+  “the two inner sums cancel” is equivalent to the assertion
+  `∑_{r ≠ s,t} 1/((λ_r − λ_s)(λ_r − λ_t)) = 2/(λ_s − λ_t)²`. That identity is **false** for finite separated
+  families: on generic random configurations every one of the `R(R−1)` ordered pairs `(s,t)` fails it
+  (numerically refuted). Keeping only what survives the alleged cancellation reproduces exactly the
+  insufficient free bound above, so the argument collapses to the case already excluded.
+
+* **What a proof actually needs.** The two published routes are (i) Montgomery and Vaughan's original
+  1974 argument — a delicate double-sum manipulation with cosecant/cotangent kernels — and (ii) the
+  Beurling–Selberg extremal-majorant route: construct Beurling's entire majorant `B ≥ sign` of exponential
+  type `2π` with `∫(B − sign) = 1`, then pair the bilinear form against band-limited test functions via
+  Paley–Wiener/Plancherel/Poisson summation. Neither ingredient exists in this repository, and neither is
+  available in mathlib at the required sharpness; supplying either is a substantial formalization project
+  on its own.
+
+Accordingly `GeneralizedHilbertInequality` is left as a `Prop`, as this repository's convention requires of
+every statement without a proof term. No `sorry` has been introduced anywhere: the convention is to record
+unproved statements as Props rather than pollute the build with placeholders. Downstream milestones that
+require the sharp constant — `M2-MEANVALUE-WELLSPACED`'s optimal main term `T ∑ ‖x_r‖²`, hence the sharp
+large sieve and the mollified mean-square arguments of `M2-MOLLIFIER` — are blocked pending this theorem;
+see `docs/goal/task-board.yaml`, where `M2-MOLLIFIER`, `M2-MEANVALUE`, `M2-LEVINSON` and `M2-DENSITY` are
+marked `BLOCKED` with the dependency explained.
+
 
 noncomputable section
 

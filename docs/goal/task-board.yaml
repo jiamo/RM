@@ -1373,11 +1373,12 @@ tasks:
 
   - id: M2-MEANVALUE
     priority: P0
-    status: DONE_WEAK
+    status: BLOCKED
     track: modern
     title: "Mean-value theorems and the large sieve for zeta on the critical line"
     latest_evidence: docs/goal/evidence/2026-08-24-m2-meanvalue.md
-    latest_update: "2026-08-24 DONE_WEAK: the elementary mean value theorem for Dirichlet polynomials with arbitrary coefficients is proved in RiemannHypothesis/DirichletPolyMeanValue.lean. offDiagSum_le bounds the off-diagonal remainder by 8 N (1 + log N) times the diagonal, and abs_integral_normSq_dirichletPoly_sub_diag_le_mvt gives the two-sided statement int_0^T ||D(sigma + i t)||^2 dt = (T + O(N log N)) sum ||a n||^2 n^(-2 sigma) with an explicit constant; integral_normSq_dirichletPoly_mvt_zero is the sigma = 0 form. No sorry; axioms exactly propext, Classical.choice, Quot.sound."
+    latest_update: "2026-08-24 DONE_WEAK: the elementary mean value theorem for Dirichlet polynomials with arbitrary coefficients is proved in RiemannHypothesis/DirichletPolyMeanValue.lean. offDiagSum_le bounds the off-diagonal remainder by 8 N (1 + log N) times the diagonal, and abs_integral_normSq_dirichletPoly_sub_diag_le_mvt gives the two-sided statement int_0^T ||D(sigma + i t)||^2 dt = (T + O(N log N)) sum ||a n||^2 n^(-2 sigma) with an explicit constant; integral_normSq_dirichletPoly_mvt_zero is the sigma = 0 form. No sorry; axioms exactly propext, Classical.choice, Quot.sound.
+  2026-09-16 BLOCKED: the sharp Montgomery-Vaughan mean-value form and the discrete large sieve over well-spaced points both hinge on Montgomery and Vaughan's generalized Hilbert inequality for δ-separated real families, which is not proved here (see docs/goal/evidence/2026-09-16-round-GHI-blocked.md); the fourth-moment route on the critical line recorded in this row's open boundary is likewise unavailable. This blocks M2-MOLLIFIER, M2-LEVINSON and the linear saving of M2-DENSITY."
     open_boundary: "Two items remain. (i) The sharp Montgomery-Vaughan form, int_0^T |D(i t)|^2 dt = sum |a n|^2 (T + O(n)), needs the generalized Hilbert inequality of Montgomery and Vaughan, and the discrete large sieve over well-spaced points needs a duality argument on top of it; neither is formalized in that shape - what is now available is the substitute the applications use, the delta-separated bound of M2-MEANVALUE-WELLSPACED, int_{-T}^{T} ||sum_r x_r e^{i lam_r t}||^2 <= 18 (T + 1/delta) sum ||x_r||^2, with an explicit but non-optimal constant. (ii) The fourth moment of zeta on the critical line needs the approximate functional equation and the divisor correlation sums, which are not available in this repository or in mathlib."
     milestone: M2
     depends_on:
@@ -1454,11 +1455,11 @@ tasks:
 
   - id: M2-MOLLIFIER
     priority: P0
-    status: TODO_NEEDS_DESIGN
+    status: BLOCKED
     track: modern
     title: "Mollifier machinery for the Levinson method"
     latest_evidence: ""
-    latest_update: "2026-08-19 scoped: Dirichlet polynomials with smooth coefficients used to isolate the low-lying behaviour of zeta near the critical line."
+    latest_update: "2026-09-16 BLOCKED: the mollifier machinery for the Levinson method requires the sharp mean-value theorem over well-spaced frequencies, which in turn requires Montgomery and Vaughan's generalized Hilbert inequality for δ-separated real families; that theorem is unproved here (docs/goal/evidence/2026-09-16-round-GHI-blocked.md). Its two standard proofs — Montgomery and Vaughan's original 1974 cosecant/cotangent double-sum argument, and the Beurling-Selberg extremal-majorant + Paley-Wiener/Poisson route — are each a substantial formalization project, and neither is available in mathlib at the required sharpness."
     open_boundary: "Needs a design for the mollifier family (length, smooth coefficients), the mean-value estimate for the mollified product, and the error terms. Nothing in mathlib points in this direction."
     milestone: M2
     depends_on:
@@ -1471,12 +1472,13 @@ tasks:
 
   - id: M2-LEVINSON
     priority: P0
-    status: DONE_STRONG
+    status: BLOCKED
     track: modern
     title: "Levinson's method: at least one third of the zeroes lie on the critical line"
     latest_evidence: docs/goal/evidence/2026-08-21-zeta23-derived-results.md
     revalidation: docs/goal/evidence/2026-08-21-zeta23-derived-results.md
-    latest_update: "2026-08-21 DONE_STRONG on the statement, not on the method: levinson_one_third (RiemannHypothesis/CriticalLine.lean) and oneThirdOnCriticalLine (RiemannHypothesis/PartialProved.lean) give, for every eps > 0 and all large T, (1/3 - eps) N(T,2T) <= N0*(T,2T). This is a corollary of the stronger two-thirds bound of M1-TWO-THIRDS, not a formalization of Levinson's mollifier argument; M2-MOLLIFIER remains open. No sorry; axioms exactly propext, Classical.choice, Quot.sound."
+    latest_update: "2026-08-21 DONE_STRONG on the statement, not on the method: levinson_one_third (RiemannHypothesis/CriticalLine.lean) and oneThirdOnCriticalLine (RiemannHypothesis/PartialProved.lean) give, for every eps > 0 and all large T, (1/3 - eps) N(T,2T) <= N0*(T,2T). This is a corollary of the stronger two-thirds bound of M1-TWO-THIRDS, not a formalization of Levinson's mollifier argument; M2-MOLLIFIER remains open. No sorry; axioms exactly propext, Classical.choice, Quot.sound.
+  2026-09-16 BLOCKED on the method: Levinson's actual mollifier argument cannot be formalized until M2-MOLLIFIER is completed, which requires the generalized Hilbert inequality (blocked above). The bound currently in the repository stands, but it is only a corollary of the two-thirds bound of M1-TWO-THIRDS, not a formalization of Levinson's method."
     open_boundary: ""
     milestone: M2
     depends_on:
@@ -1527,12 +1529,13 @@ tasks:
       - "./scripts/audit.sh"
   - id: M2-DENSITY
     priority: P1
-    status: DONE_WEAK
+    status: BLOCKED
     track: modern
     title: "Selberg density theorem: bounds for N(sigma, T), the number of zeroes with re s >= sigma"
     latest_evidence: docs/goal/evidence/2026-09-02-m2-density-explicit-exponent.md
     revalidation: docs/goal/evidence/2026-09-02-m2-density-explicit-exponent.md
-    latest_update: "2026-09-02 DONE_WEAK with an explicit but quadratic saving: RiemannHypothesis/CarlsonDensityPowerSaving.lean proves ncard_zerosRightOf_le_rpow_explicit, for 1/2 < sigma < 1 there is C > 0 with N(sigma, T) <= C T^(1 - (sigma - 1/2)^2 / 64) for all T >= 1, and the two-sided ncard_zerosOffCriticalLine_le_rpow_explicit with exponent 1 - delta^2/64. The exponent is an explicit function of sigma that degrades continuously to 0 as sigma decreases to 1/2; only the constant C(sigma) is left implicit. This was obtained by tracking the constants of the Carlson chain of M2-DENSITY-POWER-SAVING in theta = sigma_0 - 1/2 instead of discarding them: the Montgomery-Vaughan exponent is exactly 1 - theta/2, the Euler-Maclaurin exponent is at most 1 - theta, the mollifier exponent is now chosen to be theta/8 (previously an inexplicit (1 - max)/4), the mean square then saves at least 3 theta/8, and the three-way balancing of the Jensen counting inequality gives theta^2/16 with theta = (sigma - 1/2)/2. The strengthened existential forms exists_ncard_zerosRightOf_high_le_rpow and exists_ncard_zerosRightOf_le_rpow now carry the conjunct (sigma - 1/2)^2/64 <= c. No sorry; axioms exactly propext, Classical.choice, Quot.sound; the explicit statements are pinned in scripts/revalidation.lean. Previous entry: 2026-08-19 scoped: N(sigma, T) = O(T^(...) ) estimates; implies AlmostAllZerosNearCriticalLine quantitatively."
+    latest_update: "2026-09-02 DONE_WEAK with an explicit but quadratic saving: RiemannHypothesis/CarlsonDensityPowerSaving.lean proves ncard_zerosRightOf_le_rpow_explicit, for 1/2 < sigma < 1 there is C > 0 with N(sigma, T) <= C T^(1 - (sigma - 1/2)^2 / 64) for all T >= 1, and the two-sided ncard_zerosOffCriticalLine_le_rpow_explicit with exponent 1 - delta^2/64. The exponent is an explicit function of sigma that degrades continuously to 0 as sigma decreases to 1/2; only the constant C(sigma) is left implicit. This was obtained by tracking the constants of the Carlson chain of M2-DENSITY-POWER-SAVING in theta = sigma_0 - 1/2 instead of discarding them: the Montgomery-Vaughan exponent is exactly 1 - theta/2, the Euler-Maclaurin exponent is at most 1 - theta, the mollifier exponent is now chosen to be theta/8 (previously an inexplicit (1 - max)/4), the mean square then saves at least 3 theta/8, and the three-way balancing of the Jensen counting inequality gives theta^2/16 with theta = (sigma - 1/2)/2. The strengthened existential forms exists_ncard_zerosRightOf_high_le_rpow and exists_ncard_zerosRightOf_le_rpow now carry the conjunct (sigma - 1/2)^2/64 <= c. No sorry; axioms exactly propext, Classical.choice, Quot.sound; the explicit statements are pinned in scripts/revalidation.lean. Previous entry: 2026-08-19 scoped: N(sigma, T) = O(T^(...) ) estimates; implies AlmostAllZerosNearCriticalLine quantitatively.
+  2026-09-16 BLOCKED on the linear saving: the Selberg/Ingham shape N(sigma,T)=O(T^{1-c(sigma-1/2)}) originally scoped in this row's open boundary needs the sharp mean value theorem, i.e. Montgomery and Vaughan's generalized Hilbert inequality; the Carlson chain can only deliver the quadratic saving already proved. See docs/goal/evidence/2026-09-16-round-GHI-blocked.md. The quadratic-saving statements already proved remain valid and are unchanged."
     open_boundary: "The saving proved is quadratic in sigma - 1/2, not linear: the Selberg/Ingham shape N(sigma, T) = O(T^(1 - c (sigma - 1/2))) that this row originally scoped is not proved and is not reachable by the Carlson route, whose saving is intrinsically of order (sigma - 1/2)^2 (Carlson's own theorem gives 4 (sigma - 1/2)^2, 256 times better than the constant here). A linear saving needs the sharp mean value theorem (Montgomery-Vaughan's generalized Hilbert inequality) or the fourth moment (approximate functional equation plus divisor correlation sums); neither is in mathlib nor in this repository, which is the gap recorded on M2-MEANVALUE. The constant C(sigma) is not effective, no statement is uniform in sigma, nothing is claimed at sigma = 1/2, and zeroes are counted without multiplicity."
     milestone: M2
     depends_on:
