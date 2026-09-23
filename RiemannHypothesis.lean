@@ -81,6 +81,8 @@ import RiemannHypothesis.StripMeanSquareAsymptoticHalf
 import RiemannHypothesis.DirichletPolyMeanValue
 import RiemannHypothesis.HalaszMontgomery
 import RiemannHypothesis.HilbertInequality
+import RiemannHypothesis.ExponentialType
+import RiemannHypothesis.HilbertFreeBound
 import RiemannHypothesis.LargeSieve
 import RiemannHypothesis.Mollifier
 import RiemannHypothesis.LogDerivIntegrable

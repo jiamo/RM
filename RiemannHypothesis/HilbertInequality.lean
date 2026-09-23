@@ -3,6 +3,7 @@ Copyright (c) 2026 Riemann Hypothesis formalization. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Riemann Hypothesis formalization
 -/
+import RiemannHypothesis.ExponentialType
 import Mathlib.Analysis.SpecialFunctions.Complex.Circle
 import Mathlib.MeasureTheory.Integral.IntervalIntegral.Basic
 import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
@@ -52,11 +53,13 @@ the inequality.
 * `RiemannHypothesis.Hilbert.fake_cancellation_identity_is_false` — a machine-checked
   counterexample refuting the circulated 'elementary' proof of the general form (also the bare
   arithmetic fact `fake_cancellation_counterexample_arith`).
-* `RiemannHypothesis.Hilbert.BeurlingSignMajorant` / `HasExponentialTypeAtMost` and
+* `RiemannHypothesis.Hilbert.BeurlingSignMajorant` (exponential type via
+  `RiemannHypothesis.HasExponentialTypeAtMost`, `RiemannHypothesis/ExponentialType.lean`) and
   `RiemannHypothesis.Hilbert.GeneralizedHilbertInequality_of_beurling_selberg` — the exact residual gap:
   the general form reduced to the Beurling–Selberg extremal problem.
-* `RiemannHypothesis.Hilbert.hilbert_free_bound` — what separation alone yields by the triangle
-  inequality, worse than the sharp bound by a logarithm.
+* `RiemannHypothesis.Hilbert.hilbert_free_bound` (now proved, in
+  `RiemannHypothesis/HilbertFreeBound.lean`) — what separation alone yields by the triangle
+  inequality: the constant `2 H_n` in place of the sharp `π`.
 * `RiemannHypothesis.Hilbert.GeneralizedHilbertInequality` — the Montgomery–Vaughan theorem for
   *arbitrary* `δ`-separated real frequencies, recorded as a statement and **not** proved here.
 * `RiemannHypothesis.Hilbert.generalizedHilbert_of_lattice` — what is missing is exactly the
@@ -591,12 +594,6 @@ theorem fake_cancellation_identity_is_false :
 
 /-! ## What a proof needs: the Beurling–Selberg reduction -/
 
-/-- An entire function has *exponential type at most* `τ` when it is bounded by
-`C e^{τ ‖z‖}` for some constant `C`.  Recorded here locally because mathlib does not
-yet carry an exponential-type API sharp enough for the Montgomery–Vaughan theorem. -/
-def HasExponentialTypeAtMost (B : ℂ → ℂ) (τ : ℝ) : Prop :=
-  ∃ C > (0 : ℝ), ∀ z, ‖B z‖ ≤ C * Real.exp (τ * ‖z‖)
-
 /-- A **Beurling majorant of the sign function**: an entire function `B` of exponential
 type `2π` such that `B(x) ≥ sign x` for every real `x`, and `∫_ℝ (B(x) − sign x) dx ≤ 1`.
 The bandwidth `2π` is exactly the one that matches `δ`-separation in the generalized
@@ -621,20 +618,6 @@ def GeneralizedHilbertInequality_of_beurling_selberg : Prop :=
   BeurlingSignMajorant → GeneralizedHilbertInequality
 
 /-! ## What separation alone gives for free -/
-
-/-- The **free bound**: from separation plus the triangle inequality one gets only
-`δ⁻¹ log R`.  Concretely, for a `δ`-separated family of `n ≥ 2` reals, every row sum of
-the kernel `‖1/(λ_r − λ_s)‖` is at most `(2/δ) (1 + Real.log (n − 1))` — worse than the
-desired `π δ⁻¹` by the logarithm, which is why the general theorem must exploit
-*cancellation* rather than absolute values.  Recorded as a `Prop`; the ordering argument
-that proves it (sort the other frequencies by distance; the `j`-th nearest is at least
-`⌈j/2⌉ δ` away, so the sum is dominated by the harmonic series) is elementary but not yet
-formalized here. -/
-def hilbert_free_bound : Prop :=
-  ∀ (n : ℕ) (lam : Fin n → ℝ) (δ : ℝ), 2 ≤ n → 0 < δ →
-    (∀ r s : Fin n, r ≠ s → δ ≤ |lam r - lam s|) →
-      ∀ r, ∑ s ∈ Finset.univ.erase r, ‖((lam r : ℂ) - (lam s : ℂ))⁻¹‖
-        ≤ (2 / δ) * (1 + Real.log (n - 1))
 
 end Hilbert
 
