@@ -49,6 +49,14 @@ the inequality.
 * `RiemannHypothesis.Hilbert.hilbert_inequality_lattice` — the same for frequencies
   `λ_r = δ k_r` in the lattice `δ ℤ`, with constant `π/δ`: the Montgomery–Vaughan bound in the
   case of lattice frequencies.
+* `RiemannHypothesis.Hilbert.fake_cancellation_identity_is_false` — a machine-checked
+  counterexample refuting the circulated 'elementary' proof of the general form (also the bare
+  arithmetic fact `fake_cancellation_counterexample_arith`).
+* `RiemannHypothesis.Hilbert.BeurlingSignMajorant` / `HasExponentialTypeAtMost` and
+  `RiemannHypothesis.Hilbert.GeneralizedHilbertInequality_of_beurling_selberg` — the exact residual gap:
+  the general form reduced to the Beurling–Selberg extremal problem.
+* `RiemannHypothesis.Hilbert.hilbert_free_bound` — what separation alone yields by the triangle
+  inequality, worse than the sharp bound by a logarithm.
 * `RiemannHypothesis.Hilbert.GeneralizedHilbertInequality` — the Montgomery–Vaughan theorem for
   *arbitrary* `δ`-separated real frequencies, recorded as a statement and **not** proved here.
 * `RiemannHypothesis.Hilbert.generalizedHilbert_of_lattice` — what is missing is exactly the
@@ -95,6 +103,11 @@ known about it:
   Paley–Wiener/Plancherel/Poisson summation. Neither ingredient exists in this repository, and neither is
   available in mathlib at the required sharpness; supplying either is a substantial formalization project
   on its own.
+* **This repository now records the boundary in code.** `BeurlingSignMajorant` and
+  `GeneralizedHilbertInequality_of_beurling_selberg` state the precise remaining reduction, and
+  `fake_cancellation_identity_is_false` eliminates the circulated elementary route by an explicit,
+  decidable counterexample (`λ = ![0, 10, 30]`: the alleged cancellation identity gives `1/600` on the
+  left but `1/50` on the right).
 
 Accordingly `GeneralizedHilbertInequality` is left as a `Prop`, as this repository's convention requires of
 every statement without a proof term. No `sorry` has been introduced anywhere: the convention is to record
@@ -548,6 +561,80 @@ theorem generalizedHilbert_of_lattice {n : ℕ} (k : Fin n → ℤ) (hk : Functi
         (((δ * k r : ℝ) : ℂ) - ((δ * k s : ℝ) : ℂ))‖
       ≤ Real.pi / δ * ∑ r, ‖x r‖ ^ 2 :=
   hilbert_inequality_lattice Finset.univ k (fun _ _ _ _ h => hk h) x hδ
+
+
+/-! ## The circulated 'elementary' proof is refuted -/
+
+/-- Directly checkable arithmetic behind the counterexample below:
+`1/((30 − 0)(30 − 10)) ≠ 2/(0 − 10)²`, i.e. `1/600 ≠ 1/50`. -/
+theorem fake_cancellation_counterexample_arith :
+    (1 : ℚ) / ((30 - 0) * (30 - 10)) ≠ (2 : ℚ) / ((0 - 10) ^ 2) := by decide
+
+/-- The circulated 'elementary' proof of `GeneralizedHilbertInequality` rests on the
+cancellation identity
+
+`∑_{r ≠ s,t} 1/((λ_r − λ_s)(λ_r − λ_t)) = 2/(λ_s − λ_t)²`,
+
+which is **false**.  For the `10`-separated family `λ = ![0, 10, 30]`, taking
+`s = 0` and `t = 1` leaves exactly one index on the left, `r = 2`, giving
+`1/((30 − 0)(30 − 10)) = 1/600`, whereas the right side is `2/(0 − 10)² = 1/50`.
+The proof term is `decide`: every operation involved — filtering and summing over
+the computable finite type `Fin 3`, field operations on `ℚ`, comparison of `Fin`
+indices — reduces definitionally, so Lean evaluates both sides and checks the
+inequality directly. -/
+theorem fake_cancellation_identity_is_false :
+    let lam : Fin 3 → ℚ := ![0, 10, 30];
+    let s := ⟨0, by decide⟩; let t := ⟨1, by decide⟩;
+    (∑ r in (Finset.univ : Finset (Fin 3)).filter fun r => r ≠ s ∧ r ≠ t,
+      (1 : ℚ) / ((lam r - lam s) * (lam r - lam t)))
+    ≠ (2 : ℚ) / ((lam s - lam t) ^ 2) := by decide
+
+/-! ## What a proof needs: the Beurling–Selberg reduction -/
+
+/-- An entire function has *exponential type at most* `τ` when it is bounded by
+`C e^{τ ‖z‖}` for some constant `C`.  Recorded here locally because mathlib does not
+yet carry an exponential-type API sharp enough for the Montgomery–Vaughan theorem. -/
+def HasExponentialTypeAtMost (B : ℂ → ℂ) (τ : ℝ) : Prop :=
+  ∃ C > (0 : ℝ), ∀ z, ‖B z‖ ≤ C * Real.exp (τ * ‖z‖)
+
+/-- A **Beurling majorant of the sign function**: an entire function `B` of exponential
+type `2π` such that `B(x) ≥ sign x` for every real `x`, and `∫_ℝ (B(x) − sign x) dx ≤ 1`.
+The bandwidth `2π` is exactly the one that matches `δ`-separation in the generalized
+Hilbert inequality; classically one then pairs the bilinear form against band-limited test
+functions built from `B` via Paley–Wiener / Plancherel / Poisson summation. -/
+structure BeurlingSignMajorant where
+  B : ℂ → ℂ
+  entire : Differentiable ℂ B
+  exp_type : HasExponentialTypeAtMost B (2 * Real.pi)
+  real_on_real : ∀ x : ℝ, (B (x : ℂ)).im = 0
+  majorizes : ∀ x : ℝ, Real.sign x ≤ (B (x : ℂ)).re
+  integrable : MeasureTheory.Integrable (fun x : ℝ => (B (x : ℂ)).re - Real.sign x) volume
+  integral_bound : (∫ x : ℝ, (B (x : ℂ)).re - Real.sign x ∂volume) ≤ 1
+
+/-- The exact residual step behind `GeneralizedHilbertInequality`: if a
+`BeurlingSignMajorant` exists, then the Montgomery–Vaughan bound holds for *arbitrary*
+`δ`-separated real frequencies.  Recorded as a `Prop` (the antecedent is not constructed
+here); it pins the remaining gap down to two concrete sub-tasks: (i) build the majorant,
+(ii) develop the band-limited machinery (Paley–Wiener / Poisson summation at the required
+sharpness) that turns it into the bilinear estimate. -/
+def GeneralizedHilbertInequality_of_beurling_selberg : Prop :=
+  BeurlingSignMajorant → GeneralizedHilbertInequality
+
+/-! ## What separation alone gives for free -/
+
+/-- The **free bound**: from separation plus the triangle inequality one gets only
+`δ⁻¹ log R`.  Concretely, for a `δ`-separated family of `n ≥ 2` reals, every row sum of
+the kernel `‖1/(λ_r − λ_s)‖` is at most `(2/δ) (1 + Real.log (n − 1))` — worse than the
+desired `π δ⁻¹` by the logarithm, which is why the general theorem must exploit
+*cancellation* rather than absolute values.  Recorded as a `Prop`; the ordering argument
+that proves it (sort the other frequencies by distance; the `j`-th nearest is at least
+`⌈j/2⌉ δ` away, so the sum is dominated by the harmonic series) is elementary but not yet
+formalized here. -/
+def hilbert_free_bound : Prop :=
+  ∀ (n : ℕ) (lam : Fin n → ℝ) (δ : ℝ), 2 ≤ n → 0 < δ →
+    (∀ r s : Fin n, r ≠ s → δ ≤ |lam r - lam s|) →
+      ∀ r, ∑ s ∈ Finset.univ.erase r, ‖((lam r : ℂ) - (lam s : ℂ))⁻¹‖
+        ≤ (2 / δ) * (1 + Real.log (n - 1))
 
 end Hilbert
 

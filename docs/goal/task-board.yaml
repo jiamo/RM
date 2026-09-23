@@ -1383,6 +1383,7 @@ tasks:
     milestone: M2
     depends_on:
       - M1-GROWTH
+      - M2-HILBERT-INEQUALITY
     rank: 40
     exit_criteria:
       - "The mean value theorem for Dirichlet polynomials with arbitrary coefficients is proved, two-sided and with an explicit constant."
@@ -3790,7 +3791,7 @@ tasks:
       - "./scripts/audit.sh"
 
   - id: M2-HILBERT-INEQUALITY
-    priority: P1
+    priority: P0
     status: DONE_WEAK
     track: analysis
     title: "Hilbert's inequality with the constant pi, and the Montgomery-Vaughan bound for lattice frequencies"
