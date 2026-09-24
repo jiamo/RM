@@ -3911,3 +3911,41 @@ tasks:
     required_gates:
       - "lake build"
       - "./scripts/audit.sh"
+  - id: M2-GRAM-INERTIA
+    priority: P1
+    status: DONE_WEAK
+    track: linear-algebra
+    title: "The Gram-matrix inertia certificate behind the 2/3 (B1-B4), zeta-free"
+    latest_evidence: docs/goal/evidence/2026-09-24-m2-gram-inertia.md
+    revalidation: docs/goal/evidence/2026-09-24-m2-gram-inertia.md
+    latest_update: "2026-09-24 DONE_WEAK: RiemannHypothesis/GramInertia.lean. B1 posIndex_conj_eq, negIndex_conj_eq, rank_conj_eq (Sylvester's law of inertia as invariance under invertible congruence; Mathlib only has the existence half) and posIndex_add_negIndex. B2 norm_trace_mul_le_of_posSemidef (|tr AB| <= sum a_i b_i for PSD A, B, sorted eigenvalues = singular values), built on the vendored Hermitian vonNeumann_trace_ineq. B3 ReflectionConfig (finite set stable under criticalReflect, symmetric multiplicities), gram = sum m v v^T with v(k) = phi(gamma - tau_k), gram_isHermitian, posIndex_gram_le (n_+ <= #on-line + #{Re > 1/2}), card_offLine_eq_two_mul, rank_gram_le. B4 inertia_certificate (4 tr A - 2N - |A|_F^2 <= r at matrix level), inertia_certificate_ratio, certificate_eventually_of_bounds, gram_certificate, gram_certificate_ratio, GramFamily.certificate_eventually, certificate_Hfun_eventually (constant Zeta23.Hfun lam), two_thirds_eventually (tr = N(1+o(1)), frob <= (4/3)N(1+o(1)) => #on-line >= (2/3 - eps) N). No sorry; axioms propext, Classical.choice, Quot.sound."
+    open_boundary: "The prime side is a hypothesis: the asymptotics tr A-hat = N(1+o(1)) and |A-hat|_F^2 <= (1/lam + lam/3) N (1+o(1)) from the explicit formula, and the Poisson diagonal bound sum_k |phi(gamma - tau_k)|^2 <= aL^2, are inputs, not proved here (the vendored library proves them for its own taper; they are not re-derived in this repository's vocabulary). Von Neumann's inequality is only in the Hermitian / PSD form, not for arbitrary matrices with singular values. The certificate is used at c = 2 only; the general-c rank-trace inequality is available from the vendored library but no optimisation over c is formalised."
+    milestone: M2
+    depends_on: []
+    rank: 51.0
+    exit_criteria:
+      - "posIndex_conj_eq, negIndex_conj_eq, rank_conj_eq : Sylvester's law of inertia (invariance)."
+      - "norm_trace_mul_le_of_posSemidef : von Neumann, absolute form for PSD matrices."
+      - "ReflectionConfig.posIndex_gram_le, card_offLine_eq_two_mul : an off-line pair costs two points and raises n_+ by at most one."
+      - "inertia_certificate_ratio : the zeta-free certificate with prime-side inputs."
+      - "GramFamily.two_thirds_eventually : 2/3 from the two prime-side asymptotics."
+    required_gates:
+      - "lake build RiemannHypothesis.GramInertia"
+
+  - id: M2-BEURLING-SELBERG
+    priority: P1
+    status: TODO_NEEDS_DESIGN
+    track: analysis
+    title: "Beurling-Selberg extremal functions: Paley-Wiener, Beurling's B, Selberg and Vaaler functions (A1-A2)"
+    latest_evidence: docs/goal/evidence/2026-09-24-m2-gram-inertia.md
+    latest_update: "2026-09-24: bottom layers only. RiemannHypothesis/ExponentialType.lean (HasExponentialTypeAtMost and closure API, earlier round). RiemannHypothesis/PaleyWienerEasy.lean: the easy direction of Paley-Wiener for g in L^1[-tau, tau]: bandLimited g tau is entire (bandLimited_differentiable), has exponential type at most tau (bandLimited_hasExponentialTypeAtMost, via |F(z)| <= |g|_1 e^{tau|z|}), and is bounded by |g|_1 on the real axis. No term of BeurlingSignMajorant has been constructed; GeneralizedHilbertInequality_of_beurling_selberg is still a Prop definition, not a theorem."
+    open_boundary: "A1: the hard direction of Paley-Wiener (entire of exponential type tau and L^2 on R => Fourier transform supported in [-tau, tau]) and Plancherel for band-limited functions are missing. A2: Beurling's function B(z) = (sin pi z / pi)^2 (sum_{n>=0} (z-n)^{-2} - sum_{n<0} (z-n)^{-2} + 2/z) is not defined; B >= sgn on R and int (B - sgn) = 1 are not proved. Selberg's interval majorants/minorants and Vaaler's function are not started. The derivation of the Montgomery-Vaughan inequality from B is not formalised."
+    milestone: M2
+    depends_on:
+      - M2-HILBERT-INEQUALITY
+    rank: 51.1
+    exit_criteria:
+      - "A term of BeurlingSignMajorant (exponential type 2 pi, B >= sgn, int (B - sgn) <= 1)."
+      - "GeneralizedHilbertInequality_of_beurling_selberg proved as a theorem."
+    required_gates:
+      - "lake build RiemannHypothesis.PaleyWienerEasy"

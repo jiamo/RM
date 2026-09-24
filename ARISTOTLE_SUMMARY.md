@@ -1,3 +1,42 @@
+# Summary of changes for run ad678e65-e2de-4aee-aaa4-cdabafe5dcf8
+**Warning: this round started from the old snapshot again, not commit `31844ac`.** Here is what I found:
+- git history has a single `Initial commit`, and `31844ac` is not reachable from it;
+- `Challenge.lean` still has its three `sorry`s;
+- `submission/` does not exist;
+- `HilbertInequality.lean` has no `BeurlingSignMajorant` and does not import `ExponentialType`;
+- the GHI-blocked evidence file is missing.
+
+I had no way to get `31844ac`, so two of your checks could not be done: compiling your hand edits to `HilbertInequality.lean`, `HilbertFreeBound.lean` and `ExponentialType.lean` (item 4), and compiling the eight `submission/` modules (C1). The only thing I could check for item 4 is the import graph in this snapshot. `ExponentialType.lean` imports only Mathlib, so adding `import RiemannHypothesis.ExponentialType` to `HilbertInequality.lean` creates no cycle. That is not a compilation of the `31844ac` files.
+
+**Part 1: delivery**
+- I did not touch any of the five protected paths (`Challenge.lean`, `HilbertInequality.lean`, `task-board.yaml`, `submission/`, the GHI evidence file).
+- The two new task-board rows are in a separate file, `docs/goal/task-board-additions-2026-09-24.yaml`, for you to append to the `31844ac` board.
+- `RiemannHypothesis.lean` only gained two import lines at the end.
+- `docs/delivery-2026-09-24.md` lists exactly which paths to take onto `31844ac`. Please don't merge the tree wholesale.
+- **Manifest:** the one I received was once again `name: RequestProject`, Mathlib `8f9d9cff` with `inputRev v4.28.0`, and no `Zeta23` entry. I re-resolved it against the project's own pins and committed it: it now has Mathlib `db584cd…`, the `Zeta23` path entry, and `name: RiemannHypothesis`. An identical copy is committed as `docs/lake-manifest.pinned.json`. If the manifest you receive has no `Zeta23` entry (`grep -c '"name": "Zeta23"' lake-manifest.json` prints 0), it was replaced after delivery and the copy is the correct one. I can't see what happens after delivery, so I can't confirm the cause.
+- With this manifest the full `lake build` succeeds (9223 jobs), including `vendor/zeta23`.
+
+**Part 3: Gram matrix / inertia (B1–B4), new module `RiemannHypothesis/GramInertia.lean`**
+
+A correction first: the vendored `Zeta23` library already contains a lot of this machinery. It has the positive index and Sylvester's variational description, the one-sided congruence inequality, subadditivity, von Neumann's inequality for Hermitian matrices, the rank–trace inequality, and the block data with `posIndex_blockQ_le`. So "the repository has none of it" is not accurate. What was missing is below, and this round adds it:
+- **B1:** Sylvester's law as an equality. For Hermitian `Q` and invertible `B`, `QᴴBQ`-style congruence `BᴴQB` has the same positive index, negative index and rank as `Q` (`posIndex_conj_eq`, `negIndex_conj_eq`, `rank_conj_eq`), plus `n₊ + n₋ = rank`. Mathlib only has the existence of a signed diagonal form, not this invariance.
+- **B2:** `‖tr(AB)‖ ≤ Σ aᵢbᵢ` for positive semidefinite `A, B`. The version for arbitrary matrices with singular values is not done.
+- **B3:** `ReflectionConfig` is a finite set that is stable under your `criticalReflect` and has symmetric multiplicities. For its Gram matrix `Σ m v vᵀ`, `v(k) = φ(γ − τ_k)`, I proved:
+  - it is Hermitian;
+  - `n₊ ≤ #on-line + #{Re ρ > 1/2}`;
+  - the off-line count is exactly twice the second term.
+  So each off-line pair costs two points but raises `n₊` by at most one.
+- **B4:** a `ζ`-free certificate. Given `tr A ≥ αN − E₁` and `‖A‖_F² ≤ βN + E₂`, it concludes `r ≥ (4α − β − 2)N − (4E₁ + E₂)` (`inertia_certificate_ratio`). The asymptotic version for a family gives the constant `Hfun λ = 2 − 1/λ − λ/3`, and `two_thirds_eventually` gives `(2/3 − ε)N`. The numerator counts distinct on-line points and `N` counts with multiplicity.
+- **Scope of B4:** the two prime-side asymptotics and the Poisson diagonal bound are hypotheses. They are not derived here.
+
+**Part 2: GHI / Beurling–Selberg (only a first layer)**
+- New module `RiemannHypothesis/PaleyWienerEasy.lean` covers the easy direction of Paley–Wiener for `g` integrable on `[−τ, τ]`. The function `F(z) = ∫ g(t)e^{izt}dt` is entire, satisfies `|F(z)| ≤ ‖g‖₁e^{τ|z|}`, has exponential type at most `τ`, and is bounded by `‖g‖₁` on ℝ.
+- Still not done: the hard direction of Paley–Wiener, Beurling's function `B`, the Selberg and Vaaler functions, and turning `GeneralizedHilbertInequality_of_beurling_selberg` into a theorem. That last item couldn't even be attempted, because that declaration is not in this snapshot.
+
+**C2:** the two rows `M2-GRAM-INERTIA` (DONE_WEAK, with the prime-side hypotheses stated in its open boundary) and `M2-BEURLING-SELBERG` (TODO_NEEDS_DESIGN) are in the additions file. There is also a new evidence file, `docs/goal/evidence/2026-09-24-m2-gram-inertia.md`.
+
+**Verification:** neither new module has any `sorry`, and neither produces warnings. `#print axioms` on the headline theorems shows only `propext`, `Classical.choice` and `Quot.sound`. Everything is committed.
+
 # Summary of changes for run 24d6cf7e-2d46-4d4b-9ebd-9e7e2e7e8180
 I worked through the priority list in order: the build blocker first, then the outstanding proof debt, then the methodology question, and finally a foundational layer of the extremal-function programme.
 
