@@ -1,3 +1,57 @@
+# Summary of changes for run 90a2fd91-2861-4509-93ca-8c3189937b47
+这一轮做了一项具体的数学工作，证明已在 Lean 中通过检查。先说明：黎曼猜想本身仍是公开问题，这次没有证明它，也没有声称证明了它。
+
+**1. 先修复构建。** 拿到的 `lake-manifest.json` 又是旧版本（缺 `Zeta23` 条目，Mathlib 版本也和 `lakefile.toml` 的 pin 对不上）。我用仓库里存的 `docs/lake-manifest.pinned.json` 替换，再按 `docs/build-environment.md` 的步骤重新拉取依赖。现在完整 `lake build` 成功（9224 个任务）。
+
+**2. 新模块 `RiemannHypothesis/Zeta23Sharp.lean`：去掉三分之二定理绝对形式里的常数损失。** 原来的 `Zeta23Verification.lean` 有意丢掉了常数，只证到临界线上至少有 `(T/8π)·log T` 个零点。新模块证明了最优常数的版本（记 `windowLeadingTerm T = (T/2π)·log T`）：
+- `windowCount_asymptotic`：对任意 `ε > 0`，当 `T` 足够大时，`(1−ε)(T/2π) log T ≤ N(T,2T) ≤ (1+ε)(T/2π) log T`；
+- `tendsto_windowCount_div`：`N(T,2T) / ((T/2π) log T) → 1`；
+- `eventually_windowCountOnLine_ge_sharp`：当 `T` 足够大时，`(T, 2T]` 内临界线上至少有 `(2/3 − ε)(T/2π) log T` 个**互不相同**的零点；
+- `eventually_windowCountSimpleOnLine_ge_sharp`：临界线上的**单**零点也至少有这么多；
+- `eventually_windowCountDistinct_ge_sharp`：互不相同的非平凡零点至少有 `(5/6 − ε)(T/2π) log T` 个。
+
+用到的前提都是仓库里已有的无条件定理：Riemann–von Mangoldt 公式，以及来自 vendored 库的定理 A、B、C 的比例形式。没有引入任何假设，模块里没有 `sorry`。五个定理的 `#print axioms` 都只有 `propext`、`Classical.choice`、`Quot.sound`。
+
+**3. 按仓库规范做的记账。**
+- 任务板新增一行 `M1-TWO-THIRDS-SHARP`，标为 `DONE_STRONG`；同时更新了 `M1-TWO-THIRDS-ABSOLUTE` 的未完成部分（open boundary）说明。
+- 新增证据文件 `docs/goal/evidence/2026-10-02-m1-two-thirds-sharp.md`，内含对抗性复核一节。
+- 在 `scripts/revalidation.lean` 里把四条主要陈述完整写出并固定下来；`scripts/audit.sh` 加上了新模块的导入和公理检查。
+- 更新了 README 模块表和根导入，并重新生成了 `docs/current-goal-state.md`。
+
+**检查结果：** `lake build` 成功；`bash scripts/audit.sh` 输出 `OK`（检查了 2632 条定理，没有用到标准三个公理之外的公理；171 个任务通过校验；所有固定的陈述都能通过检查）。`Challenge.lean` 里那三个 `sorry` 是按仓库约定保留的，没有改动。所有改动已提交。
+
+# Summary of changes for run cbcd058b-5044-4805-ae74-aa59596aac26
+上一轮的建议有两部分，在这个快照里只能做第二部分。
+
+**1. 换到正确的仓库上重做：这一轮做不了。** 这次拿到的还是 Riemann 假设仓库，git 历史里只有一个 `Initial commit`。我在项目里搜过，`AbsMachine`、TQBF、Krivine、BGS 相关的代码和任务行都不存在。所以第 1 → 2 → 3 → 4 项那条链，以及第 5 项（同一座桥的第二个实例）都没法在这里做。要做的话，需要在那个复杂度理论仓库的快照上重新发起这一轮。
+
+**2. 把放宽的规则写进本仓库：已完成。**
+- `docs/goal/goal-prompt.md` 新增了 §2.1“Chained delivery of ready rows”。默认仍然是一次交付完成一行。例外是：如果几行在同一条依赖链上，并且开始时全部是 `TODO_READY`，可以在一次交付里按依赖顺序连着做完。条件如下：
+  - 每一行各自保留证据文件、退出标准和对抗性复核；
+  - 每做完一行，都要跑一遍 `lake build`、`./scripts/audit.sh` 和 `goal_state.py validate`，不能只在整条链结束时跑；
+  - 某一行达不到 `DONE_STRONG` 时，整条链就停在这里，这一行如实标记状态，后面的行本次不再开始；
+  - `TODO_NEEDS_DESIGN`、`DISCOVERED` 或研究性的行（例如 `M3-GAP`）不能放进链里；
+  - 同一机制的第二个实例可以接在链尾，前提是它那一行本身是 `TODO_READY`，并且依赖于建立这个机制的那一行。
+- `AGENTS.md` 的“Task Board Rule”下加了一条简短说明，指向 §2.1。
+
+改完后 `python3 scripts/goal_state.py validate` 通过（170 个任务）。这次只改了文档，没有动 Lean 文件，所以没有构建目标。改动已提交（`157c8f5`）。
+
+另外有一点需要你确认：`goal-prompt.md` 里写着“Never commit unless the user asks”。我把“按你的建议做”理解成同意提交，所以提交了这次改动。
+
+# Summary of changes for run c9d59343-6241-4b1c-8566-cc48c1f924ea
+这一轮我没有做任何修改，因为收到的项目不是你说的那个。
+
+**不匹配的地方：** 我拿到的是 Riemann 假设仓库（`RiemannHypothesis/`、`Challenge.lean`，任务板 `docs/goal/task-board.yaml` 的编号从 M0 到 M4，最后一行是 `M4-RH`）。git 历史里只有一个 `Initial commit`。我在整个项目里（包括 `vendor/` 和 `references/`）搜过，下面这些一样都没有：
+- `M14-TQBF-IN-PSPACE`、`M14-TQBF-PSPACE-HARD`、`M14-KRIVINE-SPACE-CLASS`、`M15-BGS-EQUAL`、`M15-NO-RELATIVIZING-PROOF` 这几个任务行；
+- `AbsMachine`、`Realizes.pspace`、`tqbfLang`、Qbf 求值栈机、`pspaceComplete_TQBF`；
+- 任何 Krivine 或 BGS 相关文件。
+
+`ARISTOTLE_SUMMARY.md` 里也没有提到这些，说的都是 Riemann 假设这条线。所以你要的那座桥和它的实例都不在这个快照里，我没法在上面接着做 1–5。要我从零重建复杂度理论框架，那是一个新设计，跟"全部 TODO_READY、只差收口"的前提不一样，所以我没有动手。我向你确认过接下来怎么做，这一轮结束前没收到回复。
+
+**建议：** 在正确的仓库（有 `AbsMachine` 桥的那个复杂度理论项目）上重新发起这一轮。你提议放宽的规则是：同一条依赖链上、且全部已是 TODO_READY 的任务，可以在一次交付里连着做完。在那个仓库里，1 → 2 → 3 → 4 可以一次做完，5 用同一座桥做第二个实例。如果你想把这条规则也写进本仓库的 `AGENTS.md` 或 `docs/goal/goal-prompt.md`，告诉我就行。
+
+本轮没有修改或新增任何文件，也没有构建目标。
+
 # Summary of changes for run ad678e65-e2de-4aee-aaa4-cdabafe5dcf8
 **Warning: this round started from the old snapshot again, not commit `31844ac`.** Here is what I found:
 - git history has a single `Initial commit`, and `31844ac` is not reachable from it;

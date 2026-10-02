@@ -28,6 +28,9 @@ tracks the proof attempt on the task board. See `README.md` and
 - `DONE_STRONG` means the listed exit criteria are proven and `open_boundary` is
   empty; for the Riemann hypothesis itself that means a Lean-checked proof term.
 - `DONE_WEAK` remains unfinished.
+- One delivery normally completes one row. Rows on a single dependency chain that
+  are all `TODO_READY` at the start may be completed together, in dependency order,
+  with per-row evidence and gates; see §2.1 of `docs/goal/goal-prompt.md`.
 
 ## Commands
 

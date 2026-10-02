@@ -12,9 +12,9 @@
 ## Active milestone
 
 - Milestone: `M1`
-- Tasks in milestone: `93`
-- Tasks total: `172`
-- `DONE_STRONG`: `102`
+- Tasks in milestone: `94`
+- Tasks total: `173`
+- `DONE_STRONG`: `103`
 - `DONE_WEAK`: `57`
 - `TODO_NEEDS_DESIGN`: `9`
 - `BLOCKED`: `4`

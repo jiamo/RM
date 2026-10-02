@@ -4353,6 +4353,33 @@ example : ∀ᶠ T in Filter.atTop,
   RiemannHypothesis.eventually_windowCountSimpleOnLine_ge
 
 
+/-! ## The two-thirds theorem in absolute form, sharp constant
+(RiemannHypothesis/Zeta23Sharp.lean) -/
+
+/-- Riemann–von Mangoldt, leading order: `N(T, 2T) ~ (T/2π) log T`. -/
+example : Filter.Tendsto (fun T => (RiemannHypothesis.windowCount T (2 * T) : ℝ) /
+      (T / (2 * Real.pi) * Real.log T)) Filter.atTop (nhds 1) :=
+  RiemannHypothesis.tendsto_windowCount_div
+
+/-- Theorem A, sharp absolute form: `(2/3 − ε)(T/2π) log T` distinct zeroes on the line. -/
+example {ε : ℝ} (hε : 0 < ε) : ∀ᶠ T in Filter.atTop,
+    (2 / 3 - ε) * (T / (2 * Real.pi) * Real.log T) ≤
+      (RiemannHypothesis.windowCountOnLine T (2 * T) : ℝ) :=
+  RiemannHypothesis.eventually_windowCountOnLine_ge_sharp hε
+
+/-- Theorem B, sharp absolute form: `(2/3 − ε)(T/2π) log T` simple zeroes on the line. -/
+example {ε : ℝ} (hε : 0 < ε) : ∀ᶠ T in Filter.atTop,
+    (2 / 3 - ε) * (T / (2 * Real.pi) * Real.log T) ≤
+      (RiemannHypothesis.windowCountSimpleOnLine T (2 * T) : ℝ) :=
+  RiemannHypothesis.eventually_windowCountSimpleOnLine_ge_sharp hε
+
+/-- Theorem C, sharp absolute form: `(5/6 − ε)(T/2π) log T` distinct zeroes in the window. -/
+example {ε : ℝ} (hε : 0 < ε) : ∀ᶠ T in Filter.atTop,
+    (5 / 6 - ε) * (T / (2 * Real.pi) * Real.log T) ≤
+      (RiemannHypothesis.windowCountDistinct T (2 * T) : ℝ) :=
+  RiemannHypothesis.eventually_windowCountDistinct_ge_sharp hε
+
+
 /-! ## The Riemann hypothesis as an eventual counting statement
 (RiemannHypothesis/EventualCountingCriterion.lean) -/
 

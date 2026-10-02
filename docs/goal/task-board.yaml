@@ -3949,3 +3949,25 @@ tasks:
       - "GeneralizedHilbertInequality_of_beurling_selberg proved as a theorem."
     required_gates:
       - "lake build RiemannHypothesis.PaleyWienerEasy"
+  - id: M1-TWO-THIRDS-SHARP
+    priority: P1
+    status: DONE_STRONG
+    track: modern
+    title: "The two-thirds theorem in absolute form with the sharp constant, and N(T,2T) ~ (T/2pi) log T"
+    latest_evidence: docs/goal/evidence/2026-10-02-m1-two-thirds-sharp.md
+    revalidation: docs/goal/evidence/2026-10-02-m1-two-thirds-sharp.md
+    latest_update: "2026-10-02 DONE_STRONG: RiemannHypothesis/Zeta23Sharp.lean removes the factor lost in M1-TWO-THIRDS-ABSOLUTE. With windowLeadingTerm T = (T/2pi) log T, windowCount_asymptotic proves (1 - eps) (T/2pi) log T <= N(T,2T) <= (1 + eps) (T/2pi) log T for every eps > 0 and all large T, and tendsto_windowCount_div gives N(T,2T) / ((T/2pi) log T) -> 1. eventually_windowCountOnLine_ge_sharp: for every eps > 0, eventually at least (2/3 - eps)(T/2pi) log T distinct zeroes of zeta on the critical line have ordinate in (T,2T]; eventually_windowCountSimpleOnLine_ge_sharp: the same for simple zeroes on the line; eventually_windowCountDistinct_ge_sharp: at least (5/6 - eps)(T/2pi) log T distinct nontrivial zeroes in the window. Inputs: windowCount_sub_mainTerm_le (Riemann-von Mangoldt, from Zeta23.riemannVonMangoldt_zeta), two_thirds_on_critical_line, two_thirds_simple_on_critical_line, five_sixths_distinct, all unconditional. No sorry; axioms exactly propext, Classical.choice, Quot.sound; four statements pinned in scripts/revalidation.lean."
+    open_boundary: ""
+    milestone: M1
+    depends_on:
+      - M1-TWO-THIRDS-ABSOLUTE
+    rank: 33.46
+    open_conjecture_reduction: false
+    exit_criteria:
+      - "windowCount_asymptotic, tendsto_windowCount_div : N(T,2T) ~ (T/2pi) log T, pinned in scripts/revalidation.lean."
+      - "eventually_windowCountOnLine_ge_sharp : (2/3 - eps)(T/2pi) log T distinct zeroes on the critical line in (T,2T], pinned in scripts/revalidation.lean."
+      - "eventually_windowCountSimpleOnLine_ge_sharp : the same count of simple zeroes on the line, pinned in scripts/revalidation.lean."
+      - "eventually_windowCountDistinct_ge_sharp : (5/6 - eps)(T/2pi) log T distinct zeroes in (T,2T], pinned in scripts/revalidation.lean."
+    required_gates:
+      - "lake build RiemannHypothesis.Zeta23Sharp"
+      - "./scripts/audit.sh"

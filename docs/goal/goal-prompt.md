@@ -151,6 +151,28 @@ For one selected card:
    claims are rejected. (Rule adopted from the Crouzeix-conjecture agent conversation;
    see `references/README.md`.)
 
+### 2.1 Chained delivery of ready rows
+
+By default one delivery completes one selected card. As an exception, rows that
+form a single dependency chain (each row's `depends_on` contains the previous row)
+and that are **all** `TODO_READY` when the delivery starts may be completed in one
+delivery, in dependency order, subject to all of the following:
+
+1. Every row in the chain keeps its own evidence file, its own exit criteria,
+   and its own adversarial revalidation (§0.2, §0.5); batching never merges or
+   weakens per-row evidence.
+2. The repository gates (`lake build`, `./scripts/audit.sh`) and
+   `python3 scripts/goal_state.py validate` pass after **each** row, not only at
+   the end of the chain.
+3. The chain stops at the first row that cannot reach `DONE_STRONG`; that row is
+   recorded honestly (`DONE_WEAK`, `BLOCKED`, `CLAIM_RISK`, …) and no later row of
+   the chain is started in the same delivery.
+4. A row that is `TODO_NEEDS_DESIGN`, `DISCOVERED`, or a research row (for example
+   `M3-GAP`) is never part of a chain, and a chain never crosses into one.
+5. A second instance of a shared mechanism (for example a second application of
+   a bridge built earlier in the chain) may be appended to the chain only if its
+   row is itself `TODO_READY` and depends on the row that built the mechanism.
+
 All shell commands require explicit timeouts. Never commit unless the user asks.
 Never discard shared worktree changes.
 
