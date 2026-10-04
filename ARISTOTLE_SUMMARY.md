@@ -1,3 +1,35 @@
+# Summary of changes for run e4cb809f-fdf5-40b8-b8c0-e301f5465d9e
+I did the two things you asked for and nothing else. I didn't sharpen any constant, add any task-board row, or change any process rule.
+
+**1. Full build and audit (`lake build && ./scripts/audit.sh`)**
+- `lake build` succeeds on all default targets: **9225 jobs, 0 errors**. That number is after adding the new module; it was 9224 before.
+- `./scripts/audit.sh` exits 0 and prints `OK`.
+  - `scripts/axiom_audit.lean`: **2644 theorems checked, 0 use anything beyond `propext`, `Classical.choice` and `Quot.sound`**.
+  - Pinned axiom list: 833 names, none stale. No `sorry` outside `Challenge.lean`. The list of conditional theorems is unchanged. 171 tasks validate.
+- The modules you named all compiled as part of that full build: `GramInertia`, `PaleyWienerEasy`, `ExponentialType`, `HilbertFreeBound`, `HilbertInequality`, `Zeta23Sharp`. `ExponentialType` and `HilbertFreeBound` only produce linter warnings.
+- **What I could not verify, because it isn't in this snapshot** (its git history is a single `Initial commit`):
+  - `submission/` doesn't exist, so **none of the 8 `submission/` modules were compiled**, here or in a Mathlib checkout.
+  - `HilbertInequality.lean` is not your hand-edited version. It imports only Mathlib and has no `BeurlingSignMajorant`. The build above compiled the snapshot's version.
+  - The `M2-GRAM-INERTIA` and `M2-BEURLING-SELBERG` rows aren't in `docs/goal/task-board.yaml`; they exist only in `docs/goal/task-board-additions-2026-09-24.yaml`.
+- Before the build could run at all I had to fix two environment problems. `lake-manifest.json` was the stale one again (no `Zeta23` entry), so I restored it from `docs/lake-manifest.pinned.json` and ran `lake update -R`. `scripts/audit.sh` wasn't executable (`Permission denied`), so I set its mode to executable.
+
+**2. The `poisson` field of `GramFamily`, proved for a concrete taper**
+New module `RiemannHypothesis/GramPoisson.lean`. It contains no `sorry`, and every theorem uses only the three standard axioms.
+- `stdTaper_poisson_onLine` is the concrete case. The taper is the Fourier transform φ̂ of φ(u) = ϱ((L/2 − |u|)/w), with ϱ = `Real.smoothTransition`, w = 1 and any L ≥ 2. The nodes are τ_k = T + 2πk/L. For every on-line point of any `ReflectionConfig`, Σ_k ‖φ̂(γ_ρ − τ_k)‖² ≤ aL².
+- `taperHat_poisson_onLine` proves the same bound for any taper profile with 0 < w and 2w ≤ L.
+- `params_poisson_onLine` proves it for the vendored library's own taper and grid: `P.phiHat T`, `P.tau T k`, `P.d T`, constant `P.a T * P.L T ^ 2`. Two `rfl` lemmas show these are literally the same objects as above.
+- The proof: on the critical line γ_ρ is real and φ̂ is real there. The vendored Poisson summation gives Σ_{k∈ℤ} φ̂(γ − τ_k)² = aL² exactly, and the sum over k < d is a sub-sum of non-negative terms.
+- `GramFamily.ofTaper` and `GramFamily.ofStdTaper` build a `GramFamily` whose `poisson` and `c_pos` fields are theorems, so no analytic field is assumed. These are the first actual instances of the structure.
+- `GramFamily.ofStdTaper_two_thirds_eventually` applies `two_thirds_eventually` to that family. Its only remaining analytic hypotheses are `htr` and `hfr`.
+
+**Still open (now written into the open boundary of M2-GRAM-INERTIA, in the additions file):** one of the three inputs is now proved and two remain.
+- `htr`: tr Â_t ≥ N_t − o(N_t).
+- `hfr`: ‖Â_t‖_F² ≤ (4/3)N_t + o(N_t).
+
+Both are prime-side estimates for the zeros of ζ. The vendored library proves them for its own matrix `Az`, but transferring them needs D3: a `ReflectionConfig` built from the zeros of ζ whose `gram` is identified with `Az`. I did not attempt D3 this round. The row stays `DONE_WEAK`.
+
+The full report is in `docs/delivery-2026-10-02.md` and the evidence file is `docs/goal/evidence/2026-10-02-m2-gram-poisson.md`. I also added the new module to the root import and its axiom checks to `scripts/audit.sh`. Everything is committed.
+
 # Summary of changes for run 90a2fd91-2861-4509-93ca-8c3189937b47
 这一轮做了一项具体的数学工作，证明已在 Lean 中通过检查。先说明：黎曼猜想本身仍是公开问题，这次没有证明它，也没有声称证明了它。
 

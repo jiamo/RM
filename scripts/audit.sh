@@ -203,6 +203,7 @@ import RiemannHypothesis.CarlsonPowerSaving
 import RiemannHypothesis.CarlsonDensityPowerSaving
 import RiemannHypothesis.Zeta23Verification
 import RiemannHypothesis.Zeta23Sharp
+import RiemannHypothesis.GramPoisson
 import RiemannHypothesis.EventualCountingCriterion
 import RiemannHypothesis.MeanValueWellSpaced
 import RiemannHypothesis.VaughanIdentity
@@ -1008,6 +1009,11 @@ import RiemannHypothesis.HilbertInequality
 #print axioms RiemannHypothesis.eventually_windowCountOnLine_ge_sharp
 #print axioms RiemannHypothesis.eventually_windowCountSimpleOnLine_ge_sharp
 #print axioms RiemannHypothesis.eventually_windowCountDistinct_ge_sharp
+#print axioms RiemannHypothesis.GramInertia.taperHat_poisson
+#print axioms RiemannHypothesis.GramInertia.taperHat_poisson_onLine
+#print axioms RiemannHypothesis.GramInertia.params_poisson_onLine
+#print axioms RiemannHypothesis.GramInertia.stdTaper_poisson_onLine
+#print axioms RiemannHypothesis.GramInertia.GramFamily.ofStdTaper_two_thirds_eventually
 #print axioms RiemannHypothesis.eventually_windowCountSimpleOnLine_ge
 #print axioms RiemannHypothesis.zetaStripForm_of_eventually_windowCountOnLine_eq
 #print axioms RiemannHypothesis.zetaStripForm_iff_eventually_windowCountOnLine_eq
