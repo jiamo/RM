@@ -4866,6 +4866,55 @@ example {p : ℝ} :
         p * Z.toZeroCorpus.windowTotal T ≤ Z.toZeroCorpus.windowOn T) ↔ p ≤ 0.67 :=
   RiemannHypothesis.zeta_rich_corpus_window_ceiling
 
+/-! ## M1-OAI-ZETA-SEVEN-EIGHTHS — the quasi-Riemann hypothesis for `ζ`
+(RiemannHypothesis/QuasiRiemann.lean; native absorption of openai/math family 003, fd4aeeb) -/
+
+/-- `ζ(s) ≠ 0` for `7/8 < re s`, with no pole exception (`riemannZeta 1 ≠ 0` in Mathlib). -/
+example {s : ℂ} (hs : (7 / 8 : ℝ) < s.re) : _root_.riemannZeta s ≠ 0 :=
+  RiemannHypothesis.QuasiRiemann.riemannZeta_ne_zero_of_seven_eighths_lt_re hs
+
+/-- Every non-trivial zero of `ζ` has real part in `[1/8, 7/8]`. -/
+example {s : ℂ} (hz : _root_.riemannZeta s = 0) (htriv : ¬ ∃ n : ℕ, s = -2 * (n + 1)) :
+    (1 / 8 : ℝ) ≤ s.re ∧ s.re ≤ 7 / 8 :=
+  RiemannHypothesis.QuasiRiemann.nontrivial_zero_re_mem hz htriv
+
+/-! ## M1-OAI-DIRICHLET-SEVEN-EIGHTHS — the quasi-Riemann hypothesis for Dirichlet `L`-functions
+(RiemannHypothesis/DirichletSevenEighths.lean) -/
+
+/-- `L(s, χ) ≠ 0` for `7/8 < re s`, every modulus and character, away from the pole. -/
+example {q : ℕ} [NeZero q] (χ : DirichletCharacter ℂ q) {s : ℂ} (hs : (7 / 8 : ℝ) < s.re)
+    (hpole : ¬ (χ = 1 ∧ s = 1)) : _root_.DirichletCharacter.LFunction χ s ≠ 0 :=
+  RiemannHypothesis.DirichletSevenEighths.LFunction_ne_zero_of_seven_eighths_lt_re χ hs hpole
+
+/-! ## M1-OAI-HECKE-SEVEN-EIGHTHS — finite-order Hecke `L`-functions over `ℚ(√-3)`
+(RiemannHypothesis/HeckeSevenEighths.lean) -/
+
+/-- The character model is the upstream one, definitionally. -/
+example (χ : RiemannHypothesis.Family003.SevenEighths.HeckeFamily.Character) (s : ℂ) :
+    RiemannHypothesis.Family003.SevenEighths.HeckeFamily.LFunction χ s =
+      RiemannHypothesis.Family003.SevenEighths.HeckeFamily.continuedLattice χ s / 6 :=
+  RiemannHypothesis.HeckeSevenEighths.LFunction_eq χ s
+
+/-- `L(s, χ) ≠ 0` for `7/8 < re s`, every finite-order Hecke character of `ℚ(√-3)` in the
+upstream model, away from the pole of the principal character. -/
+example (χ : RiemannHypothesis.Family003.SevenEighths.HeckeFamily.Character) {s : ℂ}
+    (hs : (7 / 8 : ℝ) < s.re) (hpole : ¬ (χ.residue = 1 ∧ s = 1)) :
+    RiemannHypothesis.Family003.SevenEighths.HeckeFamily.LFunction χ s ≠ 0 :=
+  RiemannHypothesis.HeckeSevenEighths.LFunction_ne_zero_of_seven_eighths_lt_re χ hs hpole
+
+/-! ## M1-OAI-SIEGEL-ZERO-GAP — a uniform logarithmic gap for real zeroes of real primitive
+Dirichlet `L`-functions (RiemannHypothesis/SiegelZeroGap.lean) -/
+
+/-- An absolute `c > 0` with `c ≤ (1 - β) log q` for every real zero `β ∈ (0, 1)` of `L(s, χ)`,
+`χ` real, primitive and non-trivial modulo `q ≥ 3`. -/
+example : ∃ c : ℝ, 0 < c ∧
+    ∀ (q : ℕ) [NeZero q], 3 ≤ q →
+    ∀ χ : DirichletCharacter ℂ q,
+      χ.IsPrimitive → χ ≠ 1 → (∀ a : ZMod q, (χ a).im = 0) →
+      ∀ β : ℝ, 0 < β → β < 1 → χ.LFunction (β : ℂ) = 0 →
+        c ≤ (1 - β) * Real.log (q : ℝ) :=
+  RiemannHypothesis.SiegelZeroGap.exists_absolute_real_zero_gap
+
 /-! ## The conjecture itself is *not* claimed
 
 There is deliberately no term of type `RiemannHypothesis.ZetaForm` anywhere in this

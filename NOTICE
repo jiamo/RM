@@ -1,0 +1,71 @@
+NOTICE — third-party material in this repository
+=================================================
+
+This repository (a Lean 4 formalization around the Riemann hypothesis) contains material
+written by others.  Each item below is listed with its origin, authors, fixed revision and
+licence.  None of these results is an original discovery of this repository.
+
+1. openai/math, family 003 ("The quasi-Riemann hypothesis")
+   ---------------------------------------------------------
+   Repository:      https://github.com/openai/math
+   Source revision: fd4aeeb2ee4fc729c18d98444fed42fd0529eeeb (main, checked 2026-10-11)
+   Catalogue:       lean/docs/003.md
+   Papers:          "The Quasi-Riemann Hypothesis: A Zero-Free Half-Plane Re(s) > 7/8"
+                    (preprints/The-Quasi-Riemann-Hypothesis-September-30-2026);
+                    "Uniform exclusion of Landau-Siegel zeros"
+                    (preprints/Uniform-exclusion-of-Landau-Siegel-zeros-October-1-2026);
+                    reference manuscript (no separate Lean endpoint):
+                    preprints/The-Quasi-Riemann-Hypothesis-October-5-2026.
+   Authorship:      openai/math states that its manuscripts and proof artifacts were produced
+                    by an internal OpenAI model.  The Lean files carry no per-file copyright or
+                    author line.
+   Licence:         Apache License 2.0 — LICENSES/openai-math-LICENSE.
+   Where:           RiemannHypothesis/Family003/** (except Compat/ and External/), and the public
+                    restatements RiemannHypothesis/QuasiRiemann.lean (and, when completed,
+                    RiemannHypothesis/DirichletSevenEighths.lean, HeckeSevenEighths.lean,
+                    SiegelZeroGap.lean).  Every absorbed module starts with a header naming
+                    github.com/openai/math, its exact original path, family 003, the paper and
+                    the source revision, its proof status (ADAPTED / NEWLY PROVED FOR
+                    COMPATIBILITY / RECONSTRUCTED) and every host-compatibility edit.
+   Map:             docs/family003/source-to-native-map.tsv (upstream module and path ->
+                    native module and path), docs/family003/README.md.
+   Modifications:   module prefix OAI -> RiemannHypothesis.Family003; namespace
+                    OAI -> RiemannHypothesis.Family003; proofs adapted to Lean v4.33.0 and Mathlib
+                    db584cd6d46c92f209a44c0f1c829460d327499d (the upstream pins are Lean v4.34.1
+                    and Mathlib d13f23b723b8a846827a245b89c10fc7d3f11612).
+
+2. PrimeNumberTheoremAnd (via openai/math family 003)
+   --------------------------------------------------
+   Repository:      https://github.com/AlexKontorovich/PrimeNumberTheoremAnd
+   Authors:         Alex Kontorovich and contributors
+   Fixed revision:  c39a751132c88b6e8080b74c74023fd95b3d8be0, with the openai/math compatibility
+                    patch lean/patches/PrimeNumberTheoremAnd-lean4341.patch already applied
+                    (applied once, by openai/math; not re-applied here).
+   Licence:         Apache License 2.0 — LICENSES/PrimeNumberTheoremAnd-LICENSE.
+   Where:           RiemannHypothesis/Family003/External/PrimeNumberTheoremAnd/** .
+                    The modules PrimeNumberTheoremAnd.{Fourier, SmoothExistence, Sobolev} are not
+                    duplicated: the mathematically identical copies already vendored in
+                    vendor/zeta23/Zeta23/FromPNTPlus/ (see vendor/zeta23/NOTICE) are reused.
+
+3. rellich-kondrachov (via openai/math family 003)
+   -----------------------------------------------
+   Repository:      https://github.com/abenenson/rellich-kondrachov
+   Author:          Adam Benenson (Copyright (c) 2026 Adam Benenson)
+   Fixed revision:  70f85d4c1bf99c6e7d61e8be4daa6f3664d08d23, with the openai/math compatibility
+                    patch lean/patches/rellich-kondrachov-lean4341.patch already applied
+                    (applied once, by openai/math; not re-applied here).
+   Licence:         Apache License 2.0 — LICENSES/rellich-kondrachov-LICENSE.
+   Where:           RiemannHypothesis/Family003/External/RellichKondrachov/** .
+
+4. Mathlib and Lean core backports
+   -------------------------------
+   RiemannHypothesis/Family003/Compat/** restates, for this repository's older pins, a few
+   declarations that exist only in newer Mathlib (d13f23b7) or Lean core (v4.34.1):
+   Mathlib (https://github.com/leanprover-community/mathlib4, Apache 2.0,
+   LICENSES/mathlib-LICENSE; e.g. Mathlib/MeasureTheory/Group/Circle.lean, Copyright (c) 2026
+   Terence Tao) and Lean 4 (https://github.com/leanprover/lean4, Apache 2.0,
+   LICENSES/lean4-LICENSE).  Each Compat file names its origin.
+
+5. Zeta23 (pre-existing, unchanged)
+   --------------------------------
+   vendor/zeta23 — see vendor/zeta23/NOTICE and vendor/zeta23/LICENSE.

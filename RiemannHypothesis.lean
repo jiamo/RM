@@ -200,3 +200,7 @@ import RiemannHypothesis.CorpusRichInstance
 import RiemannHypothesis.VinogradovMeanValue
 import RiemannHypothesis.VinogradovCongruencing
 import RiemannHypothesis.VinogradovConditioning
+import RiemannHypothesis.QuasiRiemann
+import RiemannHypothesis.DirichletSevenEighths
+import RiemannHypothesis.HeckeSevenEighths
+import RiemannHypothesis.SiegelZeroGap

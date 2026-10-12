@@ -65,6 +65,18 @@ it. -/
 def isVendorModule (m : Name) : Bool :=
   m == `Zeta23 || (`Zeta23).isPrefixOf m
 
+/-- Is `m` a module of the absorbed openai/math family-003 closure
+(`RiemannHypothesis/Family003/`, see `docs/family003/README.md`)?  Like the vendored `Zeta23`
+library, its `Prop`-valued definitions are *statements* in the sense of step 1, so a theorem of
+this repository that assumes one of them is still reported; but its own theorems are upstream
+intermediate lemmas (about 1400 of them take a `Prop`-valued structure of the upstream
+development as a hypothesis, exactly as a Mathlib lemma takes `[IsDomain R]`) and are not
+listed in step 3.  What the boundary is about is the public endpoints built on that closure
+(`QuasiRiemann`, `DirichletSevenEighths`, `HeckeSevenEighths`, `SiegelZeroGap`); they live
+outside `Family003/`, are scanned, and assume none of these statements. -/
+def isAbsorbedModule (m : Name) : Bool :=
+  (`RiemannHypothesis.Family003).isPrefixOf m
+
 /-- The module a constant was declared in, `none` for the module being elaborated. -/
 def moduleOf? (env : Environment) (n : Name) : Option Name :=
   match env.getModuleIdxFor? n with
@@ -237,7 +249,7 @@ run_cmd do
   -- 3. the theorems one of whose hypotheses mentions an unproved statement
   let mut lines : Array (String × String) := #[]
   for (n, ci) in env.constants.toList do
-    if !n.isInternal && isProjectConst env n then
+    if !n.isInternal && isProjectConst env n && !(moduleOf? env n).any isAbsorbedModule then
       match ci with
       | .thmInfo _ =>
         let apps := (hypotheses ci.type #[]).foldl (fun a d => statementApps statements d a) #[]

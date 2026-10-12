@@ -22,7 +22,6 @@ tasks:
     required_gates:
       - "python3 scripts/goal_state.py validate"
       - "python3 scripts/goal_state.py next"
-
   - id: M0-STATEMENTS
     priority: P0
     status: DONE_STRONG
@@ -42,7 +41,6 @@ tasks:
     required_gates:
       - "lake build"
       - "./scripts/audit.sh"
-
   - id: M0-CONNECTED
     priority: P0
     status: DONE_STRONG
@@ -61,7 +59,6 @@ tasks:
       - "The proof joins every point of the domain to 2 by a preconnected subset, with no sorry."
     required_gates:
       - "lake build RiemannHypothesis.Connected"
-
   - id: M0-ETA
     priority: P0
     status: DONE_STRONG
@@ -80,7 +77,6 @@ tasks:
       - "dirichletEta_eq_tsum_alternating_of_one_lt_re holds for 1 < re s."
     required_gates:
       - "lake build RiemannHypothesis.Eta"
-
   - id: M0-TRIVIAL-ZEROS
     priority: P0
     status: DONE_STRONG
@@ -99,7 +95,6 @@ tasks:
       - "one_sub_two_cpow_ne_zero : re s < 1 -> (1 - 2^(1-s)) != 0."
     required_gates:
       - "lake build RiemannHypothesis.Zeros"
-
   - id: M0-EQUIV
     priority: P0
     status: DONE_STRONG
@@ -121,7 +116,6 @@ tasks:
     required_gates:
       - "lake build"
       - "./scripts/audit.sh"
-
   - id: M0-PARTIAL-STATEMENTS
     priority: P1
     status: DONE_STRONG
@@ -140,7 +134,6 @@ tasks:
       - "No row in this task pretends a statement is a proof."
     required_gates:
       - "lake build RiemannHypothesis.Partial"
-
   - id: M0-AUDIT
     priority: P1
     status: DONE_STRONG
@@ -159,7 +152,6 @@ tasks:
       - "scripts/audit.sh fails when a compared theorem depends on an axiom outside propext, Quot.sound, Classical.choice."
     required_gates:
       - "./scripts/audit.sh"
-
   - id: M0-SYMMETRY
     priority: P1
     status: DONE_STRONG
@@ -182,7 +174,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.Symmetry"
       - "./scripts/audit.sh"
-
   - id: M0-ALTERNATING-STRIP
     priority: P1
     status: DONE_STRONG
@@ -204,7 +195,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.Alternating"
       - "./scripts/audit.sh"
-
   - id: M0-XI
     priority: P1
     status: DONE_STRONG
@@ -225,7 +215,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.Xi"
       - "./scripts/audit.sh"
-
   - id: M1-ABS-CONV-BOUND
     priority: P1
     status: DONE_STRONG
@@ -246,7 +235,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.Bounds"
       - "./scripts/audit.sh"
-
   - id: M1-MEAN-SQUARE
     priority: P1
     status: DONE_STRONG
@@ -269,7 +257,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.MeanSquare"
       - "./scripts/audit.sh"
-
   - id: M1-STRIP-MEAN-SQUARE
     priority: P1
     status: DONE_WEAK
@@ -312,7 +299,6 @@ tasks:
       - "lake build RiemannHypothesis.StripMeanSquareBernoulli"
       - "lake build RiemannHypothesis.StripMeanSquareBohrLandau"
       - "./scripts/audit.sh"
-
   - id: M1-STRIP-MEAN-SQUARE-ASYMPTOTIC
     priority: P1
     status: DONE_WEAK
@@ -341,7 +327,6 @@ tasks:
       - "lake build RiemannHypothesis.StripMeanSquareAsymptotic"
       - "lake build RiemannHypothesis.StripMeanSquareAsymptoticHalf"
       - "./scripts/audit.sh"
-
   - id: M1-FOURTH-MOMENT
     priority: P1
     status: DONE_STRONG
@@ -362,7 +347,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.FourthMoment"
       - "./scripts/audit.sh"
-
   - id: M1-HIGHER-MOMENTS
     priority: P1
     status: DONE_STRONG
@@ -383,7 +367,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.HigherMoments"
       - "./scripts/audit.sh"
-
   - id: M1-MERTENS-ELEMENTARY
     priority: P1
     status: DONE_STRONG
@@ -403,7 +386,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.MertensSums"
       - "./scripts/audit.sh"
-
   - id: M1-LIOUVILLE-ELEMENTARY
     priority: P1
     status: DONE_STRONG
@@ -424,7 +406,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.LiouvilleSums"
       - "./scripts/audit.sh"
-
   - id: M1-REDHEFFER
     priority: P1
     status: DONE_STRONG
@@ -446,7 +427,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.Redheffer"
       - "./scripts/audit.sh"
-
   - id: M1-GROWTH
     priority: P0
     status: DONE_STRONG
@@ -472,7 +452,6 @@ tasks:
     required_gates:
       - "lake build"
       - "./scripts/audit.sh"
-
   - id: M1-STRIP-GROWTH
     priority: P1
     status: DONE_STRONG
@@ -493,7 +472,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.Growth"
       - "./scripts/audit.sh"
-
   - id: M1-MERTENS-341
     priority: P1
     status: DONE_STRONG
@@ -513,7 +491,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.Growth"
       - "./scripts/audit.sh"
-
   - id: M1-EULER-MACLAURIN
     priority: P1
     status: DONE_STRONG
@@ -534,7 +511,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.EulerMaclaurin"
       - "./scripts/audit.sh"
-
   - id: M1-ZETA-LOWER-BOUND
     priority: P1
     status: DONE_STRONG
@@ -556,7 +532,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.ZeroFree"
       - "./scripts/audit.sh"
-
   - id: M1-ZETA-CONTINUATION
     priority: P1
     status: DONE_STRONG
@@ -577,7 +552,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.Continuation"
       - "./scripts/audit.sh"
-
   - id: M1-NEARLINE-LOG-BOUND
     priority: P0
     status: DONE_STRONG
@@ -597,7 +571,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.NearLine"
       - "./scripts/audit.sh"
-
   - id: M1-STRIP-TRIVIAL-BOUND
     priority: P1
     status: DONE_STRONG
@@ -617,7 +590,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.StripGrowth"
       - "./scripts/audit.sh"
-
   - id: M1-IMAGINARY-AXIS
     priority: P1
     status: DONE_STRONG
@@ -638,7 +610,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.ImaginaryAxis"
       - "./scripts/audit.sh"
-
   - id: M1-CONVEXITY
     priority: P0
     status: DONE_STRONG
@@ -660,7 +631,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.Convexity"
       - "./scripts/audit.sh"
-
   - id: M1-CONVEXITY-LOG
     priority: P1
     status: DONE_STRONG
@@ -681,7 +651,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.ConvexityLog"
       - "./scripts/audit.sh"
-
   - id: M1-ZERO-FREE-REGION-NINTH
     priority: P0
     status: DONE_STRONG
@@ -703,7 +672,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.ZeroFreeRegion"
       - "./scripts/audit.sh"
-
   - id: M1-ZERO-LOCATION
     priority: P1
     status: DONE_STRONG
@@ -725,7 +693,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.ZeroLocation"
       - "./scripts/audit.sh"
-
   - id: M1-ZERO-FREE-REGION
     priority: P0
     status: DONE_STRONG
@@ -745,7 +712,6 @@ tasks:
     required_gates:
       - "lake build"
       - "./scripts/audit.sh"
-
   - id: M1-EXPLICIT
     priority: P0
     status: DONE_STRONG
@@ -786,7 +752,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.PrimeCounting"
       - "./scripts/audit.sh"
-
   - id: M1-CHEBYSHEV-BOUNDS
     priority: P1
     status: DONE_STRONG
@@ -809,7 +774,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.ChebyshevLower"
       - "./scripts/audit.sh"
-
   - id: M1-MERTENS-FIRST
     priority: P1
     status: DONE_STRONG
@@ -832,7 +796,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.Mertens"
       - "./scripts/audit.sh"
-
   - id: M1-MERTENS-SECOND
     priority: P1
     status: DONE_STRONG
@@ -854,7 +817,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.MertensSecond"
       - "./scripts/audit.sh"
-
   - id: M1-MERTENS-THIRD
     priority: P1
     status: DONE_STRONG
@@ -876,7 +838,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.MertensThird"
       - "./scripts/audit.sh"
-
   - id: M1-XI-GROWTH
     priority: P1
     status: DONE_STRONG
@@ -900,7 +861,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.XiGrowth"
       - "./scripts/audit.sh"
-
   - id: M1-TWO-THIRDS
     priority: P0
     status: DONE_STRONG
@@ -922,7 +882,6 @@ tasks:
     required_gates:
       - "lake build"
       - "./scripts/audit.sh"
-
   - id: M1-CRITICAL-LINE-ORDINATES
     priority: P1
     status: DONE_STRONG
@@ -945,7 +904,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.CriticalLineOrdinates"
       - "./scripts/audit.sh"
-
   - id: M1-PNT
     priority: P0
     status: DONE_STRONG
@@ -1003,7 +961,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.OffLine"
       - "./scripts/audit.sh"
-
   - id: M1-SIMPLE-EIGHTY
     priority: P1
     status: DONE_STRONG
@@ -1029,7 +986,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.EightyPercentSimple"
       - "./scripts/audit.sh"
-
   - id: M1-SIXTY-SEVEN-CRITICAL
     priority: P1
     status: DONE_STRONG
@@ -1053,7 +1009,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.SixtySevenPercent"
       - "./scripts/audit.sh"
-
   - id: M1-EIGHTY-CRITICAL-ROUTE
     priority: P1
     status: DONE_WEAK
@@ -1077,7 +1032,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.EightyPercentRoute"
       - "./scripts/audit.sh"
-
   - id: M1-ZERO-LOCATION-CLASSICAL
     priority: P1
     status: DONE_STRONG
@@ -1098,7 +1052,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.ZeroLocationClassical"
       - "./scripts/audit.sh"
-
   - id: M1-ZERO-MULTIPLICITY
     priority: P1
     status: DONE_STRONG
@@ -1124,7 +1077,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.ZeroMultiplicityBound"
       - "./scripts/audit.sh"
-
   - id: M1-SPEISER-MULTIPLE
     priority: P1
     status: DONE_STRONG
@@ -1152,7 +1104,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.SpeiserMultiple"
       - "./scripts/audit.sh"
-
   - id: M1-SPEISER-ROLLE
     priority: P1
     status: DONE_STRONG
@@ -1179,7 +1130,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.SpeiserEquivalence"
       - "./scripts/audit.sh"
-
   - id: M1-SPEISER-RH
     priority: P1
     status: DONE_STRONG
@@ -1202,7 +1152,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.SpeiserRH"
       - "./scripts/audit.sh"
-
   - id: M1-RECTANGLE-ARGUMENT-PRINCIPLE
     priority: P1
     status: DONE_STRONG
@@ -1234,7 +1183,6 @@ tasks:
       - "lake build RiemannHypothesis.RectangleZeroCount"
       - "lake build RiemannHypothesis.RectangleArgumentPrinciple"
       - "./scripts/audit.sh"
-
   - id: M1-ZETA-RECTANGLE-COUNT
     priority: P1
     status: DONE_STRONG
@@ -1259,7 +1207,6 @@ tasks:
       - "lake build RiemannHypothesis.ZetaLittlewood"
       - "lake build RiemannHypothesis.ZetaRectangleCount"
       - "./scripts/audit.sh"
-
   - id: M1-LITTLEWOOD-BOUNDS
     priority: P1
     status: DONE_STRONG
@@ -1285,7 +1232,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.LittlewoodZetaBound"
       - "./scripts/audit.sh"
-
   - id: M1-BACKLUND-ARGUMENT
     priority: P1
     status: DONE_STRONG
@@ -1312,7 +1258,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.ZetaDensityLittlewood"
       - "./scripts/audit.sh"
-
   - id: M1-ALMOST-ALL-STRIP
     priority: P1
     status: DONE_STRONG
@@ -1333,7 +1278,6 @@ tasks:
     required_gates:
       - "lake build"
       - "./scripts/audit.sh"
-
   - id: M1-NUMERICAL
     priority: P2
     status: TODO_NEEDS_DESIGN
@@ -1350,7 +1294,6 @@ tasks:
       - "VerifiedUpToHeight (3 * 10^12) is proved by computation."
     required_gates:
       - "lake build"
-
   - id: M1-SPECTRAL-INTERPRETATION
     priority: P1
     status: DONE_STRONG
@@ -1370,7 +1313,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.Spectral"
       - "./scripts/audit.sh"
-
   - id: M2-MEANVALUE
     priority: P0
     status: BLOCKED
@@ -1393,7 +1335,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.DirichletPolyMeanValue"
       - "lake build"
-
   - id: M2-MEANVALUE-WELLSPACED
     priority: P0
     status: DONE_STRONG
@@ -1414,7 +1355,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.MeanValueWellSpaced"
       - "./scripts/audit.sh"
-
   - id: M2-VAUGHAN
     priority: P1
     status: DONE_STRONG
@@ -1434,7 +1374,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.VaughanIdentity"
       - "./scripts/audit.sh"
-
   - id: M3-VINOGRADOV-SYSTEM
     priority: P2
     status: DONE_WEAK
@@ -1453,7 +1392,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.VinogradovMeanValue"
       - "./scripts/audit.sh"
-
   - id: M2-MOLLIFIER
     priority: P0
     status: BLOCKED
@@ -1470,7 +1408,6 @@ tasks:
       - "A mollified first moment for zeta(1/2 + i t) is proved with the expected main term and error."
     required_gates:
       - "lake build"
-
   - id: M2-LEVINSON
     priority: P0
     status: BLOCKED
@@ -1550,7 +1487,6 @@ tasks:
     required_gates:
       - "lake build"
       - "./scripts/audit.sh"
-
   - id: M2-SELBERG-CLT
     priority: P1
     status: TODO_NEEDS_DESIGN
@@ -1567,7 +1503,6 @@ tasks:
       - "SelbergCentralLimit is proved in Lean."
     required_gates:
       - "lake build"
-
   - id: M2-PAIR-CORRELATION
     priority: P2
     status: TODO_NEEDS_DESIGN
@@ -1586,7 +1521,6 @@ tasks:
       - "The unconditional conjecture PairCorrelationConjecture is stated (done) and documented as open."
     required_gates:
       - "lake build"
-
   - id: M3-VINOGRADOV
     priority: P2
     status: TODO_NEEDS_DESIGN
@@ -1603,7 +1537,6 @@ tasks:
       - "The zero-free region is improved to re s > 1 - c / log^c'(|t|) with an exponent below 1."
     required_gates:
       - "lake build"
-
   - id: M3-GAP
     priority: P0
     status: TODO_NEEDS_DESIGN
@@ -1622,7 +1555,6 @@ tasks:
       - "A new theorem about the zeroes of zeta that strictly improves every known partial result, proved in Lean."
     required_gates:
       - "lake build"
-
   - id: M0-ADVERSARIAL-AUDIT
     priority: P1
     status: DONE_STRONG
@@ -1642,7 +1574,6 @@ tasks:
       - "The claims of the closed rows are pinned in Lean (scripts/revalidation.lean) so a weakened or renamed declaration fails the gate."
     required_gates:
       - "./scripts/audit.sh"
-
   - id: M0-OPEN-REDUCTION-RULE
     priority: P1
     status: DONE_STRONG
@@ -1661,7 +1592,6 @@ tasks:
       - "validate checks this syntactically (status DONE_STRONG + open_conjecture_reduction: true is an error)."
     required_gates:
       - "python3 scripts/goal_state.py validate"
-
   - id: M0-MILESTONE-METRIC-RULE
     priority: P1
     status: DONE_STRONG
@@ -1682,7 +1612,6 @@ tasks:
     required_gates:
       - "./scripts/audit.sh"
       - "python3 scripts/goal_state.py validate"
-
   - id: M2-WEIL-POSITIVITY
     priority: P1
     status: DONE_WEAK
@@ -1700,7 +1629,6 @@ tasks:
       - "The equivalence is proved in Lean, using the explicit formula (M1-EXPLICIT) and the positivity of the associated kernel. Only the forward implication is proved (weilFunctional_nonneg_of_zetaForm); the converse is open."
     required_gates:
       - "lake build"
-
   - id: M2-WEIL-TESTFUNCTIONS
     priority: P1
     status: DONE_STRONG
@@ -1721,7 +1649,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.WeilTestFunctions"
       - "./scripts/audit.sh"
-
   - id: M2-DE-BRUIJN-NEWMAN
     priority: P1
     status: DONE_STRONG
@@ -1742,7 +1669,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.DeBruijnNewman"
       - "./scripts/audit.sh"
-
   - id: M2-H0-EQUALS-XI
     priority: P1
     status: DONE_STRONG
@@ -1766,7 +1692,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.FourierXi"
       - "./scripts/audit.sh"
-
   - id: M2-ZERO-COUNT
     priority: P1
     status: DONE_STRONG
@@ -1788,7 +1713,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.ZeroCount"
       - "./scripts/audit.sh"
-
   - id: M2-ZERO-SUM
     priority: P1
     status: DONE_STRONG
@@ -1811,7 +1735,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.ZeroSum"
       - "./scripts/audit.sh"
-
   - id: M2-ZERO-EXPONENT
     priority: P1
     status: DONE_STRONG
@@ -1838,7 +1761,6 @@ tasks:
       - "lake build RiemannHypothesis.ZeroExponent"
       - "lake build RiemannHypothesis.ZeroExponentOne"
       - "./scripts/audit.sh"
-
   - id: M2-ZERO-SUM-LOGSQ
     priority: P2
     status: DONE_STRONG
@@ -1865,7 +1787,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.ZeroSumLogSq"
       - "./scripts/audit.sh"
-
   - id: M2-RVM-CUMULATIVE
     priority: P2
     status: DONE_STRONG
@@ -1893,7 +1814,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.RvMCumulative"
       - "./scripts/audit.sh"
-
   - id: M2-ZERO-ORDINATE
     priority: P2
     status: DONE_STRONG
@@ -1917,7 +1837,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.ZeroOrdinate"
       - "./scripts/audit.sh"
-
   - id: M2-ZERO-GAPS
     priority: P2
     status: DONE_STRONG
@@ -1944,7 +1863,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.ZeroGaps"
       - "./scripts/audit.sh"
-
   - id: M2-ZERO-EXISTS
     priority: P1
     status: DONE_STRONG
@@ -1969,7 +1887,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.ZeroExists"
       - "./scripts/audit.sh"
-
   - id: M2-ZERO-INFINITE
     priority: P1
     status: DONE_STRONG
@@ -1992,7 +1909,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.ZeroInfinite"
       - "./scripts/audit.sh"
-
   - id: M2-ZERO-COUNT-LOWER
     priority: P1
     status: DONE_STRONG
@@ -2016,7 +1932,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.ZeroCountLower"
       - "./scripts/audit.sh"
-
   - id: M2-ZERO-SYMMETRY-COUNT
     priority: P1
     status: DONE_STRONG
@@ -2042,7 +1957,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.ZeroSymmetryCount"
       - "./scripts/audit.sh"
-
   - id: M2-OFF-LINE-QUADRUPLE
     priority: P1
     status: DONE_STRONG
@@ -2068,7 +1982,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.OffLineQuadruple"
       - "./scripts/audit.sh"
-
   - id: M2-MULTIPLICITY-SYMMETRY
     priority: P1
     status: DONE_STRONG
@@ -2094,7 +2007,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.ZeroMultiplicitySymmetry"
       - "./scripts/audit.sh"
-
   - id: M2-BOHR-LANDAU
     priority: P1
     status: DONE_STRONG
@@ -2122,7 +2034,6 @@ tasks:
       - "lake build RiemannHypothesis.ZetaCircleAverage"
       - "lake build RiemannHypothesis.BohrLandau"
       - "./scripts/audit.sh"
-
   - id: M2-LINDELOF-DENSITY
     priority: P1
     status: DONE_WEAK
@@ -2148,7 +2059,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.LindelofDensity"
       - "./scripts/audit.sh"
-
   - id: M2-THREE-CIRCLES
     priority: P2
     status: DONE_STRONG
@@ -2169,7 +2079,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.ThreeCircles"
       - "./scripts/audit.sh"
-
   - id: M2-LINDELOF-FROM-RH
     priority: P1
     status: DONE_WEAK
@@ -2195,7 +2104,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.LindelofFromRH"
       - "./scripts/audit.sh"
-
   - id: M2-LARGE-SIEVE
     priority: P0
     status: DONE_WEAK
@@ -2219,7 +2127,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.LargeSieve"
       - "./scripts/audit.sh"
-
   - id: M2-LARGE-SIEVE-GALLAGHER
     priority: P0
     status: DONE_WEAK
@@ -2242,7 +2149,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.LargeSieveGallagher"
       - "./scripts/audit.sh"
-
   - id: M2-LARGE-SIEVE-FAREY
     priority: P0
     status: DONE_WEAK
@@ -2264,7 +2170,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.LargeSieveFarey"
       - "./scripts/audit.sh"
-
   - id: M2-LARGE-SIEVE-DUAL
     priority: P0
     status: DONE_WEAK
@@ -2286,7 +2191,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.LargeSieveDual"
       - "./scripts/audit.sh"
-
   - id: M2-LARGE-SIEVE-SIFTED
     priority: P0
     status: DONE_WEAK
@@ -2310,7 +2214,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.LargeSieveSifted"
       - "./scripts/audit.sh"
-
   - id: M2-LARGE-SIEVE-SQUAREFREE
     priority: P0
     status: DONE_WEAK
@@ -2338,7 +2241,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.LargeSieveSquarefree"
       - "./scripts/audit.sh"
-
   - id: M2-BRUN-TITCHMARSH
     priority: P0
     status: DONE_WEAK
@@ -2377,7 +2279,6 @@ tasks:
       - "lake build RiemannHypothesis.BrunTitchmarshProgressions"
       - "lake build RiemannHypothesis.BrunTitchmarshSharp"
       - "./scripts/audit.sh"
-
   - id: M2-BRUN-TWIN
     priority: P0
     status: DONE_WEAK
@@ -2404,7 +2305,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.BrunTwinPrimes"
       - "./scripts/audit.sh"
-
   - id: M2-BRUN-CONSTANT
     priority: P0
     status: DONE_WEAK
@@ -2429,7 +2329,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.BrunConstant"
       - "./scripts/audit.sh"
-
   - id: M2-LARGE-VALUES
     priority: P0
     status: DONE_WEAK
@@ -2452,7 +2351,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.HalaszMontgomery"
       - "./scripts/audit.sh"
-
   - id: M2-ZERO-DETECTION
     priority: P0
     status: DONE_WEAK
@@ -2474,7 +2372,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.Mollifier"
       - "./scripts/audit.sh"
-
   - id: M2-MOLLIFIED-MEAN-SQUARE
     priority: P0
     status: DONE_WEAK
@@ -2498,7 +2395,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.MollifiedMeanSquare"
       - "./scripts/audit.sh"
-
   - id: M2-DISCRETE-MEANVALUE
     priority: P0
     status: DONE_WEAK
@@ -2521,7 +2417,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.GallagherDiscrete"
       - "./scripts/audit.sh"
-
   - id: M2-MEANVALUE-MV
     priority: P0
     status: DONE_WEAK
@@ -2544,7 +2439,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.GaussianMeanValue"
       - "./scripts/audit.sh"
-
   - id: M2-DISCRETE-MEANVALUE-MV
     priority: P0
     status: DONE_WEAK
@@ -2566,7 +2460,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.GaussianMeanValueDiscrete"
       - "./scripts/audit.sh"
-
   - id: M2-MOLLIFIED-ZETA-MEAN-SQUARE
     priority: P0
     status: DONE_WEAK
@@ -2590,7 +2483,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.MollifiedZetaCircle"
       - "./scripts/audit.sh"
-
   - id: M2-DENSITY-POWER-SAVING
     priority: P0
     status: DONE_WEAK
@@ -2615,7 +2507,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.CarlsonDensityPowerSaving"
       - "./scripts/audit.sh"
-
   - id: M1-CRITICAL-LINE-MEAN-SQUARE
     priority: P1
     status: DONE_WEAK
@@ -2637,7 +2528,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.CriticalLineMeanSquare"
       - "./scripts/audit.sh"
-
   - id: M1-VAN-DER-CORPUT
     priority: P1
     status: DONE_WEAK
@@ -2658,7 +2548,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.VanDerCorput"
       - "./scripts/audit.sh"
-
   - id: M1-KUSMIN-LANDAU
     priority: P1
     status: DONE_WEAK
@@ -2682,7 +2571,6 @@ tasks:
       - "lake build RiemannHypothesis.KusminLandau"
       - "lake build RiemannHypothesis.KusminLandauGeneral"
       - "./scripts/audit.sh"
-
   - id: M1-VDC-SECOND-DERIVATIVE
     priority: P1
     status: DONE_WEAK
@@ -2706,7 +2594,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.VanDerCorputSums"
       - "./scripts/audit.sh"
-
   - id: M1-WEYL-DIFFERENCING
     priority: P1
     status: DONE_WEAK
@@ -2727,7 +2614,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.WeylDifferencing"
       - "./scripts/audit.sh"
-
   - id: M1-WEYL-QUADRATIC
     priority: P1
     status: DONE_WEAK
@@ -2749,7 +2635,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.WeylQuadratic"
       - "./scripts/audit.sh"
-
   - id: M1-WEYL-EQUIDISTRIBUTION
     priority: P1
     status: DONE_WEAK
@@ -2771,7 +2656,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.WeylEquidistribution"
       - "./scripts/audit.sh"
-
   - id: M1-WEYL-CRITERION
     priority: P1
     status: DONE_WEAK
@@ -2793,7 +2677,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.WeylCriterion"
       - "./scripts/audit.sh"
-
   - id: M1-WEYL-COUNT
     priority: P1
     status: DONE_WEAK
@@ -2815,7 +2698,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.WeylCount"
       - "./scripts/audit.sh"
-
   - id: M1-WEYL-COUNT-GENERAL
     priority: P1
     status: DONE_STRONG
@@ -2837,7 +2719,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.WeylCountGeneral"
       - "./scripts/audit.sh"
-
   - id: M1-WEYL-LINEAR
     priority: P1
     status: DONE_STRONG
@@ -2859,7 +2740,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.WeylLinear"
       - "./scripts/audit.sh"
-
   - id: M1-WEYL-COUNT-ARC
     priority: P1
     status: DONE_STRONG
@@ -2881,7 +2761,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.WeylCountArc"
       - "./scripts/audit.sh"
-
   - id: M1-WEYL-PORTMANTEAU
     priority: P1
     status: DONE_STRONG
@@ -2905,7 +2784,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.WeylPortmanteau"
       - "./scripts/audit.sh"
-
   - id: M1-WEYL-DISCREPANCY
     priority: P1
     status: DONE_WEAK
@@ -2930,7 +2808,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.WeylDiscrepancy"
       - "./scripts/audit.sh"
-
   - id: M1-WEYL-DISCREPANCY-QUADRATIC
     priority: P1
     status: DONE_WEAK
@@ -2954,7 +2831,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.WeylDiscrepancyQuadratic"
       - "./scripts/audit.sh"
-
   - id: M1-WEYL-DISCREPANCY-GENERAL
     priority: P1
     status: DONE_STRONG
@@ -2979,7 +2855,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.WeylDiscrepancyGeneral"
       - "./scripts/audit.sh"
-
   - id: M1-DISCREPANCY
     priority: P1
     status: DONE_STRONG
@@ -3002,7 +2877,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.Discrepancy"
       - "./scripts/audit.sh"
-
   - id: M1-DISCREPANCY-CRITERION
     priority: P1
     status: DONE_STRONG
@@ -3026,7 +2900,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.DiscrepancyCriterion"
       - "./scripts/audit.sh"
-
   - id: M1-KOKSMA
     priority: P1
     status: DONE_WEAK
@@ -3052,7 +2925,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.Koksma"
       - "./scripts/audit.sh"
-
   - id: M1-KOKSMA-VARIATION
     priority: P1
     status: DONE_WEAK
@@ -3075,7 +2947,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.KoksmaVariation"
       - "./scripts/audit.sh"
-
   - id: M1-KOKSMA-LIPSCHITZ-SHARP
     priority: P1
     status: DONE_STRONG
@@ -3100,7 +2971,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.KoksmaSharp"
       - "./scripts/audit.sh"
-
   - id: M1-VDC-SEQUENCE
     priority: P1
     status: DONE_WEAK
@@ -3130,7 +3000,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.VanDerCorputSequence"
       - "./scripts/audit.sh"
-
   - id: M1-WEYL-DIFFERENCE-THEOREM
     priority: P1
     status: DONE_STRONG
@@ -3152,7 +3021,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.WeylDifferenceTheorem"
       - "./scripts/audit.sh"
-
   - id: M1-WEYL-POLYNOMIAL
     priority: P1
     status: DONE_STRONG
@@ -3176,7 +3044,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.WeylPolynomial"
       - "./scripts/audit.sh"
-
   - id: M1-WEYL-POLYNOMIAL-GENERAL
     priority: P1
     status: DONE_STRONG
@@ -3200,7 +3067,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.WeylPolynomialGeneral"
       - "./scripts/audit.sh"
-
   - id: M1-WEYL-QUADRATIC-QUANTITATIVE
     priority: P1
     status: DONE_STRONG
@@ -3225,7 +3091,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.WeylQuadraticQuantitative"
       - "./scripts/audit.sh"
-
   - id: M1-WEYL-MIN-SUM
     priority: P1
     status: DONE_WEAK
@@ -3248,7 +3113,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.WeylMinSum"
       - "./scripts/audit.sh"
-
   - id: M1-WEYL-BADLY-APPROXIMABLE
     priority: P1
     status: DONE_WEAK
@@ -3272,7 +3136,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.WeylBadlyApproximable"
       - "./scripts/audit.sh"
-
   - id: M1-WEYL-CUBIC
     priority: P1
     status: DONE_WEAK
@@ -3298,7 +3161,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.WeylCubic"
       - "./scripts/audit.sh"
-
   - id: M1-WEYL-GENERAL
     priority: P1
     status: DONE_WEAK
@@ -3324,7 +3186,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.WeylGeneral"
       - "./scripts/audit.sh"
-
   - id: M1-WEYL-DIVISOR
     priority: P1
     status: DONE_WEAK
@@ -3349,7 +3210,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.WeylDivisor"
       - "./scripts/audit.sh"
-
   - id: M1-WEYL-CLASSICAL
     priority: P1
     status: DONE_WEAK
@@ -3375,7 +3235,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.WeylClassical"
       - "./scripts/audit.sh"
-
   - id: M1-WEYL-BADLY-GENERAL
     priority: P1
     status: DONE_WEAK
@@ -3399,7 +3258,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.WeylBadlyGeneral"
       - "./scripts/audit.sh"
-
   - id: M1-WEYL-INTERVAL
     priority: P1
     status: DONE_WEAK
@@ -3426,7 +3284,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.WeylInterval"
       - "./scripts/audit.sh"
-
   - id: M1-ZETA-CHI-AFE
     priority: P1
     status: DONE_WEAK
@@ -3452,7 +3309,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.ApproximateFunctionalEquation"
       - "./scripts/audit.sh"
-
   - id: M1-VDC-THIRD-DERIVATIVE
     priority: P1
     status: DONE_WEAK
@@ -3477,7 +3333,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.VanDerCorputThird"
       - "./scripts/audit.sh"
-
   - id: M1-AFE-SUBCONVEXITY
     priority: P1
     status: DONE_WEAK
@@ -3504,7 +3359,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.AFESubconvexity"
       - "./scripts/audit.sh"
-
   - id: M1-SUBCONVEXITY-UNCONDITIONAL
     priority: P1
     status: DONE_WEAK
@@ -3532,7 +3386,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.SubconvexityUnconditional"
       - "./scripts/audit.sh"
-
   - id: M1-SUBCONVEXITY-STRIP
     priority: P1
     status: DONE_WEAK
@@ -3558,7 +3411,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.SubconvexityStrip"
       - "./scripts/audit.sh"
-
   - id: M1-SUBCONVEXITY-LEFT
     priority: P1
     status: DONE_STRONG
@@ -3583,7 +3435,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.SubconvexityLeft"
       - "./scripts/audit.sh"
-
   - id: M1-SUBCONVEXITY-CLOSED-STRIP
     priority: P1
     status: DONE_STRONG
@@ -3606,7 +3457,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.SubconvexityClosedStrip"
       - "./scripts/audit.sh"
-
   - id: M1-SUBCONVEXITY-LOGFREE
     priority: P1
     status: DONE_STRONG
@@ -3629,7 +3479,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.SubconvexityLogFree"
       - "./scripts/audit.sh"
-
   - id: M1-TWO-THIRDS-ABSOLUTE
     priority: P1
     status: DONE_WEAK
@@ -3652,7 +3501,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.Zeta23Verification"
       - "./scripts/audit.sh"
-
   - id: M0-AUDIT-COVERAGE
     priority: P0
     status: DONE_STRONG
@@ -3674,7 +3522,6 @@ tasks:
     required_gates:
       - "lake env lean scripts/axiom_audit.lean"
       - "./scripts/audit.sh"
-
   - id: M3-EVENTUAL-COUNTING-CRITERION
     priority: P1
     status: DONE_WEAK
@@ -3698,7 +3545,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.EventualCountingCriterion"
       - "./scripts/audit.sh"
-
   - id: M2-METHOD-CEILING
     priority: P1
     status: DONE_STRONG
@@ -3721,7 +3567,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.MethodCeiling"
       - "./scripts/audit.sh"
-
   - id: M2-CORPUS-CEILING
     priority: P1
     status: DONE_STRONG
@@ -3747,7 +3592,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.CorpusCeiling"
       - "./scripts/audit.sh"
-
   - id: M2-CORPUS-INSTANCE
     priority: P2
     status: DONE_STRONG
@@ -3768,7 +3612,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.CorpusCeiling"
       - "./scripts/audit.sh"
-
   - id: M3-VINOGRADOV-CONGRUENCING
     priority: P2
     status: DONE_WEAK
@@ -3789,7 +3632,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.VinogradovCongruencing"
       - "./scripts/audit.sh"
-
   - id: M2-HILBERT-INEQUALITY
     priority: P0
     status: DONE_WEAK
@@ -3808,7 +3650,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.HilbertInequality"
       - "./scripts/audit.sh"
-
   - id: M2-CORPUS-RICH
     priority: P2
     status: DONE_STRONG
@@ -3831,7 +3672,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.CorpusRichInstance"
       - "./scripts/audit.sh"
-
   - id: M3-VINOGRADOV-CONDITIONING
     priority: P2
     status: DONE_WEAK
@@ -3852,7 +3692,6 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.VinogradovConditioning"
       - "./scripts/audit.sh"
-
   - id: M3-ATIYAH-VERIFICATION
     priority: P2
     status: TODO_NEEDS_DESIGN
@@ -3871,7 +3710,6 @@ tasks:
       - "The verdict is recorded in an evidence file; either way it does not claim RH."
     required_gates:
       - "lake build"
-
   - id: M3-GEOMETRY
     priority: P1
     status: TODO_NEEDS_DESIGN
@@ -3892,7 +3730,6 @@ tasks:
       - "The row does not claim RH: it documents what is provable (the model and the trace-formula identity) and what is conjectural (the existence of H)."
     required_gates:
       - "lake build"
-
   - id: M4-RH
     priority: P0
     status: TODO_NEEDS_DESIGN
@@ -3931,7 +3768,6 @@ tasks:
       - "GramFamily.two_thirds_eventually : 2/3 from the two prime-side asymptotics."
     required_gates:
       - "lake build RiemannHypothesis.GramInertia"
-
   - id: M2-BEURLING-SELBERG
     priority: P1
     status: TODO_NEEDS_DESIGN
@@ -3971,3 +3807,87 @@ tasks:
     required_gates:
       - "lake build RiemannHypothesis.Zeta23Sharp"
       - "./scripts/audit.sh"
+  - id: M1-OAI-ZETA-SEVEN-EIGHTHS
+    priority: P0
+    status: DONE_STRONG
+    track: absorption/openai-math-003
+    title: "Absorb openai/math family 003: zeta(s) != 0 for Re s > 7/8 (quasi-Riemann hypothesis, zeta case)"
+    latest_evidence: docs/goal/evidence/2026-10-11-m1-oai-seven-eighths.md
+    revalidation: docs/goal/evidence/2026-10-11-m1-oai-seven-eighths.md
+    latest_update: "2026-10-11 DONE_STRONG: the whole import closure of OAI.NumberTheory.DirichletL.Nonvanishing (2940 absorbed modules under RiemannHypothesis/Family003/, plus 18 host-compatibility files under Family003/Compat/) compiles against the host pins (Lean v4.33.0, Mathlib db584cd6): lake build +RiemannHypothesis.Family003.NumberTheory.DirichletL.Nonvanishing, 7019 jobs, no errors. RiemannHypothesis/QuasiRiemann.lean: riemannZeta_ne_zero_of_seven_eighths_lt_re (exact upstream statement, no pole hypothesis; Mathlib's riemannZeta 1 = (gamma - log 4pi)/2 != 0 in both pins, so no discrepancy) and the corollary nontrivial_zero_re_mem (every zero other than -2(n+1) has 1/8 <= re <= 7/8, via riemannZeta_one_sub). Axioms exactly propext, Classical.choice, Quot.sound; statements pinned in scripts/revalidation.lean; module imported from RiemannHypothesis.lean. Edits recorded per file; summary in docs/family003/README.md. Not RH."
+    open_boundary: ""
+    milestone: M1
+    depends_on: []
+    rank: 1
+    open_conjecture_reduction: false
+    exit_criteria:
+      - "RiemannHypothesis.QuasiRiemann.riemannZeta_ne_zero_of_seven_eighths_lt_re : forall {s : C}, (7/8 : R) < s.re -> _root_.riemannZeta s != 0, in RiemannHypothesis/QuasiRiemann.lean, with no extra pole hypothesis (upstream OAI.riemannZeta_ne_zero_of_seven_eighths_lt_re, openai/math fd4aeeb, family 003)."
+      - "Its transitive axiom closure is exactly within propext, Classical.choice, Quot.sound; statement pinned in scripts/revalidation.lean; module imported from RiemannHypothesis.lean."
+      - "Every absorbed module carries the openai/math provenance header; NOTICE and licence texts present; no RH claim is made."
+    required_gates:
+      - "lake build"
+      - "./scripts/audit.sh"
+      - "python3 scripts/goal_state.py validate"
+  - id: M1-OAI-DIRICHLET-SEVEN-EIGHTHS
+    priority: P0
+    status: DONE_STRONG
+    track: absorption/openai-math-003
+    title: "Absorb openai/math family 003: L(s, chi) != 0 for Re s > 7/8, every Dirichlet character, away from the pole"
+    latest_evidence: docs/goal/evidence/2026-10-11-m1-oai-seven-eighths.md
+    revalidation: docs/goal/evidence/2026-10-11-m1-oai-seven-eighths.md
+    latest_update: "2026-10-11 DONE_STRONG: RiemannHypothesis/DirichletSevenEighths.lean, LFunction_ne_zero_of_seven_eighths_lt_re, the upstream OAI.DirichletCharacter.LFunction_ne_zero_of_seven_eighths_lt_re (same module OAI.NumberTheory.DirichletL.Nonvanishing, so the closure is the one compiled for M1-OAI-ZETA-SEVEN-EIGHTHS). Hypotheses: NeZero q, 7/8 < re s, not (chi = 1 and s = 1) only; conclusion about Mathlib's DirichletCharacter.LFunction. Axioms exactly propext, Classical.choice, Quot.sound; statement pinned in scripts/revalidation.lean."
+    open_boundary: ""
+    milestone: M1
+    depends_on:
+      - M1-OAI-ZETA-SEVEN-EIGHTHS
+    rank: 2
+    open_conjecture_reduction: false
+    exit_criteria:
+      - "RiemannHypothesis.DirichletSevenEighths.LFunction_ne_zero_of_seven_eighths_lt_re : forall {q : N} [NeZero q] (chi : DirichletCharacter C q) {s : C}, (7/8 : R) < s.re -> not (chi = 1 and s = 1) -> _root_.DirichletCharacter.LFunction chi s != 0 (upstream OAI.DirichletCharacter.LFunction_ne_zero_of_seven_eighths_lt_re)."
+      - "No unproved detector certificate or analytic band assumption in the public theorem; axioms within propext, Classical.choice, Quot.sound; statement pinned in scripts/revalidation.lean."
+    required_gates:
+      - "lake build"
+      - "./scripts/audit.sh"
+      - "python3 scripts/goal_state.py validate"
+  - id: M1-OAI-HECKE-SEVEN-EIGHTHS
+    priority: P0
+    status: DONE_STRONG
+    track: absorption/openai-math-003
+    title: "Absorb openai/math family 003: finite-order Hecke L-functions over Q(sqrt(-3)) do not vanish for Re s > 7/8"
+    latest_evidence: docs/goal/evidence/2026-10-11-m1-oai-hecke-seven-eighths.md
+    revalidation: docs/goal/evidence/2026-10-11-m1-oai-hecke-seven-eighths.md
+    latest_update: "2026-10-12 DONE_STRONG: RiemannHypothesis/HeckeSevenEighths.lean, LFunction_ne_zero_of_seven_eighths_lt_re (upstream OAI.SevenEighths.HeckeFamily.LFunction_ne_zero_of_seven_eighths_lt_re, module OAI.NumberTheory.DirichletL.Hecke.Nonvanishing) with the ofResidue and ray-class corollaries. Hypotheses: 7/8 < re s and the upstream pole exclusion not (chi.residue = 1 and s = 1) only. The Correspondence section states the character model (O, coordinateElement, elementCoeff, coefficients, continuedLattice, LFunction = continuedLattice / 6, latticeL, completed) as rfl equations. Closure compiled (lake build of the endpoint, exit 0); axioms exactly propext, Classical.choice, Quot.sound; statements pinned in scripts/revalidation.lean."
+    open_boundary: ""
+    milestone: M1
+    depends_on:
+      - M1-OAI-DIRICHLET-SEVEN-EIGHTHS
+    rank: 3
+    open_conjecture_reduction: false
+    exit_criteria:
+      - "RiemannHypothesis.HeckeSevenEighths: native counterpart of OAI.SevenEighths.HeckeFamily.LFunction_ne_zero_of_seven_eighths_lt_re for the upstream finite-order Eisenstein-field Q(sqrt(-3)) character model, with the exception not (chi.residue = 1 and s = 1), plus the ofResidue and ray-character corollaries."
+      - "Source/native character, residue and LFunction correspondences spelled out; no proxy nonvanishing property; axioms within propext, Classical.choice, Quot.sound; statements pinned in scripts/revalidation.lean."
+    required_gates:
+      - "lake build"
+      - "./scripts/audit.sh"
+      - "python3 scripts/goal_state.py validate"
+  - id: M1-OAI-SIEGEL-ZERO-GAP
+    priority: P0
+    status: DONE_STRONG
+    track: absorption/openai-math-003
+    title: "Absorb openai/math family 003: uniform logarithmic real-zero gap for primitive real Dirichlet characters"
+    latest_evidence: docs/goal/evidence/2026-10-12-m1-oai-siegel-zero-gap.md
+    revalidation: docs/goal/evidence/2026-10-12-m1-oai-siegel-zero-gap.md
+    latest_update: "2026-10-12 DONE_STRONG: RiemannHypothesis/SiegelZeroGap.lean, exists_absolute_real_zero_gap and dirichletRealZeroBound, the two theorems of the upstream comparator ComparatorChallenges/SiegelZeros (solution module OAI.NumberTheory.SiegelZeros.Main), with statements identical to the comparator ones and mentioning only Mathlib DirichletCharacter, IsPrimitive and LFunction. The import closure (306 upstream modules, 12 PrimeNumberTheoremAnd SiegelZeros modules, Compat.SiegelBackports) compiles at the host pin after host-compatibility edits recorded in each file header (renames, small simp repairs, heartbeat limits, the stalkIso transparency option); no statement changed. Uniform constant, both parities; axioms exactly propext, Classical.choice, Quot.sound; statement pinned in scripts/revalidation.lean."
+    open_boundary: ""
+    milestone: M1
+    depends_on:
+      - M1-OAI-HECKE-SEVEN-EIGHTHS
+    rank: 4
+    open_conjecture_reduction: false
+    exit_criteria:
+      - "RiemannHypothesis.SiegelZeroGap: exists c : R, 0 < c and for all q : N [NeZero q], 3 <= q -> for all chi : DirichletCharacter C q, chi.IsPrimitive -> chi != 1 -> (forall a, (chi a).im = 0) -> for all beta : R, 0 < beta -> beta < 1 -> chi.LFunction beta = 0 -> c <= (1 - beta) * Real.log q (upstream OAI.SiegelZeros.WeightedTorusJets.exists_absolute_real_zero_gap), and the conjoined-hypothesis form (upstream dirichletRealZeroBound_proof)."
+      - "Uniform constant (not q-dependent), both parities; axioms within propext, Classical.choice, Quot.sound; statements pinned in scripts/revalidation.lean."
+    required_gates:
+      - "lake build"
+      - "./scripts/audit.sh"
+      - "python3 scripts/goal_state.py validate"

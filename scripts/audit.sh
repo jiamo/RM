@@ -204,6 +204,10 @@ import RiemannHypothesis.CarlsonDensityPowerSaving
 import RiemannHypothesis.Zeta23Verification
 import RiemannHypothesis.Zeta23Sharp
 import RiemannHypothesis.GramPoisson
+import RiemannHypothesis.QuasiRiemann
+import RiemannHypothesis.DirichletSevenEighths
+import RiemannHypothesis.HeckeSevenEighths
+import RiemannHypothesis.SiegelZeroGap
 import RiemannHypothesis.EventualCountingCriterion
 import RiemannHypothesis.MeanValueWellSpaced
 import RiemannHypothesis.VaughanIdentity
@@ -1048,6 +1052,14 @@ import RiemannHypothesis.HilbertInequality
 #print axioms RiemannHypothesis.Hilbert.hilbert_inequality_lattice
 #print axioms RiemannHypothesis.Vinogradov.pow_card_le_vinogradovCount
 #print axioms RiemannHypothesis.Vinogradov.vinogradovCount_one_one
+#print axioms RiemannHypothesis.QuasiRiemann.riemannZeta_ne_zero_of_seven_eighths_lt_re
+#print axioms RiemannHypothesis.QuasiRiemann.nontrivial_zero_re_mem
+#print axioms RiemannHypothesis.DirichletSevenEighths.LFunction_ne_zero_of_seven_eighths_lt_re
+#print axioms RiemannHypothesis.HeckeSevenEighths.LFunction_ne_zero_of_seven_eighths_lt_re
+#print axioms RiemannHypothesis.HeckeSevenEighths.LFunction_ofResidue_ne_zero_of_seven_eighths_lt_re
+#print axioms RiemannHypothesis.HeckeSevenEighths.rayCharacter_LFunction_ne_zero_of_seven_eighths_lt_re
+#print axioms RiemannHypothesis.SiegelZeroGap.exists_absolute_real_zero_gap
+#print axioms RiemannHypothesis.SiegelZeroGap.dirichletRealZeroBound
 EOF
 lake env lean .lake/build/axioms.lean > .lake/build/axioms.out
 cat .lake/build/axioms.out
