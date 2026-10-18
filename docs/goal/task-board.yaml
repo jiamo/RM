@@ -1322,8 +1322,9 @@ tasks:
     latest_update: "2026-08-24 DONE_WEAK: the elementary mean value theorem for Dirichlet polynomials with arbitrary coefficients is proved in RiemannHypothesis/DirichletPolyMeanValue.lean. offDiagSum_le bounds the off-diagonal remainder by 8 N (1 + log N) times the diagonal, and abs_integral_normSq_dirichletPoly_sub_diag_le_mvt gives the two-sided statement int_0^T ||D(sigma + i t)||^2 dt = (T + O(N log N)) sum ||a n||^2 n^(-2 sigma) with an explicit constant; integral_normSq_dirichletPoly_mvt_zero is the sigma = 0 form. No sorry; axioms exactly propext, Classical.choice, Quot.sound.
   2026-09-16 BLOCKED: the sharp Montgomery-Vaughan mean-value form and the discrete large sieve over well-spaced points both hinge on Montgomery and Vaughan's generalized Hilbert inequality for δ-separated real families, which is not proved here (see docs/goal/evidence/2026-09-16-round-GHI-blocked.md); the fourth-moment route on the critical line recorded in this row's open boundary is likewise unavailable. This blocks M2-MOLLIFIER, M2-LEVINSON and the linear saving of M2-DENSITY.
   2026-10-18 DONE_WEAK (no longer BLOCKED): the generalized Hilbert inequality is proved (M2-HILBERT-INEQUALITY, RiemannHypothesis/MontgomeryVaughan.lean), and so is the unweighted sharp mean value theorem int_0^T |D(i t)|^2 dt = (T + O(N)) sum |a n|^2 with the constant 2 pi N (M2-MEANVALUE-MV-SHARP). The weighted form (T + O(n)), the large sieve and the fourth moment remain open, as recorded in open_boundary.
-  2026-10-18 (stays DONE_WEAK): the circle large sieve with the constant N + delta^(-1) is proved (M2-LARGE-SIEVE-MV); the Dirichlet-polynomial large sieve, the weighted mean value theorem and the fourth moment remain open."
-    open_boundary: "Two items remain. (i) The generalized Hilbert inequality of Montgomery and Vaughan is proved since 2026-10-18 (M2-HILBERT-INEQUALITY), and so is its unweighted consequence int_0^T |D(i t)|^2 dt = (T + O(N)) sum |a n|^2 with the constant 2 pi N, together with the delta-separated form |int_0^T ||sum_r x_r e^{i lam_r t}||^2 - T sum ||x_r||^2| <= (2 pi / delta) sum ||x_r||^2 (M2-MEANVALUE-MV-SHARP). What remains of (i) is the weighted Montgomery-Vaughan form int_0^T |D(i t)|^2 dt = sum |a n|^2 (T + O(n)), which needs the weighted Hilbert inequality (Montgomery-Vaughan, Theorem 2), and the discrete large sieve over well-spaced points, which needs a duality argument on top of it; neither is formalized in that shape (the circle form of the large sieve, for exponential polynomials at points separated modulo one, is proved since 2026-10-18 with the constant N + delta^(-1) in M2-LARGE-SIEVE-MV; Montgomery's large sieve for Dirichlet polynomials at well-spaced real points, an exit criterion of this row, is not). (ii) The fourth moment of zeta on the critical line needs the approximate functional equation and the divisor correlation sums, which are not available in this repository or in mathlib."
+  2026-10-18 (stays DONE_WEAK): the circle large sieve with the constant N + delta^(-1) is proved (M2-LARGE-SIEVE-MV); the Dirichlet-polynomial large sieve, the weighted mean value theorem and the fourth moment remain open.
+  2026-10-18 (stays DONE_WEAK): the weighted Hilbert inequality (constant 5 sqrt 2, M2-HILBERT-WEIGHTED) and the weighted form int_0^T |D(i t)|^2 dt = sum |a n|^2 (T + O(n)) with |O(n)| <= 10 sqrt 2 (n + 1) (M2-MEANVALUE-WEIGHTED) are proved; Montgomery's large sieve for Dirichlet polynomials and the fourth moment remain open."
+    open_boundary: "Two items remain. (i) The generalized Hilbert inequality of Montgomery and Vaughan is proved since 2026-10-18 (M2-HILBERT-INEQUALITY), and so is its unweighted consequence int_0^T |D(i t)|^2 dt = (T + O(N)) sum |a n|^2 with the constant 2 pi N, together with the delta-separated form |int_0^T ||sum_r x_r e^{i lam_r t}||^2 - T sum ||x_r||^2| <= (2 pi / delta) sum ||x_r||^2 (M2-MEANVALUE-MV-SHARP). The weighted Montgomery-Vaughan form int_0^T |D(i t)|^2 dt = sum |a n|^2 (T + O(n)) is proved since 2026-10-18 with |O(n)| <= 10 sqrt 2 (n + 1) (M2-MEANVALUE-WEIGHTED), from the weighted Hilbert inequality with the constant 5 sqrt 2 in place of Montgomery and Vaughan's 3 pi / 2 (M2-HILBERT-WEIGHTED). What remains of (i) is the discrete large sieve over well-spaced points, which needs a duality argument on top of it and is not formalized in that shape (the circle form of the large sieve, for exponential polynomials at points separated modulo one, is proved since 2026-10-18 with the constant N + delta^(-1) in M2-LARGE-SIEVE-MV; Montgomery's large sieve for Dirichlet polynomials at well-spaced real points, an exit criterion of this row, is not). (ii) The fourth moment of zeta on the critical line needs the approximate functional equation and the divisor correlation sums, which are not available in this repository or in mathlib."
     milestone: M2
     depends_on:
       - M1-GROWTH
@@ -1479,8 +1480,9 @@ tasks:
     latest_update: "2026-09-02 DONE_WEAK with an explicit but quadratic saving: RiemannHypothesis/CarlsonDensityPowerSaving.lean proves ncard_zerosRightOf_le_rpow_explicit, for 1/2 < sigma < 1 there is C > 0 with N(sigma, T) <= C T^(1 - (sigma - 1/2)^2 / 64) for all T >= 1, and the two-sided ncard_zerosOffCriticalLine_le_rpow_explicit with exponent 1 - delta^2/64. The exponent is an explicit function of sigma that degrades continuously to 0 as sigma decreases to 1/2; only the constant C(sigma) is left implicit. This was obtained by tracking the constants of the Carlson chain of M2-DENSITY-POWER-SAVING in theta = sigma_0 - 1/2 instead of discarding them: the Montgomery-Vaughan exponent is exactly 1 - theta/2, the Euler-Maclaurin exponent is at most 1 - theta, the mollifier exponent is now chosen to be theta/8 (previously an inexplicit (1 - max)/4), the mean square then saves at least 3 theta/8, and the three-way balancing of the Jensen counting inequality gives theta^2/16 with theta = (sigma - 1/2)/2. The strengthened existential forms exists_ncard_zerosRightOf_high_le_rpow and exists_ncard_zerosRightOf_le_rpow now carry the conjunct (sigma - 1/2)^2/64 <= c. No sorry; axioms exactly propext, Classical.choice, Quot.sound; the explicit statements are pinned in scripts/revalidation.lean. Previous entry: 2026-08-19 scoped: N(sigma, T) = O(T^(...) ) estimates; implies AlmostAllZerosNearCriticalLine quantitatively.
   2026-09-16 BLOCKED on the linear saving: the Selberg/Ingham shape N(sigma,T)=O(T^{1-c(sigma-1/2)}) originally scoped in this row's open boundary needs the sharp mean value theorem, i.e. Montgomery and Vaughan's generalized Hilbert inequality; the Carlson chain can only deliver the quadratic saving already proved. See docs/goal/evidence/2026-09-16-round-GHI-blocked.md. The quadratic-saving statements already proved remain valid and are unchanged.
   2026-10-18 DONE_WEAK (no longer BLOCKED): the generalized Hilbert inequality and the unweighted sharp mean value theorem (T + O(N)) sum |a_n|^2 are proved (M2-HILBERT-INEQUALITY, M2-MEANVALUE-MV-SHARP). The density argument has not been rerun on them, so the linear saving is still not proved; the quadratic-saving statements are unchanged.
-  2026-10-18 (stays DONE_WEAK): the circle large sieve with the constant N + delta^(-1) is proved (M2-LARGE-SIEVE-MV), but the density argument has not been rerun and needs the Dirichlet-polynomial form; open_boundary updated accordingly."
-    open_boundary: "The saving proved is quadratic in sigma - 1/2, not linear: the Selberg/Ingham shape N(sigma, T) = O(T^(1 - c (sigma - 1/2))) that this row originally scoped is not proved and is not reachable by the Carlson route, whose saving is intrinsically of order (sigma - 1/2)^2 (Carlson's own theorem gives 4 (sigma - 1/2)^2, 256 times better than the constant here). A linear saving needs the sharp mean value theorem or the fourth moment (approximate functional equation plus divisor correlation sums). Since 2026-10-18 the generalized Hilbert inequality of Montgomery and Vaughan and its unweighted mean value theorem (T + O(N)) sum |a_n|^2 are proved (M2-HILBERT-INEQUALITY, M2-MEANVALUE-MV-SHARP), but the density argument has not been rerun on them, and the weighted form (T + O(n)), the large sieve for Dirichlet polynomials in its sharp shape (the circle form with N + delta^(-1) is proved since 2026-10-18, M2-LARGE-SIEVE-MV) and the fourth moment are still missing, which is the gap recorded on M2-MEANVALUE. The constant C(sigma) is not effective, no statement is uniform in sigma, nothing is claimed at sigma = 1/2, and zeroes are counted without multiplicity."
+  2026-10-18 (stays DONE_WEAK): the circle large sieve with the constant N + delta^(-1) is proved (M2-LARGE-SIEVE-MV), but the density argument has not been rerun and needs the Dirichlet-polynomial form; open_boundary updated accordingly.
+  2026-10-18 (stays DONE_WEAK): the weighted mean value theorem sum |a_n|^2 (T + O(n)) is proved (M2-MEANVALUE-WEIGHTED, constant 10 sqrt 2); the density argument has not been rerun on it, so the linear saving is still not proved."
+    open_boundary: "The saving proved is quadratic in sigma - 1/2, not linear: the Selberg/Ingham shape N(sigma, T) = O(T^(1 - c (sigma - 1/2))) that this row originally scoped is not proved and is not reachable by the Carlson route, whose saving is intrinsically of order (sigma - 1/2)^2 (Carlson's own theorem gives 4 (sigma - 1/2)^2, 256 times better than the constant here). A linear saving needs the sharp mean value theorem or the fourth moment (approximate functional equation plus divisor correlation sums). Since 2026-10-18 the generalized Hilbert inequality of Montgomery and Vaughan and its unweighted mean value theorem (T + O(N)) sum |a_n|^2 are proved (M2-HILBERT-INEQUALITY, M2-MEANVALUE-MV-SHARP), and since 2026-10-18 also the weighted form sum |a_n|^2 (T + O(n)) with |O(n)| <= 10 sqrt 2 (n + 1) (M2-HILBERT-WEIGHTED, M2-MEANVALUE-WEIGHTED), but the density argument has not been rerun on them, and the large sieve for Dirichlet polynomials in its sharp shape (the circle form with N + delta^(-1) is proved since 2026-10-18, M2-LARGE-SIEVE-MV) and the fourth moment are still missing, which is the gap recorded on M2-MEANVALUE. The constant C(sigma) is not effective, no statement is uniform in sigma, nothing is claimed at sigma = 1/2, and zeroes are counted without multiplicity."
     milestone: M2
     depends_on:
       - M2-MEANVALUE
@@ -2436,7 +2438,7 @@ tasks:
     title: "The mean value theorem for Dirichlet polynomials in Montgomery-Vaughan shape"
     latest_evidence: docs/goal/evidence/2026-08-29-m2-meanvalue-mv.md
     latest_update: "2026-08-29 DONE_WEAK: RiemannHypothesis/GaussianMeanValue.lean moves the error term of the mean value theorem inside the sum, which is what the Carlson-Ingham density argument needs and what the elementary theorem of M2-MEANVALUE (error 8 N (1 + log N) outside the sum) does not give. The method is the Gaussian majorant rather than Montgomery and Vaughan's generalized Hilbert inequality: on [-T, T] the indicator is at most e exp(-t^2/T^2), and integral_exp_mul_I_gaussian evaluates the resulting oscillatory integral, so integral_normSq_dirichletPoly_gaussian_le bounds the weighted mean square by sqrt(pi) T times the bilinear form with kernel exp(-(T/2)^2 (log n - log m)^2). The row sums of that kernel are bounded by sum_exp_neg_sq_log_sub_le, 1 + 6 m / L for L >= 3, splitting at n = 2m: near the diagonal abs_log_sub_log_ge turns the logarithmic separation into the integer separation and the integral test sum_Icc_exp_neg_mul_sq_le sums the resulting Gaussian, while far from it exp_neg_sq_log_sub_le_far dominates the kernel by m^2/n^2 times a constant that is at most 4/L. Schur's test bilinear_gaussian_kernel_le then gives integral_normSq_dirichletPoly_le_mv: int_(-T)^T ||D(sigma + i t)||^2 dt <= 58 sum_{n <= N} ||a n||^2 n^(-2 sigma) (T + n) for T >= 6, with the corollary integral_Icc_normSq_dirichletPoly_le_mv over [0, T]. No sorry; axioms exactly propext, Classical.choice, Quot.sound."
-    open_boundary: "The constant 58 is not sharp: Montgomery and Vaughan's weighted theorem gives the asymptotically optimal main term (T + O(n)) with constant 1 + o(1) - the generalized Hilbert inequality it rests on is proved since 2026-10-18 (M2-HILBERT-INEQUALITY), and so is the unweighted (T + O(N)) form (M2-MEANVALUE-MV-SHARP), but the weighted inequality is not - and the Gaussian majorant used here loses the factor 12 e sqrt(pi) coming from the majorant e exp(-t^2/T^2) and from the crude count 1 + 6 m / L of the integers within 1/L of log m. Only the shape of the error term is claimed. The bound is about Dirichlet polynomials, not about zeta: no approximation of zeta in the strip is used, so no zero-density estimate follows and no zero is located."
+    open_boundary: "The constant 58 is not sharp: Montgomery and Vaughan's weighted theorem gives the asymptotically optimal main term (T + O(n)) with constant 1 + o(1) - the generalized Hilbert inequality it rests on is proved since 2026-10-18 (M2-HILBERT-INEQUALITY), and so is the unweighted (T + O(N)) form (M2-MEANVALUE-MV-SHARP); since 2026-10-18 the weighted inequality is proved with the constant 5 sqrt 2 instead of 3 pi / 2 (M2-HILBERT-WEIGHTED), and the weighted form at sigma = 0 on [0, T] with the error 10 sqrt 2 (n + 1) |a_n|^2 inside the sum (M2-MEANVALUE-WEIGHTED), but neither has been carried over to this row's statements - and the Gaussian majorant used here loses the factor 12 e sqrt(pi) coming from the majorant e exp(-t^2/T^2) and from the crude count 1 + 6 m / L of the integers within 1/L of log m. Only the shape of the error term is claimed. The bound is about Dirichlet polynomials, not about zeta: no approximation of zeta in the strip is used, so no zero-density estimate follows and no zero is located."
     milestone: M2
     depends_on:
       - M2-MEANVALUE
@@ -3685,7 +3687,7 @@ tasks:
       - "integral_normSq_expSum_eq : the exact formula for the mean square of an exponential sum in terms of the Hilbert form, pinned in scripts/revalidation.lean."
       - "abs_integral_normSq_expSum_sub_le : |int_0^T |sum_r a_r e^(i lam_r t)|^2 dt - T sum |a_r|^2| <= (2 pi / delta) sum |a_r|^2 for delta-separated real frequencies, pinned."
       - "abs_integral_normSq_dirichletPoly_sub_le_two_pi_mul : int_0^T |sum_(n <= N) a_n n^(-it)|^2 dt = (T + O(N)) sum |a_n|^2 with the explicit constant 2 pi N, pinned."
-      - "The row is explicit that the weighted form sum |a_n|^2 (T + O(n)) (Montgomery-Vaughan, Theorem 2) is not proved."
+      - "The row is explicit that the weighted form sum |a_n|^2 (T + O(n)) (Montgomery-Vaughan, Theorem 2) is not proved in this row; it is proved, with 10 sqrt 2 (n + 1) in place of 3 pi n, in M2-MEANVALUE-WEIGHTED."
     required_gates:
       - "lake build RiemannHypothesis.MontgomeryVaughanMeanValue"
       - "lake build"
@@ -3761,6 +3763,79 @@ tasks:
       - "The row is explicit that the exact constant 2 of Montgomery-Vaughan for every y > 1 is not proved and that nothing about zeta follows."
     required_gates:
       - "lake build RiemannHypothesis.BrunTitchmarshTwo"
+      - "lake build"
+      - "./scripts/audit.sh"
+  - id: M2-HILBERT-WEIGHTED
+    priority: P0
+    status: DONE_STRONG
+    track: analysis
+    title: "The weighted Montgomery-Vaughan inequality: |sum_(r <> s) u_r conj(u_s) / (lam_r - lam_s)| <= 5 sqrt 2 sum |u_r|^2 / delta_r for local spacings delta_r"
+    latest_evidence: docs/goal/evidence/2026-10-18-m2-hilbert-weighted.md
+    revalidation: docs/goal/evidence/2026-10-18-m2-hilbert-weighted.md
+    latest_update: "2026-10-18 DONE_STRONG: RiemannHypothesis/MontgomeryVaughanWeighted.lean proves weightedHilbertInequality: for real lam_r, r in Fin n, any weights delta_r > 0 with delta_r <= |lam_r - lam_s| for every s <> r (the stronger of the two forms; it contains delta_r = min_(s <> r) |lam_r - lam_s|), and complex u_r, the norm of sum_r sum_(s <> r) u_r conj(u_s) / (lam_r - lam_s) is at most 5 sqrt 2 sum_r |u_r|^2 / delta_r. The constant 5 sqrt 2 = 7.071... = 2.251... pi is about 1.50 times Montgomery and Vaughan's 3 pi / 2 = 4.712..., which is not proved. hilbertInequality_of_uniform is the uniform case, 5 sqrt 2 / delta, weaker than the sharp pi / delta of generalizedHilbertInequality (unchanged). The proof is Montgomery and Vaughan's eigenvector argument for B r s = sqrt(delta_r delta_s) / (lam_r - lam_s): the weighted partial-fraction identity sum_delta_kernel_mul_kernel and weighted_eigen_identity cancel the column-sum terms; the leftover positive kernel delta_s^(3/2) delta_t^(1/2) / (lam_s - lam_t)^2 is not Schur-bounded with any power weight and is bounded instead by the discrete maximal inequality of RiemannHypothesis/LocalSpacingMaximal.lean (disjoint intervals, summation by parts, a Vitali covering and the layer-cake formula: sum_sum_mul_div_sq_le, constant 2 sqrt 120, and delta_mul_sum_delta_div_sq_le, constant 6), so mu^2 <= 6 + 4 sqrt 120 < 50 (weighted_eigenvalue_sq_le); the spectral theorem for i B and Cauchy-Schwarz finish as in MontgomeryVaughan.lean. The vendored Zeta23 library has the same inequality with the constant 13 (Zeta23.MV.mvDiag_thirteen); it is not used. No sorry, no new hypothesis; axioms exactly propext, Classical.choice, Quot.sound."
+    open_boundary: ""
+    milestone: M2
+    depends_on:
+      - M2-HILBERT-INEQUALITY
+    rank: 50.98849
+    exit_criteria:
+      - "sum_sum_mul_div_sq_le : sum_(s <> t) a_s a_t delta_s^(3/2) delta_t^(1/2) / (lam_s - lam_t)^2 <= 2 sqrt 120 sum a_t^2 for a >= 0 and local spacings delta, pinned in scripts/revalidation.lean."
+      - "weighted_eigenvalue_sq_le : every eigenvalue i mu of sqrt(delta_r delta_s) / (lam_r - lam_s) has mu^2 <= 50, pinned."
+      - "weightedHilbertInequality : the weighted inequality with the constant 5 sqrt 2, for any delta_r > 0 with delta_r <= |lam_r - lam_s| (s <> r), pinned in scripts/revalidation.lean, axioms pinned in scripts/audit.sh."
+      - "hilbertInequality_of_uniform : the uniform case 5 sqrt 2 / delta, pinned."
+      - "The row is explicit that Montgomery and Vaughan's constant 3 pi / 2 is not proved (5 sqrt 2 is about 1.50 times it)."
+    required_gates:
+      - "lake build RiemannHypothesis.MontgomeryVaughanWeighted"
+      - "lake build"
+      - "./scripts/audit.sh"
+  - id: M2-MEANVALUE-WEIGHTED
+    priority: P0
+    status: DONE_STRONG
+    track: analysis
+    title: "The weighted Montgomery-Vaughan mean value theorem: int_0^T |sum_(n <= N) a_n n^(-it)|^2 dt = sum |a_n|^2 (T + O(n))"
+    latest_evidence: docs/goal/evidence/2026-10-18-m2-meanvalue-weighted.md
+    revalidation: docs/goal/evidence/2026-10-18-m2-meanvalue-weighted.md
+    latest_update: "2026-10-18 DONE_STRONG: RiemannHypothesis/MontgomeryVaughanWeightedMeanValue.lean derives the weighted mean value theorem from weightedHilbertInequality (M2-HILBERT-WEIGHTED) exactly as round 1 derived the unweighted one, reusing integral_normSq_expSum_eq. abs_integral_normSq_expSum_sub_le_weighted: for real lam_r and delta_r > 0 with delta_r <= |lam_r - lam_s| (s <> r), |int_0^T |sum_r a_r e^(i lam_r t)|^2 dt - T sum |a_r|^2| <= 10 sqrt 2 sum |a_r|^2 / delta_r. log_local_spacing: for 1 <= n <> m <= N, |log n - log m| >= 1/(n + 1), from log x >= 1 - 1/x. abs_integral_normSq_dirichletPoly_sub_le_weighted: |int_0^T ||dirichletPoly a N (i t)||^2 dt - T sum_(n <= N) |a_n|^2| <= 10 sqrt 2 sum_(n <= N) (n + 1) |a_n|^2 for all coefficients, all N and all real T, i.e. sum |a_n|^2 (T + O(n)); with Montgomery and Vaughan's 3 pi / 2 the constant would be 3 pi, the one proved is 10 sqrt 2 = 14.14... = 4.50... pi. The round-1 theorem with 2 pi N is unchanged. No sorry, no new hypothesis; axioms exactly propext, Classical.choice, Quot.sound."
+    open_boundary: ""
+    milestone: M2
+    depends_on:
+      - M2-HILBERT-WEIGHTED
+      - M2-MEANVALUE-MV-SHARP
+    rank: 50.98850
+    exit_criteria:
+      - "abs_integral_normSq_expSum_sub_le_weighted : the weighted mean value theorem for exponential sums with the constant 10 sqrt 2, pinned in scripts/revalidation.lean."
+      - "log_local_spacing : the local spacing 1/(n + 1) of -log n, pinned."
+      - "abs_integral_normSq_dirichletPoly_sub_le_weighted : int_0^T |sum_(n <= N) a_n n^(-it)|^2 dt = sum |a_n|^2 (T + O(n)) with |O(n)| <= 10 sqrt 2 (n + 1), pinned in scripts/revalidation.lean, axioms pinned in scripts/audit.sh."
+      - "The row is explicit that the constant 3 pi of Montgomery and Vaughan is not proved and that nothing about zeta follows."
+    required_gates:
+      - "lake build RiemannHypothesis.MontgomeryVaughanWeightedMeanValue"
+      - "lake build"
+      - "./scripts/audit.sh"
+  - id: M2-LARGE-SIEVE-WEIGHTED
+    priority: P0
+    status: DONE_STRONG
+    track: modern
+    title: "The weighted cosecant inequality and the weighted large sieve: sum_i (N + C delta_i^(-1))^(-1) |sum_(n < N) a_n e(n t_i)|^2 <= sum |a_n|^2 with C = 5 sqrt 2 / pi"
+    latest_evidence: docs/goal/evidence/2026-10-18-m2-large-sieve-weighted.md
+    revalidation: docs/goal/evidence/2026-10-18-m2-large-sieve-weighted.md
+    latest_update: "2026-10-18 DONE_STRONG: RiemannHypothesis/HilbertCosecantWeighted.lean proves weightedCosecantInequality: for real alpha_r, r in Fin n, weights delta_r > 0 with delta_r <= intDist (alpha_r - alpha_s) for every s <> r, and complex u_r, the norm of sum_r sum_(s <> r) u_r conj(u_s) / sin (pi (alpha_r - alpha_s)) is at most (5 sqrt 2 / pi) sum_r |u_r|^2 / delta_r, with weightedCosecantInequality_finset over a finite set of any index type; no hypothesis delta <= 1/2 is needed. The constant 5 sqrt 2 / pi = 2.2508... is the one that follows from 5 sqrt 2 in M2-HILBERT-WEIGHTED, about 1.50 times Montgomery and Vaughan's 3/2, which is not proved. The proof is the weighted eigenvector argument with the kernel sqrt(delta_r delta_s) csc pi(alpha_r - alpha_s) (sum_delta_csc_mul_csc, wcsc_eigen_identity, wcsc_eigenvalue_sq_le: mu^2 <= 50/pi^2), where the two maximal bounds are transferred to the circle by periodization: the points alpha_t + m, |m| <= M, carry the spacings delta_t, LocalSpacingMaximal.lean (generalized here from Fin n to any Fintype index) applies to them, and the expansion pi^2 csc^2 pi x = sum_m (x + m)^(-2) (hasSum_inv_sq_int) with a window argument gives delta_mul_sum_delta_cscSq_le (6/pi^2) and sum_sum_cscSq_le (2 sqrt 120/pi^2). RiemannHypothesis/LargeSieveWeighted.lean then follows the route of large_sieve_mv: large_sieve_weighted_dual, sum_(n < N) |sum_i x_i e(n t_i)|^2 <= sum_i (N + (5 sqrt 2/pi) delta_i^(-1)) |x_i|^2, and by the duality principle large_sieve_weighted, sum_i (N + (5 sqrt 2/pi) delta_i^(-1))^(-1) |sum_(n < N) a_n e(n t_i)|^2 <= sum_(n < N) |a_n|^2. The Brun-Titchmarsh theorem in progressions pi(x; q, a) <= 2x/(phi(q) log(x/q)) that this feeds is not proved. No sorry, no new hypothesis; axioms exactly propext, Classical.choice, Quot.sound."
+    open_boundary: ""
+    milestone: M2
+    depends_on:
+      - M2-HILBERT-WEIGHTED
+      - M2-HILBERT-CSC
+      - M2-LARGE-SIEVE-MV
+    rank: 50.98851
+    exit_criteria:
+      - "sum_sum_cscSq_le : sum_(s <> t) a_s a_t delta_s^(3/2) delta_t^(1/2) csc^2 pi(alpha_s - alpha_t) <= (2 sqrt 120 / pi^2) sum a_t^2, pinned in scripts/revalidation.lean."
+      - "weightedCosecantInequality : the weighted cosecant inequality with the constant 5 sqrt 2 / pi, pinned in scripts/revalidation.lean, axioms pinned in scripts/audit.sh."
+      - "weightedCosecantInequality_finset : the same over a finite set of an arbitrary index type, pinned."
+      - "large_sieve_weighted_dual : the dual weighted large sieve with N + (5 sqrt 2 / pi) delta_i^(-1), pinned."
+      - "large_sieve_weighted : the weighted large sieve, pinned in scripts/revalidation.lean, axioms pinned in scripts/audit.sh."
+      - "The row is explicit that Montgomery and Vaughan's constant 3/2 and their Brun-Titchmarsh theorem in progressions are not proved, and that nothing about zeta follows."
+    required_gates:
+      - "lake build RiemannHypothesis.HilbertCosecantWeighted"
+      - "lake build RiemannHypothesis.LargeSieveWeighted"
       - "lake build"
       - "./scripts/audit.sh"
   - id: M2-CORPUS-RICH

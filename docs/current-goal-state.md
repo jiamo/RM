@@ -13,8 +13,8 @@
 
 - Milestone: `M1`
 - Tasks in milestone: `98`
-- Tasks total: `181`
-- `DONE_STRONG`: `112`
+- Tasks total: `184`
+- `DONE_STRONG`: `115`
 - `DONE_WEAK`: `58`
 - `TODO_NEEDS_DESIGN`: `10`
 - `CLAIM_RISK`: `1`

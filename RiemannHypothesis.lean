@@ -207,5 +207,10 @@ import RiemannHypothesis.SiegelZeroGap
 import RiemannHypothesis.MontgomeryVaughan
 import RiemannHypothesis.MontgomeryVaughanMeanValue
 import RiemannHypothesis.HilbertCosecant
+import RiemannHypothesis.LocalSpacingMaximal
+import RiemannHypothesis.MontgomeryVaughanWeighted
+import RiemannHypothesis.MontgomeryVaughanWeightedMeanValue
+import RiemannHypothesis.HilbertCosecantWeighted
+import RiemannHypothesis.LargeSieveWeighted
 import RiemannHypothesis.LargeSieveMV
 import RiemannHypothesis.BrunTitchmarshTwo

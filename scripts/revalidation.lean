@@ -4924,6 +4924,120 @@ example {ι : Type*} [DecidableEq ι] (s : Finset ι) (t : ι → ℝ) (x : ι �
       ≤ δ⁻¹ * ∑ i ∈ s, ‖x i‖ ^ 2 :=
   RiemannHypothesis.HilbertCosecant.cosecantHilbertInequality_finset s t x hδ hδ2 hsep
 
+/-! ## M2-HILBERT-WEIGHTED — the weighted Montgomery–Vaughan inequality
+(RiemannHypothesis/MontgomeryVaughanWeighted.lean) -/
+
+/-- **The weighted generalized Hilbert inequality** with the constant `5 √2` (Montgomery and
+Vaughan prove `3π/2`), for weights `δ_r > 0` with `δ_r ≤ |λ_r - λ_s|` for every `s ≠ r`. -/
+example {n : ℕ} (lam δ : Fin n → ℝ) (hδ : ∀ r, 0 < δ r)
+    (hsep : ∀ r s : Fin n, r ≠ s → δ r ≤ |lam r - lam s|) (u : Fin n → ℂ) :
+    ‖∑ r, ∑ s ∈ Finset.univ.erase r, u r * (starRingEnd ℂ) (u s) /
+        ((lam r : ℂ) - (lam s : ℂ))‖
+      ≤ 5 * Real.sqrt 2 * ∑ r, ‖u r‖ ^ 2 / δ r :=
+  RiemannHypothesis.MontgomeryVaughanWeighted.weightedHilbertInequality lam δ hδ hsep u
+
+/-- The unweighted check: all `δ_r = δ` gives `5 √2 / δ`, weaker than the sharp `π / δ`. -/
+example {n : ℕ} (lam : Fin n → ℝ) (u : Fin n → ℂ) {δ : ℝ} (hδ : 0 < δ)
+    (hsep : ∀ r s : Fin n, r ≠ s → δ ≤ |lam r - lam s|) :
+    ‖∑ r, ∑ s ∈ Finset.univ.erase r, u r * (starRingEnd ℂ) (u s) /
+        ((lam r : ℂ) - (lam s : ℂ))‖
+      ≤ 5 * Real.sqrt 2 / δ * ∑ r, ‖u r‖ ^ 2 :=
+  RiemannHypothesis.MontgomeryVaughanWeighted.hilbertInequality_of_uniform lam u hδ hsep
+
+/-- The eigenvalue bound `μ² ≤ 50` for the weighted kernel `√δ_r √δ_s / (λ_r - λ_s)`. -/
+example {n : ℕ} {lam δ : Fin n → ℝ} (hδ : ∀ r, 0 < δ r)
+    (hsep : ∀ r s : Fin n, r ≠ s → δ r ≤ |lam r - lam s|)
+    (v : Fin n → ℂ) (μ : ℝ) (hv0 : ∃ r, v r ≠ 0)
+    (hv : ∀ r, ∑ s, ((Real.sqrt (δ r) * Real.sqrt (δ s) * (1 / (lam r - lam s)) : ℝ) : ℂ) * v s
+      = Complex.I * μ * v r) :
+    μ ^ 2 ≤ 50 :=
+  RiemannHypothesis.MontgomeryVaughanWeighted.weighted_eigenvalue_sq_le hδ hsep v μ hv0 hv
+
+/-- The maximal-function bound for the positive kernel `δ_s^{3/2} δ_t^{1/2} / (λ_s - λ_t)²`. -/
+example {n : ℕ} {lam δ : Fin n → ℝ} (hδ : ∀ r, 0 < δ r)
+    (hsep : ∀ r s : Fin n, r ≠ s → δ r ≤ |lam r - lam s|) {a : Fin n → ℝ}
+    (ha : ∀ t, 0 ≤ a t) :
+    ∑ s, ∑ t ∈ Finset.univ.erase s,
+        a s * a t * (δ s * Real.sqrt (δ s) * Real.sqrt (δ t)) / (lam s - lam t) ^ 2
+      ≤ 2 * Real.sqrt 120 * ∑ t, a t ^ 2 :=
+  RiemannHypothesis.LocalSpacing.sum_sum_mul_div_sq_le hδ hsep ha
+
+/-! ## M2-MEANVALUE-WEIGHTED — the weighted Montgomery–Vaughan mean value theorem
+(RiemannHypothesis/MontgomeryVaughanWeightedMeanValue.lean) -/
+
+/-- The weighted mean value theorem for exponential sums, with the constant `10 √2`. -/
+example {n : ℕ} (lam δ : Fin n → ℝ) (hδ : ∀ r, 0 < δ r)
+    (hsep : ∀ r s : Fin n, r ≠ s → δ r ≤ |lam r - lam s|) (a : Fin n → ℂ) (T : ℝ) :
+    |(∫ t in (0 : ℝ)..T, ‖∑ r, a r * Complex.exp ((t : ℂ) * (lam r : ℂ) * Complex.I)‖ ^ 2)
+        - T * ∑ r, ‖a r‖ ^ 2|
+      ≤ 10 * Real.sqrt 2 * ∑ r, ‖a r‖ ^ 2 / δ r :=
+  RiemannHypothesis.MontgomeryVaughanWeighted.abs_integral_normSq_expSum_sub_le_weighted
+    lam δ hδ hsep a T
+
+/-- The local spacing of `-log n` at `n = k + 1` is at least `1 / (n + 1)`. -/
+example {N : ℕ} (k l : Fin N) (hkl : k ≠ l) :
+    1 / ((k : ℕ) + 2 : ℝ) ≤ |-Real.log ((k : ℕ) + 1 : ℝ) - -Real.log ((l : ℕ) + 1 : ℝ)| :=
+  RiemannHypothesis.MontgomeryVaughanWeighted.log_local_spacing k l hkl
+
+/-- **`∫₀ᵀ |∑_{n ≤ N} a_n n^{-it}|² dt = ∑ |a_n|² (T + O(n))`**, with the constant `10 √2`. -/
+example (a : ℕ → ℂ) (N : ℕ) (T : ℝ) :
+    |(∫ t in (0 : ℝ)..T, ‖RiemannHypothesis.dirichletPoly a N ((t : ℂ) * Complex.I)‖ ^ 2)
+        - T * ∑ n ∈ Finset.Icc 1 N, ‖a n‖ ^ 2|
+      ≤ 10 * Real.sqrt 2 * ∑ n ∈ Finset.Icc 1 N, ((n : ℝ) + 1) * ‖a n‖ ^ 2 :=
+  RiemannHypothesis.MontgomeryVaughanWeighted.abs_integral_normSq_dirichletPoly_sub_le_weighted
+    a N T
+
+/-! ## M2-LARGE-SIEVE-WEIGHTED — the weighted cosecant inequality and the weighted large sieve
+(RiemannHypothesis/HilbertCosecantWeighted.lean, RiemannHypothesis/LargeSieveWeighted.lean) -/
+
+/-- The periodized bound for the positive kernel `δ_s^{3/2} δ_t^{1/2} csc² π(α_s − α_t)`. -/
+example {n : ℕ} {α δ : Fin n → ℝ} (hδ : ∀ r, 0 < δ r) (hδ1 : ∀ r, δ r ≤ 1)
+    (hsep : ∀ r s, r ≠ s → δ r ≤ RiemannHypothesis.LargeSieve.intDist (α r - α s))
+    {a : Fin n → ℝ} (ha : ∀ t, 0 ≤ a t) :
+    ∑ s, ∑ t ∈ Finset.univ.erase s,
+        a s * a t * (δ s * Real.sqrt (δ s) * Real.sqrt (δ t))
+          * (1 / Real.sin (Real.pi * (α s - α t))) ^ 2
+      ≤ 2 * Real.sqrt 120 / Real.pi ^ 2 * ∑ t, a t ^ 2 :=
+  RiemannHypothesis.HilbertCosecantWeighted.sum_sum_cscSq_le hδ hδ1 hsep ha
+
+/-- **The weighted cosecant inequality** with the constant `5 √2 / π` (Montgomery and Vaughan:
+`3/2`), for weights `δ_r > 0` with `δ_r ≤ intDist (α_r − α_s)` for every `s ≠ r`. -/
+example {n : ℕ} (α δ : Fin n → ℝ) (hδ : ∀ r, 0 < δ r)
+    (hsep : ∀ r s : Fin n, r ≠ s → δ r ≤ RiemannHypothesis.LargeSieve.intDist (α r - α s))
+    (u : Fin n → ℂ) :
+    ‖∑ r, ∑ s ∈ Finset.univ.erase r,
+        u r * (starRingEnd ℂ) (u s) / (Real.sin (Real.pi * (α r - α s)) : ℂ)‖
+      ≤ 5 * Real.sqrt 2 / Real.pi * ∑ r, ‖u r‖ ^ 2 / δ r :=
+  RiemannHypothesis.HilbertCosecantWeighted.weightedCosecantInequality α δ hδ hsep u
+
+/-- The same over a finite set of an arbitrary index type. -/
+example {ι : Type*} [DecidableEq ι] (s : Finset ι) (t δ : ι → ℝ) (x : ι → ℂ)
+    (hδ : ∀ i ∈ s, 0 < δ i)
+    (hsep : ∀ i ∈ s, ∀ j ∈ s, i ≠ j → δ i ≤ RiemannHypothesis.LargeSieve.intDist (t i - t j)) :
+    ‖∑ i ∈ s, ∑ j ∈ s.erase i,
+        x i * (starRingEnd ℂ) (x j) / (Real.sin (Real.pi * (t i - t j)) : ℂ)‖
+      ≤ 5 * Real.sqrt 2 / Real.pi * ∑ i ∈ s, ‖x i‖ ^ 2 / δ i :=
+  RiemannHypothesis.HilbertCosecantWeighted.weightedCosecantInequality_finset s t δ x hδ hsep
+
+/-- The dual weighted large sieve. -/
+example {ι : Type*} {s : Finset ι} {t δ : ι → ℝ} (hδ : ∀ i ∈ s, 0 < δ i)
+    (hsep : ∀ i ∈ s, ∀ j ∈ s, i ≠ j → δ i ≤ RiemannHypothesis.LargeSieve.intDist (t i - t j))
+    (x : ι → ℂ) (N : ℕ) :
+    ∑ n ∈ Finset.range N,
+        ‖∑ i ∈ s, x i * RiemannHypothesis.KusminLandau.e2pi ((n : ℝ) * t i)‖ ^ 2
+      ≤ ∑ i ∈ s, ((N : ℝ) + 5 * Real.sqrt 2 / Real.pi / δ i) * ‖x i‖ ^ 2 :=
+  RiemannHypothesis.LargeSieveWeighted.large_sieve_weighted_dual hδ hsep x N
+
+/-- **The weighted large sieve**
+`∑_i (N + (5 √2 / π) δ_i⁻¹)⁻¹ ‖∑_{n<N} a_n e(n t_i)‖² ≤ ∑_{n<N} ‖a_n‖²`. -/
+example {ι : Type*} {s : Finset ι} {t δ : ι → ℝ} (hδ : ∀ i ∈ s, 0 < δ i)
+    (hsep : ∀ i ∈ s, ∀ j ∈ s, i ≠ j → δ i ≤ RiemannHypothesis.LargeSieve.intDist (t i - t j))
+    (a : ℕ → ℂ) (N : ℕ) :
+    ∑ i ∈ s, ((N : ℝ) + 5 * Real.sqrt 2 / Real.pi / δ i)⁻¹
+        * ‖∑ n ∈ Finset.range N, a n * RiemannHypothesis.KusminLandau.e2pi ((n : ℝ) * t i)‖ ^ 2
+      ≤ ∑ n ∈ Finset.range N, ‖a n‖ ^ 2 :=
+  RiemannHypothesis.LargeSieveWeighted.large_sieve_weighted hδ hsep a N
+
 /-! ## M2-LARGE-SIEVE-MV — the large sieve with the constant `N + δ⁻¹`
 (RiemannHypothesis/LargeSieveMV.lean) -/
 
