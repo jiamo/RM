@@ -228,6 +228,9 @@ import RiemannHypothesis.HilbertCosecantWeighted
 import RiemannHypothesis.LargeSieveWeighted
 import RiemannHypothesis.LargeSieveMV
 import RiemannHypothesis.BrunTitchmarshTwo
+import RiemannHypothesis.VanDerCorputSumIntegral
+import RiemannHypothesis.ZetaPartialSum
+import RiemannHypothesis.HardyLittlewoodMeanSquare
 
 #print axioms RiemannHypothesisConjecture.zeta_strip_iff_eta
 #print axioms RiemannHypothesisConjecture.zeta_iff_zeta_strip
@@ -1106,6 +1109,22 @@ import RiemannHypothesis.BrunTitchmarshTwo
 #print axioms RiemannHypothesis.HeckeSevenEighths.rayCharacter_LFunction_ne_zero_of_seven_eighths_lt_re
 #print axioms RiemannHypothesis.SiegelZeroGap.exists_absolute_real_zero_gap
 #print axioms RiemannHypothesis.SiegelZeroGap.dirichletRealZeroBound
+#print axioms RiemannHypothesis.VdcSumIntegral.ampDefect_mul_e2pi_sub_one
+#print axioms RiemannHypothesis.VdcSumIntegral.antitoneOn_cotDefect
+#print axioms RiemannHypothesis.VdcSumIntegral.norm_unit_sub_integral_le
+#print axioms RiemannHypothesis.VdcSumIntegral.norm_sum_mul_e2pi_sub_integral_le
+#print axioms RiemannHypothesis.VdcSumIntegral.norm_sum_mul_e2pi_sub_integral_le_of_antitone
+#print axioms RiemannHypothesis.VdcSumIntegral.norm_sum_e2pi_sub_integral_le
+#print axioms RiemannHypothesis.ZetaPartialSum.vdcKappa_half_inv_pi_lt_two
+#print axioms RiemannHypothesis.ZetaPartialSum.norm_sum_cpow_sub_integral_le
+#print axioms RiemannHypothesis.ZetaPartialSum.norm_riemannZeta_sub_partialSum_le
+#print axioms RiemannHypothesis.ZetaPartialSum.norm_riemannZeta_criticalLine_sub_partialSum_le
+#print axioms RiemannHypothesis.HardyLittlewood.abs_integral_criticalPoly_sub_le
+#print axioms RiemannHypothesis.HardyLittlewood.abs_integral_block_criticalPoly_sub_le
+#print axioms RiemannHypothesis.HardyLittlewood.norm_zeta_sub_criticalPoly_le
+#print axioms RiemannHypothesis.HardyLittlewood.abs_integral_block_zeta_sub_le
+#print axioms RiemannHypothesis.HardyLittlewood.exists_abs_integral_normSq_riemannZeta_sub_le
+#print axioms RiemannHypothesis.HardyLittlewood.tendsto_integral_normSq_riemannZeta_div
 EOF
 lake env lean .lake/build/axioms.lean > .lake/build/axioms.out
 cat .lake/build/axioms.out

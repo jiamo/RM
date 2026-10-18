@@ -12,16 +12,16 @@
 ## Active milestone
 
 - Milestone: `M1`
-- Tasks in milestone: `98`
-- Tasks total: `184`
-- `DONE_STRONG`: `115`
+- Tasks in milestone: `100`
+- Tasks total: `187`
+- `DONE_STRONG`: `118`
 - `DONE_WEAK`: `58`
 - `TODO_NEEDS_DESIGN`: `10`
 - `CLAIM_RISK`: `1`
 - Next dependency-ready task: `M1-STRIP-MEAN-SQUARE`
 - Next title: The mean square of zeta on a vertical line inside the critical strip
 - Next depends on: `M1-MEAN-SQUARE` (DONE_STRONG), `M1-ZETA-CONTINUATION` (DONE_STRONG)
-- Next open boundary: What remains open is not the range of sigma but the strength of the statement. (i) The rows of this file state an upper bound of the correct order of magnitude; the asymptotic int_0^T ||zeta||^2 ~ zeta(2 sigma) T is now proved in the same range sigma > 1/2 by M1-STRIP-MEAN-SQUARE-ASYMPTOTIC, but no second order term is extracted. (ii) Nothing is claimed on the critical line sigma = 1/2, where the Hardy-Littlewood asymptotic int_0^T ||zeta(1/2 + i t)||^2 ~ T log T needs the approximate functional equation; the constant produced here blows up as sigma decreases to 1/2, as it must. (iii) Higher moments (the fourth moment of Ingham) are not addressed. (iv) No consequence for the zeroes is drawn: the density theorem M1-ALMOST-ALL-STRIP needs the mean square of zeta against a mollifier, not of zeta alone.
+- Next open boundary: What remains open is not the range of sigma but the strength of the statement. (i) The rows of this file state an upper bound of the correct order of magnitude; the asymptotic int_0^T ||zeta||^2 ~ zeta(2 sigma) T is now proved in the same range sigma > 1/2 by M1-STRIP-MEAN-SQUARE-ASYMPTOTIC, but no second order term is extracted. (ii) Nothing is claimed by this row on the critical line sigma = 1/2, where the Hardy-Littlewood asymptotic int_0^T ||zeta(1/2 + i t)||^2 ~ T log T is proved separately by M1-HARDY-LITTLEWOOD-MEAN-SQUARE, without the approximate functional equation; the constant produced here blows up as sigma decreases to 1/2, as it must. (iii) Higher moments (the fourth moment of Ingham) are not addressed. (iv) No consequence for the zeroes is drawn: the density theorem M1-ALMOST-ALL-STRIP needs the mean square of zeta against a mollifier, not of zeta alone.
 
 ## Active task table
 

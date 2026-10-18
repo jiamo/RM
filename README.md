@@ -354,6 +354,9 @@ is precisely the equivalence `ZetaStripForm ↔ EtaForm`.
 | [`RiemannHypothesis/LargeSieveWeighted.lean`](RiemannHypothesis/LargeSieveWeighted.lean) | **the weighted large sieve**: `∑_i (N + (5√2/π) δ_i⁻¹)⁻¹ ‖∑_{n<N} a_n e(n t_i)‖² ≤ ∑ ‖a_n‖²` for points with local spacings `δ_i ≤ intDist(t_i − t_j)` (`large_sieve_weighted`), with its dual form (`large_sieve_weighted_dual`), by the route of `large_sieve_mv` |
 | [`RiemannHypothesis/LargeSieveMV.lean`](RiemannHypothesis/LargeSieveMV.lean) | **the large sieve with the sharp constant `N + δ⁻¹`** (Montgomery–Vaughan): `∑_i ‖∑_{n<N} a_n e(n t_i)‖² ≤ (N + δ⁻¹) ∑_n ‖a_n‖²` under the hypotheses of `large_sieve_gallagher` (`large_sieve_mv`), its dual form, and `admissibleConstant_large_sieve_mv`; Selberg's `N − 1 + δ⁻¹` is not proved |
 | [`RiemannHypothesis/BrunTitchmarshTwo.lean`](RiemannHypothesis/BrunTitchmarshTwo.lean) | **Brun–Titchmarsh with the constant `2 + ε`**: the sharp large sieve `N + δ⁻¹` carried down the chain — Farey large sieve with `Q² + N` (`large_sieve_farey_mv`), Montgomery's sieve with `Q² + N` (`card_le_sifted_squarefree_mv`), the level bound `(Q² + y)/log Q + Q + 1` (`card_primes_Ico_le_of_level_mv`), and `#{p prime : x ≤ p < x + y} ≤ (2 + ε) y / log y` for `y ≥ Y(ε)` and all `x` (`card_primes_Ico_le_two`), also in progressions with `(2 + ε)(q/φ(q)) Y / log Y` (`card_primes_Ico_mod_le_two`); Montgomery–Vaughan's exact `2` for all `y > 1` is not proved |
+| [`RiemannHypothesis/VanDerCorputSumIntegral.lean`](RiemannHypothesis/VanDerCorputSumIntegral.lean) | **van der Corput's sum-versus-integral lemma** (Titchmarsh, Lemma 4.8): for real `f` on `[a, a + N]` with `f'` monotone and `\|f'\| ≤ θ < 1`, `‖∑_{n<N} e(f(a+n)) − ∫_a^{a+N} e(f(u)) du‖ ≤ 5/2 + 4πθ + 5κ(θ)/2` with `κ(θ) = 1/(πθ) − cot(πθ)` (`norm_sum_e2pi_sub_integral_le`), and with a nonnegative decreasing weight `g` the error `(5/2 + 4πθ + 5κ(θ)/2) g(a)` (`norm_sum_mul_e2pi_sub_integral_le`, `…_of_antitone`; Lemma 4.10), by linear interpolation on unit intervals and Abel summation against `cot(πΔ) − 1/(πΔ)`, which is decreasing on `(−1, 1)` |
+| [`RiemannHypothesis/ZetaPartialSum.lean`](RiemannHypothesis/ZetaPartialSum.lean) | **`ζ` and its partial sums** (Titchmarsh, Theorem 4.11): `‖ζ(s) − ∑_{n ≤ x} n^(−s) + x^(1−s)/(1 − s)‖ ≤ 11 x^(−σ)` for `σ > 0`, `s ≠ 1` and real `x > 0` with `\|t\| ≤ x` (`norm_riemannZeta_sub_partialSum_le`; on the critical line `norm_riemannZeta_criticalLine_sub_partialSum_le`), from the Euler–Maclaurin representation and the weighted sum-versus-integral lemma |
+| [`RiemannHypothesis/HardyLittlewoodMeanSquare.lean`](RiemannHypothesis/HardyLittlewoodMeanSquare.lean) | **the Hardy–Littlewood mean square on the critical line**: `\|∫_T^{2T} \|ζ(1/2 + it)\|² dt − T log T\| ≤ 584 T` for `T ≥ 1` (`abs_integral_block_zeta_sub_le`), `∫₀ᵀ \|ζ(1/2 + it)\|² dt = T log T + O(T)` for `T ≥ 1` (`exists_abs_integral_normSq_riemannZeta_sub_le`, existential constant) and `(∫₀ᵀ \|ζ(1/2 + it)\|² dt)/(T log T) → 1` (`tendsto_integral_normSq_riemannZeta_div`), by Theorem 4.11 with `x = 2T` and the weighted mean value theorem (Montgomery–Vaughan's route); Ingham's second term `(2γ − 1 − log 2π) T` is not proved |
 | [`RiemannHypothesis/VaughanIdentity.lean`](RiemannHypothesis/VaughanIdentity.lean) | **Vaughan's identity**: `Λ = Λ_{≤U} + log ∗ μ_{≤V} − Λ_{≤U} ∗ ζ ∗ μ_{≤V} + Λ_{>U} ∗ ζ ∗ μ_{>V}` in the Dirichlet convolution ring, with the three terms written out as divisor sums and summed against an arbitrary weight — the combinatorial input of Bombieri–Vinogradov; no bilinear estimate is proved |
 | [`RiemannHypothesis/VinogradovMeanValue.lean`](RiemannHypothesis/VinogradovMeanValue.lean) | **the Vinogradov system**: the solution count `J_{s,k}(X)`, its translation and dilation invariances, the diagonal lower bound `X^s ≤ J` and the non-vacuity check `J_{1,1}(X) = X`; the mean value theorem itself is recorded as a `Prop` and is not proved |
 | [`RiemannHypothesis/VinogradovCongruencing.lean`](RiemannHypothesis/VinogradovCongruencing.lean) | **the congruencing step**: the descent `vinogradovEq_of_affine` (if `(r + q u, r + q v)` solves the Vinogradov system, so does `(u, v)`), the decomposition of `J_{s,k}(X)` along the residue profiles modulo `q`, and the congruencing lemma `C_{s,k}(X; q, r) ≤ J_{s,k}(X/q + 1)` with its summed and iterated forms; the induction of efficient congruencing, and hence the mean value theorem, is not formalized |
@@ -458,8 +461,10 @@ theorem meanSquareAvg_tendsto_tsum_moebius {σ : ℝ} (hσ : 1 < σ) :
 
 the first with `aₙ = 1`, so that the diagonal is `∑ (n+1)^(−2σ) = ζ(2σ)`, the second with
 `aₙ = μ(n)`, the Möbius series being `1/ζ` there.  Only the half-plane of absolute convergence
-is covered: the second moment on the critical line, `∫₀ᵀ |ζ(1/2 + i t)|² dt ∼ T log T`, needs
-the approximate functional equation and is not proved here.
+is covered here: the second moment on the critical line, `∫₀ᵀ |ζ(1/2 + i t)|² dt ∼ T log T`, is
+proved by another route in
+[`RiemannHypothesis/HardyLittlewoodMeanSquare.lean`](RiemannHypothesis/HardyLittlewoodMeanSquare.lean),
+without the approximate functional equation.
 
 ## The fourth moment of `ζ`
 
@@ -582,8 +587,10 @@ the limit being `ζ(2σ)` by `ofReal_tsum_natAddOne_rpow_neg_eq_riemannZeta`.  T
 instead of writing out a fixed number of Bernoulli corrections:
 [`StripMeanSquareBohrLandau.lean`](RiemannHypothesis/StripMeanSquareBohrLandau.lean) gives the
 upper bound and [`StripMeanSquareAsymptoticHalf.lean`](RiemannHypothesis/StripMeanSquareAsymptoticHalf.lean)
-the asymptotic, for every `1/2 < σ < 1`.  Nothing is proved on the critical line, where
-`(1/T) ∫₀ᵀ |ζ(1/2 + i t)|² dt ∼ log T` needs the approximate functional equation.
+the asymptotic, for every `1/2 < σ < 1`.  On the critical line these files prove nothing;
+there `(1/T) ∫₀ᵀ |ζ(1/2 + i t)|² dt ∼ log T` is proved in
+[`HardyLittlewoodMeanSquare.lean`](RiemannHypothesis/HardyLittlewoodMeanSquare.lean), without the
+approximate functional equation.
 
 ## The Bohr–Landau zero-density theorem
 

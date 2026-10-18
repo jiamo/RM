@@ -33,12 +33,15 @@ The route is the one of the Bohr–Landau file, carried out at `σ = 1/2`:
 
 ## Scope
 
-The sharp Hardy–Littlewood asymptotic `∼ T log T` is **not** proved here, and neither is the
-`O(T log T)` upper bound: the loss `T^ε` is exactly the loss of the elementary Euler–Maclaurin
-approximation of `ζ` on the critical line, which needs a Dirichlet polynomial of length
-`N ≍ T^(1+1/(2m−1))` where the approximate functional equation would allow `N ≍ T`.  Removing
-it needs the first-derivative test for exponential sums (van der Corput / Kusmin–Landau), which
-is not formalized here.  Nothing about the location of the zeroes is deduced.
+The sharp Hardy–Littlewood asymptotic `∼ T log T` is **not** proved in this file, and neither
+is the `O(T log T)` upper bound: the loss `T^ε` is exactly the loss of the elementary
+Euler–Maclaurin approximation of `ζ` on the critical line, which needs a Dirichlet polynomial of
+length `N ≍ T^(1+1/(2m−1))`.  Both are proved in `RiemannHypothesis/HardyLittlewoodMeanSquare.lean`
+by another route, without the approximate functional equation: Titchmarsh's Theorem 4.11
+(`RiemannHypothesis/ZetaPartialSum.lean`, from the sum-versus-integral lemma of
+`RiemannHypothesis/VanDerCorputSumIntegral.lean`) gives a polynomial of length `N ≍ T` with error
+`O(T^(-1/2))`, and the weighted mean value theorem replaces the unweighted `T + O(N)` used here.
+Nothing about the location of the zeroes is deduced.
 
 ## Main results
 

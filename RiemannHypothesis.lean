@@ -214,3 +214,6 @@ import RiemannHypothesis.HilbertCosecantWeighted
 import RiemannHypothesis.LargeSieveWeighted
 import RiemannHypothesis.LargeSieveMV
 import RiemannHypothesis.BrunTitchmarshTwo
+import RiemannHypothesis.VanDerCorputSumIntegral
+import RiemannHypothesis.ZetaPartialSum
+import RiemannHypothesis.HardyLittlewoodMeanSquare

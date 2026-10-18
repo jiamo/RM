@@ -35,8 +35,9 @@ an interval which is non-empty exactly when `m (2σ - 1) > 1 - σ`, hence for so
   with `|∫₀ᵀ ‖ζ(σ + i t)‖² dt - ζ(2σ) T| ≤ C T^(1-c)` for every `T ≥ 1`.
 * `tendsto_integral_normSq_riemannZeta_div_half` — the same statement in limit form.
 
-Nothing is claimed on the critical line `σ = 1/2`, where the mean square is `~ T log T` and needs
-the approximate functional equation; and no consequence for the zeroes is drawn.
+Nothing is claimed in this file on the critical line `σ = 1/2`, where the mean square is
+`~ T log T` (proved in `RiemannHypothesis/HardyLittlewoodMeanSquare.lean`, without the
+approximate functional equation); and no consequence for the zeroes is drawn.
 -/
 
 noncomputable section

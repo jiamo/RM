@@ -5169,6 +5169,95 @@ example : ∃ c : ℝ, 0 < c ∧
         c ≤ (1 - β) * Real.log (q : ℝ) :=
   RiemannHypothesis.SiegelZeroGap.exists_absolute_real_zero_gap
 
+/-! ## M1-VDC-SUM-INTEGRAL — van der Corput's sum-versus-integral lemma
+(RiemannHypothesis/VanDerCorputSumIntegral.lean) -/
+
+/-- **Titchmarsh, Lemma 4.8**: `f'` monotone, `|f'| ≤ θ < 1` ⟹ the exponential sum is its
+integral up to `5/2 + 4πθ + 5κ(θ)/2`, `κ(θ) = 1/(πθ) − cot(πθ)`. -/
+example {a θ : ℝ} {N : ℕ} {f f' : ℝ → ℝ} (hθ : θ < 1)
+    (hf : ∀ u ∈ Set.Icc a (a + N), HasDerivAt f (f' u) u)
+    (hmono : MonotoneOn f' (Set.Icc a (a + N)) ∨ AntitoneOn f' (Set.Icc a (a + N)))
+    (hbd : ∀ u ∈ Set.Icc a (a + N), |f' u| ≤ θ) :
+    ‖∑ n ∈ Finset.range N, RiemannHypothesis.KusminLandau.e2pi (f (a + n))
+        - ∫ u in a..a + N, RiemannHypothesis.KusminLandau.e2pi (f u)‖
+      ≤ 5 / 2 + 4 * Real.pi * θ + 5 / 2 * RiemannHypothesis.VdcSumIntegral.vdcKappa θ :=
+  RiemannHypothesis.VdcSumIntegral.norm_sum_e2pi_sub_integral_le hθ hf hmono hbd
+
+/-- `κ(θ) = −(cot(πθ) − 1/(πθ))`. -/
+example (θ : ℝ) : RiemannHypothesis.VdcSumIntegral.vdcKappa θ
+    = -(Real.cos (Real.pi * θ) / Real.sin (Real.pi * θ) - 1 / (Real.pi * θ)) := rfl
+
+/-- **The weighted form** (Titchmarsh, Lemma 4.10), `f'` increasing. -/
+example {a θ : ℝ} {N : ℕ} {f f' g : ℝ → ℝ} (hθ : θ < 1)
+    (hf : ∀ u ∈ Set.Icc a (a + N), HasDerivAt f (f' u) u)
+    (hmono : MonotoneOn f' (Set.Icc a (a + N)))
+    (hbd : ∀ u ∈ Set.Icc a (a + N), |f' u| ≤ θ)
+    (hg : ContinuousOn g (Set.Icc a (a + N)))
+    (hg0 : ∀ u ∈ Set.Icc a (a + N), 0 ≤ g u)
+    (hganti : AntitoneOn g (Set.Icc a (a + N))) :
+    ‖∑ n ∈ Finset.range N, (g (a + n) : ℂ) * RiemannHypothesis.KusminLandau.e2pi (f (a + n))
+        - ∫ u in a..a + N, (g u : ℂ) * RiemannHypothesis.KusminLandau.e2pi (f u)‖
+      ≤ (5 / 2 + 4 * Real.pi * θ + 5 / 2 * RiemannHypothesis.VdcSumIntegral.vdcKappa θ) * g a :=
+  RiemannHypothesis.VdcSumIntegral.norm_sum_mul_e2pi_sub_integral_le hθ hf hmono hbd hg hg0 hganti
+
+/-- The weighted form, `f'` decreasing. -/
+example {a θ : ℝ} {N : ℕ} {f f' g : ℝ → ℝ} (hθ : θ < 1)
+    (hf : ∀ u ∈ Set.Icc a (a + N), HasDerivAt f (f' u) u)
+    (hanti : AntitoneOn f' (Set.Icc a (a + N)))
+    (hbd : ∀ u ∈ Set.Icc a (a + N), |f' u| ≤ θ)
+    (hg : ContinuousOn g (Set.Icc a (a + N)))
+    (hg0 : ∀ u ∈ Set.Icc a (a + N), 0 ≤ g u)
+    (hganti : AntitoneOn g (Set.Icc a (a + N))) :
+    ‖∑ n ∈ Finset.range N, (g (a + n) : ℂ) * RiemannHypothesis.KusminLandau.e2pi (f (a + n))
+        - ∫ u in a..a + N, (g u : ℂ) * RiemannHypothesis.KusminLandau.e2pi (f u)‖
+      ≤ (5 / 2 + 4 * Real.pi * θ + 5 / 2 * RiemannHypothesis.VdcSumIntegral.vdcKappa θ) * g a :=
+  RiemannHypothesis.VdcSumIntegral.norm_sum_mul_e2pi_sub_integral_le_of_antitone hθ hf hanti hbd
+    hg hg0 hganti
+
+/-! ## M1-ZETA-PARTIAL-SUM — `ζ` and its partial sums (Titchmarsh, Theorem 4.11)
+(RiemannHypothesis/ZetaPartialSum.lean) -/
+
+/-- `κ(1/(2π)) = 2 − cot(1/2) < 2`. -/
+example : RiemannHypothesis.VdcSumIntegral.vdcKappa (1 / (2 * Real.pi)) < 2 :=
+  RiemannHypothesis.ZetaPartialSum.vdcKappa_half_inv_pi_lt_two
+
+/-- **Theorem 4.11**: `‖ζ(s) − ∑_{n ≤ x} n^(-s) + x^(1-s)/(1 − s)‖ ≤ 11 x^(-σ)` for `σ > 0`,
+`s ≠ 1`, `x > 0`, `|t| ≤ x`. -/
+example {s : ℂ} (hs0 : 0 < s.re) (hs1 : s ≠ 1) {x : ℝ} (hx : 0 < x) (hxt : |s.im| ≤ x) :
+    ‖riemannZeta s - ∑ n ∈ Finset.Icc 1 ⌊x⌋₊, (n : ℂ) ^ (-s) + (x : ℂ) ^ (1 - s) / (1 - s)‖
+      ≤ 11 * x ^ (-s.re) :=
+  RiemannHypothesis.ZetaPartialSum.norm_riemannZeta_sub_partialSum_le hs0 hs1 hx hxt
+
+/-- **Theorem 4.11 on the critical line.** -/
+example {t x : ℝ} (hx : 0 < x) (hxt : |t| ≤ x) :
+    ‖riemannZeta (((1 / 2 : ℝ) : ℂ) + (t : ℂ) * Complex.I)
+        - ∑ n ∈ Finset.Icc 1 ⌊x⌋₊, (n : ℂ) ^ (-(((1 / 2 : ℝ) : ℂ) + (t : ℂ) * Complex.I))
+        + (x : ℂ) ^ (((1 / 2 : ℝ) : ℂ) - (t : ℂ) * Complex.I)
+          / (((1 / 2 : ℝ) : ℂ) - (t : ℂ) * Complex.I)‖
+      ≤ 11 * x ^ (-(1 / 2 : ℝ)) :=
+  RiemannHypothesis.ZetaPartialSum.norm_riemannZeta_criticalLine_sub_partialSum_le hx hxt
+
+/-! ## M1-HARDY-LITTLEWOOD-MEAN-SQUARE — `∫₀ᵀ |ζ(1/2 + it)|² dt = T log T + O(T)`
+(RiemannHypothesis/HardyLittlewoodMeanSquare.lean) -/
+
+/-- **The dyadic block**: `|∫_T^{2T} |ζ(1/2 + it)|² dt − T log T| ≤ 584 T` for `T ≥ 1`. -/
+example {T : ℝ} (hT : 1 ≤ T) :
+    |(∫ t in T..2 * T, ‖riemannZeta (((1 / 2 : ℝ) : ℂ) + (t : ℂ) * Complex.I)‖ ^ 2)
+        - T * Real.log T| ≤ 584 * T :=
+  RiemannHypothesis.HardyLittlewood.abs_integral_block_zeta_sub_le hT
+
+/-- **The Hardy–Littlewood mean square**: `∫₀ᵀ |ζ(1/2 + it)|² dt = T log T + O(T)`. -/
+example : ∃ C : ℝ, 0 < C ∧ ∀ T : ℝ, 1 ≤ T →
+    |(∫ t in (0 : ℝ)..T, ‖riemannZeta (((1 / 2 : ℝ) : ℂ) + (t : ℂ) * Complex.I)‖ ^ 2)
+      - T * Real.log T| ≤ C * T :=
+  RiemannHypothesis.HardyLittlewood.exists_abs_integral_normSq_riemannZeta_sub_le
+
+/-- **The limit form**: `(∫₀ᵀ |ζ(1/2 + it)|² dt) / (T log T) → 1`. -/
+example : Filter.Tendsto (fun T : ℝ => (∫ t in (0 : ℝ)..T,
+      ‖riemannZeta (((1 / 2 : ℝ) : ℂ) + (t : ℂ) * Complex.I)‖ ^ 2) / (T * Real.log T))
+    Filter.atTop (nhds 1) :=
+  RiemannHypothesis.HardyLittlewood.tendsto_integral_normSq_riemannZeta_div
+
 /-! ## The conjecture itself is *not* claimed
 
 There is deliberately no term of type `RiemannHypothesis.ZetaForm` anywhere in this
