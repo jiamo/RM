@@ -2,10 +2,11 @@
 
 `lake build` builds the whole project: 12,510 jobs, including the vendored `Zeta23` library and
 the native absorption `RiemannHypothesis/Family003`. (At commit `5960dab` the `Challenge`
-target fails: `Challenge.lean` refers to theorems of `RiemannHypothesis.Main` without importing
-it. Every other target builds.) If it does not build for you, the cause is almost certainly one
-of the two below. Both are dependency-resolution problems, not Lean problems. Memory is the
-third constraint; see "Resources" below.
+target failed, because `Challenge.lean` referred to theorems of `RiemannHypothesis.Main` without
+importing it. This was fixed on 2026-10-18 by importing `RiemannHypothesis.Main` in
+`Challenge.lean`; every target now builds.) If it does not build for you, the cause is almost
+certainly one of the two below. Both are dependency-resolution problems, not Lean problems.
+Memory is the third constraint; see "Resources" below.
 
 ## 0. The manifest is tracked
 

@@ -206,3 +206,6 @@ import RiemannHypothesis.HeckeSevenEighths
 import RiemannHypothesis.SiegelZeroGap
 import RiemannHypothesis.MontgomeryVaughan
 import RiemannHypothesis.MontgomeryVaughanMeanValue
+import RiemannHypothesis.HilbertCosecant
+import RiemannHypothesis.LargeSieveMV
+import RiemannHypothesis.BrunTitchmarshTwo

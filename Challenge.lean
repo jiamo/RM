@@ -57,8 +57,9 @@ namespace RiemannHypothesisConjecture
 
 open Complex
 
-/-- **The Riemann hypothesis** (zeta form): every zero of `ζ` other than the trivial zeroes
-`-2(n+1)` and the pole at `s = 1` lies on the critical line `re s = 1/2`. -/
+/-- The strip form of the Riemann hypothesis (every zero of `ζ` in the critical strip
+`0 < re s < 1` lies on the critical line `re s = 1/2`) is equivalent to its Dirichlet eta form
+(the same statement for the zeroes of `η`). -/
 theorem zeta_strip_iff_eta : RiemannHypothesis.ZetaStripForm ↔ RiemannHypothesis.EtaForm :=
   RiemannHypothesis.zeta_strip_iff_eta
 

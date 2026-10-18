@@ -4899,6 +4899,97 @@ example (a : ℕ → ℂ) (N : ℕ) (T : ℝ) :
       ≤ 2 * Real.pi * N * ∑ n ∈ Finset.Icc 1 N, ‖a n‖ ^ 2 :=
   RiemannHypothesis.MontgomeryVaughan.abs_integral_normSq_dirichletPoly_sub_le_two_pi_mul a N T
 
+/-! ## M2-HILBERT-CSC — the cosecant form of the Montgomery–Vaughan inequality
+(RiemannHypothesis/HilbertCosecant.lean) -/
+
+/-- The partial-fraction expansion `∑_{m ∈ ℤ} (x + m)⁻² = π² / sin² πx` off the integers. -/
+example {x : ℝ} (hx : ∀ m : ℤ, x ≠ m) :
+    HasSum (fun m : ℤ => 1 / (x + m) ^ 2) (Real.pi ^ 2 / Real.sin (Real.pi * x) ^ 2) :=
+  RiemannHypothesis.HilbertCosecant.hasSum_inv_sq_int hx
+
+/-- **The cosecant inequality** with the constant `δ⁻¹`, for points `δ`-separated modulo one. -/
+example {n : ℕ} (α : Fin n → ℝ) (u : Fin n → ℂ) {δ : ℝ} (hδ : 0 < δ) (hδ2 : δ ≤ 1 / 2)
+    (hsep : ∀ r s : Fin n, r ≠ s → δ ≤ RiemannHypothesis.LargeSieve.intDist (α r - α s)) :
+    ‖∑ r, ∑ s ∈ Finset.univ.erase r,
+        u r * (starRingEnd ℂ) (u s) / (Real.sin (Real.pi * (α r - α s)) : ℂ)‖
+      ≤ δ⁻¹ * ∑ r, ‖u r‖ ^ 2 :=
+  RiemannHypothesis.HilbertCosecant.cosecantHilbertInequality α u hδ hδ2 hsep
+
+/-- The same over a finite set of an arbitrary index type. -/
+example {ι : Type*} [DecidableEq ι] (s : Finset ι) (t : ι → ℝ) (x : ι → ℂ) {δ : ℝ}
+    (hδ : 0 < δ) (hδ2 : δ ≤ 1 / 2)
+    (hsep : ∀ i ∈ s, ∀ j ∈ s, i ≠ j → δ ≤ RiemannHypothesis.LargeSieve.intDist (t i - t j)) :
+    ‖∑ i ∈ s, ∑ j ∈ s.erase i,
+        x i * (starRingEnd ℂ) (x j) / (Real.sin (Real.pi * (t i - t j)) : ℂ)‖
+      ≤ δ⁻¹ * ∑ i ∈ s, ‖x i‖ ^ 2 :=
+  RiemannHypothesis.HilbertCosecant.cosecantHilbertInequality_finset s t x hδ hδ2 hsep
+
+/-! ## M2-LARGE-SIEVE-MV — the large sieve with the constant `N + δ⁻¹`
+(RiemannHypothesis/LargeSieveMV.lean) -/
+
+/-- **The large sieve with the sharp constant `N + δ⁻¹`**, under the hypotheses of
+`large_sieve_gallagher`. -/
+example {ι : Type*} {s : Finset ι} {t : ι → ℝ} {δ : ℝ} (hδ : 0 < δ) (hδ2 : δ ≤ 1 / 2)
+    (hsep : ∀ i ∈ s, ∀ j ∈ s, i ≠ j → δ ≤ RiemannHypothesis.LargeSieve.intDist (t i - t j))
+    (a : ℕ → ℂ) (N : ℕ) :
+    ∑ i ∈ s, ‖∑ n ∈ Finset.range N, a n * RiemannHypothesis.KusminLandau.e2pi ((n : ℝ) * t i)‖ ^ 2
+      ≤ ((N : ℝ) + δ⁻¹) * ∑ n ∈ Finset.range N, ‖a n‖ ^ 2 :=
+  RiemannHypothesis.LargeSieveMV.large_sieve_mv hδ hδ2 hsep a N
+
+/-- Its dual form. -/
+example {ι : Type*} {s : Finset ι} {t : ι → ℝ} {δ : ℝ} (hδ : 0 < δ) (hδ2 : δ ≤ 1 / 2)
+    (hsep : ∀ i ∈ s, ∀ j ∈ s, i ≠ j → δ ≤ RiemannHypothesis.LargeSieve.intDist (t i - t j))
+    (x : ι → ℂ) (N : ℕ) :
+    ∑ n ∈ Finset.range N, ‖∑ i ∈ s, x i * RiemannHypothesis.KusminLandau.e2pi ((n : ℝ) * t i)‖ ^ 2
+      ≤ ((N : ℝ) + δ⁻¹) * ∑ i ∈ s, ‖x i‖ ^ 2 :=
+  RiemannHypothesis.LargeSieveMV.large_sieve_mv_dual hδ hδ2 hsep x N
+
+/-- `N + δ⁻¹` is an admissible large-sieve constant. -/
+example : RiemannHypothesis.LargeSieve.AdmissibleConstant (fun δ N => (N : ℝ) + δ⁻¹) :=
+  RiemannHypothesis.LargeSieveMV.admissibleConstant_large_sieve_mv
+
+/-! ## M2-BRUN-TITCHMARSH-TWO — the sharp large sieve down the chain, and Brun–Titchmarsh with
+the constant `2 + ε` (RiemannHypothesis/BrunTitchmarshTwo.lean) -/
+
+/-- The large sieve at rationals of denominator at most `Q`, with `Q² + N`. -/
+example {s : Finset ℚ} {Q : ℕ} (hQ : 2 ≤ Q)
+    (hmem : ∀ x ∈ s, x ∈ Set.Ico (0 : ℚ) 1) (hden : ∀ x ∈ s, x.den ≤ Q)
+    (a : ℕ → ℂ) (N : ℕ) :
+    ∑ x ∈ s,
+        ‖∑ n ∈ Finset.range N, a n * RiemannHypothesis.KusminLandau.e2pi ((n : ℝ) * (x : ℝ))‖ ^ 2
+      ≤ ((Q : ℝ) ^ 2 + N) * ∑ n ∈ Finset.range N, ‖a n‖ ^ 2 :=
+  RiemannHypothesis.BrunTitchmarshTwo.large_sieve_farey_mv hQ hmem hden a N
+
+/-- Montgomery's sieve with `Q² + N`. -/
+example {N Q : ℕ} (hQ : 2 ≤ Q) {A : Finset ℕ} (hA : A ⊆ Finset.range N)
+    (w : ℕ → ℕ) (hwpos : ∀ p, p.Prime → p ≤ Q → 0 < w p) (hwle : ∀ p, p.Prime → p ≤ Q → w p ≤ p)
+    (hAw : ∀ p, p.Prime → p ≤ Q → (A.image (fun n => n % p)).card ≤ w p) :
+    (A.card : ℝ) * ∑ q ∈ RiemannHypothesis.LargeSieveSquarefree.squarefreeUpTo Q,
+        ∏ p ∈ q.primeFactors, (((p : ℝ) - w p) / w p)
+      ≤ (Q : ℝ) ^ 2 + N :=
+  RiemannHypothesis.BrunTitchmarshTwo.card_le_sifted_squarefree_mv hQ hA w hwpos hwle hAw
+
+/-- Brun–Titchmarsh at a free level `Q ≥ 2`, with `(Q² + y)/log Q + Q + 1`. -/
+example (x y : ℕ) {Q : ℕ} (hQ : 2 ≤ Q) :
+    (((Finset.Ico x (x + y)).filter Nat.Prime).card : ℝ)
+      ≤ ((Q : ℝ) ^ 2 + y) / Real.log Q + Q + 1 :=
+  RiemannHypothesis.BrunTitchmarshTwo.card_primes_Ico_le_of_level_mv x y hQ
+
+/-- **Brun–Titchmarsh with the constant `2 + ε`**, for `y ≥ Y(ε)` and every `x`. -/
+example {eps : ℝ} (heps : 0 < eps) :
+    ∃ Y : ℕ, ∀ y : ℕ, Y ≤ y → ∀ x : ℕ,
+      (((Finset.Ico x (x + y)).filter Nat.Prime).card : ℝ)
+        ≤ (2 + eps) * y / Real.log y :=
+  RiemannHypothesis.BrunTitchmarshTwo.card_primes_Ico_le_two heps
+
+/-- Its arithmetic-progression form, with `(2 + ε) (q/φ(q)) Y / log Y`, `Y = ⌊y/q⌋ + 1`. -/
+example {eps : ℝ} (heps : 0 < eps) :
+    ∃ Y₀ : ℕ, ∀ q a : ℕ, 1 ≤ q → a < q → ∀ x y : ℕ, Y₀ ≤ y / q + 1 →
+      (((Finset.Ico x (x + y)).filter (fun n => n.Prime ∧ n % q = a)).card : ℝ)
+        ≤ (2 + eps) * ((q : ℝ) / (q.totient : ℝ)) * ((y / q + 1 : ℕ) : ℝ)
+            / Real.log ((y / q + 1 : ℕ) : ℝ) :=
+  RiemannHypothesis.BrunTitchmarshTwo.card_primes_Ico_mod_le_two heps
+
 /-! ## M2-CORPUS-RICH — the thicker corpus, and its unchanged ceiling -/
 
 /-- The zeroes of `ζ` satisfy the enlarged list of facts, and it still has a model violating the
