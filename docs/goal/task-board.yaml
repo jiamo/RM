@@ -1315,13 +1315,14 @@ tasks:
       - "./scripts/audit.sh"
   - id: M2-MEANVALUE
     priority: P0
-    status: BLOCKED
+    status: DONE_WEAK
     track: modern
     title: "Mean-value theorems and the large sieve for zeta on the critical line"
     latest_evidence: docs/goal/evidence/2026-08-24-m2-meanvalue.md
     latest_update: "2026-08-24 DONE_WEAK: the elementary mean value theorem for Dirichlet polynomials with arbitrary coefficients is proved in RiemannHypothesis/DirichletPolyMeanValue.lean. offDiagSum_le bounds the off-diagonal remainder by 8 N (1 + log N) times the diagonal, and abs_integral_normSq_dirichletPoly_sub_diag_le_mvt gives the two-sided statement int_0^T ||D(sigma + i t)||^2 dt = (T + O(N log N)) sum ||a n||^2 n^(-2 sigma) with an explicit constant; integral_normSq_dirichletPoly_mvt_zero is the sigma = 0 form. No sorry; axioms exactly propext, Classical.choice, Quot.sound.
-  2026-09-16 BLOCKED: the sharp Montgomery-Vaughan mean-value form and the discrete large sieve over well-spaced points both hinge on Montgomery and Vaughan's generalized Hilbert inequality for δ-separated real families, which is not proved here (see docs/goal/evidence/2026-09-16-round-GHI-blocked.md); the fourth-moment route on the critical line recorded in this row's open boundary is likewise unavailable. This blocks M2-MOLLIFIER, M2-LEVINSON and the linear saving of M2-DENSITY."
-    open_boundary: "Two items remain. (i) The sharp Montgomery-Vaughan form, int_0^T |D(i t)|^2 dt = sum |a n|^2 (T + O(n)), needs the generalized Hilbert inequality of Montgomery and Vaughan, and the discrete large sieve over well-spaced points needs a duality argument on top of it; neither is formalized in that shape - what is now available is the substitute the applications use, the delta-separated bound of M2-MEANVALUE-WELLSPACED, int_{-T}^{T} ||sum_r x_r e^{i lam_r t}||^2 <= 18 (T + 1/delta) sum ||x_r||^2, with an explicit but non-optimal constant. (ii) The fourth moment of zeta on the critical line needs the approximate functional equation and the divisor correlation sums, which are not available in this repository or in mathlib."
+  2026-09-16 BLOCKED: the sharp Montgomery-Vaughan mean-value form and the discrete large sieve over well-spaced points both hinge on Montgomery and Vaughan's generalized Hilbert inequality for δ-separated real families, which is not proved here (see docs/goal/evidence/2026-09-16-round-GHI-blocked.md); the fourth-moment route on the critical line recorded in this row's open boundary is likewise unavailable. This blocks M2-MOLLIFIER, M2-LEVINSON and the linear saving of M2-DENSITY.
+  2026-10-18 DONE_WEAK (no longer BLOCKED): the generalized Hilbert inequality is proved (M2-HILBERT-INEQUALITY, RiemannHypothesis/MontgomeryVaughan.lean), and so is the unweighted sharp mean value theorem int_0^T |D(i t)|^2 dt = (T + O(N)) sum |a n|^2 with the constant 2 pi N (M2-MEANVALUE-MV-SHARP). The weighted form (T + O(n)), the large sieve and the fourth moment remain open, as recorded in open_boundary."
+    open_boundary: "Two items remain. (i) The generalized Hilbert inequality of Montgomery and Vaughan is proved since 2026-10-18 (M2-HILBERT-INEQUALITY), and so is its unweighted consequence int_0^T |D(i t)|^2 dt = (T + O(N)) sum |a n|^2 with the constant 2 pi N, together with the delta-separated form |int_0^T ||sum_r x_r e^{i lam_r t}||^2 - T sum ||x_r||^2| <= (2 pi / delta) sum ||x_r||^2 (M2-MEANVALUE-MV-SHARP). What remains of (i) is the weighted Montgomery-Vaughan form int_0^T |D(i t)|^2 dt = sum |a n|^2 (T + O(n)), which needs the weighted Hilbert inequality (Montgomery-Vaughan, Theorem 2), and the discrete large sieve over well-spaced points, which needs a duality argument on top of it; neither is formalized in that shape. (ii) The fourth moment of zeta on the critical line needs the approximate functional equation and the divisor correlation sums, which are not available in this repository or in mathlib."
     milestone: M2
     depends_on:
       - M1-GROWTH
@@ -1394,11 +1395,12 @@ tasks:
       - "./scripts/audit.sh"
   - id: M2-MOLLIFIER
     priority: P0
-    status: BLOCKED
+    status: TODO_NEEDS_DESIGN
     track: modern
     title: "Mollifier machinery for the Levinson method"
     latest_evidence: ""
-    latest_update: "2026-09-16 BLOCKED: the mollifier machinery for the Levinson method requires the sharp mean-value theorem over well-spaced frequencies, which in turn requires Montgomery and Vaughan's generalized Hilbert inequality for δ-separated real families; that theorem is unproved here (docs/goal/evidence/2026-09-16-round-GHI-blocked.md). Its two standard proofs — Montgomery and Vaughan's original 1974 cosecant/cotangent double-sum argument, and the Beurling-Selberg extremal-majorant + Paley-Wiener/Poisson route — are each a substantial formalization project, and neither is available in mathlib at the required sharpness."
+    latest_update: "2026-09-16 BLOCKED: the mollifier machinery for the Levinson method requires the sharp mean-value theorem over well-spaced frequencies, which in turn requires Montgomery and Vaughan's generalized Hilbert inequality for δ-separated real families; that theorem is unproved here (docs/goal/evidence/2026-09-16-round-GHI-blocked.md). Its two standard proofs — Montgomery and Vaughan's original 1974 cosecant/cotangent double-sum argument, and the Beurling-Selberg extremal-majorant + Paley-Wiener/Poisson route — are each a substantial formalization project, and neither is available in mathlib at the required sharpness.
+  2026-10-18 TODO_NEEDS_DESIGN (no longer BLOCKED): the generalized Hilbert inequality is proved (M2-HILBERT-INEQUALITY, RiemannHypothesis/MontgomeryVaughan.lean), with the sharp unweighted mean value theorem (M2-MEANVALUE-MV-SHARP). The mollifier design recorded in open_boundary is still missing."
     open_boundary: "Needs a design for the mollifier family (length, smooth coefficients), the mean-value estimate for the mollified product, and the error terms. Nothing in mathlib points in this direction."
     milestone: M2
     depends_on:
@@ -1410,13 +1412,14 @@ tasks:
       - "lake build"
   - id: M2-LEVINSON
     priority: P0
-    status: BLOCKED
+    status: CLAIM_RISK
     track: modern
     title: "Levinson's method: at least one third of the zeroes lie on the critical line"
     latest_evidence: docs/goal/evidence/2026-08-21-zeta23-derived-results.md
     revalidation: docs/goal/evidence/2026-08-21-zeta23-derived-results.md
     latest_update: "2026-08-21 DONE_STRONG on the statement, not on the method: levinson_one_third (RiemannHypothesis/CriticalLine.lean) and oneThirdOnCriticalLine (RiemannHypothesis/PartialProved.lean) give, for every eps > 0 and all large T, (1/3 - eps) N(T,2T) <= N0*(T,2T). This is a corollary of the stronger two-thirds bound of M1-TWO-THIRDS, not a formalization of Levinson's mollifier argument; M2-MOLLIFIER remains open. No sorry; axioms exactly propext, Classical.choice, Quot.sound.
-  2026-09-16 BLOCKED on the method: Levinson's actual mollifier argument cannot be formalized until M2-MOLLIFIER is completed, which requires the generalized Hilbert inequality (blocked above). The bound currently in the repository stands, but it is only a corollary of the two-thirds bound of M1-TWO-THIRDS, not a formalization of Levinson's method."
+  2026-09-16 BLOCKED on the method: Levinson's actual mollifier argument cannot be formalized until M2-MOLLIFIER is completed, which requires the generalized Hilbert inequality (blocked above). The bound currently in the repository stands, but it is only a corollary of the two-thirds bound of M1-TWO-THIRDS, not a formalization of Levinson's method.
+  2026-10-18 CLAIM_RISK (no longer BLOCKED): the generalized Hilbert inequality is proved (M2-HILBERT-INEQUALITY), so M2-MOLLIFIER no longer waits on it; it is TODO_NEEDS_DESIGN. The one-third bound stands as a corollary of M1-TWO-THIRDS, but Levinson's mollifier argument, which the title names, is still not formalized."
     open_boundary: ""
     milestone: M2
     depends_on:
@@ -1467,14 +1470,15 @@ tasks:
       - "./scripts/audit.sh"
   - id: M2-DENSITY
     priority: P1
-    status: BLOCKED
+    status: DONE_WEAK
     track: modern
     title: "Selberg density theorem: bounds for N(sigma, T), the number of zeroes with re s >= sigma"
     latest_evidence: docs/goal/evidence/2026-09-02-m2-density-explicit-exponent.md
     revalidation: docs/goal/evidence/2026-09-02-m2-density-explicit-exponent.md
     latest_update: "2026-09-02 DONE_WEAK with an explicit but quadratic saving: RiemannHypothesis/CarlsonDensityPowerSaving.lean proves ncard_zerosRightOf_le_rpow_explicit, for 1/2 < sigma < 1 there is C > 0 with N(sigma, T) <= C T^(1 - (sigma - 1/2)^2 / 64) for all T >= 1, and the two-sided ncard_zerosOffCriticalLine_le_rpow_explicit with exponent 1 - delta^2/64. The exponent is an explicit function of sigma that degrades continuously to 0 as sigma decreases to 1/2; only the constant C(sigma) is left implicit. This was obtained by tracking the constants of the Carlson chain of M2-DENSITY-POWER-SAVING in theta = sigma_0 - 1/2 instead of discarding them: the Montgomery-Vaughan exponent is exactly 1 - theta/2, the Euler-Maclaurin exponent is at most 1 - theta, the mollifier exponent is now chosen to be theta/8 (previously an inexplicit (1 - max)/4), the mean square then saves at least 3 theta/8, and the three-way balancing of the Jensen counting inequality gives theta^2/16 with theta = (sigma - 1/2)/2. The strengthened existential forms exists_ncard_zerosRightOf_high_le_rpow and exists_ncard_zerosRightOf_le_rpow now carry the conjunct (sigma - 1/2)^2/64 <= c. No sorry; axioms exactly propext, Classical.choice, Quot.sound; the explicit statements are pinned in scripts/revalidation.lean. Previous entry: 2026-08-19 scoped: N(sigma, T) = O(T^(...) ) estimates; implies AlmostAllZerosNearCriticalLine quantitatively.
-  2026-09-16 BLOCKED on the linear saving: the Selberg/Ingham shape N(sigma,T)=O(T^{1-c(sigma-1/2)}) originally scoped in this row's open boundary needs the sharp mean value theorem, i.e. Montgomery and Vaughan's generalized Hilbert inequality; the Carlson chain can only deliver the quadratic saving already proved. See docs/goal/evidence/2026-09-16-round-GHI-blocked.md. The quadratic-saving statements already proved remain valid and are unchanged."
-    open_boundary: "The saving proved is quadratic in sigma - 1/2, not linear: the Selberg/Ingham shape N(sigma, T) = O(T^(1 - c (sigma - 1/2))) that this row originally scoped is not proved and is not reachable by the Carlson route, whose saving is intrinsically of order (sigma - 1/2)^2 (Carlson's own theorem gives 4 (sigma - 1/2)^2, 256 times better than the constant here). A linear saving needs the sharp mean value theorem (Montgomery-Vaughan's generalized Hilbert inequality) or the fourth moment (approximate functional equation plus divisor correlation sums); neither is in mathlib nor in this repository, which is the gap recorded on M2-MEANVALUE. The constant C(sigma) is not effective, no statement is uniform in sigma, nothing is claimed at sigma = 1/2, and zeroes are counted without multiplicity."
+  2026-09-16 BLOCKED on the linear saving: the Selberg/Ingham shape N(sigma,T)=O(T^{1-c(sigma-1/2)}) originally scoped in this row's open boundary needs the sharp mean value theorem, i.e. Montgomery and Vaughan's generalized Hilbert inequality; the Carlson chain can only deliver the quadratic saving already proved. See docs/goal/evidence/2026-09-16-round-GHI-blocked.md. The quadratic-saving statements already proved remain valid and are unchanged.
+  2026-10-18 DONE_WEAK (no longer BLOCKED): the generalized Hilbert inequality and the unweighted sharp mean value theorem (T + O(N)) sum |a_n|^2 are proved (M2-HILBERT-INEQUALITY, M2-MEANVALUE-MV-SHARP). The density argument has not been rerun on them, so the linear saving is still not proved; the quadratic-saving statements are unchanged."
+    open_boundary: "The saving proved is quadratic in sigma - 1/2, not linear: the Selberg/Ingham shape N(sigma, T) = O(T^(1 - c (sigma - 1/2))) that this row originally scoped is not proved and is not reachable by the Carlson route, whose saving is intrinsically of order (sigma - 1/2)^2 (Carlson's own theorem gives 4 (sigma - 1/2)^2, 256 times better than the constant here). A linear saving needs the sharp mean value theorem or the fourth moment (approximate functional equation plus divisor correlation sums). Since 2026-10-18 the generalized Hilbert inequality of Montgomery and Vaughan and its unweighted mean value theorem (T + O(N)) sum |a_n|^2 are proved (M2-HILBERT-INEQUALITY, M2-MEANVALUE-MV-SHARP), but the density argument has not been rerun on them, and the weighted form (T + O(n)), the large sieve in its sharp shape and the fourth moment are still missing, which is the gap recorded on M2-MEANVALUE. The constant C(sigma) is not effective, no statement is uniform in sigma, nothing is claimed at sigma = 1/2, and zeroes are counted without multiplicity."
     milestone: M2
     depends_on:
       - M2-MEANVALUE
@@ -2424,7 +2428,7 @@ tasks:
     title: "The mean value theorem for Dirichlet polynomials in Montgomery-Vaughan shape"
     latest_evidence: docs/goal/evidence/2026-08-29-m2-meanvalue-mv.md
     latest_update: "2026-08-29 DONE_WEAK: RiemannHypothesis/GaussianMeanValue.lean moves the error term of the mean value theorem inside the sum, which is what the Carlson-Ingham density argument needs and what the elementary theorem of M2-MEANVALUE (error 8 N (1 + log N) outside the sum) does not give. The method is the Gaussian majorant rather than Montgomery and Vaughan's generalized Hilbert inequality: on [-T, T] the indicator is at most e exp(-t^2/T^2), and integral_exp_mul_I_gaussian evaluates the resulting oscillatory integral, so integral_normSq_dirichletPoly_gaussian_le bounds the weighted mean square by sqrt(pi) T times the bilinear form with kernel exp(-(T/2)^2 (log n - log m)^2). The row sums of that kernel are bounded by sum_exp_neg_sq_log_sub_le, 1 + 6 m / L for L >= 3, splitting at n = 2m: near the diagonal abs_log_sub_log_ge turns the logarithmic separation into the integer separation and the integral test sum_Icc_exp_neg_mul_sq_le sums the resulting Gaussian, while far from it exp_neg_sq_log_sub_le_far dominates the kernel by m^2/n^2 times a constant that is at most 4/L. Schur's test bilinear_gaussian_kernel_le then gives integral_normSq_dirichletPoly_le_mv: int_(-T)^T ||D(sigma + i t)||^2 dt <= 58 sum_{n <= N} ||a n||^2 n^(-2 sigma) (T + n) for T >= 6, with the corollary integral_Icc_normSq_dirichletPoly_le_mv over [0, T]. No sorry; axioms exactly propext, Classical.choice, Quot.sound."
-    open_boundary: "The constant 58 is not sharp: Montgomery and Vaughan's theorem gives the asymptotically optimal main term (T + O(n)) with constant 1 + o(1), and the Gaussian majorant used here loses the factor 12 e sqrt(pi) coming from the majorant e exp(-t^2/T^2) and from the crude count 1 + 6 m / L of the integers within 1/L of log m. Only the shape of the error term is claimed. The bound is about Dirichlet polynomials, not about zeta: no approximation of zeta in the strip is used, so no zero-density estimate follows and no zero is located."
+    open_boundary: "The constant 58 is not sharp: Montgomery and Vaughan's weighted theorem gives the asymptotically optimal main term (T + O(n)) with constant 1 + o(1) - the generalized Hilbert inequality it rests on is proved since 2026-10-18 (M2-HILBERT-INEQUALITY), and so is the unweighted (T + O(N)) form (M2-MEANVALUE-MV-SHARP), but the weighted inequality is not - and the Gaussian majorant used here loses the factor 12 e sqrt(pi) coming from the majorant e exp(-t^2/T^2) and from the crude count 1 + 6 m / L of the integers within 1/L of log m. Only the shape of the error term is claimed. The bound is about Dirichlet polynomials, not about zeta: no approximation of zeta in the strip is used, so no zero-density estimate follows and no zero is located."
     milestone: M2
     depends_on:
       - M2-MEANVALUE
@@ -3634,21 +3638,49 @@ tasks:
       - "./scripts/audit.sh"
   - id: M2-HILBERT-INEQUALITY
     priority: P0
-    status: DONE_WEAK
+    status: DONE_STRONG
     track: analysis
     title: "Hilbert's inequality with the constant pi, and the Montgomery-Vaughan bound for lattice frequencies"
-    latest_evidence: docs/goal/evidence/2026-09-07-m2-hilbert-inequality.md
-    latest_update: "2026-09-07 DONE_WEAK: RiemannHypothesis/HilbertInequality.lean proves Hilbert's inequality in the form of Schur and Montgomery: for distinct integers k_r and complex x_r, the norm of the sum over r <> s of x_r conj(x_s)/(k_r - k_s) is at most pi times the sum of |x_r|^2 (hilbert_inequality). The proof is the Fourier one: integral_sawtooth_exp computes the Fourier coefficients 1/m of the sawtooth pi - theta on (0, 2 pi) by an explicit antiderivative, integral_exp_int_mul is the orthogonality of the characters, integral_normSq_trigSum is Parseval, and integral_sawtooth_normSq_trigSum identifies the sawtooth mean of |f|^2 with 2 pi i times the Hilbert form; the bound |pi - theta| <= pi then gives the constant. hilbert_inequality_lattice rescales to frequencies delta k_r in the lattice delta Z, which are delta-separated, with the constant pi/delta - the Montgomery-Vaughan bound in the lattice case. GeneralizedHilbertInequality records the general theorem as an unproved Prop with the four hypothesis-hygiene answers, and generalizedHilbert_of_lattice exhibits the proved case inside it. No sorry; axioms exactly propext, Classical.choice, Quot.sound; two statements pinned in scripts/revalidation.lean."
-    open_boundary: "The theorem of Montgomery and Vaughan - the same constant pi/delta for an arbitrary delta-separated family of real frequencies - is not proved; only the case of frequencies in a common lattice is. The Fourier argument uses the lattice essentially, since it needs the characters to be orthogonal on a fixed period, and the extremal problem that replaces it for general frequencies is the content of the theorem. Nothing in this repository assumes the general form: the mean value theorem actually used, in MeanValueWellSpaced, is proved unconditionally by the Gaussian majorant method with the worse constant 18(T + 1/delta), and it is not improved here. The optimality of the constant pi is also not proved."
+    latest_evidence: docs/goal/evidence/2026-10-18-m2-generalized-hilbert.md
+    revalidation: docs/goal/evidence/2026-10-18-m2-generalized-hilbert.md
+    latest_update: "2026-09-07 DONE_WEAK: RiemannHypothesis/HilbertInequality.lean proves Hilbert's inequality in the form of Schur and Montgomery: for distinct integers k_r and complex x_r, the norm of the sum over r <> s of x_r conj(x_s)/(k_r - k_s) is at most pi times the sum of |x_r|^2 (hilbert_inequality). The proof is the Fourier one: integral_sawtooth_exp computes the Fourier coefficients 1/m of the sawtooth pi - theta on (0, 2 pi) by an explicit antiderivative, integral_exp_int_mul is the orthogonality of the characters, integral_normSq_trigSum is Parseval, and integral_sawtooth_normSq_trigSum identifies the sawtooth mean of |f|^2 with 2 pi i times the Hilbert form; the bound |pi - theta| <= pi then gives the constant. hilbert_inequality_lattice rescales to frequencies delta k_r in the lattice delta Z, which are delta-separated, with the constant pi/delta - the Montgomery-Vaughan bound in the lattice case. GeneralizedHilbertInequality records the general theorem as an unproved Prop with the four hypothesis-hygiene answers, and generalizedHilbert_of_lattice exhibits the proved case inside it. No sorry; axioms exactly propext, Classical.choice, Quot.sound; two statements pinned in scripts/revalidation.lean.
+  2026-10-18 DONE_STRONG: RiemannHypothesis/MontgomeryVaughan.lean proves generalizedHilbertInequality : RiemannHypothesis.Hilbert.GeneralizedHilbertInequality, the theorem of Montgomery and Vaughan with the sharp constant pi/delta for an arbitrary delta-separated family of real frequencies (the definition in HilbertInequality.lean is unchanged). The proof is Montgomery and Vaughan's eigenvector argument, not the circulated 'elementary' one: H = i A with A r s = 1/(lam r - lam s) is Hermitian (hilbertMatrix_isHermitian); for an eigenvector A v = i mu v, eigen_bound expands ||A v||^2 = mu^2 ||v||^2 through the summed partial-fraction identity sum_kernel_mul_kernel, the terms with a_s = sum_r 1/(lam r - lam s) cancel because v is an eigenvector, and what is left gives mu^2 ||v||^2 <= 3 sum_s b_s |v_s|^2 with b_s = sum_(r <> s) (lam r - lam s)^(-2); colSq_le bounds b_s <= 2 zeta(2) / delta^2 = pi^2/(3 delta^2) by the fibre count card_fiber_le_two of MeanValueWellSpaced and mathlib's hasSum_zeta_two; norm_apply_le turns the eigenvalue bound into an operator-norm bound through the orthonormal eigenbasis of LinearMap.IsSymmetric, and Cauchy-Schwarz finishes. No sorry; axioms exactly propext, Classical.choice, Quot.sound; the statement is pinned in scripts/revalidation.lean and its axioms in scripts/audit.sh."
+    open_boundary: ""
     milestone: M2
     depends_on: []
     rank: 50.9884
     exit_criteria:
       - "hilbert_inequality : the sharp-constant inequality for distinct integer frequencies, pinned in scripts/revalidation.lean."
       - "hilbert_inequality_lattice : the constant pi/delta for frequencies in delta Z, pinned."
-      - "GeneralizedHilbertInequality : the general Montgomery-Vaughan statement, recorded as unproved with its hygiene answers."
+      - "GeneralizedHilbertInequality : the general Montgomery-Vaughan statement, recorded as a Prop in HilbertInequality.lean (statement unchanged)."
+      - "generalizedHilbertInequality : GeneralizedHilbertInequality is proved, with the constant pi/delta, in RiemannHypothesis/MontgomeryVaughan.lean; pinned in scripts/revalidation.lean with the full statement written out, axioms pinned in scripts/audit.sh."
     required_gates:
       - "lake build RiemannHypothesis.HilbertInequality"
+      - "lake build RiemannHypothesis.MontgomeryVaughan"
+      - "lake build"
+      - "./scripts/audit.sh"
+  - id: M2-MEANVALUE-MV-SHARP
+    priority: P1
+    status: DONE_STRONG
+    track: analysis
+    title: "The Montgomery-Vaughan mean value theorem: int_0^T |sum_(n <= N) a_n n^(-it)|^2 dt = (T + O(N)) sum |a_n|^2"
+    latest_evidence: docs/goal/evidence/2026-10-18-m2-meanvalue-mv-sharp.md
+    revalidation: docs/goal/evidence/2026-10-18-m2-meanvalue-mv-sharp.md
+    latest_update: "2026-10-18 DONE_STRONG: RiemannHypothesis/MontgomeryVaughanMeanValue.lean derives the mean value theorem from generalizedHilbertInequality. integral_normSq_expSum_eq computes the mean square exactly: int_0^T |sum_r a_r e^(i lam_r t)|^2 dt = T sum |a_r|^2 - i (H(x) - H(a)), with H the Hilbert form and x_r = a_r e^(i lam_r T). abs_integral_normSq_expSum_sub_le then gives, for delta-separated real lam_r, |int_0^T |sum_r a_r e^(i lam_r t)|^2 dt - T sum |a_r|^2| <= (2 pi / delta) sum |a_r|^2. With lam_n = -log n, which are 1/N-separated on 1 <= n <= N (log_separated, from log x >= 1 - 1/x), abs_integral_normSq_dirichletPoly_sub_le_two_pi_mul proves |int_0^T ||dirichletPoly a N (i t)||^2 dt - T sum_(n <= N) |a_n|^2| <= 2 pi N sum_(n <= N) |a_n|^2 for all coefficients a, all N and all real T, improving the 8 N (1 + log N) of integral_normSq_dirichletPoly_mvt_zero (M2-MEANVALUE), which is left unchanged. No sorry; axioms exactly propext, Classical.choice, Quot.sound; three statements pinned in scripts/revalidation.lean."
+    open_boundary: ""
+    milestone: M2
+    depends_on:
+      - M2-HILBERT-INEQUALITY
+      - M2-MEANVALUE
+    rank: 50.98845
+    exit_criteria:
+      - "integral_normSq_expSum_eq : the exact formula for the mean square of an exponential sum in terms of the Hilbert form, pinned in scripts/revalidation.lean."
+      - "abs_integral_normSq_expSum_sub_le : |int_0^T |sum_r a_r e^(i lam_r t)|^2 dt - T sum |a_r|^2| <= (2 pi / delta) sum |a_r|^2 for delta-separated real frequencies, pinned."
+      - "abs_integral_normSq_dirichletPoly_sub_le_two_pi_mul : int_0^T |sum_(n <= N) a_n n^(-it)|^2 dt = (T + O(N)) sum |a_n|^2 with the explicit constant 2 pi N, pinned."
+      - "The row is explicit that the weighted form sum |a_n|^2 (T + O(n)) (Montgomery-Vaughan, Theorem 2) is not proved."
+    required_gates:
+      - "lake build RiemannHypothesis.MontgomeryVaughanMeanValue"
+      - "lake build"
       - "./scripts/audit.sh"
   - id: M2-CORPUS-RICH
     priority: P2

@@ -1,0 +1,104 @@
+# Continuous integration: build the library, then run the audit and validate the task board.
+#
+# A cold build compiles about 4,000 non-Mathlib modules (RiemannHypothesis/Family003,
+# vendor/zeta23 and this repository's own modules), which may not fit in one job on a
+# 2-core GitHub-hosted runner.  The build therefore runs under a time limit, and the build
+# directories are saved to the Actions cache even when the build times out or the run is
+# cancelled; the next run (or a re-run of this one) restores the latest saved build and
+# continues from it.  Mathlib itself is not compiled: its prebuilt cache is downloaded.
+name: CI
+
+# Manual trigger only (owner's decision): CI runs when started by hand, from the Actions tab
+# ("CI" -> "Run workflow") or with `gh workflow run CI`.  A cold build needs a runner with at
+# least 32 GB of RAM (see the runs-on comment below and docs/build-environment.md).
+# To re-enable automatic runs once such a runner exists: set the repository variable
+# CI_RUNNER to its label, then put push and pull_request back next to workflow_dispatch:
+#
+#   on:
+#     push:
+#     pull_request:
+#     workflow_dispatch:
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    # Default: the GitHub-hosted ubuntu-latest runner (2 cores, about 7 GB of RAM for private
+    # repositories).  Three modules of RiemannHypothesis/Family003 need about 22 GB of RAM each
+    # (measured; see docs/build-environment.md), so a cold build cannot finish there.  Set the
+    # repository variable CI_RUNNER to the label of a runner with at least 32 GB of RAM (a
+    # larger GitHub-hosted runner or a self-hosted one) to build without editing this file.
+    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
+    timeout-minutes: 350
+    env:
+      # Bump to discard every saved build (for instance after a broken cache was saved).
+      CACHE_PREFIX: lake-build-v1
+      # Lake has no -j option.  The number of modules it compiles at once follows the size of
+      # Lean's thread pool, which the environment variable LEAN_NUM_THREADS sets (default: one
+      # per core).  To compile one module at a time, uncomment:
+      # LEAN_NUM_THREADS: "1"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install elan and the toolchain of lean-toolchain
+        run: |
+          set -euo pipefail
+          curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh \
+            | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+          "$HOME/.elan/bin/elan" toolchain install "$(cat lean-toolchain)"
+          "$HOME/.elan/bin/lean" --version
+
+      - name: Fetch the dependencies and the prebuilt Mathlib cache
+        run: |
+          set -euo pipefail
+          lake exe cache get
+
+      - name: Restore the saved build
+        id: restore
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            .lake/build
+            vendor/zeta23/.lake/build
+          key: ${{ env.CACHE_PREFIX }}-${{ runner.os }}-${{ hashFiles('lean-toolchain', 'lake-manifest.json') }}-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            ${{ env.CACHE_PREFIX }}-${{ runner.os }}-${{ hashFiles('lean-toolchain', 'lake-manifest.json') }}-${{ github.sha }}-
+            ${{ env.CACHE_PREFIX }}-${{ runner.os }}-${{ hashFiles('lean-toolchain', 'lake-manifest.json') }}-
+
+      - name: Build (time-limited, resumable)
+        run: |
+          set -euo pipefail
+          echo "restored from: ${{ steps.restore.outputs.cache-matched-key }}"
+          # 300 minutes leaves room under the job limit for saving the cache.  On timeout
+          # lake receives SIGINT; every module finished so far keeps its .olean and trace,
+          # so the next run resumes from there.
+          status=0
+          timeout --signal=INT --kill-after=5m 300m lake build || status=$?
+          if [ "$status" -eq 124 ]; then
+            echo "::warning::lake build hit the 300-minute limit; the partial build is saved below. Re-run this workflow to continue."
+          fi
+          exit "$status"
+
+      - name: Save the build (also after a timeout or a cancellation)
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            .lake/build
+            vendor/zeta23/.lake/build
+          key: ${{ env.CACHE_PREFIX }}-${{ runner.os }}-${{ hashFiles('lean-toolchain', 'lake-manifest.json') }}-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+
+      - name: Audit
+        run: ./scripts/audit.sh
+
+      - name: Validate the task board
+        run: python3 scripts/goal_state.py validate

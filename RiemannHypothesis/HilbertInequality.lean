@@ -7,6 +7,7 @@ import RiemannHypothesis.ExponentialType
 import Mathlib.Analysis.SpecialFunctions.Complex.Circle
 import Mathlib.MeasureTheory.Integral.IntervalIntegral.Basic
 import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
+import Mathlib.Data.Real.Sign
 
 /-!
 # Hilbert's inequality, with the sharp constant
@@ -75,51 +76,46 @@ essential way (the characters `e^{i k θ}` are orthogonal on a fixed period), an
 problem that replaces it for general frequencies is the content of the theorem.  Nothing in this
 repository assumes the general form: the mean value theorem actually used, in
 `RiemannHypothesis/MeanValueWellSpaced.lean`, is proved unconditionally by the Gaussian majorant
+method, with a worse constant.
 
+## Attempts toward the general form (recorded 2026-09-16; superseded 2026-10-18)
 
-## Attempts toward the general form (recorded 2026-09-16)
+**Update 2026-10-18: the general form is proved.** `GeneralizedHilbertInequality` — the bound
+`π δ⁻¹` for an arbitrary `δ`-separated family of *real* frequencies — is proved as
+`RiemannHypothesis.MontgomeryVaughan.generalizedHilbertInequality` in
+`RiemannHypothesis/MontgomeryVaughan.lean`. That module imports this one, so the statement
+stays a `Prop` here and its definition is unchanged; the remarks above that the general form is
+"not proved here" describe this file only. The proof there is Montgomery and Vaughan's own
+eigenvector argument: `H = i A` with `A r s = 1/(λ_r − λ_s)` is Hermitian, an eigenvector of `A` is
+bounded through the *summed* partial-fraction identity (in which the troublesome terms cancel
+because `v` is an eigenvector), the column sums `∑_{r ≠ s} (λ_r − λ_s)⁻² ≤ π²/(3 δ²)` come from the
+fibre count of `MeanValueWellSpaced` and `ζ(2) = π²/6`, and the spectral theorem turns the
+eigenvalue bound into the bilinear one. The optimality of the constant `π` is still not proved.
 
-The residual content named above — the passage from lattice frequencies to arbitrary `δ`-separated
-real frequencies, with the *same* sharp constant `π δ⁻¹` — is not a bookkeeping gap. It is the hard
-part of the Montgomery–Vaughan theorem, and it remains open in this repository. Three things are now
-known about it:
+What the 2026-09-16 record established remains true, and is kept:
 
 * **The naive route cannot work.** Separation puts at most two frequencies in each annulus
-  `[r δ, (r+1) δ)`, so the row sums of the kernel `|1/(λ_r − λ_s)|` diverge like the harmonic series:
-  the triangle inequality plus separation yields only the free bound `O(δ⁻¹ log R)` already mentioned
-  here. Beating the logarithm requires exploiting *cancellation*, not absolute values.
+  `[r δ, (r+1) δ)`, so the row sums of the kernel `|1/(λ_r − λ_s)|` diverge like the harmonic
+  series: the triangle inequality plus separation yields only the free bound `O(δ⁻¹ log R)`
+  (`hilbert_free_bound`). Beating the logarithm requires exploiting *cancellation*, not absolute
+  values.
 
-* **A widely circulated “elementary” proof does not formalize.** Notes in circulation derive the key
-  ℓ² estimate `∑_r |∑_{s ≠ r} z_s/(λ_r − λ_s)|² ≤ (π/δ)² ∑_r |z_r|²` by expanding the square and using the
-  partial-fraction identity
-  `1/((λ_r − λ_s)(λ_r − λ_t)) = (1/(λ_s − λ_t))(1/(λ_r − λ_s) − 1/(λ_r − λ_t))`. The step recorded there as
-  “the two inner sums cancel” is equivalent to the assertion
-  `∑_{r ≠ s,t} 1/((λ_r − λ_s)(λ_r − λ_t)) = 2/(λ_s − λ_t)²`. That identity is **false** for finite separated
-  families: on generic random configurations every one of the `R(R−1)` ordered pairs `(s,t)` fails it
-  (numerically refuted). Keeping only what survives the alleged cancellation reproduces exactly the
-  insufficient free bound above, so the argument collapses to the case already excluded.
+* **A widely circulated “elementary” proof does not formalize.** Its step “the two inner sums
+  cancel” is equivalent to the identity
+  `∑_{r ≠ s,t} 1/((λ_r − λ_s)(λ_r − λ_t)) = 2/(λ_s − λ_t)²`, which is **false** for finite separated
+  families; `fake_cancellation_identity_is_false` refutes it by an explicit, decidable
+  counterexample (`λ = ![0, 10, 30]`: `1/600` on the left, `1/50` on the right). The proof in
+  `RiemannHypothesis/MontgomeryVaughan.lean` does not use that identity.
 
-* **What a proof actually needs.** The two published routes are (i) Montgomery and Vaughan's original
-  1974 argument — a delicate double-sum manipulation with cosecant/cotangent kernels — and (ii) the
-  Beurling–Selberg extremal-majorant route: construct Beurling's entire majorant `B ≥ sign` of exponential
-  type `2π` with `∫(B − sign) = 1`, then pair the bilinear form against band-limited test functions via
-  Paley–Wiener/Plancherel/Poisson summation. Neither ingredient exists in this repository, and neither is
-  available in mathlib at the required sharpness; supplying either is a substantial formalization project
-  on its own.
-* **This repository now records the boundary in code.** `BeurlingSignMajorant` and
-  `GeneralizedHilbertInequality_of_beurling_selberg` state the precise remaining reduction, and
-  `fake_cancellation_identity_is_false` eliminates the circulated elementary route by an explicit,
-  decidable counterexample (`λ = ![0, 10, 30]`: the alleged cancellation identity gives `1/600` on the
-  left but `1/50` on the right).
+* **The Beurling–Selberg route is still not formalized.** `BeurlingSignMajorant` and
+  `GeneralizedHilbertInequality_of_beurling_selberg` record that alternative reduction; no term of
+  `BeurlingSignMajorant` is constructed (see `M2-BEURLING-SELBERG` in
+  `docs/goal/task-board.yaml`). It is no longer needed for the inequality itself.
 
-Accordingly `GeneralizedHilbertInequality` is left as a `Prop`, as this repository's convention requires of
-every statement without a proof term. No `sorry` has been introduced anywhere: the convention is to record
-unproved statements as Props rather than pollute the build with placeholders. Downstream milestones that
-require the sharp constant — `M2-MEANVALUE-WELLSPACED`'s optimal main term `T ∑ ‖x_r‖²`, hence the sharp
-large sieve and the mollified mean-square arguments of `M2-MOLLIFIER` — are blocked pending this theorem;
-see `docs/goal/task-board.yaml`, where `M2-MOLLIFIER`, `M2-MEANVALUE`, `M2-LEVINSON` and `M2-DENSITY` are
-marked `BLOCKED` with the dependency explained.
-
+The downstream rows that the 2026-09-16 round marked `BLOCKED` on this theorem (`M2-MEANVALUE`,
+`M2-MOLLIFIER`, `M2-LEVINSON`, `M2-DENSITY`) are no longer blocked by it; their remaining open
+items are recorded in `docs/goal/task-board.yaml`.
+-/
 
 noncomputable section
 
@@ -571,7 +567,7 @@ theorem generalizedHilbert_of_lattice {n : ℕ} (k : Fin n → ℤ) (hk : Functi
 /-- Directly checkable arithmetic behind the counterexample below:
 `1/((30 − 0)(30 − 10)) ≠ 2/(0 − 10)²`, i.e. `1/600 ≠ 1/50`. -/
 theorem fake_cancellation_counterexample_arith :
-    (1 : ℚ) / ((30 - 0) * (30 - 10)) ≠ (2 : ℚ) / ((0 - 10) ^ 2) := by decide
+    (1 : ℚ) / ((30 - 0) * (30 - 10)) ≠ (2 : ℚ) / ((0 - 10) ^ 2) := by decide +kernel
 
 /-- The circulated 'elementary' proof of `GeneralizedHilbertInequality` rests on the
 cancellation identity
@@ -588,9 +584,9 @@ inequality directly. -/
 theorem fake_cancellation_identity_is_false :
     let lam : Fin 3 → ℚ := ![0, 10, 30];
     let s := ⟨0, by decide⟩; let t := ⟨1, by decide⟩;
-    (∑ r in (Finset.univ : Finset (Fin 3)).filter fun r => r ≠ s ∧ r ≠ t,
+    (∑ r ∈ (Finset.univ : Finset (Fin 3)).filter fun r => r ≠ s ∧ r ≠ t,
       (1 : ℚ) / ((lam r - lam s) * (lam r - lam t)))
-    ≠ (2 : ℚ) / ((lam s - lam t) ^ 2) := by decide
+    ≠ (2 : ℚ) / ((lam s - lam t) ^ 2) := by decide +kernel
 
 /-! ## What a proof needs: the Beurling–Selberg reduction -/
 

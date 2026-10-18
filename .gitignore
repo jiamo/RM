@@ -1,5 +1,4 @@
 /.lake
-/lake-manifest.json
 .DS_Store
 /.aristotle/
 /openai_rh_fd4aeeb_source_bundle.json

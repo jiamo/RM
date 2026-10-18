@@ -4850,6 +4850,55 @@ example {ι : Type*} [DecidableEq ι] (S : Finset ι) (k : ι → ℤ) (hk : Set
       ≤ Real.pi / δ * ∑ r ∈ S, ‖x r‖ ^ 2 :=
   RiemannHypothesis.Hilbert.hilbert_inequality_lattice S k hk x hδ
 
+/-! ## M2-HILBERT-INEQUALITY — Montgomery and Vaughan's generalized Hilbert inequality
+(RiemannHypothesis/MontgomeryVaughan.lean) -/
+
+/-- **The generalized Hilbert inequality** with the sharp constant `π / δ`, for arbitrary
+`δ`-separated real frequencies; the statement of `Hilbert.GeneralizedHilbertInequality`,
+written out in full. -/
+example : ∀ (n : ℕ) (lam : Fin n → ℝ) (x : Fin n → ℂ) (δ : ℝ), 0 < δ →
+    (∀ r s : Fin n, r ≠ s → δ ≤ |lam r - lam s|) →
+      ‖∑ r, ∑ s ∈ Finset.univ.erase r, x r * (starRingEnd ℂ) (x s) /
+          ((lam r : ℂ) - (lam s : ℂ))‖
+        ≤ Real.pi / δ * ∑ r, ‖x r‖ ^ 2 :=
+  RiemannHypothesis.MontgomeryVaughan.generalizedHilbertInequality
+
+/-- The same, against the repository's `Prop`. -/
+example : RiemannHypothesis.Hilbert.GeneralizedHilbertInequality :=
+  RiemannHypothesis.MontgomeryVaughan.generalizedHilbertInequality
+
+/-! ## M2-MEANVALUE-MV-SHARP — the Montgomery–Vaughan mean value theorem
+(RiemannHypothesis/MontgomeryVaughanMeanValue.lean) -/
+
+/-- The mean square of an exponential sum, exactly, through the Hilbert form. -/
+example {n : ℕ} (lam : Fin n → ℝ) (hinj : ∀ r s, r ≠ s → lam r ≠ lam s) (a : Fin n → ℂ)
+    (T : ℝ) :
+    (((∫ t in (0:ℝ)..T, ‖∑ r, a r * Complex.exp ((t : ℂ) * (lam r : ℂ) * Complex.I)‖ ^ 2 : ℝ))
+        : ℂ)
+      = T * ∑ r, ((‖a r‖ ^ 2 : ℝ) : ℂ)
+        + -Complex.I * (∑ r, ∑ s ∈ Finset.univ.erase r,
+              (a r * Complex.exp ((T : ℂ) * (lam r : ℂ) * Complex.I))
+                * (starRingEnd ℂ) (a s * Complex.exp ((T : ℂ) * (lam s : ℂ) * Complex.I))
+                / ((lam r : ℂ) - (lam s : ℂ))
+          - ∑ r, ∑ s ∈ Finset.univ.erase r,
+              a r * (starRingEnd ℂ) (a s) / ((lam r : ℂ) - (lam s : ℂ))) :=
+  RiemannHypothesis.MontgomeryVaughan.integral_normSq_expSum_eq lam hinj a T
+
+/-- The mean value theorem for `δ`-separated frequencies, with the constant `2π / δ`. -/
+example {n : ℕ} (lam : Fin n → ℝ) (a : Fin n → ℂ) {δ : ℝ} (hδ : 0 < δ)
+    (hsep : ∀ r s : Fin n, r ≠ s → δ ≤ |lam r - lam s|) (T : ℝ) :
+    |(∫ t in (0 : ℝ)..T, ‖∑ r, a r * Complex.exp ((t : ℂ) * (lam r : ℂ) * Complex.I)‖ ^ 2)
+        - T * ∑ r, ‖a r‖ ^ 2|
+      ≤ 2 * Real.pi / δ * ∑ r, ‖a r‖ ^ 2 :=
+  RiemannHypothesis.MontgomeryVaughan.abs_integral_normSq_expSum_sub_le lam a hδ hsep T
+
+/-- **`∫₀ᵀ |∑_{n ≤ N} a_n n^{-it}|² dt = (T + O(N)) ∑ |a_n|²`**, with the constant `2π N`. -/
+example (a : ℕ → ℂ) (N : ℕ) (T : ℝ) :
+    |(∫ t in (0 : ℝ)..T, ‖RiemannHypothesis.dirichletPoly a N ((t : ℂ) * Complex.I)‖ ^ 2)
+        - T * ∑ n ∈ Finset.Icc 1 N, ‖a n‖ ^ 2|
+      ≤ 2 * Real.pi * N * ∑ n ∈ Finset.Icc 1 N, ‖a n‖ ^ 2 :=
+  RiemannHypothesis.MontgomeryVaughan.abs_integral_normSq_dirichletPoly_sub_le_two_pi_mul a N T
+
 /-! ## M2-CORPUS-RICH — the thicker corpus, and its unchanged ceiling -/
 
 /-- The zeroes of `ζ` satisfy the enlarged list of facts, and it still has a model violating the

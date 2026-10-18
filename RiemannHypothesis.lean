@@ -204,3 +204,5 @@ import RiemannHypothesis.QuasiRiemann
 import RiemannHypothesis.DirichletSevenEighths
 import RiemannHypothesis.HeckeSevenEighths
 import RiemannHypothesis.SiegelZeroGap
+import RiemannHypothesis.MontgomeryVaughan
+import RiemannHypothesis.MontgomeryVaughanMeanValue

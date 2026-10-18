@@ -218,6 +218,8 @@ import RiemannHypothesis.VinogradovMeanValue
 import RiemannHypothesis.VinogradovCongruencing
 import RiemannHypothesis.VinogradovConditioning
 import RiemannHypothesis.HilbertInequality
+import RiemannHypothesis.MontgomeryVaughan
+import RiemannHypothesis.MontgomeryVaughanMeanValue
 
 #print axioms RiemannHypothesisConjecture.zeta_strip_iff_eta
 #print axioms RiemannHypothesisConjecture.zeta_iff_zeta_strip
@@ -1050,6 +1052,10 @@ import RiemannHypothesis.HilbertInequality
 #print axioms RiemannHypothesis.Vinogradov.card_congruenceSolutions_le_factorial
 #print axioms RiemannHypothesis.Hilbert.hilbert_inequality
 #print axioms RiemannHypothesis.Hilbert.hilbert_inequality_lattice
+#print axioms RiemannHypothesis.MontgomeryVaughan.generalizedHilbertInequality
+#print axioms RiemannHypothesis.MontgomeryVaughan.integral_normSq_expSum_eq
+#print axioms RiemannHypothesis.MontgomeryVaughan.abs_integral_normSq_expSum_sub_le
+#print axioms RiemannHypothesis.MontgomeryVaughan.abs_integral_normSq_dirichletPoly_sub_le_two_pi_mul
 #print axioms RiemannHypothesis.Vinogradov.pow_card_le_vinogradovCount
 #print axioms RiemannHypothesis.Vinogradov.vinogradovCount_one_one
 #print axioms RiemannHypothesis.QuasiRiemann.riemannZeta_ne_zero_of_seven_eighths_lt_re

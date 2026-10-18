@@ -1,3 +1,4 @@
+**2026-10-18:** the generalized Hilbert inequality has been proved since 2026-10-18: `RiemannHypothesis.MontgomeryVaughan.generalizedHilbertInequality` in the module `RiemannHypothesis.MontgomeryVaughan` (`RiemannHypothesis/MontgomeryVaughan.lean`); the report below is kept unchanged as the 2026-09-16 record.
 # Round report 2026-09-16 — Generalized Hilbert Inequality (blocked) and mathlib extraction (delivered)
 
 **Starting point.** Snapshot `output-final_aristotle` of the `riemann_hypothesis_formalization`

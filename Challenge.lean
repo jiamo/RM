@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Riemann Hypothesis formalization
 -/
 import RiemannHypothesis.Defs
+import RiemannHypothesis.Main
 import Mathlib.NumberTheory.LSeries.RiemannZeta
 
 /-!
