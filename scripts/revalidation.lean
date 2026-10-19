@@ -2838,8 +2838,9 @@ example (N : ℕ) (t : ℝ) :
   RiemannHypothesis.norm_zetaSum_criticalLine_le N t
 
 /-- **The recorded hypothesis is the intended statement.**  `AFECriticalLine C` says exactly that
-`ζ(1/2+it)` differs from the two Dirichlet polynomials of length `⌊√(t/2π)⌋` by `O(t^(−1/4))`.  It
-is *not* proved in this repository; every theorem that uses it takes it as a hypothesis. -/
+`ζ(1/2+it)` differs from the two Dirichlet polynomials of length `⌊√(t/2π)⌋` by `O(t^(−1/4))`.
+Since 2026-10-19 it is proved for `C = 250` (`afeCriticalLine`, pinned under
+M1-AFE-CRITICAL-LINE below). -/
 example (C : ℝ) : RiemannHypothesis.AFECriticalLine C =
     ∀ t : ℝ, 2 ≤ t →
       ‖riemannZeta (1 / 2 + (t : ℂ) * I)
@@ -2849,8 +2850,9 @@ example (C : ℝ) : RiemannHypothesis.AFECriticalLine C =
                 (1 / 2 + (t : ℂ) * I)‖
         ≤ C * t ^ (-(1 / 4) : ℝ) := rfl
 
-/-- **The conditional convexity bound.**  The hypothesis `AFECriticalLine C` is visible in the
-statement; nothing here is unconditional. -/
+/-- **The convexity bound from the approximate functional equation.**  The hypothesis
+`AFECriticalLine C` is visible in the statement; the unconditional form, with `C = 250`, is
+pinned under M1-AFE-CRITICAL-LINE below. -/
 example {C : ℝ} (hafe : RiemannHypothesis.AFECriticalLine C) {t : ℝ} (ht : 2 ≤ t) :
     ‖riemannZeta (1 / 2 + (t : ℂ) * I)‖ ≤ (C + 4) * t ^ ((1 : ℝ) / 4) :=
   RiemannHypothesis.norm_riemannZeta_criticalLine_le_of_afe hafe ht
@@ -5257,6 +5259,90 @@ example : Filter.Tendsto (fun T : ℝ => (∫ t in (0 : ℝ)..T,
       ‖riemannZeta (((1 / 2 : ℝ) : ℂ) + (t : ℂ) * Complex.I)‖ ^ 2) / (T * Real.log T))
     Filter.atTop (nhds 1) :=
   RiemannHypothesis.HardyLittlewood.tendsto_integral_normSq_riemannZeta_div
+
+/-! ## M1-AFE-CRITICAL-LINE — the approximate functional equation on the critical line, proved
+(RiemannHypothesis/PoissonSummationInterval.lean, LaplaceGamma.lean, ZetaMellinPhase.lean,
+ZetaStationaryPhase.lean, AFEIntegrals.lean, AFEProof.lean, AFECriticalLineProof.lean) -/
+
+/-- **Poisson summation between half-integers** (exact, a convergent series of Fourier
+integrals). -/
+example {A B : ℕ} (hAB : A ≤ B) {G G' G'' : ℝ → ℂ}
+    (hG : ∀ x ∈ Set.Icc ((A : ℝ) + 1 / 2) ((B : ℝ) + 1 / 2), HasDerivAt G (G' x) x)
+    (hG' : ∀ x ∈ Set.Icc ((A : ℝ) + 1 / 2) ((B : ℝ) + 1 / 2), HasDerivAt G' (G'' x) x)
+    (hG''c : ContinuousOn G'' (Set.Icc ((A : ℝ) + 1 / 2) ((B : ℝ) + 1 / 2))) :
+    HasSum (fun n : ℕ => 2 * ∫ x in ((A : ℝ) + 1 / 2)..((B : ℝ) + 1 / 2),
+        G x * (Real.cos (2 * Real.pi * ((n + 1 : ℕ) : ℝ) * x) : ℂ))
+      (∑ k ∈ Finset.Ioc A B, G k - ∫ x in ((A : ℝ) + 1 / 2)..((B : ℝ) + 1 / 2), G x) :=
+  RiemannHypothesis.PoissonInterval.hasSum_sum_Ioc_halfInt hAB hG hG' hG''c
+
+/-- **The Laplace transform at a complex frequency**: `∫₀^∞ u^(a−1) e^(−ru) du = r^(−a) Γ(a)`
+for `re a > 0`, `re r > 0`. -/
+example {a r : ℂ} (ha : 0 < a.re) (hr : 0 < r.re) :
+    ∫ u in Set.Ioi (0 : ℝ), (u : ℂ) ^ (a - 1) * Complex.exp (-(r * u))
+      = (1 / r) ^ a * Complex.Gamma a :=
+  RiemannHypothesis.LaplaceGamma.integral_cpow_mul_exp_neg_mul_Ioi_of_re_pos ha hr
+
+/-- **The complete stationary-phase integral**: `∫₀^B u^(−1/2) e^{i(ωu − t log u)} du →
+Γ(1−s)(i/ω)^(1−s)`, `s = 1/2 + it`. -/
+example {t ω : ℝ} (ht : 0 ≤ t) (hω : 0 < ω) :
+    Filter.Tendsto (fun B => ∫ u in (0 : ℝ)..B, ((1 / Real.sqrt u : ℝ) : ℂ)
+        * Complex.exp (Complex.I * ((ω * u - t * Real.log u : ℝ) : ℂ))) Filter.atTop
+      (nhds (Complex.Gamma (1 - (1 / 2 + (t : ℂ) * I))
+        * (I / (ω : ℂ)) ^ (1 - (1 / 2 + (t : ℂ) * I)))) :=
+  RiemannHypothesis.ZetaMellinPhase.tendsto_integral_mellin ht hω
+
+/-- **The main term is `χ(s) ν^(s−1)`** up to `ν^(−1/2) e^(−πt)`. -/
+example (t : ℝ) {ν : ℝ} (hν : 0 < ν) :
+    ‖Complex.Gamma (1 - (1 / 2 + (t : ℂ) * I))
+        * (I / ((2 * Real.pi * ν : ℝ) : ℂ)) ^ (1 - (1 / 2 + (t : ℂ) * I))
+        - RiemannHypothesis.zetaChi (1 / 2 + (t : ℂ) * I) * (ν : ℂ) ^ ((1 / 2 + (t : ℂ) * I) - 1)‖
+      ≤ ν ^ (-(1 / 2 : ℝ)) * Real.exp (-(Real.pi * t)) :=
+  RiemannHypothesis.ZetaMellinPhase.norm_mellinMain_sub_zetaChi_le t hν
+
+/-- **The stationary-phase evaluation (R2)**: for `0 < a < t/(2πν) < b`,
+`∫_a^b u^(−1/2−it) e(νu) du = χ(s) ν^(s−1) − i[h E]_a^b + O(|k(a)| + |k(b)| + ν^(−1/2) e^(−πt))`
+with `h = √u/(ωu − t)`, `k = −√u(ωu + t)/(2(ωu − t)³)`, `ω = 2πν`. -/
+example {t ν a b : ℝ} (ht : 0 < t) (hν : 0 < ν) (ha : 0 < a) (hat : 2 * Real.pi * ν * a < t)
+    (hbt : t < 2 * Real.pi * ν * b) :
+    ‖(∫ u in a..b, ((1 / Real.sqrt u : ℝ) : ℂ)
+          * Complex.exp (Complex.I * ((2 * Real.pi * ν * u - t * Real.log u : ℝ) : ℂ)))
+        - RiemannHypothesis.zetaChi (1 / 2 + (t : ℂ) * I) * (ν : ℂ) ^ ((1 / 2 + (t : ℂ) * I) - 1)
+        + I * (((Real.sqrt b / (2 * Real.pi * ν * b - t) : ℝ) : ℂ)
+              * Complex.exp (Complex.I * ((2 * Real.pi * ν * b - t * Real.log b : ℝ) : ℂ))
+            - ((Real.sqrt a / (2 * Real.pi * ν * a - t) : ℝ) : ℂ)
+              * Complex.exp (Complex.I * ((2 * Real.pi * ν * a - t * Real.log a : ℝ) : ℂ)))‖
+      ≤ 2 * (|-(Real.sqrt a * (2 * Real.pi * ν * a + t)) / (2 * (2 * Real.pi * ν * a - t) ^ 3)|
+          + |-(Real.sqrt b * (2 * Real.pi * ν * b + t)) / (2 * (2 * Real.pi * ν * b - t) ^ 3)|)
+        + ν ^ (-(1 / 2 : ℝ)) * Real.exp (-(Real.pi * t)) :=
+  RiemannHypothesis.ZetaMellinPhase.norm_integral_sub_zetaChi_add_boundary_le ht hν ha hat hbt
+
+/-- **The error of the approximate functional equation for `t ≥ 200`** is at most `80/√(N + 1/2)`,
+`N = ⌊√(t/2π)⌋`. -/
+example {t : ℝ} (ht : 200 ≤ t) :
+    ‖riemannZeta (1 / 2 + (t : ℂ) * I)
+        - RiemannHypothesis.zetaSum (RiemannHypothesis.afeLength t) (1 / 2 + (t : ℂ) * I)
+        - RiemannHypothesis.zetaChi (1 / 2 + (t : ℂ) * I)
+          * RiemannHypothesis.zetaSumDual (RiemannHypothesis.afeLength t) (1 / 2 + (t : ℂ) * I)‖
+      ≤ 80 / Real.sqrt ((RiemannHypothesis.afeLength t : ℝ) + 1 / 2) :=
+  RiemannHypothesis.AFEProof.norm_afe_error_le_large ht
+
+/-- **The approximate functional equation of Hardy and Littlewood (R3)**, unconditionally, with
+the constant `250`, written out in full. -/
+example : ∀ t : ℝ, 2 ≤ t →
+    ‖riemannZeta (1 / 2 + (t : ℂ) * I)
+        - RiemannHypothesis.zetaSum ⌊Real.sqrt (t / (2 * Real.pi))⌋₊ (1 / 2 + (t : ℂ) * I)
+        - RiemannHypothesis.zetaChi (1 / 2 + (t : ℂ) * I)
+          * RiemannHypothesis.zetaSumDual ⌊Real.sqrt (t / (2 * Real.pi))⌋₊ (1 / 2 + (t : ℂ) * I)‖
+      ≤ 250 * t ^ (-(1 / 4) : ℝ) :=
+  RiemannHypothesis.afeCriticalLine
+
+example : RiemannHypothesis.AFECriticalLine 250 := RiemannHypothesis.afeCriticalLine
+
+/-- **The convexity bound on the critical line, unconditionally**:
+`‖ζ(1/2 + it)‖ ≤ 254 t^(1/4)` for `t ≥ 2`. -/
+example {t : ℝ} (ht : 2 ≤ t) :
+    ‖riemannZeta (1 / 2 + (t : ℂ) * I)‖ ≤ (250 + 4) * t ^ ((1 : ℝ) / 4) :=
+  RiemannHypothesis.norm_riemannZeta_criticalLine_le ht
 
 /-! ## The conjecture itself is *not* claimed
 

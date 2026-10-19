@@ -18,8 +18,11 @@ This file replaces the trivial bound by a genuine cancellation estimate.  Van de
 third-derivative test (`RiemannHypothesis.VanDerCorputThird`), applied to the phase
 `x ↦ (t/2π) log x` on a dyadic block, gives `‖∑_{M ≤ n < M+L} n^(-1/2-it)‖ ≪ t^(1/6)` uniformly
 for `t^(1/3) ≪ M ≤ √t`, and summing `O(log t)` such blocks bounds the whole Dirichlet polynomial
-of length `√(t/2π)`.  Conditionally on the approximate functional equation this is the classical
-subconvexity exponent `1/6` of Hardy and Littlewood.
+of length `√(t/2π)`.  Together with the approximate functional equation this is the classical
+subconvexity exponent `1/6` of Hardy and Littlewood.  The approximate functional equation is now
+a theorem (`afeCriticalLine : AFECriticalLine 250`, `RiemannHypothesis.AFECriticalLineProof`), so
+the hypothesis of the last theorem below can be discharged; the exponent `1/6` for `ζ` is also
+proved without it in `RiemannHypothesis.SubconvexityUnconditional`.
 
 ## Main results
 
@@ -36,8 +39,9 @@ All of the following are **unconditional** except the last one.
   `‖∑_{j<L} (M+j)^(-1/2-i u⁶)‖ ≤ 60 u` for `30 u² ≤ M ≤ u³`, `L ≤ M`.
 * `norm_zetaSum_le_of_le_cube` — summing over dyadic blocks:
   `‖∑_{n ≤ N} n^(-1/2-i u⁶)‖ ≤ 60 u (log₂ N + 1)` for `N ≤ u³`.
-* `norm_riemannZeta_criticalLine_le_of_afe` — **conditionally on `AFECriticalLine C`**,
-  `‖ζ(1/2+it)‖ ≤ C + 120 t^(1/6) (log t + 1)` for `t ≥ 10⁹`.
+* `norm_riemannZeta_criticalLine_le_of_afe` — **with `AFECriticalLine C` as hypothesis**,
+  `‖ζ(1/2+it)‖ ≤ C + 120 t^(1/6) (log t + 1)` for `t ≥ 10⁹`; with `afeCriticalLine` this holds
+  with `C = 250`.
 
 The height parameter is written `u = t^(1/6)` throughout, so that every inequality that has to be
 checked is polynomial in `u`.  The constants are not optimized; `60` is comfortably larger than
@@ -45,9 +49,9 @@ the `√2343 ≈ 48.4` that the argument actually produces.
 
 ## Hypothesis hygiene (AGENTS.md)
 
-Only the last theorem is conditional, and its single hypothesis is `AFECriticalLine C`, whose four
-hygiene questions are answered in the module docstring of
-`RiemannHypothesis.ApproximateFunctionalEquation`.  Nothing in this file assumes anything else:
+Only the last theorem takes a hypothesis, `AFECriticalLine C`, whose four hygiene questions are
+answered in the module docstring of `RiemannHypothesis.ApproximateFunctionalEquation`; it is
+proved for `C = 250` by `afeCriticalLine`.  Nothing in this file assumes anything else:
 the block estimate, the Abel summation and the dyadic decomposition are proved outright.
 -/
 

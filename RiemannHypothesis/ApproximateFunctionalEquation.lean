@@ -28,8 +28,11 @@ functional equation and exactly what Euler–Maclaurin cannot do.
 ## What this file contains, and what it does not
 
 `AFECriticalLine C` below is the **statement** of the approximate functional equation with an
-explicit constant, as a `Prop`.  It is *not proved here*.  This file proves the parts of the
-surrounding theory that are unconditional, and one conditional consequence:
+explicit constant, as a `Prop`.  It is *not proved in this file*; it is proved, with `C = 250`, in
+`RiemannHypothesis.AFECriticalLineProof` (`afeCriticalLine : AFECriticalLine 250`), by exact
+Poisson summation between half-integers and a stationary-phase evaluation of the resulting
+integrals.  This file proves the parts of the surrounding theory that are unconditional, and one
+consequence stated with the approximate functional equation as a hypothesis:
 
 * `zetaSum`, `zetaSumDual` — the two Dirichlet polynomials, `∑_{n ≤ N} n^(-s)` and
   `∑_{n ≤ N} n^(s-1)`;
@@ -41,20 +44,21 @@ surrounding theory that are unconditional, and one conditional consequence:
 * `norm_riemannZeta_criticalLine_le_of_afe` — **conditionally on the approximate functional
   equation**, the log-free convexity bound `‖ζ(1/2 + i t)‖ ≤ (C + 4) t^(1/4)`.
 
-  This is a genuine improvement on what is proved unconditionally in
-  `RiemannHypothesis.StripGrowth` (`‖ζ(1/2+it)‖ ≤ 16 √|t| (1 + log|t|)`, i.e. `t^(1/2)` up to a
-  logarithm) and it is the exponent `(1-σ)/2` at `σ = 1/2` recorded as still open in the
-  boundary of the task-board row `M1-GROWTH`.  Note that the *trivial* estimate of the two sums
+  With `afeCriticalLine` it is unconditional:
+  `RiemannHypothesis.norm_riemannZeta_criticalLine_le` gives `‖ζ(1/2 + i t)‖ ≤ 254 t^(1/4)` for
+  `t ≥ 2`.  (The log-free convexity bound is also proved, by Phragmén–Lindelöf, in
+  `RiemannHypothesis.ConvexityLogFree`.)  Note that the *trivial* estimate of the two sums
   is all that is used: no cancellation in either Dirichlet polynomial is exploited.  Exploiting
   it — with the van der Corput machinery of `RiemannHypothesis.VanDerCorputSums` — is what would
   give the subconvexity exponent `1/6`.
 
 ## Hypothesis hygiene (AGENTS.md)
 
-1. **Direction.**  Nothing in this repository gives either half of `AFECriticalLine`.  The free,
-   unconditional statement of the same shape is the Euler–Maclaurin approximation with a sum of
-   length `≥ t` and no `χ`-term (`RiemannHypothesis.Continuation`), which is *weaker* in exactly
-   the direction that matters: its sum is quadratically longer.
+1. **Direction.**  When the statement was recorded, nothing in this repository gave either half
+   of `AFECriticalLine`; the free statement of the same shape was the Euler–Maclaurin
+   approximation with a sum of length `≥ t` and no `χ`-term (`RiemannHypothesis.Continuation`),
+   *weaker* in exactly the direction that matters.  Since 2026-10-19 the statement itself is a
+   theorem: `afeCriticalLine : AFECriticalLine 250` (`RiemannHypothesis.AFECriticalLineProof`).
 2. **Strength.**  `AFECriticalLine` yields the log-free convexity bound `t^(1/4)` (proved below),
    and with cancellation it yields `t^(1/6)`; it does not yield, and is not equivalent to, the
    Lindelöf hypothesis, let alone the Riemann hypothesis.  It is a statement about `ζ` on a
@@ -63,9 +67,11 @@ surrounding theory that are unconditional, and one conditional consequence:
 3. **Non-triviality.**  It is a classical unconditional theorem of Hardy and Littlewood (1921);
    its standard proofs go through the Riemann–Siegel contour integral, or through truncated
    Poisson summation followed by a stationary-phase evaluation (van der Corput's B process).
-   Neither of these is in Mathlib or in this repository, which is precisely why the statement is
-   recorded as a hypothesis rather than proved.  It is in no way derived from the Riemann
-   hypothesis.
+   It is proved in this repository (`RiemannHypothesis.AFECriticalLineProof`, constant `250`) by
+   a variant of the second route: exact Poisson summation between half-integers
+   (`RiemannHypothesis.PoissonSummationInterval`) and the exact Mellin evaluation of the complete
+   stationary-phase integral (`RiemannHypothesis.ZetaMellinPhase`).  It is in no way derived from
+   the Riemann hypothesis.
 4. **Attribution.**  The statement is Theorem 4.12 of Titchmarsh's *The Theory of the Riemann
    Zeta-Function* specialized to `σ = 1/2`, `x = y = √(t/2π)`, where the error term is
    `O(x^(-σ) + t^(1/2-σ) y^(σ-1)) = O(t^(-1/4))`.  It quantifies over `ζ` on the critical line

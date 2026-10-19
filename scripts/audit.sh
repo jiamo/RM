@@ -231,6 +231,14 @@ import RiemannHypothesis.BrunTitchmarshTwo
 import RiemannHypothesis.VanDerCorputSumIntegral
 import RiemannHypothesis.ZetaPartialSum
 import RiemannHypothesis.HardyLittlewoodMeanSquare
+import RiemannHypothesis.OscillatoryIntegral
+import RiemannHypothesis.PoissonSummationInterval
+import RiemannHypothesis.LaplaceGamma
+import RiemannHypothesis.ZetaMellinPhase
+import RiemannHypothesis.ZetaStationaryPhase
+import RiemannHypothesis.AFEIntegrals
+import RiemannHypothesis.AFEProof
+import RiemannHypothesis.AFECriticalLineProof
 
 #print axioms RiemannHypothesisConjecture.zeta_strip_iff_eta
 #print axioms RiemannHypothesisConjecture.zeta_iff_zeta_strip
@@ -1125,6 +1133,25 @@ import RiemannHypothesis.HardyLittlewoodMeanSquare
 #print axioms RiemannHypothesis.HardyLittlewood.abs_integral_block_zeta_sub_le
 #print axioms RiemannHypothesis.HardyLittlewood.exists_abs_integral_normSq_riemannZeta_sub_le
 #print axioms RiemannHypothesis.HardyLittlewood.tendsto_integral_normSq_riemannZeta_div
+#print axioms RiemannHypothesis.Oscillatory.integral_eq_second_order
+#print axioms RiemannHypothesis.Oscillatory.norm_integral_add_boundary_le_of_monotone
+#print axioms RiemannHypothesis.PoissonInterval.hasSum_sum_Ioc_sub_integral
+#print axioms RiemannHypothesis.PoissonInterval.hasSum_sum_Ioc_halfInt
+#print axioms RiemannHypothesis.LaplaceGamma.integral_cpow_mul_exp_neg_mul_Ioi_of_re_pos
+#print axioms RiemannHypothesis.ZetaMellinPhase.tendsto_integral_mellin
+#print axioms RiemannHypothesis.ZetaMellinPhase.norm_mellinMain_sub_zetaChi_le
+#print axioms RiemannHypothesis.ZetaMellinPhase.norm_integral_sub_mellinMain_add_boundary_le
+#print axioms RiemannHypothesis.ZetaMellinPhase.norm_integral_sub_zetaChi_add_boundary_le
+#print axioms RiemannHypothesis.ZetaMellinPhase.norm_mI_neg_add_boundary_le
+#print axioms RiemannHypothesis.ZetaMellinPhase.norm_mI_le_of_near
+#print axioms RiemannHypothesis.AFEProof.hasSum_Fν
+#print axioms RiemannHypothesis.AFEProof.norm_zeta_sub_zetaSum_sub_le
+#print axioms RiemannHypothesis.AFEProof.norm_poisson_sub_main_le
+#print axioms RiemannHypothesis.AFEProof.afe_bound_numeric
+#print axioms RiemannHypothesis.AFEProof.norm_afe_error_le_large
+#print axioms RiemannHypothesis.AFEProof.norm_afe_error_le_small
+#print axioms RiemannHypothesis.afeCriticalLine
+#print axioms RiemannHypothesis.norm_riemannZeta_criticalLine_le
 EOF
 lake env lean .lake/build/axioms.lean > .lake/build/axioms.out
 cat .lake/build/axioms.out

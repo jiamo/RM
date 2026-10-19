@@ -130,8 +130,10 @@ Not every unproved `Prop` of this repository is an open assumption.  Three kinds
 mixing them dilutes the signal the audit exists to give:
 
 * `OPEN` — a statement this repository would like to prove and cannot: the Riemann hypothesis
-  itself in its several forms, the approximate functional equation, the Lindelöf hypothesis,
-  and the five arithmetic criteria equivalent to the conjecture.  A theorem assuming one of
+  itself in its several forms, the Lindelöf hypothesis, and the five arithmetic criteria
+  equivalent to the conjecture.  (The approximate functional equation `AFECriticalLine` was in
+  this list until 2026-10-19, when `afeCriticalLine : AFECriticalLine 250` proved it; the two
+  theorems that take it as a hypothesis are therefore no longer reported.)  A theorem assuming one of
   these says nothing unconditional.
 * `DEFINITIONAL` — a property of an *argument* of the theorem, not an assumption about `ζ`:
   `EquidistributedMod1`, `WeylSumsVanish` and `CountsEquidistribute` are the three sides of
@@ -164,7 +166,6 @@ slip in unnoticed.
 def openStatements : List Name :=
   [`RiemannHypothesis.ZetaForm,
    `RiemannHypothesis.ZetaStripForm,
-   `RiemannHypothesis.AFECriticalLine,
    `RiemannHypothesis.LindelofHypothesis,
    `RiemannHypothesis.ChebyshevBoundForm,
    `RiemannHypothesis.LiouvilleBoundForm,
