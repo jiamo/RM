@@ -11,7 +11,7 @@ Memory is the third constraint; see "Resources" below.
 ## 0. The manifest is tracked
 
 `lake-manifest.json` is committed and is not ignored by `.gitignore`. It pins Mathlib at
-`db584cd6d46c92f209a44c0f1c829460d327499d` and contains the path dependency `Zeta23`
+`0df444a360eaa60ab8c11dca51a86af692955474` and contains the path dependency `Zeta23`
 (`vendor/zeta23`). With the committed manifest, `lake build` resolves nothing new. Do not
 replace it with a manifest regenerated elsewhere.
 
@@ -36,8 +36,8 @@ The three pins must agree:
 
 | file | value |
 |---|---|
-| `lean-toolchain` | `leanprover/lean4:v4.33.0` |
-| `lakefile.toml` (`mathlib` rev) | `db584cd6d46c92f209a44c0f1c829460d327499d` |
+| `lean-toolchain` | `leanprover/lean4:v4.33.1` |
+| `lakefile.toml` (`mathlib` rev) | `0df444a360eaa60ab8c11dca51a86af692955474` |
 | `vendor/zeta23/lean-toolchain`, `vendor/zeta23/lakefile.toml` | the same pair |
 
 A mismatch shows up as *dependency* modules failing to compile (`Batteries`, `Aesop`,

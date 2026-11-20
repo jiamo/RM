@@ -13,12 +13,13 @@
 
 - Milestone: `M1`
 - Tasks in milestone: `102`
-- Tasks total: `189`
+- Tasks total: `190`
 - `DONE_STRONG`: `120`
 - `DONE_WEAK`: `57`
 - `TODO_NEEDS_DESIGN`: `10`
 - `CLAIM_RISK`: `1`
 - `TODO_READY`: `1`
+- `IN_PROGRESS`: `1`
 - Next dependency-ready task: `M1-VDC-B-PROCESS`
 - Next title: van der Corput's B process in general: truncated Poisson summation (Titchmarsh, Lemma 4.10) for arbitrary real endpoints, and its weighted forms
 - Next depends on: `M1-AFE-CRITICAL-LINE` (DONE_STRONG), `M1-VDC-SUM-INTEGRAL` (DONE_STRONG)
@@ -93,6 +94,7 @@
 | 49.7 | `M3-VINOGRADOV-CONDITIONING` | P2 | `DONE_WEAK` | `M3-VINOGRADOV-CONGRUENCING` |
 | 50 | `M3-VINOGRADOV` | P2 | `TODO_NEEDS_DESIGN` | `M1-ZERO-FREE-REGION` |
 | 51 | `M3-GAP` | P0 | `TODO_NEEDS_DESIGN` | `M2-CONREY`, `M2-DENSITY`, `M3-VINOGRADOV` |
+| 51 | `M3-ALPO-VERIFICATION` | P1 | `IN_PROGRESS` | `M0-STATEMENTS` |
 | 52 | `M3-ATIYAH-VERIFICATION` | P2 | `TODO_NEEDS_DESIGN` | `M0-STATEMENTS` |
 | 53 | `M3-GEOMETRY` | P1 | `TODO_NEEDS_DESIGN` | `M1-SPECTRAL-INTERPRETATION`, `M1-EXPLICIT` |
 | 60 | `M3-EVENTUAL-COUNTING-CRITERION` | P1 | `DONE_WEAK` | `M1-TWO-THIRDS`, `M0-STATEMENTS` |

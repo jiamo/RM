@@ -1,0 +1,106 @@
+# Verification of the vendored alpo.ge Lean tree, a claimed proof of RH and GRH
+# (vendor/alpo; see vendor/alpo/README.md for where the code comes from).
+#
+# Manual trigger only, like CI: Actions tab -> "alpo-verify" -> "Run workflow", or
+# `gh workflow run alpo-verify`.
+#
+#  * provenance: on a standard runner, a few minutes. Downloads the 14 published parts again,
+#    checks them against vendor/alpo/SHA256SUMS, checks that vendor/alpo/lean is byte-identical
+#    to the archive, and runs the static scan.
+#  * build-verify: compiles all 175,187 modules (estimated 290-460 core-hours and about 57 GB
+#    of build output, far beyond a standard runner's 6 hours and 14 GB of disk), then checks
+#    the statements and axioms (Verify.lean), checks them against this repository's statements
+#    (Bridge.lean), and optionally replays every declaration in the kernel. It runs only when
+#    the repository variable ALPO_RUNNER names a runner big enough. A self-hosted runner is
+#    recommended (jobs may run up to 5 days, and the build directory survives between runs so
+#    an interrupted build resumes): at least 32 cores, 128 GB of RAM and 150 GB of free disk.
+#    Never `lake build` the tree: Lake v4.33 cannot cap its parallelism (vendor/alpo/README.md).
+name: alpo-verify
+
+on:
+  workflow_dispatch:
+    inputs:
+      jobs:
+        description: "Parallel lean processes for the build (empty: half the runner's CPUs)"
+        required: false
+        default: ""
+      kernel_replay:
+        description: "Also run leanchecker --fresh Main (very long, needs a lot of RAM)"
+        type: boolean
+        required: false
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: alpo-verify-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  provenance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Provenance (download, hashes, byte-identical tree)
+        run: bash vendor/alpo/tools/provenance.sh
+
+      - name: Static scan
+        run: bash vendor/alpo/tools/scan.sh
+
+  build-verify:
+    needs: provenance
+    if: ${{ vars.ALPO_RUNNER != '' }}
+    runs-on: ${{ vars.ALPO_RUNNER }}
+    timeout-minutes: 7200
+    steps:
+      - name: Checkout (keep vendor/alpo/lean/.lake, so an interrupted build resumes)
+        uses: actions/checkout@v4
+        with:
+          clean: false
+
+      - name: Install elan and the toolchain
+        run: |
+          set -euo pipefail
+          if ! command -v elan >/dev/null && [ ! -x "$HOME/.elan/bin/elan" ]; then
+            curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh \
+              | sh -s -- -y --default-toolchain none
+          fi
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+          "$HOME/.elan/bin/elan" toolchain install "$(cat vendor/alpo/lean/lean-toolchain)"
+
+      - name: Mathlib's prebuilt cache (for the tree and for this repository)
+        run: |
+          set -euo pipefail
+          (cd vendor/alpo/lean && lake exe cache get)
+          lake exe cache get
+
+      - name: Build the tree (capped parallelism, watchdog, resumable)
+        env:
+          JOBS: ${{ inputs.jobs }}
+        run: |
+          set -euo pipefail
+          if [ -n "$JOBS" ]; then
+            case "$JOBS" in (*[!0-9]*) echo "jobs must be a number"; exit 1 ;; esac
+            python3 -I vendor/alpo/tools/build.py --root vendor/alpo/lean --jobs "$JOBS"
+          else
+            python3 -I vendor/alpo/tools/build.py --root vendor/alpo/lean
+          fi
+
+      - name: Statements and axioms (Verify.lean)
+        working-directory: vendor/alpo/lean
+        run: lake env lean ../Verify.lean
+
+      - name: Against this repository's statements (Bridge.lean)
+        run: |
+          set -euo pipefail
+          lake build RiemannHypothesis.Main
+          bash vendor/alpo/tools/bridge.sh
+
+      - name: Kernel replay (leanchecker --fresh Main)
+        if: ${{ inputs.kernel_replay }}
+        working-directory: vendor/alpo/lean
+        run: lake env leanchecker --fresh Main

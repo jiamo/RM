@@ -4018,6 +4018,31 @@ tasks:
       - "The verdict is recorded in an evidence file; either way it does not claim RH."
     required_gates:
       - "lake build"
+  - id: M3-ALPO-VERIFICATION
+    priority: P1
+    status: IN_PROGRESS
+    track: research
+    title: "Verify the alpo.ge Lean tree (a claimed proof of RH and GRH, 2026-11-20): build it, check its statements and axioms, and check it against ZetaForm"
+    latest_evidence: vendor/alpo/README.md
+    latest_update: "2026-11-21 vendored unmodified in vendor/alpo/lean (175,187 files, 1.03 GB; SHA-256 of the 14 published parts in vendor/alpo/SHA256SUMS; announcement vendor/alpo/remark.pdf). Its Main states riemannHypothesis : RiemannHypothesis (Mathlib's, = our ZetaForm) and GRH for Dirichlet L-functions. Provenance and static scan pass; 14 sample modules compile. This repository moved to the tree's pins (Lean v4.33.1, Mathlib 0df444a3, one commit after db584cd6) so that Bridge.lean can import both; this repository has not yet been rebuilt under the new pins."
+    open_boundary: "Unverified. Main imports all 175,187 modules, so only a full build decides: estimated 290-460 core-hours and about 57 GB of output (2-3 days at 6 jobs, 5-8 hours on 64 cores). Must use vendor/alpo/tools/build.py, never lake build (Lake v4.33 cannot cap its parallelism; an unthrottled run panicked the host on 2026-11-20). Then Verify.lean, Bridge.lean and leanchecker --fresh Main. Even a pass rests on the Lean kernel and on Mathlib's riemannZeta and DirichletCharacter.LFunction; EtaForm removes the latter for RH, an independent kernel (lean4lean, nanoda) would remove the former. This row verifies a claim; it does not accept it."
+    milestone: M3
+    depends_on:
+      - M0-STATEMENTS
+    rank: 51
+    exit_criteria:
+      - "vendor/alpo/lean is byte-identical to the archive published at alpo.ge (vendor/alpo/tools/provenance.sh passes) and vendor/alpo/tools/scan.sh passes."
+      - "All 175,187 modules compile with vendor/alpo/tools/build.py under Lean v4.33.1 and Mathlib 0df444a3."
+      - "vendor/alpo/Verify.lean passes: the five theorems of Main have exactly the advertised types, compared as kernel terms, and depend only on propext, Classical.choice, Quot.sound."
+      - "vendor/alpo/Bridge.lean compiles with the same three axioms: ZetaForm, ZetaStripForm and EtaForm follow from the tree's riemannHypothesis; the tree's RiemannZetaZerosOnLine is ZetaForm (Iff.rfl); and ZetaStripForm and EtaForm follow a second time from the tree's GRH theorem through the character mod 1, without riemannHypothesis."
+      - "leanchecker --fresh Main passes."
+      - "The verdict is recorded in an evidence file. A pass is recorded as an external machine-checked proof, not as a theorem of this repository; M4-RH is not closed by this row."
+    required_gates:
+      - "bash vendor/alpo/tools/provenance.sh"
+      - "bash vendor/alpo/tools/scan.sh"
+      - "python3 -I vendor/alpo/tools/build.py --root vendor/alpo/lean"
+      - "(cd vendor/alpo/lean && lake env lean ../Verify.lean)"
+      - "bash vendor/alpo/tools/bridge.sh"
   - id: M3-GEOMETRY
     priority: P1
     status: TODO_NEEDS_DESIGN

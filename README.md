@@ -384,7 +384,7 @@ is precisely the equivalence `ZetaStripForm ↔ EtaForm`.
 ## Building
 
 ```bash
-elan toolchain install leanprover/lean4:v4.33.0
+elan toolchain install leanprover/lean4:v4.33.1
 lake exe cache get   # Mathlib's prebuilt oleans; without this Mathlib is compiled from source
 lake build
 ./scripts/audit.sh
@@ -392,6 +392,24 @@ lake build
 
 The vendored [`Zeta23`](vendor/zeta23) library and this repository are compiled from source
 (there is no cache for them), which takes a while on a first build.
+
+## The alpo.ge tree: a claimed proof, vendored for verification
+
+[`vendor/alpo`](vendor/alpo) holds a Lean tree published on 2026-11-20 at
+`https://alpo.ge/lean.tar.gz.part01` … `part14`, together with the announcement that came with it
+([`remark.pdf`](vendor/alpo/remark.pdf)). It claims a proof of the Riemann hypothesis
+(`theorem riemannHypothesis : RiemannHypothesis`, Mathlib's statement, which is our `ZetaForm`)
+and of GRH for Dirichlet `L`-functions. **It is not verified, and nothing in this repository
+depends on it.** The tree is kept byte-identical to the published archive (checked by
+`vendor/alpo/tools/provenance.sh` against the recorded SHA-256 hashes), passes a static scan,
+and has 175,187 modules, all of which `Main` imports, so only a full build can decide it
+(estimated 290–460 core-hours). This repository uses the same pins as the tree (Lean v4.33.1,
+Mathlib `0df444a3`), so that [`vendor/alpo/Bridge.lean`](vendor/alpo/Bridge.lean) can check the
+tree's theorem against `ZetaForm`, `ZetaStripForm` and `EtaForm`. Where the code comes from, what
+has been checked, and how to finish the check: [`vendor/alpo/README.md`](vendor/alpo/README.md);
+CI: the manual workflow [`alpo-verify`](.github/workflows/alpo-verify.yml); task board:
+`M3-ALPO-VERIFICATION`. Do not run `lake build` inside `vendor/alpo/lean`: Lake cannot cap its
+parallelism, and on this tree an unthrottled build crashed the machine.
 
 ## Goal task board
 
