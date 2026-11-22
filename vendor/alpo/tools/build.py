@@ -244,8 +244,11 @@ def main():
                 if m.startswith(prefix):
                     opts += lib_opts
             log = os.path.join(log_dir, m + ".log")
-            cmd = ["nice", "-n", str(a.nice), "lean", "-j1", *extra, *opts, src_of(m),
-                   "-o", tmp_o, "-i", tmp_i]
+            # -R src: the module name is computed relative to the source directory, as Lake
+            # does. Without it Lean would name the module `src.<M>` (wrong private-name
+            # mangling, `open private ... from <M>` fails, output differs from Lake's).
+            cmd = ["nice", "-n", str(a.nice), "lean", "-j1", "-R", src, *extra, *opts,
+                   src_of(m), "-o", tmp_o, "-i", tmp_i]
             fh = open(log, "w")
             p = subprocess.Popen(cmd, cwd=root, env=env, stdout=fh, stderr=subprocess.STDOUT,
                                  start_new_session=True)

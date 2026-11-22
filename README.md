@@ -399,11 +399,16 @@ The vendored [`Zeta23`](vendor/zeta23) library and this repository are compiled 
 `https://alpo.ge/lean.tar.gz.part01` … `part14`, together with the announcement that came with it
 ([`remark.pdf`](vendor/alpo/remark.pdf)). It claims a proof of the Riemann hypothesis
 (`theorem riemannHypothesis : RiemannHypothesis`, Mathlib's statement, which is our `ZetaForm`)
-and of GRH for Dirichlet `L`-functions. **It is not verified, and nothing in this repository
-depends on it.** The tree is kept byte-identical to the published archive (checked by
-`vendor/alpo/tools/provenance.sh` against the recorded SHA-256 hashes), passes a static scan,
-and has 175,187 modules, all of which `Main` imports, so only a full build can decide it
-(estimated 290–460 core-hours). This repository uses the same pins as the tree (Lean v4.33.1,
+and of GRH for Dirichlet `L`-functions. **Nothing in this repository depends on it.** The tree
+is kept byte-identical to the published archive (checked by `vendor/alpo/tools/provenance.sh`
+against the recorded SHA-256 hashes) and passes a static scan. Its 175,187 modules have been
+compiled and checked by several independent kernels elsewhere (A. Sutherland, MIT, as of
+2026-11-22), on the same archive (identical SHA-256); that full check has not been repeated
+here. What is compiled here, and in CI, is the proof's analytic half: in
+[`vendor/alpo/AnalyticBridge.lean`](vendor/alpo/AnalyticBridge.lean), a one-sided window bound
+on the smoothed prime sum implies `ZetaForm`, `ZetaStripForm` and `EtaForm`, so for `ζ` the
+arithmetic half has to be trusted for that one statement only. A 55-page exposition is in
+[`riemann_hypothesis.pdf`](vendor/alpo/riemann_hypothesis.pdf). This repository uses the same pins as the tree (Lean v4.33.1,
 Mathlib `0df444a3`), so that [`vendor/alpo/Bridge.lean`](vendor/alpo/Bridge.lean) can check the
 tree's theorem against `ZetaForm`, `ZetaStripForm` and `EtaForm`. Where the code comes from, what
 has been checked, and how to finish the check: [`vendor/alpo/README.md`](vendor/alpo/README.md);

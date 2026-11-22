@@ -4024,14 +4024,15 @@ tasks:
     track: research
     title: "Verify the alpo.ge Lean tree (a claimed proof of RH and GRH, 2026-11-20): build it, check its statements and axioms, and check it against ZetaForm"
     latest_evidence: vendor/alpo/README.md
-    latest_update: "2026-11-21 vendored unmodified in vendor/alpo/lean (175,187 files, 1.03 GB; SHA-256 of the 14 published parts in vendor/alpo/SHA256SUMS; announcement vendor/alpo/remark.pdf). Its Main states riemannHypothesis : RiemannHypothesis (Mathlib's, = our ZetaForm) and GRH for Dirichlet L-functions. Provenance and static scan pass; 14 sample modules compile. This repository moved to the tree's pins (Lean v4.33.1, Mathlib 0df444a3, one commit after db584cd6) so that Bridge.lean can import both; this repository has not yet been rebuilt under the new pins."
-    open_boundary: "Unverified. Main imports all 175,187 modules, so only a full build decides: estimated 290-460 core-hours and about 57 GB of output (2-3 days at 6 jobs, 5-8 hours on 64 cores). Must use vendor/alpo/tools/build.py, never lake build (Lake v4.33 cannot cap its parallelism; an unthrottled run panicked the host on 2026-11-20). Then Verify.lean, Bridge.lean and leanchecker --fresh Main. Even a pass rests on the Lean kernel and on Mathlib's riemannZeta and DirichletCharacter.LFunction; EtaForm removes the latter for RH, an independent kernel (lean4lean, nanoda) would remove the former. This row verifies a claim; it does not accept it."
+    latest_update: "2026-11-22 Independent verification reported by A. Sutherland (MIT, math.mit.edu/~drew/grh, as of 2026-11-22 04:35 UTC): all 175,187 modules compile, the five theorems use only the three standard axioms, leanchecker and lean4lean replay every module, the independent kernels nanoda and con-leche accept the full export, statement comparison passes; Lean default/paranoid kernel replay of the export still running then. The joined archive vendored here has the SHA-256 they checked (9631b4f0..., 239,275,554 bytes). Here: the analytic half (31 tree modules importing only Mathlib, Deduction.zeroFree_of_rpow_window) compiles in full with vendor/alpo/tools/analytic.sh (local run and CI job analytic), and vendor/alpo/AnalyticBridge.lean proves WindowBound -> ZetaForm, ZetaStripForm, EtaForm with standard axioms only; exposition vendor/alpo/riemann_hypothesis.pdf added. build.py fixed to pass -R src (module names now match Lake's). 2026-11-21: vendored unmodified (SHA256SUMS, remark.pdf); pins moved to Lean v4.33.1 / Mathlib 0df444a3; five repository modules compiled under them, the rest not yet rebuilt."
+    open_boundary: "The arithmetic half (WindowBound and its GRH form, paper (1.3)) is checked only through the full 175,187-module build: done independently, not here. Not run here: the full build (about 240-360 core-hours, 60-80 GB; vendor/alpo/tools/build.py only, never lake build: an unthrottled lake build panicked the host on 2026-11-20), Verify.lean, Bridge.lean, leanchecker --fresh Main. A pass rests on the kernels (independent kernels reported above) and on Mathlib's riemannZeta and DirichletCharacter.LFunction (EtaForm removes the latter for RH). This row verifies a claim; it does not accept it, and it does not close M4-RH."
     milestone: M3
     depends_on:
       - M0-STATEMENTS
     rank: 51
     exit_criteria:
       - "vendor/alpo/lean is byte-identical to the archive published at alpo.ge (vendor/alpo/tools/provenance.sh passes) and vendor/alpo/tools/scan.sh passes."
+      - "The analytic half compiles in full and vendor/alpo/AnalyticBridge.lean proves WindowBound -> ZetaForm, ZetaStripForm, EtaForm with only propext, Classical.choice, Quot.sound (vendor/alpo/tools/analytic.sh; CI job analytic)."
       - "All 175,187 modules compile with vendor/alpo/tools/build.py under Lean v4.33.1 and Mathlib 0df444a3."
       - "vendor/alpo/Verify.lean passes: the five theorems of Main have exactly the advertised types, compared as kernel terms, and depend only on propext, Classical.choice, Quot.sound."
       - "vendor/alpo/Bridge.lean compiles with the same three axioms: ZetaForm, ZetaStripForm and EtaForm follow from the tree's riemannHypothesis; the tree's RiemannZetaZerosOnLine is ZetaForm (Iff.rfl); and ZetaStripForm and EtaForm follow a second time from the tree's GRH theorem through the character mod 1, without riemannHypothesis."
@@ -4040,6 +4041,7 @@ tasks:
     required_gates:
       - "bash vendor/alpo/tools/provenance.sh"
       - "bash vendor/alpo/tools/scan.sh"
+      - "bash vendor/alpo/tools/analytic.sh"
       - "python3 -I vendor/alpo/tools/build.py --root vendor/alpo/lean"
       - "(cd vendor/alpo/lean && lake env lean ../Verify.lean)"
       - "bash vendor/alpo/tools/bridge.sh"

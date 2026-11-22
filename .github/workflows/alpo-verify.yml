@@ -7,7 +7,12 @@
 #  * provenance: on a standard runner, a few minutes. Downloads the 14 published parts again,
 #    checks them against vendor/alpo/SHA256SUMS, checks that vendor/alpo/lean is byte-identical
 #    to the archive, and runs the static scan.
-#  * build-verify: compiles all 175,187 modules (estimated 290-460 core-hours and about 57 GB
+#  * analytic: on a standard runner, minutes. Compiles in full the analytic half of the proof
+#    (the 31 tree modules behind Deduction.zeroFree_of_rpow_window, which import only Mathlib),
+#    this repository's RiemannHypothesis.{Defs,Connected,Eta,Zeros,Main}, and
+#    vendor/alpo/AnalyticBridge.lean: a one-sided window bound on the smoothed prime sum implies
+#    ZetaForm, ZetaStripForm and EtaForm. What remains unchecked by CI is that bound itself.
+#  * build-verify: compiles all 175,187 modules (measured: about 240-360 core-hours and 60-80 GB
 #    of build output, far beyond a standard runner's 6 hours and 14 GB of disk), then checks
 #    the statements and axioms (Verify.lean), checks them against this repository's statements
 #    (Bridge.lean), and optionally replays every declaration in the kernel. It runs only when
@@ -50,6 +55,30 @@ jobs:
 
       - name: Static scan
         run: bash vendor/alpo/tools/scan.sh
+
+  analytic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install elan and the toolchain
+        run: |
+          set -euo pipefail
+          curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh \
+            | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+          "$HOME/.elan/bin/elan" toolchain install "$(cat vendor/alpo/lean/lean-toolchain)"
+
+      - name: Mathlib's prebuilt cache (for the tree)
+        working-directory: vendor/alpo/lean
+        run: lake exe cache get
+
+      - name: Analytic half (31 tree modules, 5 repository modules, AnalyticBridge.lean)
+        env:
+          JOBS: "2"
+        run: bash vendor/alpo/tools/analytic.sh
 
   build-verify:
     needs: provenance
