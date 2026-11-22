@@ -12,14 +12,14 @@
 ## Active milestone
 
 - Milestone: `M1`
-- Tasks in milestone: `102`
-- Tasks total: `190`
+- Tasks in milestone: `103`
+- Tasks total: `194`
 - `DONE_STRONG`: `120`
-- `DONE_WEAK`: `55`
-- `TODO_NEEDS_DESIGN`: `9`
-- `SUPERSEDED`: `4`
-- `TODO_READY`: `1`
-- `IN_PROGRESS`: `1`
+- `DONE_WEAK`: `50`
+- `SUPERSEDED`: `12`
+- `TODO_NEEDS_DESIGN`: `8`
+- `TODO_READY`: `2`
+- `IN_PROGRESS`: `2`
 - Next dependency-ready task: `M1-VDC-B-PROCESS`
 - Next title: van der Corput's B process in general: truncated Poisson summation (Titchmarsh, Lemma 4.10) for arbitrary real endpoints, and its weighted forms
 - Next depends on: `M1-AFE-CRITICAL-LINE` (DONE_STRONG), `M1-VDC-SUM-INTEGRAL` (DONE_STRONG)
@@ -60,12 +60,13 @@
 | 34.96 | `M1-VAN-DER-CORPUT` | P1 | `DONE_WEAK` |  |
 | 34.99 | `M1-CRITICAL-LINE-MEAN-SQUARE` | P1 | `DONE_WEAK` | `M1-STRIP-MEAN-SQUARE` |
 | 36 | `M1-NUMERICAL` | P2 | `TODO_NEEDS_DESIGN` | `M0-EQUIV` |
+| 39 | `M1-MATHLIB-UPSTREAM` | P2 | `TODO_NEEDS_DESIGN` | `M0-STATEMENTS` |
 | 40 | `M2-MEANVALUE` | P0 | `DONE_WEAK` | `M1-GROWTH`, `M2-HILBERT-INEQUALITY` |
-| 45 | `M2-DENSITY` | P1 | `DONE_WEAK` | `M2-MEANVALUE`, `M2-DENSITY-POWER-SAVING` |
 | 46 | `M2-SELBERG-CLT` | P1 | `TODO_NEEDS_DESIGN` | `M2-MEANVALUE` |
 | 47 | `M2-PAIR-CORRELATION` | P1 | `TODO_NEEDS_DESIGN` | `M2-MEANVALUE`, `M1-EXPLICIT` |
 | 49 | `M2-WEIL-POSITIVITY` | P1 | `DONE_WEAK` | `M1-EXPLICIT` |
-| 50.985 | `M2-LINDELOF-DENSITY` | P1 | `DONE_WEAK` | `M2-BOHR-LANDAU` |
+| 50.5 | `M2-VON-KOCH` | P1 | `TODO_READY` | `M0-STATEMENTS` |
+| 50.6 | `M2-RH-MOEBIUS-BOUNDS` | P1 | `TODO_NEEDS_DESIGN` | `M2-LINDELOF-FROM-RH`, `M1-REDHEFFER` |
 | 50.987 | `M2-LINDELOF-FROM-RH` | P1 | `DONE_WEAK` | `M2-THREE-CIRCLES` |
 | 50.988 | `M2-LARGE-SIEVE` | P0 | `DONE_WEAK` | `M2-MEANVALUE` |
 | 50.9885 | `M2-LARGE-SIEVE-GALLAGHER` | P0 | `DONE_WEAK` | `M2-LARGE-SIEVE`, `M2-DISCRETE-MEANVALUE` |
@@ -77,24 +78,19 @@
 | 50.988957 | `M2-BRUN-TWIN` | P0 | `DONE_WEAK` | `M2-LARGE-SIEVE-SQUAREFREE`, `M2-BRUN-TITCHMARSH` |
 | 50.98896 | `M2-BRUN-CONSTANT` | P0 | `DONE_WEAK` | `M2-BRUN-TWIN` |
 | 50.989 | `M2-LARGE-VALUES` | P0 | `DONE_WEAK` | `M2-MEANVALUE` |
-| 50.991 | `M2-MOLLIFIED-MEAN-SQUARE` | P0 | `DONE_WEAK` | `M2-MEANVALUE`, `M2-ZERO-DETECTION` |
 | 50.992 | `M2-DISCRETE-MEANVALUE` | P0 | `DONE_WEAK` | `M2-MEANVALUE`, `M2-LARGE-VALUES` |
 | 50.993 | `M2-MEANVALUE-MV` | P0 | `DONE_WEAK` | `M2-MEANVALUE` |
 | 50.994 | `M2-DISCRETE-MEANVALUE-MV` | P0 | `DONE_WEAK` | `M2-MEANVALUE-MV`, `M2-DISCRETE-MEANVALUE` |
-| 50.995 | `M2-MOLLIFIED-ZETA-MEAN-SQUARE` | P0 | `DONE_WEAK` | `M2-MOLLIFIED-MEAN-SQUARE`, `M2-MEANVALUE-MV`, `M1-STRIP-MEAN-SQUARE` |
-| 50.996 | `M2-DENSITY-POWER-SAVING` | P0 | `DONE_WEAK` | `M2-MOLLIFIED-ZETA-MEAN-SQUARE`, `M1-ALMOST-ALL-STRIP` |
 | 51.0 | `M2-GRAM-INERTIA` | P1 | `DONE_WEAK` |  |
 | 51.1 | `M2-BEURLING-SELBERG` | P1 | `TODO_NEEDS_DESIGN` | `M2-HILBERT-INEQUALITY` |
 | 49.5 | `M3-VINOGRADOV-SYSTEM` | P2 | `DONE_WEAK` |  |
 | 49.6 | `M3-VINOGRADOV-CONGRUENCING` | P2 | `DONE_WEAK` | `M3-VINOGRADOV-SYSTEM` |
 | 49.7 | `M3-VINOGRADOV-CONDITIONING` | P2 | `DONE_WEAK` | `M3-VINOGRADOV-CONGRUENCING` |
 | 50 | `M3-VINOGRADOV` | P2 | `TODO_NEEDS_DESIGN` | `M1-ZERO-FREE-REGION` |
-| 51 | `M3-GAP` | P0 | `TODO_NEEDS_DESIGN` | `M2-CONREY`, `M2-DENSITY`, `M3-VINOGRADOV` |
 | 51 | `M3-ALPO-VERIFICATION` | P1 | `IN_PROGRESS` | `M0-STATEMENTS` |
+| 51.5 | `M3-ALPO-MINING` | P1 | `IN_PROGRESS` | `M0-STATEMENTS` |
 | 52 | `M3-ATIYAH-VERIFICATION` | P2 | `TODO_NEEDS_DESIGN` | `M0-STATEMENTS` |
-| 53 | `M3-GEOMETRY` | P1 | `TODO_NEEDS_DESIGN` | `M1-SPECTRAL-INTERPRETATION`, `M1-EXPLICIT` |
 | 60 | `M3-EVENTUAL-COUNTING-CRITERION` | P1 | `DONE_WEAK` | `M1-TWO-THIRDS`, `M0-STATEMENTS` |
-| 60 | `M4-RH` | P0 | `TODO_NEEDS_DESIGN` | `M3-GAP` |
 
 ## Superseded rows
 
@@ -103,4 +99,12 @@
 | `M1-EIGHTY-CRITICAL-ROUTE` | the alpo.ge Lean proof of RH (2026-11-20; external, independently verified; vendor/alpo, row M3-ALPO-VERIFICATION): under RH every nontrivial zero is on the critical line (windowCountOffLineMult_eq_zero_of_zetaStripForm), so any proportion is a corollary; the route existed only to reach 80 % without RH, through SpeiserTransfer, which stays unproved. |
 | `M2-MOLLIFIER` | the alpo.ge Lean proof of RH (2026-11-20; external, independently verified; vendor/alpo, row M3-ALPO-VERIFICATION): the mollifier machinery was for raising the proportion of zeroes on the critical line (Levinson, Conrey), which is 1 under RH. |
 | `M2-LEVINSON` | the alpo.ge Lean proof of RH (2026-11-20; external, independently verified; vendor/alpo, row M3-ALPO-VERIFICATION): the proportion of zeroes on the critical line is 1 under RH, so Levinson's one third is no longer a step towards anything here. |
+| `M2-DENSITY` | the alpo.ge Lean proof of RH (2026-11-20; external, independently verified; vendor/alpo, row M3-ALPO-VERIFICATION): under RH no zero lies to the right of the critical line, so N(sigma, T) = 0 for sigma > 1/2 and every density bound is a corollary. |
+| `M2-LINDELOF-DENSITY` | the alpo.ge Lean proof of RH (2026-11-20; external, independently verified; vendor/alpo, row M3-ALPO-VERIFICATION): under RH no zero lies to the right of the critical line, so N(sigma, T) = 0 for sigma > 1/2 and every density bound is a corollary. |
 | `M2-ZERO-DETECTION` | the alpo.ge Lean proof of RH (2026-11-20; external, independently verified; vendor/alpo, row M3-ALPO-VERIFICATION): a step of the mollifier route (M2-MOLLIFIER, M2-LEVINSON), superseded with it. Its proved identities stay; rows that use them keep their own status. |
+| `M2-MOLLIFIED-MEAN-SQUARE` | the alpo.ge Lean proof of RH (2026-11-20; external, independently verified; vendor/alpo, row M3-ALPO-VERIFICATION): this row fed the density chain (M2-DENSITY-POWER-SAVING) and Levinson's method (M2-LEVINSON), both superseded. |
+| `M2-MOLLIFIED-ZETA-MEAN-SQUARE` | the alpo.ge Lean proof of RH (2026-11-20; external, independently verified; vendor/alpo, row M3-ALPO-VERIFICATION): this row fed the density chain (M2-DENSITY-POWER-SAVING) and Levinson's method (M2-LEVINSON), both superseded. |
+| `M2-DENSITY-POWER-SAVING` | the alpo.ge Lean proof of RH (2026-11-20; external, independently verified; vendor/alpo, row M3-ALPO-VERIFICATION): under RH no zero lies to the right of the critical line, so N(sigma, T) = 0 for sigma > 1/2 and every density bound is a corollary. |
+| `M3-GAP` | the alpo.ge Lean proof of RH (2026-11-20; external, independently verified; vendor/alpo, row M3-ALPO-VERIFICATION): the row asked for a genuinely new step beyond the known partial results towards RH; the external proof is that step. |
+| `M3-GEOMETRY` | the alpo.ge Lean proof of RH (2026-11-20; external, independently verified; vendor/alpo, row M3-ALPO-VERIFICATION): a research programme towards RH (the zeroes as Frobenius eigenvalues on a conjectural cohomology), no longer a route to anything here. |
+| `M4-RH` | the alpo.ge Lean proof of RH (2026-11-20; external, independently verified; vendor/alpo, row M3-ALPO-VERIFICATION): RH is proved externally. This repository does not re-prove it and builds no term of type ZetaForm; checking the external proof against ZetaForm is M3-ALPO-VERIFICATION (Bridge.lean). |

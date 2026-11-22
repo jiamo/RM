@@ -1,18 +1,39 @@
 # Riemann hypothesis goal execution protocol
 
 This is the single, stable, agent-neutral protocol for active goal work in this
-repository. The goal is to **prove the Riemann hypothesis in Lean** — to construct,
-in this repository, a term of type `RiemannHypothesis.ZetaForm` that Lean accepts.
+repository.
 
-The Riemann hypothesis is open. This protocol therefore has two honest consequences
-that the status vocabulary below encodes:
+**The goal, since 2026-11-22.** The Riemann hypothesis has a machine-checked proof:
+the alpo.ge Lean tree of 2026-11-20, verified independently (`vendor/alpo/README.md`,
+row `M3-ALPO-VERIFICATION`). This repository did not produce that proof and does not
+re-prove it. Its goal is what comes after the hypothesis, in four tracks:
 
-* the board's dependency graph does **not** pretend that the conjecture is reachable
-  from the known partial results — the chain must pass through the research row
-  `M3-GAP`, which has no known route;
-* a row is `DONE_STRONG` only when **Lean checks a proof** — a literature claim, a
-  mathlib theorem, and a `Prop` statement are all weaker forms of evidence and are
-  labelled as such.
+1. **Consequences of RH.** Prove the classical theorems of the form `ZetaForm → X`
+   (von Koch, Littlewood, Montgomery, …). The repository's criteria `X → ZetaForm`
+   then become equivalences, and the external proof becomes usable
+   (`M2-VON-KOCH`, `M2-RH-MOEBIUS-BOUNDS`, `M2-LINDELOF-FROM-RH`).
+2. **Mining the alpo.ge proof.** Understand it and reuse it. That covers its
+   analytic half (Landau's window theorem) and its unconditional analytic number
+   theory (explicit formula, zero counts, zero-free regions). It also covers the
+   structure of its arithmetic half. All of it is connected to this repository's
+   statements in `vendor/alpo` and compiled in CI (`M3-ALPO-MINING`).
+3. **The unconditional classical library, upstreamed.** Keep it `sorry`-free and
+   prepare its pieces for Mathlib (`M1-MATHLIB-UPSTREAM`).
+4. **Questions RH does not settle.** Simple zeroes, pair correlation and the GUE
+   conjecture, moments (`M2-PAIR-CORRELATION`).
+
+Two rules carry over unchanged, and the status vocabulary below encodes them:
+
+* a row is `DONE_STRONG` only when **Lean checks a proof**. A literature claim, a
+  mathlib theorem, an external proof and a `Prop` statement are all weaker forms of
+  evidence, and are labelled as such;
+* the external proof does not enter the library. No term of type `ZetaForm` is
+  built here (`scripts/audit.sh` checks this), and a theorem that assumes
+  `ZetaForm` stays listed in `docs/goal/conditional-theorems.txt`. Such a theorem
+  is an unconditional *implication*. Its conclusion is a consequence of the
+  external proof, not a result proved here.
+
+A row whose goal the external proof has made moot is `SUPERSEDED`.
 
 ## Objective
 
@@ -84,9 +105,10 @@ In particular:
   `riemannZeta_ne_zero_of_one_le_re`) is `DONE_STRONG` only with evidence naming
   the mathlib declaration; the exit criterion must say "proved by mathlib's X",
   not "proved here".
-- A row is `DONE_STRONG` for the Riemann hypothesis only when a term of type
-  `ZetaForm` exists and Lean checks it. No other evidence — numerical, heuristic,
-  or literature — can close `M4-RH`.
+- No row of this repository is closed by the external proof of the Riemann
+  hypothesis. `M4-RH` is `SUPERSEDED` by it. Checking it against `ZetaForm` is
+  `M3-ALPO-VERIFICATION`, whose pass is recorded as an external machine-checked
+  proof, not as a theorem of this repository.
 
 ### 0.4 No closing by reduction to an open conjecture
 
@@ -129,11 +151,11 @@ declaration then stops that file from elaborating, and `./scripts/audit.sh` fail
 The Riemann hypothesis: every nontrivial zero of the Riemann zeta function has
 real part `1/2`. In this repository the statement of record is
 `RiemannHypothesis.ZetaForm` (equivalent, by `RiemannHypothesis.Main`, to the
-strip form and to the Dirichlet-eta form). The north-star row is `M4-RH`; it
-depends on `M3-GAP`, the research row, because no known result implies the
-conjecture. Proving any of the partial results in M1–M2 is valuable checked
-landmark work and builds the analytic-number-theory infrastructure, but it does
-not by itself move the north star.
+strip form and to the Dirichlet-eta form). It has an external machine-checked
+proof (alpo.ge, 2026-11-20; `vendor/alpo`). The former north-star row `M4-RH` is
+therefore `SUPERSEDED`. The north star is now the four tracks at the top of this
+file: the consequences of RH, mining the alpo.ge proof, the classical library and
+its upstreaming, and the questions RH does not settle.
 
 ## 2. Work loop
 
@@ -171,7 +193,7 @@ delivery, in dependency order, subject to all of the following:
    recorded honestly (`DONE_WEAK`, `BLOCKED`, `CLAIM_RISK`, …) and no later row of
    the chain is started in the same delivery.
 4. A row that is `TODO_NEEDS_DESIGN`, `DISCOVERED`, or a research row (for example
-   `M3-GAP`) is never part of a chain, and a chain never crosses into one.
+   `M3-ALPO-MINING`) is never part of a chain, and a chain never crosses into one.
 5. A second instance of a shared mechanism (for example a second application of
    a bridge built earlier in the chain) may be appended to the chain only if its
    row is itself `TODO_READY` and depends on the row that built the mechanism.
@@ -185,10 +207,12 @@ The durable order is encoded in the board:
 
 ```text
 M0 statement, equivalence, and foundations        (done)
-M1 classical results, 1896–1914 (PNT, zero-free region, Hardy, Bohr–Landau)
-M2 modern partial results, 1942–1989 (Selberg, Levinson, Conrey, density)
-M3 research: the step beyond the known results
-M4 the Riemann hypothesis itself
+M1 classical results, 1896–1914 (PNT, zero-free region, Hardy, Bohr–Landau),
+   and their upstreaming to Mathlib
+M2 modern results, 1942–1989, and the consequences of RH (von Koch, Littlewood,
+   Montgomery)
+M3 the alpo.ge proof: verification and mining
+M4 the Riemann hypothesis itself (proved externally; M4-RH superseded)
 ```
 
 ## 4. Gate ownership

@@ -1476,12 +1476,13 @@ tasks:
       - "./scripts/audit.sh"
   - id: M2-DENSITY
     priority: P1
-    status: DONE_WEAK
+    status: SUPERSEDED
+    superseded_by: "the alpo.ge Lean proof of RH (2026-11-20; external, independently verified; vendor/alpo, row M3-ALPO-VERIFICATION): under RH no zero lies to the right of the critical line, so N(sigma, T) = 0 for sigma > 1/2 and every density bound is a corollary."
     track: modern
     title: "Selberg density theorem: bounds for N(sigma, T), the number of zeroes with re s >= sigma"
     latest_evidence: docs/goal/evidence/2026-09-02-m2-density-explicit-exponent.md
     revalidation: docs/goal/evidence/2026-09-02-m2-density-explicit-exponent.md
-    latest_update: "2026-09-02 DONE_WEAK with an explicit but quadratic saving: RiemannHypothesis/CarlsonDensityPowerSaving.lean proves ncard_zerosRightOf_le_rpow_explicit, for 1/2 < sigma < 1 there is C > 0 with N(sigma, T) <= C T^(1 - (sigma - 1/2)^2 / 64) for all T >= 1, and the two-sided ncard_zerosOffCriticalLine_le_rpow_explicit with exponent 1 - delta^2/64. The exponent is an explicit function of sigma that degrades continuously to 0 as sigma decreases to 1/2; only the constant C(sigma) is left implicit. This was obtained by tracking the constants of the Carlson chain of M2-DENSITY-POWER-SAVING in theta = sigma_0 - 1/2 instead of discarding them: the Montgomery-Vaughan exponent is exactly 1 - theta/2, the Euler-Maclaurin exponent is at most 1 - theta, the mollifier exponent is now chosen to be theta/8 (previously an inexplicit (1 - max)/4), the mean square then saves at least 3 theta/8, and the three-way balancing of the Jensen counting inequality gives theta^2/16 with theta = (sigma - 1/2)/2. The strengthened existential forms exists_ncard_zerosRightOf_high_le_rpow and exists_ncard_zerosRightOf_le_rpow now carry the conjunct (sigma - 1/2)^2/64 <= c. No sorry; axioms exactly propext, Classical.choice, Quot.sound; the explicit statements are pinned in scripts/revalidation.lean. Previous entry: 2026-08-19 scoped: N(sigma, T) = O(T^(...) ) estimates; implies AlmostAllZerosNearCriticalLine quantitatively.
+    latest_update: "2026-11-22 SUPERSEDED (see superseded_by); no Lean change. Earlier: 2026-09-02 DONE_WEAK with an explicit but quadratic saving: RiemannHypothesis/CarlsonDensityPowerSaving.lean proves ncard_zerosRightOf_le_rpow_explicit, for 1/2 < sigma < 1 there is C > 0 with N(sigma, T) <= C T^(1 - (sigma - 1/2)^2 / 64) for all T >= 1, and the two-sided ncard_zerosOffCriticalLine_le_rpow_explicit with exponent 1 - delta^2/64. The exponent is an explicit function of sigma that degrades continuously to 0 as sigma decreases to 1/2; only the constant C(sigma) is left implicit. This was obtained by tracking the constants of the Carlson chain of M2-DENSITY-POWER-SAVING in theta = sigma_0 - 1/2 instead of discarding them: the Montgomery-Vaughan exponent is exactly 1 - theta/2, the Euler-Maclaurin exponent is at most 1 - theta, the mollifier exponent is now chosen to be theta/8 (previously an inexplicit (1 - max)/4), the mean square then saves at least 3 theta/8, and the three-way balancing of the Jensen counting inequality gives theta^2/16 with theta = (sigma - 1/2)/2. The strengthened existential forms exists_ncard_zerosRightOf_high_le_rpow and exists_ncard_zerosRightOf_le_rpow now carry the conjunct (sigma - 1/2)^2/64 <= c. No sorry; axioms exactly propext, Classical.choice, Quot.sound; the explicit statements are pinned in scripts/revalidation.lean. Previous entry: 2026-08-19 scoped: N(sigma, T) = O(T^(...) ) estimates; implies AlmostAllZerosNearCriticalLine quantitatively.
   2026-09-16 BLOCKED on the linear saving: the Selberg/Ingham shape N(sigma,T)=O(T^{1-c(sigma-1/2)}) originally scoped in this row's open boundary needs the sharp mean value theorem, i.e. Montgomery and Vaughan's generalized Hilbert inequality; the Carlson chain can only deliver the quadratic saving already proved. See docs/goal/evidence/2026-09-16-round-GHI-blocked.md. The quadratic-saving statements already proved remain valid and are unchanged.
   2026-10-18 DONE_WEAK (no longer BLOCKED): the generalized Hilbert inequality and the unweighted sharp mean value theorem (T + O(N)) sum |a_n|^2 are proved (M2-HILBERT-INEQUALITY, M2-MEANVALUE-MV-SHARP). The density argument has not been rerun on them, so the linear saving is still not proved; the quadratic-saving statements are unchanged.
   2026-10-18 (stays DONE_WEAK): the circle large sieve with the constant N + delta^(-1) is proved (M2-LARGE-SIEVE-MV), but the density argument has not been rerun and needs the Dirichlet-polynomial form; open_boundary updated accordingly.
@@ -1552,11 +1553,12 @@ tasks:
       - "lake build"
   - id: M3-GAP
     priority: P0
-    status: TODO_NEEDS_DESIGN
+    status: SUPERSEDED
+    superseded_by: "the alpo.ge Lean proof of RH (2026-11-20; external, independently verified; vendor/alpo, row M3-ALPO-VERIFICATION): the row asked for a genuinely new step beyond the known partial results towards RH; the external proof is that step."
     track: research
     title: "Identify and formalize a genuinely new step beyond the known partial results"
     latest_evidence: ""
-    latest_update: "2026-08-19 The Riemann hypothesis does NOT follow from any finite set of the partial results in M1-M2. Reaching M4-RH requires a new idea; this row is the research milestone and has no known dependency chain from M2. Honest state: open."
+    latest_update: "2026-11-22 SUPERSEDED (see superseded_by); no Lean change. Earlier: 2026-08-19 The Riemann hypothesis does NOT follow from any finite set of the partial results in M1-M2. Reaching M4-RH requires a new idea; this row is the research milestone and has no known dependency chain from M2. Honest state: open."
     open_boundary: "No route is known. This row exists so that the board's dependency graph does not pretend M4-RH is reachable from M2. Work here means research, not formalization of known results."
     milestone: M3
     depends_on:
@@ -2049,12 +2051,13 @@ tasks:
       - "./scripts/audit.sh"
   - id: M2-LINDELOF-DENSITY
     priority: P1
-    status: DONE_WEAK
+    status: SUPERSEDED
+    superseded_by: "the alpo.ge Lean proof of RH (2026-11-20; external, independently verified; vendor/alpo, row M3-ALPO-VERIFICATION): under RH no zero lies to the right of the critical line, so N(sigma, T) = 0 for sigma > 1/2 and every density bound is a corollary."
     track: analysis
     title: "Backlund's criterion: the Lindelof hypothesis implies o(log T) zeroes with re >= sigma in a unit window"
     latest_evidence: docs/goal/evidence/2026-08-27-m2-lindelof-density.md
     revalidation: docs/goal/evidence/2026-08-27-m2-lindelof-density.md
-    latest_update: "2026-08-27 DONE_WEAK: RiemannHypothesis/LindelofDensity.lean proves the direction of Backlund's equivalence that runs from the growth hypothesis to the zeroes. LindelofHypothesis is recorded as a Prop (for every eps > 0 there is C > 0 with ||zeta(s)|| <= C (im s)^eps whenever re s >= 1/2 and im s >= 2) and is never proved; every theorem that uses it is flagged in docs/goal/conditional-theorems.txt. The unconditional part of the file is card_filter_le_log_max, the Jensen counting inequality for one disc against the maximum of ||zeta|| on the larger circle: the circle average of log ||zeta|| is at most log M by circleAverage_mono_on_of_le_circle, and ||zeta(3 + i y)|| >= 1/2 supplies the centre. The geometry is that of M2-BOHR-LANDAU: kappa = (sigma - 1/2)/4, r = 3 - sigma + kappa, R = 3 - sigma + 2 kappa, so 3 - R = sigma/2 + 1/4 > 1/2 and the larger disc stays where the Lindelof bound applies, while the smaller one already contains every zero with re >= sigma within kappa of the centre. card_le_sum_card_filter covers a window of unit height by ceil(1/(2 kappa)) such discs, a number depending only on sigma. Together: exists_ncard_zerosRightOfWindow_le gives, for every eps > 0, a constant A with #{zeroes with re >= sigma and T < im <= T + 1} <= A + eps log T for all T >= 5, and tendsto_ncard_zerosRightOfWindow_div_log turns that into the limit statement, the count divided by log T tends to 0. Two further results complete the row: tendsto_ncard_zerosOffCriticalLineWindow_div_log is the two-sided form, obtained by reflecting a zero to the left of the critical line through rho -> 1 - conj rho and paying a factor 2, so that under the hypothesis all but o(log T) of the zeroes of a unit window lie within delta of the critical line for every fixed delta > 0; and exists_ncard_zerosRightOfWindow_le_log is the unconditional comparison, the same window carries at most 41 log T such zeroes, obtained from the local Riemann-von Mangoldt bound of ZeroCountLocal. The content of the criterion is therefore exactly the saving of the whole logarithm. No sorry; axioms exactly propext, Classical.choice, Quot.sound."
+    latest_update: "2026-11-22 SUPERSEDED (see superseded_by); no Lean change. Earlier: 2026-08-27 DONE_WEAK: RiemannHypothesis/LindelofDensity.lean proves the direction of Backlund's equivalence that runs from the growth hypothesis to the zeroes. LindelofHypothesis is recorded as a Prop (for every eps > 0 there is C > 0 with ||zeta(s)|| <= C (im s)^eps whenever re s >= 1/2 and im s >= 2) and is never proved; every theorem that uses it is flagged in docs/goal/conditional-theorems.txt. The unconditional part of the file is card_filter_le_log_max, the Jensen counting inequality for one disc against the maximum of ||zeta|| on the larger circle: the circle average of log ||zeta|| is at most log M by circleAverage_mono_on_of_le_circle, and ||zeta(3 + i y)|| >= 1/2 supplies the centre. The geometry is that of M2-BOHR-LANDAU: kappa = (sigma - 1/2)/4, r = 3 - sigma + kappa, R = 3 - sigma + 2 kappa, so 3 - R = sigma/2 + 1/4 > 1/2 and the larger disc stays where the Lindelof bound applies, while the smaller one already contains every zero with re >= sigma within kappa of the centre. card_le_sum_card_filter covers a window of unit height by ceil(1/(2 kappa)) such discs, a number depending only on sigma. Together: exists_ncard_zerosRightOfWindow_le gives, for every eps > 0, a constant A with #{zeroes with re >= sigma and T < im <= T + 1} <= A + eps log T for all T >= 5, and tendsto_ncard_zerosRightOfWindow_div_log turns that into the limit statement, the count divided by log T tends to 0. Two further results complete the row: tendsto_ncard_zerosOffCriticalLineWindow_div_log is the two-sided form, obtained by reflecting a zero to the left of the critical line through rho -> 1 - conj rho and paying a factor 2, so that under the hypothesis all but o(log T) of the zeroes of a unit window lie within delta of the critical line for every fixed delta > 0; and exists_ncard_zerosRightOfWindow_le_log is the unconditional comparison, the same window carries at most 41 log T such zeroes, obtained from the local Riemann-von Mangoldt bound of ZeroCountLocal. The content of the criterion is therefore exactly the saving of the whole logarithm. No sorry; axioms exactly propext, Classical.choice, Quot.sound."
     open_boundary: "Only one direction of Backlund's equivalence is proved. The converse - that o(log T) zeroes per unit window forces the Lindelof bound - needs Littlewood's lemma together with the Borel-Caratheodory estimate for log zeta on a disc, neither of which is combined in that form here. The Lindelof hypothesis itself is not proved and is not deduced from the Riemann hypothesis in this repository, so the results of this row are conditional and yield nothing unconditional beyond card_filter_le_log_max. Zeroes are counted without multiplicity (Jensen's inequality would in fact count multiplicity, but the counting set is a set of points). Nothing here bounds N(sigma, T) globally: summing the window bound over T windows is weaker than the unconditional O(T) of M2-BOHR-LANDAU."
     milestone: M2
     depends_on:
@@ -2116,6 +2119,43 @@ tasks:
       - "The row claims only the bound away from the critical line, and does not claim the Lindelof hypothesis or RH."
     required_gates:
       - "lake build RiemannHypothesis.LindelofFromRH"
+      - "./scripts/audit.sh"
+  - id: M2-VON-KOCH
+    priority: P1
+    status: TODO_READY
+    track: consequences
+    title: "von Koch: RH implies psi(x) - x = O(x^(1/2) log^2 x), hence ChebyshevBoundForm <-> ZetaForm"
+    latest_evidence: vendor/alpo/AnalyticBridge.lean
+    latest_update: "2026-11-22 opened (track: consequences of RH). Route: the alpo.ge tree proves, unconditionally and from Mathlib only (87 modules), a truncated explicit formula for primitive Dirichlet characters (PI.ExplicitFormula, explicitFormula_closed) and a zero count in unit windows (PI.ZerosWindow, zerosWindow_closed). For the character mod 1 and T = u: under ZetaForm every zero has |u^rho| = u^(1/2), the window count gives sum over |gamma| < T of m_rho/|rho| << log^2 T, and the error term is O(log^2 u)."
+    open_boundary: "Nothing proved yet. Needed: the sum over zeroes with multiplicity split into unit windows (finsum over finite sets), and the matching of the tree's analyticOrderNatAt (LFunction 1) with riemannZeta (LFunction_modOne_eq). Lives in vendor/alpo, because the tree has no licence; compiled only in CI (no local compilation on the maintainer's machine). Hypothesis hygiene: (1) direction: ChebyshevBoundForm -> ZetaForm is proved (zeta_of_chebyshevBound), this row is the converse; (2) strength: exactly RH; (3) non-triviality: ZetaForm has an external machine-checked proof (M3-ALPO-VERIFICATION); (4) attribution: H. von Koch, Sur la distribution des nombres premiers, Acta Math. 24 (1901), for psi(x) - x = O(x^(1/2) log^2 x) under RH."
+    milestone: M2
+    depends_on:
+      - M0-STATEMENTS
+    rank: 50.5
+    exit_criteria:
+      - "vendor/alpo proves ZetaForm -> ChebyshevBoundForm, compiled by vendor/alpo/tools/analytic.sh (CI job analytic) with only propext, Classical.choice, Quot.sound."
+      - "With zeta_of_chebyshevBound: ChebyshevBoundForm <-> ZetaForm."
+    required_gates:
+      - "bash vendor/alpo/tools/analytic.sh"
+      - "python3 scripts/goal_state.py validate"
+  - id: M2-RH-MOEBIUS-BOUNDS
+    priority: P1
+    status: TODO_NEEDS_DESIGN
+    track: consequences
+    title: "Littlewood: RH implies M(x) = O(x^(1/2+eps)), and the Liouville, Moebius-over-n and Redheffer bounds; the five criteria become equivalences"
+    latest_evidence: RiemannHypothesis/LindelofFromRH.lean
+    latest_update: "2026-11-22 opened (track: consequences of RH). Route, in the library proper (no tree): under ZetaStripForm, norm_logShift_le_rpow of RiemannHypothesis/LindelofFromRH.lean bounds the logarithm of zeta, so 1/zeta(sigma + i t) = O(t^eps) for sigma >= 1/2 + delta exactly as zeta is; then Perron's formula for 1/zeta moves the line of integration to sigma = 1/2 + delta."
+    open_boundary: "Nothing proved yet. Missing: the 1/zeta bound stated as a theorem; Perron's formula for 1/zeta (the smoothed Perron formula of RiemannHypothesis/ExplicitFormula.lean is for -zeta'/zeta), with truncation; the transfer from M to L(N), to the sum of mu(n)/n and to the Redheffer determinant (det = M(n), M1-REDHEFFER). Hypothesis hygiene: (1) direction: each bound -> ZetaForm is proved (zeta_of_mertensBound, zeta_of_liouvilleBound, zeta_of_littleMertensBound, zeta_of_redhefferBound), this row is the converse; (2) strength: exactly RH; (3) non-triviality: ZetaForm has an external machine-checked proof (M3-ALPO-VERIFICATION); (4) attribution: J. E. Littlewood, Quelques consequences de l'hypothese que la fonction zeta(s) de Riemann n'a pas de zeros dans le demi-plan Re(s) > 1/2, C. R. Acad. Sci. Paris 154 (1912), for M(x) = O(x^(1/2+eps)) under RH."
+    milestone: M2
+    depends_on:
+      - M2-LINDELOF-FROM-RH
+      - M1-REDHEFFER
+    rank: 50.6
+    exit_criteria:
+      - "ZetaForm -> MertensBoundForm, LiouvilleBoundForm, LittleMertensBoundForm and RedhefferBoundForm are proved in the library, with only propext, Classical.choice, Quot.sound, and listed in docs/goal/conditional-theorems.txt."
+      - "With the proved converses: the five criteria of the README are equivalent to ZetaForm."
+    required_gates:
+      - "lake build"
       - "./scripts/audit.sh"
   - id: M2-LARGE-SIEVE
     priority: P0
@@ -2394,11 +2434,12 @@ tasks:
       - "./scripts/audit.sh"
   - id: M2-MOLLIFIED-MEAN-SQUARE
     priority: P0
-    status: DONE_WEAK
+    status: SUPERSEDED
+    superseded_by: "the alpo.ge Lean proof of RH (2026-11-20; external, independently verified; vendor/alpo, row M3-ALPO-VERIFICATION): this row fed the density chain (M2-DENSITY-POWER-SAVING) and Levinson's method (M2-LEVINSON), both superseded."
     track: modern
     title: "Mean square of the mollified partial sum: the tail of M_y P_K is small on lines in the strip"
     latest_evidence: docs/goal/evidence/2026-08-28-m2-mollified-mean-square.md
-    latest_update: "2026-08-28 DONE_WEAK: RiemannHypothesis/DivisorSquareSum.lean and RiemannHypothesis/MollifiedMeanSquare.lean combine the finite mollifier identity of M2-ZERO-DETECTION with the Dirichlet polynomial mean value theorem of M2-MEANVALUE. The arithmetic input is divisorCount_le_mul_of_dvd, d(n) <= d(u) d(n/u) for u | n, proved by injecting the divisors of n into pairs via v -> (gcd u v, v / gcd u v); summing it over the divisors gives divisorCount_sq_le_divisorCount4, d(n)^2 <= d_4(n), and since d_4 = d * d is a Dirichlet convolution of two series absolutely convergent for re s > 1, summable_divisorCount_sq_rpow gives sum d(n)^2 n^(-a) < infinity for every a > 1. Hence exists_tsum_normSq_tailCoeff_lt: for sigma > 1/2 and eps > 0 a mollifier length y makes the mean-square weight of the tail coefficients smaller than eps. mollifiedTail_eq rewrites M_y P_K - 1 as the Dirichlet polynomial with coefficients c_{y,K} supported on m > y, and the mean value theorem then gives exists_integral_normSq_mollified_partialSum_sub_one_le, int_0^T ||M_y P_K - 1||^2 <= (T + 8 yK (1 + log(yK))) eps for every K >= y and T >= 0, with the Chebyshev consequence exists_volume_norm_mollified_partialSum_sub_one_ge_le for the measure of the set where ||M_y P_K - 1|| >= V. No sorry; axioms exactly propext, Classical.choice, Quot.sound."
+    latest_update: "2026-11-22 SUPERSEDED (see superseded_by); no Lean change. Earlier: 2026-08-28 DONE_WEAK: RiemannHypothesis/DivisorSquareSum.lean and RiemannHypothesis/MollifiedMeanSquare.lean combine the finite mollifier identity of M2-ZERO-DETECTION with the Dirichlet polynomial mean value theorem of M2-MEANVALUE. The arithmetic input is divisorCount_le_mul_of_dvd, d(n) <= d(u) d(n/u) for u | n, proved by injecting the divisors of n into pairs via v -> (gcd u v, v / gcd u v); summing it over the divisors gives divisorCount_sq_le_divisorCount4, d(n)^2 <= d_4(n), and since d_4 = d * d is a Dirichlet convolution of two series absolutely convergent for re s > 1, summable_divisorCount_sq_rpow gives sum d(n)^2 n^(-a) < infinity for every a > 1. Hence exists_tsum_normSq_tailCoeff_lt: for sigma > 1/2 and eps > 0 a mollifier length y makes the mean-square weight of the tail coefficients smaller than eps. mollifiedTail_eq rewrites M_y P_K - 1 as the Dirichlet polynomial with coefficients c_{y,K} supported on m > y, and the mean value theorem then gives exists_integral_normSq_mollified_partialSum_sub_one_le, int_0^T ||M_y P_K - 1||^2 <= (T + 8 yK (1 + log(yK))) eps for every K >= y and T >= 0, with the Chebyshev consequence exists_volume_norm_mollified_partialSum_sub_one_ge_le for the measure of the set where ||M_y P_K - 1|| >= V. No sorry; axioms exactly propext, Classical.choice, Quot.sound."
     open_boundary: "The statements are about the Dirichlet polynomial M_y P_K, not about zeta M_y: replacing the partial sum P_K by zeta in the strip needs the Euler-Maclaurin (or approximate functional equation) approximation of zeta together with control of its error against the mollifier, which is not done. The error term 8 yK (1 + log(yK)) is that of the repository's elementary mean value theorem; the Carlson-Ingham density argument needs polynomials of length comparable with T, where this term is of size T log T and destroys the saving, so the sharp Montgomery-Vaughan form with error O(N) is also required. No zero-density estimate is claimed and no zero is located."
     milestone: M2
     depends_on:
@@ -2482,11 +2523,12 @@ tasks:
       - "./scripts/audit.sh"
   - id: M2-MOLLIFIED-ZETA-MEAN-SQUARE
     priority: P0
-    status: DONE_WEAK
+    status: SUPERSEDED
+    superseded_by: "the alpo.ge Lean proof of RH (2026-11-20; external, independently verified; vendor/alpo, row M3-ALPO-VERIFICATION): this row fed the density chain (M2-DENSITY-POWER-SAVING) and Levinson's method (M2-LEVINSON), both superseded."
     track: modern
     title: "Mean square of zeta M_y - 1 inside the critical strip, and its circle averages"
     latest_evidence: docs/goal/evidence/2026-08-29-m2-mollified-zeta-mean-square.md
-    latest_update: "2026-08-29 DONE_WEAK: RiemannHypothesis/MollifiedZetaMeanSquare.lean replaces the truncated zeta sum P_K of M2-MOLLIFIED-MEAN-SQUARE by zeta itself, and RiemannHypothesis/MollifiedZetaCircle.lean transports the resulting bound from vertical lines to circles. Writing zeta M_y - 1 = (M_y P_K - 1) + M_y (zeta - P_K) with the truncation length K = ceil(b^alpha), alpha = (1 + 1/(3/2 - sigma_0))/2 > 1, the polynomial half is handled by the Montgomery-Vaughan shape of the mean value theorem (M2-MEANVALUE-MV): integral_normSq_mollified_partialSum_sub_one_le_mv bounds the mean square by 58 sum_{y < m <= yK} d(m)^2 m^(-2 sigma) (T + m), and exists_sum_divisorCount_sq_mul_le bounds sum_{m <= M} d(m)^2 m^(1 - 2 sigma) by S M^(3/2 - sigma_0), which is o(b) precisely because alpha (3/2 - sigma_0) < 1; the elementary error 8 N (1 + log N) of M2-MEANVALUE, sitting outside the sum, would have destroyed the saving at this length. The tail half uses the order m Euler-Maclaurin bound for zeta - P_K, exists_integral_normSq_zeta_sub_partialSum_le. The outcome is exists_integral_normSq_zeta_mul_mollifier_sub_one_le: for every sigma_0 > 1/2 and eps > 0 there are a mollifier length y and a height b_0 with int_a^b ||zeta M_y - 1||^2 <= eps b for all 1 <= a <= b, b >= b_0, uniformly for sigma_0 <= sigma <= 6. On the circle side, norm_mollifiedZeta_sub_one_le gives ||zeta M_y - 1|| <= 1/y on re s >= 3, circleAverage_log_norm_mollifiedZeta_le turns log ||z|| <= (lambda/2) ||z - 1||^2 + 1/(2 lambda) into a circle average bound, and exists_integral_circleAverage_normSq_mollifiedZeta_sub_one_le integrates the circle averages in the ordinate of the centre. No sorry; axioms exactly propext, Classical.choice, Quot.sound. The consequence for the zeroes is drawn on M1-ALMOST-ALL-STRIP."
+    latest_update: "2026-11-22 SUPERSEDED (see superseded_by); no Lean change. Earlier: 2026-08-29 DONE_WEAK: RiemannHypothesis/MollifiedZetaMeanSquare.lean replaces the truncated zeta sum P_K of M2-MOLLIFIED-MEAN-SQUARE by zeta itself, and RiemannHypothesis/MollifiedZetaCircle.lean transports the resulting bound from vertical lines to circles. Writing zeta M_y - 1 = (M_y P_K - 1) + M_y (zeta - P_K) with the truncation length K = ceil(b^alpha), alpha = (1 + 1/(3/2 - sigma_0))/2 > 1, the polynomial half is handled by the Montgomery-Vaughan shape of the mean value theorem (M2-MEANVALUE-MV): integral_normSq_mollified_partialSum_sub_one_le_mv bounds the mean square by 58 sum_{y < m <= yK} d(m)^2 m^(-2 sigma) (T + m), and exists_sum_divisorCount_sq_mul_le bounds sum_{m <= M} d(m)^2 m^(1 - 2 sigma) by S M^(3/2 - sigma_0), which is o(b) precisely because alpha (3/2 - sigma_0) < 1; the elementary error 8 N (1 + log N) of M2-MEANVALUE, sitting outside the sum, would have destroyed the saving at this length. The tail half uses the order m Euler-Maclaurin bound for zeta - P_K, exists_integral_normSq_zeta_sub_partialSum_le. The outcome is exists_integral_normSq_zeta_mul_mollifier_sub_one_le: for every sigma_0 > 1/2 and eps > 0 there are a mollifier length y and a height b_0 with int_a^b ||zeta M_y - 1||^2 <= eps b for all 1 <= a <= b, b >= b_0, uniformly for sigma_0 <= sigma <= 6. On the circle side, norm_mollifiedZeta_sub_one_le gives ||zeta M_y - 1|| <= 1/y on re s >= 3, circleAverage_log_norm_mollifiedZeta_le turns log ||z|| <= (lambda/2) ||z - 1||^2 + 1/(2 lambda) into a circle average bound, and exists_integral_circleAverage_normSq_mollifiedZeta_sub_one_le integrates the circle averages in the ordinate of the centre. No sorry; axioms exactly propext, Classical.choice, Quot.sound. The consequence for the zeroes is drawn on M1-ALMOST-ALL-STRIP."
     open_boundary: "The dependence of the mollifier length y on eps is not explicit and y does not grow with the height: what is proved is that the mean square is o(b), not that it is O(b y^(1 - 2 sigma)) with y a power of b. That explicit form is exactly what a power saving N(sigma, T) = O(T^(1 - c)) in the density theorem would need, and it is not proved here; nor is the fourth moment or any mollified estimate on the critical line itself. The abscissa range is sigma_0 <= sigma <= 6 with sigma_0 > 1/2 fixed, and the constants degenerate as sigma_0 decreases to 1/2."
     milestone: M2
     depends_on:
@@ -2505,12 +2547,13 @@ tasks:
       - "./scripts/audit.sh"
   - id: M2-DENSITY-POWER-SAVING
     priority: P0
-    status: DONE_WEAK
+    status: SUPERSEDED
+    superseded_by: "the alpo.ge Lean proof of RH (2026-11-20; external, independently verified; vendor/alpo, row M3-ALPO-VERIFICATION): under RH no zero lies to the right of the critical line, so N(sigma, T) = 0 for sigma > 1/2 and every density bound is a corollary."
     track: modern
     title: "A power saving in the density theorem, N(sigma, T) = O(T^(1 - c))"
     latest_evidence: docs/goal/evidence/2026-09-02-m2-density-explicit-exponent.md
     revalidation: docs/goal/evidence/2026-09-02-m2-density-explicit-exponent.md
-    latest_update: "2026-08-29 DONE_WEAK: RiemannHypothesis/CarlsonPowerSaving.lean and RiemannHypothesis/CarlsonDensityPowerSaving.lean upgrade the o(T) of M1-ALMOST-ALL-STRIP to a genuine power saving: for every fixed 1/2 < sigma < 1 there are c > 0 and C with N(sigma, T) <= C T^(1 - c) for all T >= 1 (exists_ncard_zerosRightOf_le_rpow), and the two-sided form exists_ncard_zerosOffCriticalLine_le_rpow. The Carlson argument is repeated with every epsilon replaced by an explicit power and with the mollifier length growing with the height. exists_sum_Ioc_divisorCount_sq_le_rpow gives the arithmetic input with a rate, sum_{y < m <= M} d(m)^2 m^(-2 sigma) <= D y^(-(sigma_0 - 1/2)); exists_integral_normSq_mollified_partialSum_sub_one_le_rpow is the Montgomery-Vaughan half at the Carlson length, <= C (b y^(-(sigma_0 - 1/2)) + y b^gamma) with gamma = alpha (3/2 - sigma_0) < 1; exists_integral_normSq_zeta_sub_partialSum_le_rpow is the Euler-Maclaurin half, <= E b^beta with beta = 2 alpha (1 - sigma_0) < 1; exists_integral_normSq_zeta_mul_mollifier_sub_one_le_rpow combines them through ||zeta M_y - 1||^2 <= 2 ||M_y P_K - 1||^2 + 2 y^2 ||zeta - P_K||^2 for any length y <= 4 b^gamma', and exists_integral_circleAverage_normSq_mollifiedZeta_sub_one_le_rpow transports the result to circle averages by Fubini. Feeding this into the Jensen counting inequality of M1-ALMOST-ALL-STRIP with y = ceil(T^gamma') and lambda = T^c' makes each of the three terms T^(1 - c'), which is exists_ncard_zerosRightOf_high_le_rpow; the zeroes of ordinate below 5 and the range 1 <= T <= T_0 are absorbed into the constant. No sorry; axioms exactly propext, Classical.choice, Quot.sound; the two density statements and the quantitative mean square are pinned in scripts/revalidation.lean. 2026-09-02 update: every exponent in the chain is now explicit in theta = sigma_0 - 1/2 (Montgomery-Vaughan exponent exactly 1 - theta/2, Euler-Maclaurin exponent at most 1 - theta, mollifier exponent theta/8, mean-square saving at least 3 theta/8), so the density saving is named: c >= (sigma - 1/2)^2/64, and ncard_zerosRightOf_le_rpow_explicit / ncard_zerosOffCriticalLine_le_rpow_explicit state the bound with that exponent written out; see docs/goal/evidence/2026-09-02-m2-density-explicit-exponent.md."
+    latest_update: "2026-11-22 SUPERSEDED (see superseded_by); no Lean change. Earlier: 2026-08-29 DONE_WEAK: RiemannHypothesis/CarlsonPowerSaving.lean and RiemannHypothesis/CarlsonDensityPowerSaving.lean upgrade the o(T) of M1-ALMOST-ALL-STRIP to a genuine power saving: for every fixed 1/2 < sigma < 1 there are c > 0 and C with N(sigma, T) <= C T^(1 - c) for all T >= 1 (exists_ncard_zerosRightOf_le_rpow), and the two-sided form exists_ncard_zerosOffCriticalLine_le_rpow. The Carlson argument is repeated with every epsilon replaced by an explicit power and with the mollifier length growing with the height. exists_sum_Ioc_divisorCount_sq_le_rpow gives the arithmetic input with a rate, sum_{y < m <= M} d(m)^2 m^(-2 sigma) <= D y^(-(sigma_0 - 1/2)); exists_integral_normSq_mollified_partialSum_sub_one_le_rpow is the Montgomery-Vaughan half at the Carlson length, <= C (b y^(-(sigma_0 - 1/2)) + y b^gamma) with gamma = alpha (3/2 - sigma_0) < 1; exists_integral_normSq_zeta_sub_partialSum_le_rpow is the Euler-Maclaurin half, <= E b^beta with beta = 2 alpha (1 - sigma_0) < 1; exists_integral_normSq_zeta_mul_mollifier_sub_one_le_rpow combines them through ||zeta M_y - 1||^2 <= 2 ||M_y P_K - 1||^2 + 2 y^2 ||zeta - P_K||^2 for any length y <= 4 b^gamma', and exists_integral_circleAverage_normSq_mollifiedZeta_sub_one_le_rpow transports the result to circle averages by Fubini. Feeding this into the Jensen counting inequality of M1-ALMOST-ALL-STRIP with y = ceil(T^gamma') and lambda = T^c' makes each of the three terms T^(1 - c'), which is exists_ncard_zerosRightOf_high_le_rpow; the zeroes of ordinate below 5 and the range 1 <= T <= T_0 are absorbed into the constant. No sorry; axioms exactly propext, Classical.choice, Quot.sound; the two density statements and the quantitative mean square are pinned in scripts/revalidation.lean. 2026-09-02 update: every exponent in the chain is now explicit in theta = sigma_0 - 1/2 (Montgomery-Vaughan exponent exactly 1 - theta/2, Euler-Maclaurin exponent at most 1 - theta, mollifier exponent theta/8, mean-square saving at least 3 theta/8), so the density saving is named: c >= (sigma - 1/2)^2/64, and ncard_zerosRightOf_le_rpow_explicit / ncard_zerosOffCriticalLine_le_rpow_explicit state the bound with that exponent written out; see docs/goal/evidence/2026-09-02-m2-density-explicit-exponent.md."
     open_boundary: "The saving is now explicit, c >= (sigma - 1/2)^2/64, but it is still 256 times worse than Carlson's own 4 (sigma - 1/2)^2, and the constant C(sigma) is not effective. Nothing is claimed on the critical line itself, no fourth moment or large sieve input is used, and zeroes are counted without multiplicity. The linear saving of the Selberg or Ingham density estimates remains out of reach on this route; see M2-DENSITY."
     milestone: M2
     depends_on:
@@ -2664,6 +2707,23 @@ tasks:
     required_gates:
       - "lake build"
       - "./scripts/audit.sh"
+      - "python3 scripts/goal_state.py validate"
+  - id: M1-MATHLIB-UPSTREAM
+    priority: P2
+    status: TODO_NEEDS_DESIGN
+    track: governance
+    title: "Prepare the unconditional classical library for Mathlib"
+    latest_evidence: README.md
+    latest_update: "2026-11-22 opened (track: the classical library, upstreamed). Much of the library is not in Mathlib: the prime number theorem with Mertens' theorems, the de la Vallee Poussin zero-free region, zero counting, Hardy's theorem, mean value theorems, the approximate functional equation, the argument principle on rectangles."
+    open_boundary: "Nothing done. Needs: (1) a list of candidate modules not already in Mathlib, in dependency order, each checked against current Mathlib; (2) Mathlib style: naming, docstrings, no repository-specific Props; (3) the licence of each piece (vendored Zeta23 and other Apache 2.0 sources keep their attribution; the alpo.ge tree has no licence and is excluded). Opening a Mathlib pull request is the maintainer's decision, not this row's."
+    milestone: M1
+    depends_on:
+      - M0-STATEMENTS
+    rank: 39
+    exit_criteria:
+      - "docs/upstream.md lists the candidates in dependency order, each with its Mathlib gap check and licence."
+      - "The first candidate is prepared as a self-contained, Mathlib-style module."
+    required_gates:
       - "python3 scripts/goal_state.py validate"
   - id: M1-VAN-DER-CORPUT
     priority: P1
@@ -4050,13 +4110,32 @@ tasks:
       - "python3 -I vendor/alpo/tools/build.py --root vendor/alpo/lean"
       - "(cd vendor/alpo/lean && lake env lean ../Verify.lean)"
       - "bash vendor/alpo/tools/bridge.sh"
+  - id: M3-ALPO-MINING
+    priority: P1
+    status: IN_PROGRESS
+    track: research
+    title: "Mine the alpo.ge proof: reuse its unconditional analytic number theory, connect it to this repository's statements, and map its arithmetic half"
+    latest_evidence: vendor/alpo/AnalyticBridge.lean
+    latest_update: "2026-11-22 opened (track: mining the alpo.ge proof). Done: AnalyticBridge.lean proves WindowBound -> ZetaForm, ZetaStripForm, EtaForm through the tree's analytic half (Landau's window theorem), and, unconditionally, that the window bound fails below the exponent 1/2 (not_windowBound_of_lt_half, frequently_gt_rpow); all compiled in CI. Catalogued, Mathlib-only: the truncated explicit formula and the zero count in unit windows for primitive Dirichlet characters (87 modules; used by M2-VON-KOCH), the classical zero-free region and log-derivative region (Formalism.ZF; this repository has its own zeroFreeRegion). Read: riemann_hypothesis.pdf and a set of reading notes (the analytic deduction matches WindowBound exactly; the exponent 1/2 comes from balancing two errors, x/m and m, at m ~ x^(1/2) theta lifts)."
+    open_boundary: "Open: (1) a map from the paper's sections (theta-tower lifts, periods, arithmetic slopes, Galois cohomology kernels, the final inequality of Section 5) to the tree's Lean declarations; (2) a catalogue of the tree's further Mathlib-only results with import-closure sizes, and bridges for those this repository can use; (3) the window theorem for general character families (GRH) against Dirichlet L-function statements, if the repository states any. Constraints: the tree has no licence, so everything stays in vendor/alpo; never lake build the tree; no local compilation, CI only."
+    milestone: M3
+    depends_on:
+      - M0-STATEMENTS
+    rank: 51.5
+    exit_criteria:
+      - "vendor/alpo/README.md maps the paper's sections to the tree's Lean modules and catalogues the reusable Mathlib-only results with their import-closure sizes."
+      - "Every bridge in vendor/alpo compiles in CI (vendor/alpo/tools/analytic.sh) with only propext, Classical.choice, Quot.sound."
+    required_gates:
+      - "bash vendor/alpo/tools/analytic.sh"
+      - "python3 scripts/goal_state.py validate"
   - id: M3-GEOMETRY
     priority: P1
-    status: TODO_NEEDS_DESIGN
+    status: SUPERSEDED
+    superseded_by: "the alpo.ge Lean proof of RH (2026-11-20; external, independently verified; vendor/alpo, row M3-ALPO-VERIFICATION): a research programme towards RH (the zeroes as Frobenius eigenvalues on a conjectural cohomology), no longer a route to anything here."
     track: research
     title: "Categorification: the zeroes of zeta as Frobenius eigenvalues on a conjectural arithmetic cohomology of Spec Z"
     latest_evidence: docs/geometry-rh.md
-    latest_update: "2026-08-20 scoped from the geometry survey. The precedent is strict: over a finite field the zeroes of zeta_C(s) are the eigenvalues of Frobenius on etale H^1, and RH-analogues were proved geometrically (Weil, Deligne, Katz-Sarnak). For Spec Z the required cohomology theory does not exist; the task is to state the categorification conjecture precisely and to formalize its strict components (the explicit formula as a trace formula)."
+    latest_update: "2026-11-22 SUPERSEDED (see superseded_by); no Lean change. Earlier: 2026-08-20 scoped from the geometry survey. The precedent is strict: over a finite field the zeroes of zeta_C(s) are the eigenvalues of Frobenius on etale H^1, and RH-analogues were proved geometrically (Weil, Deligne, Katz-Sarnak). For Spec Z the required cohomology theory does not exist; the task is to state the categorification conjecture precisely and to formalize its strict components (the explicit formula as a trace formula)."
     open_boundary: "The conjectural object is a cohomology H of Spec Z with an operator F whose eigenvalues are the zeroes (pure weight 1/2 would be RH). No such theory is known (the etale cohomology of Spec Z is degenerate; the archimedean place has no function-field analogue). Formalizable now: Weil's explicit formula in trace-formula form, the Hadamard-product/determinant reading of zeta, and the function-field model (as a statement about zeta of curves over finite fields). The categorification conjecture itself can only be stated, not proved."
     milestone: M3
     depends_on:
@@ -4072,11 +4151,12 @@ tasks:
       - "lake build"
   - id: M4-RH
     priority: P0
-    status: TODO_NEEDS_DESIGN
+    status: SUPERSEDED
+    superseded_by: "the alpo.ge Lean proof of RH (2026-11-20; external, independently verified; vendor/alpo, row M3-ALPO-VERIFICATION): RH is proved externally. This repository does not re-prove it and builds no term of type ZetaForm; checking the external proof against ZetaForm is M3-ALPO-VERIFICATION (Bridge.lean)."
     track: north-star
     title: "Prove the Riemann hypothesis: ZetaForm"
     latest_evidence: RiemannHypothesis/Defs.lean
-    latest_update: "2026-08-19 North star. ZetaForm is stated in Defs.lean; constructing a proof term of ZetaForm is the goal of this board."
+    latest_update: "2026-11-22 SUPERSEDED (see superseded_by); no Lean change. Earlier: 2026-08-19 North star. ZetaForm is stated in Defs.lean; constructing a proof term of ZetaForm is the goal of this board."
     open_boundary: "The Riemann hypothesis is open. Per the claim-hygiene rules, a row can only reach DONE_STRONG when Lean checks a proof of ZetaForm. No known route; depends on M3-GAP."
     milestone: M4
     depends_on:

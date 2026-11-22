@@ -5,6 +5,16 @@ machine-checked equivalences between its standard formulations, and a large body
 unconditional theory: the prime number theorem, zero-free regions, zero counting, Hardy's
 theorem, moments of `ζ`, and the proportion of zeroes on the critical line.
 
+**Goal.** The hypothesis itself is now proved, externally (below). The repository works on
+what comes after it, in four tracks:
+
+1. **The consequences of RH.** Theorems of the form `ZetaForm → X`, such as von Koch's
+   `ψ(x) − x = O(x^{1/2} log² x)`, make the criteria below equivalences.
+2. **Mining the alpo.ge proof.** Reuse its analytic number theory and connect it to these
+   statements.
+3. **The unconditional classical library.** Prepare it for Mathlib.
+4. **What RH does not settle.** Simple zeroes, pair correlation, moments.
+
 ## Status: the hypothesis has a machine-checked proof (alpo.ge, 2026-11-20)
 
 On 20 November 2026 a Lean proof of the Riemann hypothesis, and of GRH for Dirichlet
@@ -149,7 +159,7 @@ this tree an unthrottled build crashed the machine. Use `vendor/alpo/tools/build
 ## Task board
 
 [`docs/goal/task-board.yaml`](docs/goal/task-board.yaml) is the machine-readable work queue
-(190 rows, milestones M0–M4). [`docs/current-goal-state.md`](docs/current-goal-state.md) is a
+(194 rows, milestones M0–M4). [`docs/current-goal-state.md`](docs/current-goal-state.md) is a
 summary generated from it.
 
 ```bash

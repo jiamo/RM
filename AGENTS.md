@@ -4,12 +4,17 @@ This file is for humans and coding agents working in this repository.
 
 ## Repository purpose
 
-Formalize the **Riemann hypothesis** in Lean: its precise statement, the equivalence
-of its standard formulations, and — as the long-term goal tracked on the task board
-— a proof. The Riemann hypothesis is open; the repository proves equivalences and
-prerequisites, states the conjecture and the known partial results as `Prop`, and
-tracks the proof attempt on the task board. See `README.md` and
-`docs/goal/goal-prompt.md`.
+Formalize the **Riemann hypothesis** in Lean, and what follows from it. Since
+2026-11-20 the hypothesis has an external machine-checked proof: the alpo.ge tree,
+vendored in `vendor/alpo` and verified independently. The repository does not
+re-prove it in its own library. Its goal is in four tracks:
+
+- the consequences of RH (`ZetaForm → X`);
+- mining the alpo.ge proof and connecting it to this repository's statements;
+- the unconditional classical library and its upstreaming to Mathlib;
+- the questions RH does not settle, such as simple zeroes and pair correlation.
+
+See `README.md` and `docs/goal/goal-prompt.md`.
 
 ## Startup Route
 
