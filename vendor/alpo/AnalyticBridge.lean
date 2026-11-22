@@ -142,7 +142,7 @@ theorem exists_gt_rpow_mem_window {θ δ : ℝ} (hθ0 : 0 < θ) (hθ : θ < 1 / 
     ∃ Y₀ : ℝ, ∀ Y : ℝ, Y₀ ≤ Y → ∃ y ∈ Set.Icc Y (Y ^ (1 + δ)),
       C * y ^ θ < smoothedChebyshevError y := by
   by_contra H
-  push_neg at H
+  push Not at H
   obtain ⟨ρ, hρ, hre⟩ := exists_riemannZeta_eq_zero_half_le_re
   have hz := Deduction.zeroFree_of_rpow_window zetaFamily (θ := θ) (δ := δ) (C := C) hθ0
     (by linarith) hδ (fun Y₀ => by

@@ -9,9 +9,10 @@
 #    to the archive, and runs the static scan.
 #  * analytic: on a standard runner, minutes. Compiles in full the analytic half of the proof
 #    (the 31 tree modules behind Deduction.zeroFree_of_rpow_window, which import only Mathlib),
-#    this repository's RiemannHypothesis.{Defs,Connected,Eta,Zeros,Main}, and
+#    the 23 modules of this repository it needs (vendor/alpo/tools/repo_closure.py), and
 #    vendor/alpo/AnalyticBridge.lean: a one-sided window bound on the smoothed prime sum implies
-#    ZetaForm, ZetaStripForm and EtaForm. What remains unchecked by CI is that bound itself.
+#    ZetaForm, ZetaStripForm and EtaForm (what remains unchecked by CI is that bound itself);
+#    and, unconditionally, no such bound holds with an exponent below 1/2.
 #  * build-verify: compiles all 175,187 modules (measured: about 240-360 core-hours and 60-80 GB
 #    of build output, far beyond a standard runner's 6 hours and 14 GB of disk), then checks
 #    the statements and axioms (Verify.lean), checks them against this repository's statements
@@ -75,7 +76,7 @@ jobs:
         working-directory: vendor/alpo/lean
         run: lake exe cache get
 
-      - name: Analytic half (31 tree modules, 5 repository modules, AnalyticBridge.lean)
+      - name: Analytic half (31 tree modules, 23 repository modules, AnalyticBridge.lean)
         env:
           JOBS: "2"
         run: bash vendor/alpo/tools/analytic.sh

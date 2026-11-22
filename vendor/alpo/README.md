@@ -7,7 +7,8 @@
   one they checked.
 * **Checked here in part.** Provenance and a static scan passed. The *analytic half* of the
   proof is compiled in full, here and in CI, and connected to this repository's statements
-  ([`AnalyticBridge.lean`](AnalyticBridge.lean)).
+  ([`AnalyticBridge.lean`](AnalyticBridge.lean)). Combined with a zero of `ζ` proved in this
+  repository, the same analytic theorem also gives an unconditional oscillation theorem.
 * **Not run here.** The full build of all 175,187 modules, [`Verify.lean`](Verify.lean) and
   [`Bridge.lean`](Bridge.lean).
 
@@ -50,8 +51,9 @@ Task-board row: `M3-ALPO-VERIFICATION`.
   * On 2026-11-21 this repository moved to the same pins, so that the tree and our statements
     can be compiled together. Every other dependency is pinned to the same commit in both
     manifests.
-  * Under the new pins, `tools/analytic.sh` has compiled five of our modules
-    (`RiemannHypothesis.{Defs,Connected,Eta,Zeros,Main}`). The rest of the repository has
+  * Under the new pins, `tools/analytic.sh` compiles the 23 of our modules that
+    `AnalyticBridge.lean` imports (`tools/repo_closure.py` lists them; they import only
+    Mathlib). The rest of the repository has
     **not yet been rebuilt**; until `lake build` and `./scripts/audit.sh` pass again, it is
     unverified under these pins.
 
@@ -112,7 +114,7 @@ The exposition and the source agree on two halves.
 | metaprogramming present | 5 `run_cmd` lines that only add names to a library-suggestions deny list (`BuildAid/D1–D5.lean`). Tactics `kexactB` and `kcopy` and command `cpt_copy_thms` build terms or declarations that the kernel then checks (`addDecl`). No `IO` actions |
 | `Main` depends on every module | yes: the import closure of `Main` is all 175,187 modules |
 | Mathlib `0df444a3` and Lean `v4.33.1` are official | yes (GitHub API) |
-| **analytic half compiled in full** (`tools/analytic.sh`, also the CI job `analytic`): the 31 tree modules, our 5 modules, and `AnalyticBridge.lean` | passed; every theorem depends only on `propext`, `Classical.choice`, `Quot.sound` |
+| **analytic half compiled in full** (`tools/analytic.sh`, also the CI job `analytic`): the 31 tree modules, the 23 of our modules it imports, and `AnalyticBridge.lean` | passed; every theorem depends only on `propext`, `Classical.choice`, `Quot.sound` |
 | `Verify.lean` logic, against Mathlib with a planted `sorry` | rejects it (non-zero exit) |
 | full build, `Verify.lean`, `Bridge.lean`, kernel replay | not run here (see below) |
 
@@ -148,6 +150,14 @@ window bound for `G₁`, stated with Mathlib notions only.
   statement `WindowBound`.
 * `WindowBound` is equivalent to RH (the four hygiene answers are in the file's docstring). It
   is an interface, not progress towards RH.
+* Run backwards, the same analytic theorem is unconditional. `ζ` has a zero with `re ρ ≥ 1/2`
+  (`RiemannHypothesis.exists_riemannZeta_eq_zero_of_mem_strip`, reflected by `s ↦ 1 − s`).
+  Therefore, for `0 < θ < 1/2`, every window `[Y, Y^{1+δ}]` far enough out contains a point
+  with `G₁(y) > C y^θ` (`exists_gt_rpow_mem_window`). In particular `G₁(y) = Ω₊(y^θ)`
+  (`frequently_gt_rpow`), and the window bound of `WindowBound` is false for every `θ < 1/2`
+  (`not_windowBound_of_lt_half`): the exponent `1/2` is sharp. Nothing from the arithmetic
+  half is used. The classical theorem (E. Schmidt, 1903: `ψ(x) − x = Ω±(x^{1/2})`) is
+  stronger; this version is one-sided, for the smoothed sum, and localized to windows.
 
 **Via `Bridge.lean` (needs the full build).**
 
@@ -216,8 +226,8 @@ The [`alpo-verify`](../../.github/workflows/alpo-verify.yml) workflow is started
 | `remark.pdf` | the announcement |
 | `riemann_hypothesis.pdf` | the 55-page exposition, with the Lean concordance |
 | `SHA256SUMS` | hashes of the 14 published parts |
-| `AnalyticBridge.lean` | `WindowBound → ZetaForm, ZetaStripForm, EtaForm` through the tree's analytic half; compiled by `tools/analytic.sh` |
+| `AnalyticBridge.lean` | `WindowBound → ZetaForm, ZetaStripForm, EtaForm` through the tree's analytic half, and the unconditional oscillation theorems (the exponent `1/2` is sharp); compiled by `tools/analytic.sh` |
 | `Verify.lean` | checks the five theorems' types as raw kernel terms, so no notation or macro in the tree can change them. Fails on any axiom beyond the standard three. Lists every axiom in the environment and where `RiemannHypothesis` is defined |
 | `Bridge.lean` | the tree's theorems against `ZetaForm`, `ZetaStripForm` and `EtaForm`, by two independent routes. Needs the full build |
-| `tools/provenance.sh`, `tools/scan.sh`, `tools/build.py`, `tools/analytic.sh`, `tools/bridge.sh` | the checks above |
+| `tools/provenance.sh`, `tools/scan.sh`, `tools/build.py`, `tools/analytic.sh`, `tools/repo_closure.py`, `tools/bridge.sh` | the checks above |
 | `.gitignore` | ignores `lean/.lake` (Mathlib checkout, cache and build output) |

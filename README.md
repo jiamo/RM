@@ -407,7 +407,9 @@ compiled and checked by several independent kernels elsewhere (A. Sutherland, MI
 here. What is compiled here, and in CI, is the proof's analytic half: in
 [`vendor/alpo/AnalyticBridge.lean`](vendor/alpo/AnalyticBridge.lean), a one-sided window bound
 on the smoothed prime sum implies `ZetaForm`, `ZetaStripForm` and `EtaForm`, so for `ζ` the
-arithmetic half has to be trusted for that one statement only. A 55-page exposition is in
+arithmetic half has to be trusted for that one statement only. Run backwards with a zero of `ζ`
+proved here, the same theorem shows unconditionally that no such bound holds with an exponent
+below `1/2`. A 55-page exposition is in
 [`riemann_hypothesis.pdf`](vendor/alpo/riemann_hypothesis.pdf). This repository uses the same pins as the tree (Lean v4.33.1,
 Mathlib `0df444a3`), so that [`vendor/alpo/Bridge.lean`](vendor/alpo/Bridge.lean) can check the
 tree's theorem against `ZetaForm`, `ZetaStripForm` and `EtaForm`. Where the code comes from, what
