@@ -1,6 +1,8 @@
 import Development.AutomorphicArithmetic.DedekindLFunctions.LandauTheorems.ZeroFreeOfRpowWindow
 import Formalism.GammaFactorNonvanishing.RhOfRight
 import RiemannHypothesis.Main
+import RiemannHypothesis.Symmetry
+import RiemannHypothesis.ZeroExists
 
 /-!
 # AnalyticBridge: the analytic half of the alpo.ge proof, against this repository's statements
@@ -24,6 +26,19 @@ analytic theorems, then `ZetaStripForm` and `EtaForm` through this repository's 
 equivalences.  Everything a reader must trust about the arithmetic half is therefore the single
 statement `WindowBound` (the `ψ = 1` case of (1.3); the tree proves the general `ψ` version).
 
+The same analytic theorem also runs the other way, and then needs nothing from the arithmetic
+half.  `ζ` has a zero with `re ρ ≥ 1/2` (this repository proves a zero in the critical strip,
+`RiemannHypothesis.exists_riemannZeta_eq_zero_of_mem_strip`, and `s ↦ 1 - s` reflects it), so by
+contraposition no bound `G₁(y) ≤ C y^θ` with `θ < 1/2` can hold on arbitrarily distant windows:
+every window `[Y, Y^{1+δ}]` far enough out contains a point with `G₁(y) > C y^θ`
+(`exists_gt_rpow_mem_window`).  These theorems are unconditional.  They show that the range
+`θ > 1/2` in `WindowBound` cannot be extended below `1/2` (`not_windowBound_of_lt_half`).  They
+also give `G₁(y) = Ω₊(y^θ)` for every `θ < 1/2` (`frequently_gt_rpow`).  The classical
+statements are stronger: E. Schmidt (1903) proved `ψ(x) − x = Ω±(x^{1/2})`, two-sided and
+without the loss of an `ε`, and Landau's theorem on Dirichlet series with nonnegative
+coefficients (1905) gives `Ω±(x^{β−ε})` for every zero `β + iγ`.  The version here is
+one-sided, for the smoothed sum, and loses the `ε`, but it is localized to windows.
+
 Hypothesis hygiene (`AGENTS.md`), for `WindowBound`:
 1. *Direction.*  `WindowBound → RH` is the theorem below.  The converse also holds (under RH,
    `|G₁(y)| ≪ y^{1/2} log² y` by the explicit formula; not formalized here), so `WindowBound`
@@ -36,7 +51,8 @@ Hypothesis hygiene (`AGENTS.md`), for `WindowBound`:
    window formulation is the alpo.ge development's (paper, Theorem 2.2).
 
 Not a theorem of this repository: it lives in `vendor/alpo` and is compiled only by
-`vendor/alpo/tools/analytic.sh`.  The `#print axioms` lines must show only `propext`,
+`vendor/alpo/tools/analytic.sh`, together with the 31 tree modules and the 23 modules of this
+repository it imports.  The `#print axioms` lines must show only `propext`,
 `Classical.choice`, `Quot.sound`.
 -/
 
@@ -105,6 +121,64 @@ series, `RiemannHypothesis/Defs.lean`). -/
 theorem etaForm_of_windowBound (h : WindowBound) : RiemannHypothesis.EtaForm :=
   RiemannHypothesis.zeta_iff_eta.mp (zetaForm_of_windowBound h)
 
+/-! ## The converse direction: oscillation, unconditionally -/
+
+/-- `ζ` has a zero on or to the right of the critical line: a zero in the critical strip,
+reflected by `s ↦ 1 - s` if it lies to the left. -/
+theorem exists_riemannZeta_eq_zero_half_le_re : ∃ ρ : ℂ, riemannZeta ρ = 0 ∧ 1 / 2 ≤ ρ.re := by
+  obtain ⟨s, hz, h0, h1⟩ := RiemannHypothesis.exists_riemannZeta_eq_zero_of_mem_strip
+  rcases le_or_gt (1 / 2) s.re with hs | hs
+  · exact ⟨s, hz, hs⟩
+  · refine ⟨1 - s, RiemannHypothesis.riemannZeta_one_sub_eq_zero_of_mem_strip h0 h1 hz, ?_⟩
+    rw [Complex.sub_re, Complex.one_re]
+    linarith
+
+/-- **Oscillation in every window.**  For `0 < θ < 1/2`, `δ > 0` and any constant `C`, every
+window `[Y, Y^{1+δ}]` far enough out contains a point where the smoothed Chebyshev error
+exceeds `C y^θ`.  The contrapositive of the tree's analytic theorem, applied to a zero of `ζ`
+with `re ρ ≥ 1/2`. -/
+theorem exists_gt_rpow_mem_window {θ δ : ℝ} (hθ0 : 0 < θ) (hθ : θ < 1 / 2) (hδ : 0 < δ)
+    (C : ℝ) :
+    ∃ Y₀ : ℝ, ∀ Y : ℝ, Y₀ ≤ Y → ∃ y ∈ Set.Icc Y (Y ^ (1 + δ)),
+      C * y ^ θ < smoothedChebyshevError y := by
+  by_contra H
+  push_neg at H
+  obtain ⟨ρ, hρ, hre⟩ := exists_riemannZeta_eq_zero_half_le_re
+  have hz := Deduction.zeroFree_of_rpow_window zetaFamily (θ := θ) (δ := δ) (C := C) hθ0
+    (by linarith) hδ (fun Y₀ => by
+      obtain ⟨Y, hY, hb⟩ := H Y₀
+      refine ⟨Y, hY, fun y hy => ?_⟩
+      rw [gm_zetaFamily]
+      exact hb y hy) () ρ (by linarith)
+  have hz' : DirichletCharacter.LFunction (1 : DirichletCharacter ℂ 1) ρ ≠ 0 := hz
+  rw [DirichletCharacter.LFunction_modOne_eq] at hz'
+  exact hz' hρ
+
+/-- **`G₁(y) = Ω₊(y^θ)` for every `θ < 1/2`**: `smoothedChebyshevError y > C y^θ` for
+arbitrarily large `y`, whatever the constant `C`. -/
+theorem frequently_gt_rpow {θ : ℝ} (hθ0 : 0 < θ) (hθ : θ < 1 / 2) (C : ℝ) :
+    ∃ᶠ y in Filter.atTop, C * y ^ θ < smoothedChebyshevError y := by
+  obtain ⟨Y₀, hY₀⟩ := exists_gt_rpow_mem_window (δ := 1) hθ0 hθ one_pos C
+  rw [Filter.frequently_atTop]
+  intro a
+  obtain ⟨y, hy, hgt⟩ := hY₀ (max a Y₀) (le_max_right a Y₀)
+  exact ⟨y, (le_max_left a Y₀).trans hy.1, hgt⟩
+
+/-- **The exponent `1/2` of `WindowBound` is sharp**: for `θ < 1/2` the window bound that
+`WindowBound` asserts for `θ > 1/2` is false. -/
+theorem not_windowBound_of_lt_half {θ : ℝ} (hθ0 : 0 < θ) (hθ : θ < 1 / 2) :
+    ¬ ∀ Y₀ : ℝ, ∃ Y : ℝ, Y₀ ≤ Y ∧
+      ∀ y ∈ Set.Icc Y (Y ^ (3 / 2 : ℝ)), smoothedChebyshevError y ≤ y ^ θ := by
+  intro H
+  obtain ⟨Y₀, hY₀⟩ := exists_gt_rpow_mem_window (δ := 1 / 2) hθ0 hθ (by norm_num) 1
+  obtain ⟨Y, hY, hb⟩ := H Y₀
+  obtain ⟨y, hy, hgt⟩ := hY₀ Y hY
+  have e : (1 : ℝ) + 1 / 2 = 3 / 2 := by norm_num
+  rw [e] at hy
+  have hle := hb y hy
+  rw [one_mul] at hgt
+  linarith
+
 end AlpoAnalytic
 
 end
@@ -118,3 +192,7 @@ end
 #print axioms AlpoAnalytic.zetaForm_of_windowBound
 #print axioms AlpoAnalytic.zetaStripForm_of_windowBound
 #print axioms AlpoAnalytic.etaForm_of_windowBound
+#print axioms AlpoAnalytic.exists_riemannZeta_eq_zero_half_le_re
+#print axioms AlpoAnalytic.exists_gt_rpow_mem_window
+#print axioms AlpoAnalytic.frequently_gt_rpow
+#print axioms AlpoAnalytic.not_windowBound_of_lt_half
