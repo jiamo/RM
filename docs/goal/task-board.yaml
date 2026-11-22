@@ -1011,12 +1011,13 @@ tasks:
       - "./scripts/audit.sh"
   - id: M1-EIGHTY-CRITICAL-ROUTE
     priority: P1
-    status: DONE_WEAK
+    status: SUPERSEDED
+    superseded_by: "the alpo.ge Lean proof of RH (2026-11-20; external, independently verified; vendor/alpo, row M3-ALPO-VERIFICATION): under RH every nontrivial zero is on the critical line (windowCountOffLineMult_eq_zero_of_zetaStripForm), so any proportion is a corollary; the route existed only to reach 80 % without RH, through SpeiserTransfer, which stays unproved."
     track: modern
     title: "A route past eighty per cent on the critical line, through the zeroes of xi'"
     latest_evidence: docs/goal/evidence/2026-08-22-m1-eighty-critical-route.md
     open_conjecture_reduction: true
-    latest_update: "2026-08-22 DONE_WEAK: RiemannHypothesis/EightyPercentRoute.lean proves, unconditionally, that the counting functions of the zeroes of zeta and of the zeroes of xi' in the dyadic window have the same Riemann-von Mangoldt main term and so differ by O(log T) (abs_xiDerivWindowCount_sub_windowCount_le), that N(T,2T)/log T tends to infinity (exists_le_windowCount_mul_log), and hence that N_xi' <= (1 + eps) N eventually (xiDerivWindowCount_le_one_add_mul). The counting form of Speiser's theorem (Levinson-Montgomery) is recorded as an unproved Prop, SpeiserTransfer. Under it: offLine_le_of_speiserTransfer (N_off <= (0.13136 + eps) N), eighty_four_percent_distinct_on_critical_line_of_speiserTransfer (0.84 N_d <= N0), eightyPercentOnCriticalLineDistinct_of_speiserTransfer (the 80 % target for the distinct zeroes), and seventy_percent_on_critical_line_of_speiserTransfer (0.7 N <= N0, with multiplicity). Unconditionally the proportion on the critical line is unchanged at 2/3. No sorry; axioms exactly propext, Classical.choice, Quot.sound."
+    latest_update: "2026-11-22 SUPERSEDED (see superseded_by); no Lean change. Earlier: 2026-08-22 DONE_WEAK: RiemannHypothesis/EightyPercentRoute.lean proves, unconditionally, that the counting functions of the zeroes of zeta and of the zeroes of xi' in the dyadic window have the same Riemann-von Mangoldt main term and so differ by O(log T) (abs_xiDerivWindowCount_sub_windowCount_le), that N(T,2T)/log T tends to infinity (exists_le_windowCount_mul_log), and hence that N_xi' <= (1 + eps) N eventually (xiDerivWindowCount_le_one_add_mul). The counting form of Speiser's theorem (Levinson-Montgomery) is recorded as an unproved Prop, SpeiserTransfer. Under it: offLine_le_of_speiserTransfer (N_off <= (0.13136 + eps) N), eighty_four_percent_distinct_on_critical_line_of_speiserTransfer (0.84 N_d <= N0), eightyPercentOnCriticalLineDistinct_of_speiserTransfer (the 80 % target for the distinct zeroes), and seventy_percent_on_critical_line_of_speiserTransfer (0.7 N <= N0, with multiplicity). Unconditionally the proportion on the critical line is unchanged at 2/3. No sorry; axioms exactly propext, Classical.choice, Quot.sound."
     open_boundary: "SpeiserTransfer is not proved: it needs the argument principle for xi'/xi on the left half of the critical strip, which is not in this repository or in mathlib. Even with it, 80 % with multiplicity is out of reach on this route (the multiplicity budget N_d >= (5/6) N caps it at 70 %), and the vendored library's bandwidth-one ceiling (about 0.6818) shows the mollifier method as formalized cannot reach 80 % on the critical line unconditionally. Correction recorded 2026-08-23 (see M1-SPEISER-ROLLE): the earlier description of SpeiserTransfer as 'the Levinson-Montgomery form of Speiser's theorem' was misleading - Levinson-Montgomery counts zeroes of zeta', not of xi', and does not prove this Prop. With multiplicity the corresponding hypothesis is equivalent to the reverse comparison of the on-line counts (speiserOffLineTransfer_iff_xiDerivOnLineDominates) and already implies 86.864 % on the critical line, so it is stronger than the target of this row; only the reverse inequality is unconditional, by Rolle's theorem for Hardy's Xi."
     milestone: M1
     depends_on:
@@ -1398,11 +1399,12 @@ tasks:
       - "./scripts/audit.sh"
   - id: M2-MOLLIFIER
     priority: P0
-    status: TODO_NEEDS_DESIGN
+    status: SUPERSEDED
+    superseded_by: "the alpo.ge Lean proof of RH (2026-11-20; external, independently verified; vendor/alpo, row M3-ALPO-VERIFICATION): the mollifier machinery was for raising the proportion of zeroes on the critical line (Levinson, Conrey), which is 1 under RH."
     track: modern
     title: "Mollifier machinery for the Levinson method"
     latest_evidence: ""
-    latest_update: "2026-09-16 BLOCKED: the mollifier machinery for the Levinson method requires the sharp mean-value theorem over well-spaced frequencies, which in turn requires Montgomery and Vaughan's generalized Hilbert inequality for δ-separated real families; that theorem is unproved here (docs/goal/evidence/2026-09-16-round-GHI-blocked.md). Its two standard proofs — Montgomery and Vaughan's original 1974 cosecant/cotangent double-sum argument, and the Beurling-Selberg extremal-majorant + Paley-Wiener/Poisson route — are each a substantial formalization project, and neither is available in mathlib at the required sharpness.
+    latest_update: "2026-11-22 SUPERSEDED (see superseded_by); no Lean change. Earlier: 2026-09-16 BLOCKED: the mollifier machinery for the Levinson method requires the sharp mean-value theorem over well-spaced frequencies, which in turn requires Montgomery and Vaughan's generalized Hilbert inequality for δ-separated real families; that theorem is unproved here (docs/goal/evidence/2026-09-16-round-GHI-blocked.md). Its two standard proofs — Montgomery and Vaughan's original 1974 cosecant/cotangent double-sum argument, and the Beurling-Selberg extremal-majorant + Paley-Wiener/Poisson route — are each a substantial formalization project, and neither is available in mathlib at the required sharpness.
   2026-10-18 TODO_NEEDS_DESIGN (no longer BLOCKED): the generalized Hilbert inequality is proved (M2-HILBERT-INEQUALITY, RiemannHypothesis/MontgomeryVaughan.lean), with the sharp unweighted mean value theorem (M2-MEANVALUE-MV-SHARP). The mollifier design recorded in open_boundary is still missing."
     open_boundary: "Needs a design for the mollifier family (length, smooth coefficients), the mean-value estimate for the mollified product, and the error terms. Nothing in mathlib points in this direction."
     milestone: M2
@@ -1415,12 +1417,13 @@ tasks:
       - "lake build"
   - id: M2-LEVINSON
     priority: P0
-    status: CLAIM_RISK
+    status: SUPERSEDED
+    superseded_by: "the alpo.ge Lean proof of RH (2026-11-20; external, independently verified; vendor/alpo, row M3-ALPO-VERIFICATION): the proportion of zeroes on the critical line is 1 under RH, so Levinson's one third is no longer a step towards anything here."
     track: modern
     title: "Levinson's method: at least one third of the zeroes lie on the critical line"
     latest_evidence: docs/goal/evidence/2026-08-21-zeta23-derived-results.md
     revalidation: docs/goal/evidence/2026-08-21-zeta23-derived-results.md
-    latest_update: "2026-08-21 DONE_STRONG on the statement, not on the method: levinson_one_third (RiemannHypothesis/CriticalLine.lean) and oneThirdOnCriticalLine (RiemannHypothesis/PartialProved.lean) give, for every eps > 0 and all large T, (1/3 - eps) N(T,2T) <= N0*(T,2T). This is a corollary of the stronger two-thirds bound of M1-TWO-THIRDS, not a formalization of Levinson's mollifier argument; M2-MOLLIFIER remains open. No sorry; axioms exactly propext, Classical.choice, Quot.sound.
+    latest_update: "2026-11-22 SUPERSEDED (see superseded_by); no Lean change. Earlier: 2026-08-21 DONE_STRONG on the statement, not on the method: levinson_one_third (RiemannHypothesis/CriticalLine.lean) and oneThirdOnCriticalLine (RiemannHypothesis/PartialProved.lean) give, for every eps > 0 and all large T, (1/3 - eps) N(T,2T) <= N0*(T,2T). This is a corollary of the stronger two-thirds bound of M1-TWO-THIRDS, not a formalization of Levinson's mollifier argument; M2-MOLLIFIER remains open. No sorry; axioms exactly propext, Classical.choice, Quot.sound.
   2026-09-16 BLOCKED on the method: Levinson's actual mollifier argument cannot be formalized until M2-MOLLIFIER is completed, which requires the generalized Hilbert inequality (blocked above). The bound currently in the repository stands, but it is only a corollary of the two-thirds bound of M1-TWO-THIRDS, not a formalization of Levinson's method.
   2026-10-18 CLAIM_RISK (no longer BLOCKED): the generalized Hilbert inequality is proved (M2-HILBERT-INEQUALITY), so M2-MOLLIFIER no longer waits on it; it is TODO_NEEDS_DESIGN. The one-third bound stands as a corollary of M1-TWO-THIRDS, but Levinson's mollifier argument, which the title names, is still not formalized."
     open_boundary: "Levinson's mollifier argument, which the title names, is not formalized; it waits on M2-MOLLIFIER (TODO_NEEDS_DESIGN). The one-third bound in the repository (levinson_one_third, oneThirdOnCriticalLine) is only a corollary of the two-thirds bound of M1-TWO-THIRDS."
@@ -1513,12 +1516,12 @@ tasks:
     required_gates:
       - "lake build"
   - id: M2-PAIR-CORRELATION
-    priority: P2
+    priority: P1
     status: TODO_NEEDS_DESIGN
     track: modern
-    title: "Montgomery's pair correlation theorem (conditional on RH) and the GUE conjecture"
+    title: "Montgomery's pair correlation theorem (conditional on RH, which now has an external proof), the proportion of simple zeroes, and the GUE conjecture"
     latest_evidence: RiemannHypothesis/Partial.lean
-    latest_update: "2026-08-20 the GUE density and the conjecture are stated (guePairCorrelationDensity, PairCorrelationConjecture); the theorem to formalize is Montgomery 1973, conditional on RH, for test functions with Fourier support in (-1, 1)."
+    latest_update: "2026-11-22 re-scoped: RH has an external machine-checked proof (alpo.ge, row M3-ALPO-VERIFICATION), and RH does not imply that the zeroes are simple, so this row is now the main route to the simple-zero question: Montgomery (1973) deduced from his theorem, assuming RH, that at least 2/3 of the zeroes are simple. Theorems here stay conditional on ZetaForm in the library (conditional-theorems manifest). Earlier: 2026-08-20 the GUE density and the conjecture are stated (guePairCorrelationDensity, PairCorrelationConjecture); the theorem to formalize is Montgomery 1973, conditional on RH, for test functions with Fourier support in (-1, 1)."
     open_boundary: "The full pair correlation conjecture is open. The formalizable target is Montgomery's conditional theorem: assuming RH, the smoothed pair sum converges to the GUE value for test functions with compactly supported Fourier transform. Needs the explicit formula and the mean-value machinery; the statement file already fixes the normalization."
     milestone: M2
     depends_on:
@@ -1527,6 +1530,7 @@ tasks:
     rank: 47
     exit_criteria:
       - "Montgomery's conditional theorem is proved: assuming RH, for test functions with Fourier support in (-1,1), the pair-correlation sum converges to the GUE density."
+      - "From it, assuming RH: at least 2/3 of the zeroes, counted with multiplicity, are simple (Montgomery 1973)."
       - "The unconditional conjecture PairCorrelationConjecture is stated (done) and documented as open."
     required_gates:
       - "lake build"
@@ -2368,11 +2372,12 @@ tasks:
       - "./scripts/audit.sh"
   - id: M2-ZERO-DETECTION
     priority: P0
-    status: DONE_WEAK
+    status: SUPERSEDED
+    superseded_by: "the alpo.ge Lean proof of RH (2026-11-20; external, independently verified; vendor/alpo, row M3-ALPO-VERIFICATION): a step of the mollifier route (M2-MOLLIFIER, M2-LEVINSON), superseded with it. Its proved identities stay; rows that use them keep their own status."
     track: modern
     title: "Mollifier zero detection: zeta times the Mobius mollifier has no short terms"
     latest_evidence: docs/goal/evidence/2026-08-28-m2-zero-detection.md
-    latest_update: "2026-08-28 DONE_WEAK: RiemannHypothesis/Mollifier.lean proves the mollifier identity, the bridge that turns a zero of zeta into a large value of a Dirichlet series with no short terms. With M_y(s) = sum_{n <= y} mu(n) n^(-s), the coefficients of zeta M_y are c_n = sum_{d | n, d <= y} mu(d) (detectCoeff), and detectCoeff_one and detectCoeff_eq_zero_of_le give c_1 = 1 and c_n = 0 for 2 <= n <= y, because for such n every divisor of n is at most y so the truncated divisor sum is the full one sum_{d | n} mu(d) = 0 (the repository's sum_divisors_moebius). Hence zeta_mul_mollifier_eq_one_add_tail : zeta(s) M_y(s) = 1 + sum_{n > y} c_n n^(-s) for re s > 1, and LSeries_tailCoeff_eq : the tail equals zeta(s) M_y(s) - 1, so it is -1 at a zero. The same mechanism is also given in a purely finite form valid for every s: mollified_partialSum and mollified_partialSum_eq_one_add_tail write M_y(s) sum_{k <= K} k^(-s) as 1 + sum_{y < m <= yK} c_{y,K}(m) m^(-s) with c_{y,K}(m) = sum_{d | m, d <= y, m/d <= K} mu(d), vanishing for 2 <= m <= min y K. No sorry; axioms exactly propext, Classical.choice, Quot.sound."
+    latest_update: "2026-11-22 SUPERSEDED (see superseded_by); no Lean change. Earlier: 2026-08-28 DONE_WEAK: RiemannHypothesis/Mollifier.lean proves the mollifier identity, the bridge that turns a zero of zeta into a large value of a Dirichlet series with no short terms. With M_y(s) = sum_{n <= y} mu(n) n^(-s), the coefficients of zeta M_y are c_n = sum_{d | n, d <= y} mu(d) (detectCoeff), and detectCoeff_one and detectCoeff_eq_zero_of_le give c_1 = 1 and c_n = 0 for 2 <= n <= y, because for such n every divisor of n is at most y so the truncated divisor sum is the full one sum_{d | n} mu(d) = 0 (the repository's sum_divisors_moebius). Hence zeta_mul_mollifier_eq_one_add_tail : zeta(s) M_y(s) = 1 + sum_{n > y} c_n n^(-s) for re s > 1, and LSeries_tailCoeff_eq : the tail equals zeta(s) M_y(s) - 1, so it is -1 at a zero. The same mechanism is also given in a purely finite form valid for every s: mollified_partialSum and mollified_partialSum_eq_one_add_tail write M_y(s) sum_{k <= K} k^(-s) as 1 + sum_{y < m <= yK} c_{y,K}(m) m^(-s) with c_{y,K}(m) = sum_{d | m, d <= y, m/d <= K} mu(d), vanishing for 2 <= m <= min y K. No sorry; axioms exactly propext, Classical.choice, Quot.sound."
     open_boundary: "The infinite identity is proved in the half-plane of absolute convergence re s > 1, where zeta has no zeroes, so it detects no zero by itself; carrying it into the critical strip needs the infinite tail to be replaced by a finite Dirichlet polynomial with an explicit error term - an approximate functional equation or a contour shift - and neither is available here in the strip (an approximate functional equation is proved since 2026-10-19 only on the critical line, M1-AFE-CRITICAL-LINE, and is not combined with this identity). The finite identity holds for every s but relates the mollifier to a partial sum, not to zeta, in the strip. No mollified mean value, no large-value bound for the tail, and no zero-density estimate is claimed; in particular this row does not close M2-MOLLIFIER, which asks for a mollified first moment of zeta on the critical line."
     milestone: M2
     depends_on:

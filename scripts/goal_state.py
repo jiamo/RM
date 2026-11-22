@@ -30,6 +30,7 @@ VALID_STATUSES = {
     "DONE_STRONG",
     "BLOCKED",
     "CLAIM_RISK",
+    "SUPERSEDED",
 }
 
 REQUIRED_TASK_FIELDS = {
@@ -207,6 +208,9 @@ def validate(board: dict[str, Any], root: Path = ROOT) -> list[str]:
             errors.append(
                 f"{tid}: open_conjecture_reduction must be true or false, got {reduction!r}"
             )
+        if status == "SUPERSEDED" and not str(task.get("superseded_by", "")).strip():
+            # A superseded row is closed without being done: say by what, in the row.
+            errors.append(f"{tid}: SUPERSEDED requires a non-empty superseded_by")
         if status == "DONE_STRONG":
             # M0-OPEN-REDUCTION-RULE: a reduction to an open conjecture never closes a row.
             if reduction is True:
@@ -263,7 +267,7 @@ def next_task(board: dict[str, Any]) -> dict[str, Any] | None:
         t
         for t in board["tasks"]
         if t.get("milestone") == active
-        and t.get("status") != "DONE_STRONG"
+        and t.get("status") not in ("DONE_STRONG", "SUPERSEDED")
         and dependency_ready(t, board)
     ]
     if not candidates:
@@ -321,13 +325,20 @@ def render(board: dict[str, Any], root: Path = ROOT) -> str:
     lines.append("| Rank | ID | Priority | Status | Depends on |")
     lines.append("|---:|---|---|---|---|")
     for t in sorted(tasks, key=lambda t: (t.get("milestone", ""), t.get("rank", 0))):
-        if t.get("status") == "DONE_STRONG":
+        if t.get("status") in ("DONE_STRONG", "SUPERSEDED"):
             continue
         deps = ", ".join(f"`{d}`" for d in t.get("depends_on", []))
         lines.append(
             f"| {t.get('rank', '')} | `{t['id']}` | {t.get('priority', '')} | "
             f"`{t.get('status', '')}` | {deps} |"
         )
+    superseded = [t for t in tasks if t.get("status") == "SUPERSEDED"]
+    if superseded:
+        lines += ["", "## Superseded rows", ""]
+        lines.append("| ID | Superseded by |")
+        lines.append("|---|---|")
+        for t in sorted(superseded, key=lambda t: (t.get("milestone", ""), t.get("rank", 0))):
+            lines.append(f"| `{t['id']}` | {t.get('superseded_by', '')} |")
     lines.append("")
     return "\n".join(lines)
 

@@ -15,9 +15,9 @@
 - Tasks in milestone: `102`
 - Tasks total: `190`
 - `DONE_STRONG`: `120`
-- `DONE_WEAK`: `57`
-- `TODO_NEEDS_DESIGN`: `10`
-- `CLAIM_RISK`: `1`
+- `DONE_WEAK`: `55`
+- `TODO_NEEDS_DESIGN`: `9`
+- `SUPERSEDED`: `4`
 - `TODO_READY`: `1`
 - `IN_PROGRESS`: `1`
 - Next dependency-ready task: `M1-VDC-B-PROCESS`
@@ -38,7 +38,6 @@
 | 34.775 | `M1-WEYL-CLASSICAL` | P1 | `DONE_WEAK` | `M1-WEYL-DIVISOR`, `M1-WEYL-GENERAL`, `M1-WEYL-MIN-SUM` |
 | 34.78 | `M1-WEYL-DIVISOR` | P1 | `DONE_WEAK` | `M1-WEYL-GENERAL`, `M1-WEYL-MIN-SUM` |
 | 34.79 | `M1-WEYL-GENERAL` | P1 | `DONE_WEAK` | `M1-WEYL-CUBIC`, `M1-WEYL-MIN-SUM`, `M1-WEYL-DIFFERENCING` |
-| 34.8 | `M1-EIGHTY-CRITICAL-ROUTE` | P1 | `DONE_WEAK` | `M1-TWO-THIRDS`, `M1-SIMPLE-EIGHTY` |
 | 34.8 | `M1-WEYL-CUBIC` | P1 | `DONE_WEAK` | `M1-WEYL-MIN-SUM`, `M1-WEYL-DIFFERENCING`, `M1-WEYL-BADLY-APPROXIMABLE` |
 | 34.81 | `M1-WEYL-BADLY-APPROXIMABLE` | P1 | `DONE_WEAK` | `M1-WEYL-MIN-SUM` |
 | 34.82 | `M1-WEYL-MIN-SUM` | P1 | `DONE_WEAK` | `M1-WEYL-QUADRATIC-QUANTITATIVE` |
@@ -62,11 +61,9 @@
 | 34.99 | `M1-CRITICAL-LINE-MEAN-SQUARE` | P1 | `DONE_WEAK` | `M1-STRIP-MEAN-SQUARE` |
 | 36 | `M1-NUMERICAL` | P2 | `TODO_NEEDS_DESIGN` | `M0-EQUIV` |
 | 40 | `M2-MEANVALUE` | P0 | `DONE_WEAK` | `M1-GROWTH`, `M2-HILBERT-INEQUALITY` |
-| 41 | `M2-MOLLIFIER` | P0 | `TODO_NEEDS_DESIGN` | `M2-MEANVALUE` |
-| 42 | `M2-LEVINSON` | P0 | `CLAIM_RISK` | `M1-TWO-THIRDS` |
 | 45 | `M2-DENSITY` | P1 | `DONE_WEAK` | `M2-MEANVALUE`, `M2-DENSITY-POWER-SAVING` |
 | 46 | `M2-SELBERG-CLT` | P1 | `TODO_NEEDS_DESIGN` | `M2-MEANVALUE` |
-| 47 | `M2-PAIR-CORRELATION` | P2 | `TODO_NEEDS_DESIGN` | `M2-MEANVALUE`, `M1-EXPLICIT` |
+| 47 | `M2-PAIR-CORRELATION` | P1 | `TODO_NEEDS_DESIGN` | `M2-MEANVALUE`, `M1-EXPLICIT` |
 | 49 | `M2-WEIL-POSITIVITY` | P1 | `DONE_WEAK` | `M1-EXPLICIT` |
 | 50.985 | `M2-LINDELOF-DENSITY` | P1 | `DONE_WEAK` | `M2-BOHR-LANDAU` |
 | 50.987 | `M2-LINDELOF-FROM-RH` | P1 | `DONE_WEAK` | `M2-THREE-CIRCLES` |
@@ -80,7 +77,6 @@
 | 50.988957 | `M2-BRUN-TWIN` | P0 | `DONE_WEAK` | `M2-LARGE-SIEVE-SQUAREFREE`, `M2-BRUN-TITCHMARSH` |
 | 50.98896 | `M2-BRUN-CONSTANT` | P0 | `DONE_WEAK` | `M2-BRUN-TWIN` |
 | 50.989 | `M2-LARGE-VALUES` | P0 | `DONE_WEAK` | `M2-MEANVALUE` |
-| 50.99 | `M2-ZERO-DETECTION` | P0 | `DONE_WEAK` | `M2-MEANVALUE` |
 | 50.991 | `M2-MOLLIFIED-MEAN-SQUARE` | P0 | `DONE_WEAK` | `M2-MEANVALUE`, `M2-ZERO-DETECTION` |
 | 50.992 | `M2-DISCRETE-MEANVALUE` | P0 | `DONE_WEAK` | `M2-MEANVALUE`, `M2-LARGE-VALUES` |
 | 50.993 | `M2-MEANVALUE-MV` | P0 | `DONE_WEAK` | `M2-MEANVALUE` |
@@ -99,3 +95,12 @@
 | 53 | `M3-GEOMETRY` | P1 | `TODO_NEEDS_DESIGN` | `M1-SPECTRAL-INTERPRETATION`, `M1-EXPLICIT` |
 | 60 | `M3-EVENTUAL-COUNTING-CRITERION` | P1 | `DONE_WEAK` | `M1-TWO-THIRDS`, `M0-STATEMENTS` |
 | 60 | `M4-RH` | P0 | `TODO_NEEDS_DESIGN` | `M3-GAP` |
+
+## Superseded rows
+
+| ID | Superseded by |
+|---|---|
+| `M1-EIGHTY-CRITICAL-ROUTE` | the alpo.ge Lean proof of RH (2026-11-20; external, independently verified; vendor/alpo, row M3-ALPO-VERIFICATION): under RH every nontrivial zero is on the critical line (windowCountOffLineMult_eq_zero_of_zetaStripForm), so any proportion is a corollary; the route existed only to reach 80 % without RH, through SpeiserTransfer, which stays unproved. |
+| `M2-MOLLIFIER` | the alpo.ge Lean proof of RH (2026-11-20; external, independently verified; vendor/alpo, row M3-ALPO-VERIFICATION): the mollifier machinery was for raising the proportion of zeroes on the critical line (Levinson, Conrey), which is 1 under RH. |
+| `M2-LEVINSON` | the alpo.ge Lean proof of RH (2026-11-20; external, independently verified; vendor/alpo, row M3-ALPO-VERIFICATION): the proportion of zeroes on the critical line is 1 under RH, so Levinson's one third is no longer a step towards anything here. |
+| `M2-ZERO-DETECTION` | the alpo.ge Lean proof of RH (2026-11-20; external, independently verified; vendor/alpo, row M3-ALPO-VERIFICATION): a step of the mollifier route (M2-MOLLIFIER, M2-LEVINSON), superseded with it. Its proved identities stay; rows that use them keep their own status. |

@@ -51,6 +51,9 @@ file is linked from the row.
 - `BLOCKED`: use only after the repository's repeated-blocker threshold.
 - `CLAIM_RISK`: useful evidence exists but cannot support the broad claim implied
   by the task title.
+- `SUPERSEDED`: the row's goal has been made moot by a result outside it (field
+  `superseded_by` says which). The row is closed but not done: it never counts as
+  `DONE_STRONG`, and the theorems it already proved stay in the library.
 
 ### 0.2 Evidence
 
