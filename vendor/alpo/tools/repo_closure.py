@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """Print, one per line and in dependency order, the modules of this repository's
-RiemannHypothesis library that a Lean file imports, directly or transitively.
+RiemannHypothesis library that some Lean files import, directly or transitively.
 
 Reads import headers only and compiles nothing.  Imports from outside this repository (Mathlib,
 the alpo.ge tree) are skipped, since analytic.sh takes them from the tree's LEAN_PATH.  An
 import of this repository's other libraries (Zeta23, Challenge, Solution) is an error, because
 analytic.sh does not compile them.
 
-Usage: repo_closure.py REPO FILE.lean
+Usage: repo_closure.py REPO FILE.lean...
 """
 import os
 import sys
@@ -63,9 +63,9 @@ def header_imports(path):
 
 
 def main():
-    if len(sys.argv) != 3:
+    if len(sys.argv) < 3:
         sys.exit(__doc__)
-    repo, file = sys.argv[1], sys.argv[2]
+    repo, files = sys.argv[1], sys.argv[2:]
     order, seen, stack = [], set(), []
 
     def visit(m):
@@ -89,8 +89,9 @@ def main():
         order.append(m)
 
     sys.setrecursionlimit(10000)
-    for m in header_imports(file):
-        visit(m)
+    for file in files:
+        for m in header_imports(file):
+            visit(m)
     print("\n".join(order))
 
 
