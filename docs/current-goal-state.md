@@ -14,12 +14,12 @@
 - Milestone: `M1`
 - Tasks in milestone: `103`
 - Tasks total: `194`
-- `DONE_STRONG`: `120`
+- `DONE_STRONG`: `121`
 - `DONE_WEAK`: `50`
 - `SUPERSEDED`: `12`
 - `TODO_NEEDS_DESIGN`: `8`
-- `TODO_READY`: `2`
 - `IN_PROGRESS`: `2`
+- `TODO_READY`: `1`
 - Next dependency-ready task: `M1-VDC-B-PROCESS`
 - Next title: van der Corput's B process in general: truncated Poisson summation (Titchmarsh, Lemma 4.10) for arbitrary real endpoints, and its weighted forms
 - Next depends on: `M1-AFE-CRITICAL-LINE` (DONE_STRONG), `M1-VDC-SUM-INTEGRAL` (DONE_STRONG)
@@ -65,7 +65,6 @@
 | 46 | `M2-SELBERG-CLT` | P1 | `TODO_NEEDS_DESIGN` | `M2-MEANVALUE` |
 | 47 | `M2-PAIR-CORRELATION` | P1 | `TODO_NEEDS_DESIGN` | `M2-MEANVALUE`, `M1-EXPLICIT` |
 | 49 | `M2-WEIL-POSITIVITY` | P1 | `DONE_WEAK` | `M1-EXPLICIT` |
-| 50.5 | `M2-VON-KOCH` | P1 | `TODO_READY` | `M0-STATEMENTS` |
 | 50.6 | `M2-RH-MOEBIUS-BOUNDS` | P1 | `TODO_NEEDS_DESIGN` | `M2-LINDELOF-FROM-RH`, `M1-REDHEFFER` |
 | 50.987 | `M2-LINDELOF-FROM-RH` | P1 | `DONE_WEAK` | `M2-THREE-CIRCLES` |
 | 50.988 | `M2-LARGE-SIEVE` | P0 | `DONE_WEAK` | `M2-MEANVALUE` |

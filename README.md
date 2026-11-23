@@ -46,6 +46,12 @@ repository calls `ZetaForm`.
   on the smoothed prime sum implies `ZetaForm`, `ZetaStripForm` and `EtaForm`. For `ζ`,
   therefore, the arithmetic half has to be trusted for that one statement only.
 * The same file proves, unconditionally, that no such bound holds with an exponent below `1/2`.
+* [`VonKoch.lean`](vendor/alpo/VonKoch.lean) proves von Koch's theorem from the tree's
+  unconditional explicit formula and zero count: `ZetaForm → ChebyshevBoundForm`, hence
+  `ChebyshevBoundForm ↔ ZetaForm` (`ψ(N) − N = O(N^{1/2+ε})`). It is compiled in CI.
+* [`docs/alpo-proof-route.md`](docs/alpo-proof-route.md) traces where the proof's content lies.
+  It answers the objection that its geometric layer is vacuous: that layer is never used, and
+  the content is a prime-sum inequality proved from lattice estimates.
 * The full 175,187-module build has **not** been repeated here (240–360 core-hours). It runs in
   the manual workflow [`alpo-verify`](.github/workflows/alpo-verify.yml) on a large self-hosted
   runner, with [`Verify.lean`](vendor/alpo/Verify.lean) and
@@ -138,7 +144,7 @@ For the alpo.ge tree, see [`vendor/alpo/README.md`](vendor/alpo/README.md):
 
 ```bash
 bash vendor/alpo/tools/provenance.sh   # hashes, byte-identical tree (minutes)
-bash vendor/alpo/tools/analytic.sh     # analytic half + AnalyticBridge (minutes; needs
+bash vendor/alpo/tools/analytic.sh     # analytic half, AnalyticBridge, VonKoch (minutes; needs
                                        # `lake exe cache get` in vendor/alpo/lean first)
 ```
 
